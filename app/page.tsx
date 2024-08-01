@@ -68,7 +68,7 @@ export default function Home() {
                 <Music />
                 <section
                     id="landing-section"
-                    className="h-screen flex items-center justify-center flex-col gap-10 text-center text-white"
+                    className="h-dvh flex items-center justify-center flex-col gap-10 text-center text-white"
                 >
                     <div className="w-full h-full absolute -z-10 overflow-hidden">
                         <Image
@@ -96,7 +96,7 @@ export default function Home() {
                         Open invitation
                     </Button>
                 </section>
-                <section className="h-screen" id="profile">
+                <section className="h-dvh" id="profile">
                     <div>Karel Karunia</div>
                     <div>Sabrina Alvina Budiono</div>
                 </section>

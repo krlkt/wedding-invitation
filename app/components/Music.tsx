@@ -16,7 +16,7 @@ const Music = () => {
         }
     }, [playMusic]);
     return (
-        <div className="absolute bottom-6 right-6">
+        <div className="fixed bottom-6 right-6">
             <span className="w-12 h-12 absolute top-0 left-0 inline-flex rounded-full  bg-blue-200 opacity-75 ping" />
             <button
                 className="bg-blue-200 w-12 h-12 p-3 rounded-full z-10 relative"
