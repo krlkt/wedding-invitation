@@ -72,12 +72,10 @@ export default function Home() {
                 >
                     <div className="w-full h-full absolute -z-10 overflow-hidden">
                         <Image
-                            className="animateImage"
+                            className="animateImage object-cover object-center"
                             src={landingPageImages[currentIndex]}
                             alt="landing page images"
                             fill
-                            objectFit="cover"
-                            objectPosition="center"
                         />
                     </div>
                     <header className="font-serif flex flex-col gap-4">
