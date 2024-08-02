@@ -39,13 +39,30 @@ body {
 }
 
 .animateImage {
-    animation: zoom 5s linear 0s infinite;
+    animation: zoom 5s linear 0s;
 }
 
 @keyframes zoom {
     to {
         transform: scale(1.05);
     }
+}
+
+/* Image overlay and hero section */
+.hero {
+    background-image: url("/images/couple1.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.overlay {
+    border-image: linear-gradient(
+            45deg,
+            hsla(0, 0%, 20%, 0.6) 0%,
+            hsla(0, 0%, 7%, 0.6) 80%
+        )
+        fill 1;
 }
 
 /* Loader css */

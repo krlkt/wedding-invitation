@@ -25,7 +25,7 @@ const Music = () => {
                 {playMusic ? <PauseIcon /> : <MusicIcon />}
             </button>
             <audio id="music" ref={audio}>
-                <source src="/music/afterglow.mp3" type="audio/mpeg" />
+                <source src="/music/luckyme.mp3" type="audio/mpeg" />
             </audio>
         </div>
     );

@@ -1,28 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "./components/Button";
 import Music from "./components/Music";
-import couple_image1 from "../public/images/couple1.jpg";
-import couple_image2 from "../public/images/couple2.jpg";
-import couple_image3 from "../public/images/couple3.jpg";
-import couple_image4 from "../public/images/couple4.jpg";
-import couple_image5 from "../public/images/couple5.jpg";
-import couple_image6 from "../public/images/couple6.jpg";
-import Image from "next/image";
 import LoaderScreen from "./components/LoaderScreen";
 
-const landingPageImages = [
-    couple_image1,
-    couple_image2,
-    couple_image3,
-    couple_image4,
-    couple_image5,
-    couple_image6,
+const backgroundImages = [
+    'url("/images/couple1.jpg")',
+    'url("/images/couple2.jpg")',
+    'url("/images/couple3.jpg")',
+    'url("/images/couple4.jpg")',
+    'url("/images/couple5.jpg")',
+    'url("/images/couple6.jpg")',
 ];
 
 export default function Home() {
-    const [currentIndex, setCurrentIndex] = useState(0);
+    let imageIndexRef = useRef(1);
 
     const handleOpenInvitation = () => {
         // Show loader screen and attach animation
@@ -50,25 +43,23 @@ export default function Home() {
     };
 
     useEffect(() => {
-        const handleAnimationIteration = () => {
-            setCurrentIndex((prevIndex) =>
-                prevIndex === landingPageImages.length - 1 ? 0 : prevIndex + 1
-            );
-        };
-
-        const imageElement = document.querySelector(".animateImage");
-        if (!imageElement) alert("image element not found");
-        imageElement?.addEventListener(
-            "animationiteration",
-            handleAnimationIteration
-        );
-
-        return () => {
-            imageElement?.removeEventListener(
-                "animationiteration",
-                handleAnimationIteration
-            );
-        };
+        setInterval(() => {
+            const hero = document.getElementById("hero");
+            if (!hero) return;
+            // Change background image
+            hero.style.backgroundImage =
+                backgroundImages[imageIndexRef.current];
+            imageIndexRef.current =
+                backgroundImages.length - 1 === imageIndexRef.current
+                    ? 0
+                    : imageIndexRef.current + 1;
+            // Reset animation
+            hero.classList.remove("animateImage");
+            void hero.offsetWidth;
+            hero.classList.add("animateImage");
+        }, 5000);
+        // Prevent rerender by letting dependency array be empty
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -78,25 +69,21 @@ export default function Home() {
                 <Music />
                 <section
                     id="landing-section"
-                    className="h-dvh flex items-center justify-center flex-col gap-10 text-center text-white"
+                    className="h-dvh flex items-center justify-center flex-col gap-10 text-center text-white relative overflow-hidden"
                 >
-                    <div className="w-full h-full absolute -z-10 overflow-hidden">
-                        <Image
-                            className="animateImage object-cover object-center"
-                            src={landingPageImages[currentIndex]}
-                            alt="landing page images"
-                            fill
-                        />
-                    </div>
+                    <div
+                        id="hero"
+                        className="w-full h-full absolute -z-10 overlay hero animateImage"
+                    />
                     <header className="font-serif flex flex-col gap-4">
-                        <h2 className="text-4xl">The wedding of</h2>
-                        <h3 className="text-6xl font-cursive">
+                        <h2 className="text-2xl">The wedding of</h2>
+                        <h3 className="text-4xl font-cursive">
                             Karel and Sabrina
                         </h3>
                     </header>
                     <div className="flex flex-col gap-4">
-                        <h4 className="text-2xl">Dear Mr./Mrs.</h4>
-                        <h2 className="text-5xl font-cursive2 text-shadow-lg">
+                        <h4 className="text-xl">Dear Mr./Mrs.</h4>
+                        <h2 className="text-3xl font-cursive2 text-shadow-lg">
                             Sabrina A. Budiono and partner
                         </h2>
                     </div>
