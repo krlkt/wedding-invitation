@@ -43,7 +43,7 @@ export default function Home() {
     };
 
     useEffect(() => {
-        setInterval(() => {
+        const animationAndBackgroundInterval = setInterval(() => {
             const hero = document.getElementById("hero");
             if (!hero) return;
             // Change background image
@@ -58,6 +58,8 @@ export default function Home() {
             void hero.offsetWidth;
             hero.classList.add("animateImage");
         }, 5000);
+
+        return () => clearInterval(animationAndBackgroundInterval);
         // Prevent rerender by letting dependency array be empty
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
