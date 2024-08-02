@@ -50,16 +50,26 @@ export default function Home() {
     };
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            if (currentIndex === landingPageImages.length - 1) {
-                setCurrentIndex(0);
-            } else {
-                setCurrentIndex(currentIndex + 1);
-            }
-        }, 5000);
+        const handleAnimationIteration = () => {
+            setCurrentIndex((prevIndex) =>
+                prevIndex === landingPageImages.length - 1 ? 0 : prevIndex + 1
+            );
+        };
 
-        return () => clearInterval(intervalId);
-    }, [currentIndex]);
+        const imageElement = document.querySelector(".animateImage");
+        if (!imageElement) alert("image element not found");
+        imageElement?.addEventListener(
+            "animationiteration",
+            handleAnimationIteration
+        );
+
+        return () => {
+            imageElement?.removeEventListener(
+                "animationiteration",
+                handleAnimationIteration
+            );
+        };
+    }, []);
 
     return (
         <body>
