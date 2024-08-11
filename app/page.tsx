@@ -87,6 +87,7 @@ export default function Home() {
                             className="w-full h-full object-cover animateImage"
                             src={backgroundImagesSrc[bgImageIndex]}
                             alt="couple image"
+                            priority={true}
                         />
                     </div>
                     <header className="font-serif flex flex-col gap-4">
