@@ -44,26 +44,20 @@ body {
 }
 
 @keyframes zoom {
+    from {
+        transform: scale(1.1);
+    }
     to {
-        transform: scale(1.05);
+        transform: scale(1);
     }
 }
 
-/* Image overlay and hero section */
-.hero {
-    background-image: url("/images/couple1.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
 .overlay {
-    border-image: linear-gradient(
-            45deg,
-            hsla(0, 0%, 20%, 0.6) 0%,
-            hsla(0, 0%, 7%, 0.6) 80%
-        )
-        fill 1;
+    background: linear-gradient(
+        45deg,
+        hsla(0, 0%, 20%, 0.6) 0%,
+        hsla(0, 0%, 7%, 0.6) 80%
+    );
 }
 
 /* Loader css */

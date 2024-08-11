@@ -1,21 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "./components/Button";
 import Music from "./components/Music";
 import LoaderScreen from "./components/LoaderScreen";
+import Image from "next/image";
 
-const backgroundImages = [
-    'url("/images/couple1.jpg")',
-    'url("/images/couple2.jpg")',
-    'url("/images/couple3.jpg")',
-    'url("/images/couple4.jpg")',
-    'url("/images/couple5.jpg")',
-    'url("/images/couple6.jpg")',
+const backgroundImagesSrc = [
+    "/images/couple1.jpg",
+    "/images/couple2.jpg",
+    "/images/couple3.jpg",
+    "/images/couple4.jpg",
+    "/images/couple5.jpg",
+    "/images/couple6.jpg",
 ];
 
 export default function Home() {
-    let imageIndexRef = useRef(1);
+    const [bgImageIndex, setBgImageIndex] = useState(0);
 
     const handleOpenInvitation = () => {
         // Show loader screen and attach animation
@@ -44,39 +45,50 @@ export default function Home() {
 
     useEffect(() => {
         const animationAndBackgroundInterval = setInterval(() => {
-            const hero = document.getElementById("hero");
-            if (!hero) return;
             // Change background image
-            hero.style.backgroundImage =
-                backgroundImages[imageIndexRef.current];
-            imageIndexRef.current =
-                backgroundImages.length - 1 === imageIndexRef.current
+            setBgImageIndex((currentBgImgIndex) =>
+                backgroundImagesSrc.length - 1 === currentBgImgIndex
                     ? 0
-                    : imageIndexRef.current + 1;
-            // Reset animation
-            hero.classList.remove("animateImage");
-            void hero.offsetWidth;
-            hero.classList.add("animateImage");
-        }, 5000);
+                    : currentBgImgIndex + 1
+            );
+        }, 4000);
 
         return () => clearInterval(animationAndBackgroundInterval);
         // Prevent rerender by letting dependency array be empty
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        const hero = document.getElementById("hero");
+        if (!hero) return;
+        // Reset animation
+        hero.classList.remove("animateImage");
+        void hero.offsetWidth;
+        hero.classList.add("animateImage");
+    }, [bgImageIndex]);
+
     return (
         <body>
-            <LoaderScreen />
-            <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif overflow-x-hidden">
+            <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
                 <section
                     id="landing-section"
                     className="h-dvh flex items-center justify-center flex-col gap-10 text-center text-white relative overflow-hidden"
                 >
                     <div
-                        id="hero"
-                        className="w-full h-full absolute -z-10 overlay hero animateImage"
+                        id="overlay"
+                        className="w-full h-full absolute -z-10 overlay"
                     />
+                    <div id="hero" className="w-full h-full absolute -z-20">
+                        <Image
+                            width={0}
+                            height={0}
+                            sizes="100vw"
+                            className="w-full h-full object-cover animateImage"
+                            src={backgroundImagesSrc[bgImageIndex]}
+                            alt="couple image"
+                        />
+                    </div>
                     <header className="font-serif flex flex-col gap-4">
                         <h2 className="text-2xl">The wedding of</h2>
                         <h3 className="text-4xl font-cursive">
@@ -99,6 +111,7 @@ export default function Home() {
                 </section>
                 <section></section>
             </main>
+            <LoaderScreen />
         </body>
     );
 }
