@@ -16,6 +16,12 @@ const config: Config = {
             fontFamily: {
                 cursive: ["Alex Brush", "cursive"],
                 cursive2: ["Tangerine", "Alex Brush", "cursive"],
+                cursive3: [
+                    "Rouge Script",
+                    "Tangerine",
+                    "Alex Brush",
+                    "cursive",
+                ],
                 serif: ["Cormorant Garamond", "serif"],
             },
         },
