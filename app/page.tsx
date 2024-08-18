@@ -69,6 +69,7 @@ export default function Home() {
 
     return (
         <body>
+            <LoaderScreen />
             <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
                 <section
@@ -110,9 +111,7 @@ export default function Home() {
                     <div>Karel Karunia</div>
                     <div>Sabrina Alvina Budiono</div>
                 </section>
-                <section></section>
             </main>
-            <LoaderScreen />
         </body>
     );
 }
