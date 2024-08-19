@@ -12,7 +12,7 @@ const LoaderScreen: FC<LoaderScreenProps> = ({ isVisible }) => {
                     id={"loader-screen"}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    exit={{ opacity: 0, scale: 2 }}
                     transition={{ duration: 0.6 }}
                     className="w-dvh h-dvh bg-black grid place-content-center fixed inset-0 z-50 font-serif"
                 >
