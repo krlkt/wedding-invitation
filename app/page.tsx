@@ -17,19 +17,19 @@ const backgroundImagesSrc = [
 
 export default function Home() {
     const [bgImageIndex, setBgImageIndex] = useState(0);
+    const [isVisible, setIsVisible] = useState<boolean>(false);
 
     const handleOpenInvitation = () => {
         // Show loader screen and attach animation
         const loaderScreen = document.getElementById("loader-screen");
         const loaderText = document.getElementsByName("text-body");
 
-        loaderScreen?.classList.add("visible");
+        setIsVisible(true);
         loaderText?.forEach((element) => {
             element.classList.add("animate-loader");
         });
         setTimeout(() => {
-            loaderScreen?.classList.remove("visible");
-            loaderScreen?.classList.add("after-visible");
+            setIsVisible(false);
         }, 4500);
 
         // Scroll into next section during animation
@@ -69,7 +69,7 @@ export default function Home() {
 
     return (
         <body>
-            <LoaderScreen />
+            <LoaderScreen isVisible={isVisible} />
             <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
                 <section

@@ -62,8 +62,7 @@ body {
 
 /* Loader css */
 #loader-screen {
-    visibility: hidden;
-    display: none;
+    display: grid;
 }
 
 #loader-screen svg {
@@ -78,15 +77,6 @@ body {
 #loader-screen .animate-loader {
     stroke: white;
     animation: animate-stroke 4s forwards;
-}
-
-#loader-screen.visible {
-    visibility: visible;
-    display: grid;
-}
-
-#loader-screen.after-visible {
-    visibility: hidden;
 }
 
 @keyframes animate-stroke {
