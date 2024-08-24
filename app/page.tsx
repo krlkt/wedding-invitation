@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Button from "./components/Button";
-import Music from "./components/Music";
-import LoaderScreen from "./components/LoaderScreen";
-import Image from "next/image";
+import { useEffect, useState } from 'react';
+import Button from './components/Button';
+import Music from './components/Music';
+import LoaderScreen from './components/LoaderScreen';
+import Image from 'next/image';
 
 const backgroundImagesSrc = [
-    "/images/couple1.jpg",
-    "/images/couple2.jpg",
-    "/images/couple3.jpg",
-    "/images/couple4.jpg",
-    "/images/couple5.jpg",
-    "/images/couple6.jpg",
+    '/images/couple1.jpg',
+    '/images/couple2.jpg',
+    '/images/couple3.jpg',
+    '/images/couple4.jpg',
+    '/images/couple5.jpg',
+    '/images/couple6.jpg',
 ];
 
 export default function Home() {
@@ -21,12 +21,12 @@ export default function Home() {
 
     const handleOpenInvitation = () => {
         // Show loader screen and attach animation
-        const loaderScreen = document.getElementById("loader-screen");
-        const loaderText = document.getElementsByName("text-body");
+        const loaderScreen = document.getElementById('loader-screen');
+        const loaderText = document.getElementsByName('text-body');
 
         setIsVisible(true);
         loaderText?.forEach((element) => {
-            element.classList.add("animate-loader");
+            element.classList.add('animate-loader');
         });
         setTimeout(() => {
             setIsVisible(false);
@@ -34,12 +34,12 @@ export default function Home() {
 
         // Scroll into next section during animation
         setTimeout(() => {
-            const profileSection = document.getElementById("profile");
+            const profileSection = document.getElementById('profile');
             profileSection?.scrollIntoView();
         }, 1000);
 
         // Play music
-        const music = document.getElementById("music") as HTMLAudioElement;
+        const music = document.getElementById('music') as HTMLAudioElement;
         music?.play();
     };
 
@@ -59,12 +59,12 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        const hero = document.getElementById("hero");
+        const hero = document.getElementById('hero');
         if (!hero) return;
         // Reset animation
-        hero.classList.remove("animateImage");
+        hero.classList.remove('animateImage');
         void hero.offsetWidth;
-        hero.classList.add("animateImage");
+        hero.classList.add('animateImage');
     }, [bgImageIndex]);
 
     return (
@@ -108,7 +108,14 @@ export default function Home() {
                     </Button>
                 </section>
                 <section className="h-dvh" id="profile">
-                    <div>Karel Karunia</div>
+                    <div>
+                        <img
+                            src="https://assets.codepen.io/1480814/kevin-p.png"
+                            alt="Kevin Powell"
+                        />
+                        <h4></h4>
+                        Karel Karunia
+                    </div>
                     <div>Sabrina Alvina Budiono</div>
                 </section>
             </main>

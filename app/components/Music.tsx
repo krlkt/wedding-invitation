@@ -1,7 +1,7 @@
-"use client";
-import { useCallback, useRef, useState } from "react";
-import MusicIcon from "../svg/MusicIcon";
-import PauseIcon from "../svg/PauseIcon";
+'use client';
+import { useCallback, useRef, useState } from 'react';
+import MusicIcon from '../svg/MusicIcon';
+import PauseIcon from '../svg/PauseIcon';
 
 const Music = () => {
     const [playMusic, setPlayMusic] = useState(false);

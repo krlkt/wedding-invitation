@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { FC } from "react";
+import { AnimatePresence, motion } from 'framer-motion';
+import { FC } from 'react';
 
 interface LoaderScreenProps {
     isVisible: boolean;
@@ -9,7 +9,7 @@ const LoaderScreen: FC<LoaderScreenProps> = ({ isVisible }) => {
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    id={"loader-screen"}
+                    id={'loader-screen'}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, scale: 2 }}
@@ -22,7 +22,7 @@ const LoaderScreen: FC<LoaderScreenProps> = ({ isVisible }) => {
                             x="40%"
                             y="40%"
                             textAnchor="middle"
-                            className={"animate-loader"}
+                            className={'animate-loader'}
                         >
                             Karel
                         </text>
@@ -32,7 +32,7 @@ const LoaderScreen: FC<LoaderScreenProps> = ({ isVisible }) => {
                             y="40%"
                             dy="0.9em"
                             textAnchor="middle"
-                            className={"animate-loader"}
+                            className={'animate-loader'}
                         >
                             &
                         </text>
@@ -42,7 +42,7 @@ const LoaderScreen: FC<LoaderScreenProps> = ({ isVisible }) => {
                             y="40%"
                             dy="1.9em"
                             textAnchor="middle"
-                            className={"animate-loader"}
+                            className={'animate-loader'}
                         >
                             Sabrina
                         </text>
