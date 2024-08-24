@@ -5,6 +5,7 @@ import Button from './components/Button';
 import Music from './components/Music';
 import LoaderScreen from './components/LoaderScreen';
 import Image from 'next/image';
+import Avatar from './components/Avatar';
 
 const backgroundImagesSrc = [
     '/images/couple1.jpg',
@@ -108,15 +109,30 @@ export default function Home() {
                     </Button>
                 </section>
                 <section className="h-dvh" id="profile">
-                    <div>
-                        <img
-                            src="https://assets.codepen.io/1480814/kevin-p.png"
-                            alt="Kevin Powell"
-                        />
-                        <h4></h4>
-                        Karel Karunia
+                    <div className="px-10 flex gap-8">
+                        <Avatar src="/images/husband_to_be.png" />
+                        <div className="flex flex-col gap-2 justify-end">
+                            <h4 className="font-bold text-2xl">
+                                Karel Karunia
+                            </h4>
+                            <p>
+                                Husband to be. Developer. Video Gamer. Sports
+                                enthusiast. Believer. Cat dad.
+                            </p>
+                        </div>
                     </div>
-                    <div>Sabrina Alvina Budiono</div>
+                    <div className="px-10 flex gap-8">
+                        <div className="flex flex-col gap-2 justify-end">
+                            <h4 className="font-bold text-2xl">
+                                Sabrina Alvina Budiono
+                            </h4>
+                            <p>
+                                Wife to be. Developer. Video Gamer. Sports
+                                enthusiast. Believer. Cat mom.
+                            </p>
+                        </div>
+                        <Avatar src="/images/wife_to_be.png" />
+                    </div>
                 </section>
             </main>
         </body>
