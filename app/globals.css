@@ -15,7 +15,6 @@
 
 body {
     color: rgb(var(--foreground-rgb));
-    font-family: Cormorant Garamond, serif;
     background: linear-gradient(
             to bottom,
             transparent,

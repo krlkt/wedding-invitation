@@ -8,7 +8,7 @@ export default function LandingPage() {
                     <h2 className="font-serif font-bold text-4xl">
                         Hi Guest 👋
                     </h2>
-                    <h3 className="text-xl">
+                    <h3 className="text-xl font-serif">
                         Which wedding are you going to attend?
                     </h3>
                 </header>
