@@ -40,7 +40,7 @@ const CycleBackground: FC<PropsWithChildren> = ({ children }) => {
     return (
         <section
             id="landing-section"
-            className="h-dvh flex items-center justify-center flex-col gap-10 text-center text-white relative overflow-hidden"
+            className="h-dvh flex items-center justify-center flex-col gap-10 text-center text-white relative overflow-hidden font-serif"
         >
             <div
                 id="overlay"
