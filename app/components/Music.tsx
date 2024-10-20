@@ -1,11 +1,12 @@
 'use client';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import MusicIcon from '../svg/MusicIcon';
 import PauseIcon from '../svg/PauseIcon';
 
 const Music = () => {
-    const [playMusic, setPlayMusic] = useState(false);
     const audio = useRef<HTMLAudioElement>(null);
+    const [playMusic, setPlayMusic] = useState(false);
+
     const handleMusicClick = useCallback(() => {
         if (playMusic) {
             audio.current?.pause();
@@ -15,6 +16,12 @@ const Music = () => {
             setPlayMusic(true);
         }
     }, [playMusic]);
+
+    useEffect(() => {
+        if (audio.current?.paused) setPlayMusic(false);
+        else setPlayMusic(true);
+    }, [playMusic]);
+
     return (
         <div className="fixed bottom-6 right-6 z-20">
             <span className="w-12 h-12 absolute top-0 left-0 inline-flex rounded-full  bg-blue-200 opacity-75 ping" />

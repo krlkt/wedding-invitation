@@ -1,4 +1,10 @@
 import LocationCard from './LocationCard';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Pick location: Karel & Sabrina's Wedding Invitation",
+    description: 'Pick a location of the wedding you are going to visit',
+};
 
 export default function LandingPage() {
     return (

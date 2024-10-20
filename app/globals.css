@@ -23,6 +23,11 @@ body {
         rgb(var(--background-start-rgb));
 }
 
+body.locked {
+    overflow: hidden;
+    height: 100%; /* Ensure the body takes full height */
+}
+
 #landing-section {
     width: 100%;
 }
