@@ -61,6 +61,18 @@ export default function InvitationPage() {
                         <Avatar src="/images/wife_to_be.png" />
                     </div>
                 </section>
+                {/* Landing page (Wedding of bla, dear bla, open invitation) Music on open
+                Profile of KK and Sab
+                History
+                first met / first date / bf gf / first & second pet / proposal
+                Countdown / Save the date (opt) masukin calendar
+                When and where (Google map link) (How to differentiate bali malang jakarta)
+                Photo galery
+                Confirmation (RSVP)
+                Wedding Gift (Bank bca/paypal)
+                Name and wish
+                Thank you
+                Show table sitting position (Bali only - opt) */}
                 <section className="h-dvh" id="profile">
                     <div className="px-10 flex gap-8">
                         <Avatar src="/images/husband_to_be.png" />
