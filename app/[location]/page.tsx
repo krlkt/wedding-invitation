@@ -1,6 +1,10 @@
 import { Metadata } from 'next';
 import InvitationPage from './InvitationPage';
 import UnopenedInvitationPage from './UnopenedInvitationPage';
+import UnidentifiedPersonPage from './UnidentifiedPersonPage';
+import NotInGuestListPage from './NotInGuestListPage';
+import { notFound } from 'next/navigation';
+import { baliGuests, jakartaGuests, malangGuests } from '../utils/guestList';
 
 export const metadata: Metadata = {
     title: "Karel & Sabrina's Wedding Invitation",
@@ -13,11 +17,39 @@ export default function Page({
     params: { location: string };
     searchParams: { [key: string]: string | string[] | undefined };
 }) {
-    console.log(params);
-    console.log(searchParams);
+    const guestName = searchParams.to as string;
+
+    if (
+        params.location !== 'bali' &&
+        params.location !== 'jakarta' &&
+        params.location !== 'malang'
+    )
+        return notFound();
+
+    if (!('to' in searchParams)) {
+        return <UnidentifiedPersonPage />;
+    }
+
+    if (!isInGuestList(params.location, guestName)) {
+        return <NotInGuestListPage guestName={guestName} />;
+    }
+
     return 'opened' in searchParams ? (
         <InvitationPage />
     ) : (
-        <UnopenedInvitationPage />
+        <UnopenedInvitationPage guestName={guestName} />
     );
+}
+
+function isInGuestList(location: string, guestName: string) {
+    switch (location) {
+        case 'bali':
+            return baliGuests.includes(guestName);
+        case 'jakarta':
+            return jakartaGuests.includes(guestName);
+        case 'malang':
+            return malangGuests.includes(guestName);
+        default:
+            return false;
+    }
 }

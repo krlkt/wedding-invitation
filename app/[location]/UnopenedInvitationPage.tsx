@@ -5,7 +5,11 @@ import Button from '../components/Button';
 import { usePathname } from 'next/navigation';
 import { createQueryString } from '../utils/link';
 
-export default function UnopenedInvitationPage() {
+export default function UnopenedInvitationPage({
+    guestName,
+}: {
+    guestName: string;
+}) {
     const pathname = usePathname();
 
     return (
@@ -17,10 +21,18 @@ export default function UnopenedInvitationPage() {
             <div className="flex flex-col gap-4">
                 <h4 className="text-xl">Dear Mr./Mrs.</h4>
                 <h2 className="text-3xl font-cursive2 text-shadow-lg">
-                    Sabrina A. Budiono and partner
+                    {guestName}
                 </h2>
             </div>
-            <Link href={pathname + '?' + createQueryString('opened', '')}>
+            <Link
+                href={
+                    pathname +
+                    '?to=' +
+                    guestName +
+                    '&' +
+                    createQueryString('opened', '')
+                }
+            >
                 <Button>Open invitation</Button>
             </Link>
         </CycleBackground>
