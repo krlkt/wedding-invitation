@@ -35,10 +35,10 @@ export default function InvitationPage() {
             <LoaderScreen isVisible={isLoaderScreenVisible} />
             <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
-                <section className="h-dvh" id="profile">
-                    <div className="px-10 flex gap-8">
-                        <Avatar src="/images/husband_to_be.png" />
-                        <div className="flex flex-col gap-2 justify-end">
+                <section className="min-h-dvh text-center pt-10" id="profile">
+                    <div className="p-10 flex gap-8 flex-col items-center justify-center">
+                        <Avatar src="/images/husband_to_be.jpg" />
+                        <div>
                             <h4 className="font-bold text-2xl">
                                 Karel Karunia
                             </h4>
@@ -48,8 +48,9 @@ export default function InvitationPage() {
                             </p>
                         </div>
                     </div>
-                    <div className="px-10 flex gap-8">
-                        <div className="flex flex-col gap-2 justify-end">
+                    <div className="px-10 flex flex-col gap-8 items-center justify-center">
+                        <Avatar src="/images/wife_to_be.jpg" />
+                        <div>
                             <h4 className="font-bold text-2xl">
                                 Sabrina Alvina Budiono
                             </h4>
@@ -58,7 +59,6 @@ export default function InvitationPage() {
                                 enthusiast. Believer. Cat mom.
                             </p>
                         </div>
-                        <Avatar src="/images/wife_to_be.png" />
                     </div>
                 </section>
                 {/* Landing page (Wedding of bla, dear bla, open invitation) Music on open
@@ -73,32 +73,6 @@ export default function InvitationPage() {
                 Name and wish
                 Thank you
                 Show table sitting position (Bali only - opt) */}
-                <section className="h-dvh" id="profile">
-                    <div className="px-10 flex gap-8">
-                        <Avatar src="/images/husband_to_be.png" />
-                        <div className="flex flex-col gap-2 justify-end">
-                            <h4 className="font-bold text-2xl">
-                                Karel Karunia
-                            </h4>
-                            <p>
-                                Husband to be. Developer. Video Gamer. Sports
-                                enthusiast. Believer. Cat dad.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="px-10 flex gap-8">
-                        <div className="flex flex-col gap-2 justify-end">
-                            <h4 className="font-bold text-2xl">
-                                Sabrina Alvina Budiono
-                            </h4>
-                            <p>
-                                Wife to be. Developer. Video Gamer. Sports
-                                enthusiast. Believer. Cat mom.
-                            </p>
-                        </div>
-                        <Avatar src="/images/wife_to_be.png" />
-                    </div>
-                </section>
             </main>
         </>
     );
