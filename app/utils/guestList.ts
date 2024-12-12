@@ -1,4 +1,5 @@
 export const baliGuests = [
+    'Karel Karunia',
     'Karel Karunia and Family',
     'Sabrina A. Budiono',
     'Natasya Diposubagio',
