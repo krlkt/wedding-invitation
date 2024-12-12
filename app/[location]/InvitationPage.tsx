@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
 import Avatar from '../components/Avatar';
+import Timeline from '../components/Timeline/Timeline';
 
 export default function InvitationPage() {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] =
@@ -61,8 +62,10 @@ export default function InvitationPage() {
                         </div>
                     </div>
                 </section>
-                {/* Landing page (Wedding of bla, dear bla, open invitation) Music on open
-                Profile of KK and Sab
+                <section className="w-full p-4" id="history">
+                    <Timeline />
+                </section>
+                {/* 
                 History
                 first met / first date / bf gf / first & second pet / proposal
                 Countdown / Save the date (opt) masukin calendar
