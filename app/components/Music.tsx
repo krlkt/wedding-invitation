@@ -1,7 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import MusicIcon from '../svg/MusicIcon';
-import PauseIcon from '../svg/PauseIcon';
+import MusicIcon from '../icons/MusicIcon';
+import PauseIcon from '../icons/PauseIcon';
 
 const Music = () => {
     const audio = useRef<HTMLAudioElement>(null);

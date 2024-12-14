@@ -12,7 +12,7 @@ const Avatar: FC<AvatarProps> = ({ src }) => {
             alt="Husband to be"
             width={500}
             height={500}
-            className="w-[200px] h-[200px] object-cover rounded-full object-top"
+            className="w-[180px] h-[180px] object-cover rounded-full object-top"
         />
     );
 };
