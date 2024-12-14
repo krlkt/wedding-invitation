@@ -5,6 +5,6 @@ export const baliGuests = [
     'Natasya Diposubagio',
 ];
 
-export const malangGuests = ['Natasya Diposubagio', 'Weny'];
+export const malangGuests = ['Karel Karunia', 'Natasya Diposubagio', 'Weny'];
 
-export const jakartaGuests = ['Ama and Akong'];
+export const jakartaGuests = ['Karel Karunia', 'Ama and Akong'];
