@@ -6,8 +6,9 @@ import Music from '../components/Music';
 import Avatar from '../components/Avatar';
 import Timeline from '../components/Timeline/Timeline';
 import InstagramIcon from '../icons/InstagramIcon';
+import LocationComponent, { Locations } from '../components/LocationComponent';
 
-export default function InvitationPage() {
+export default function InvitationPage({ location }: { location: Locations }) {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] =
         useState<boolean>(true);
 
@@ -35,7 +36,7 @@ export default function InvitationPage() {
     return (
         <>
             <LoaderScreen isVisible={isLoaderScreenVisible} />
-            <main className="flex min-h-screen w-screen flex-col gap-10 items-center justify-between font-serif">
+            <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
                 <section
                     className="min-h-dvh text-center pt-10 flex flex-col gap-10"
@@ -87,7 +88,7 @@ export default function InvitationPage() {
                 </section>
                 {/* History - Opt: Hide by default, open accordion to animate and show timeline */}
                 <section
-                    className="w-full p-4 flex flex-col gap-10"
+                    className="w-full p-4 flex flex-col gap-10 mt-10"
                     id="history"
                 >
                     <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">
@@ -96,7 +97,7 @@ export default function InvitationPage() {
                     <Timeline />
                 </section>
                 {/* When? */}
-                <section className="text-center py-24 bg-white w-full">
+                <section className="text-center py-24 bg-white w-full ,t-10">
                     <div className="flex flex-col gap-2">
                         <div className="font-cursive_nautigal text-8xl">
                             <p className="text-gray-400 opacity-60">Save</p>
@@ -115,12 +116,8 @@ export default function InvitationPage() {
                     </div>
                 </section>
                 {/* Where? */}
-                <section className="flex flex-col gap-4 text-center">
-                    <h2 className="text-5xl font-cursive_nautigal text-gray-700">
-                        Location
-                    </h2>
-                    Bali? Tirtha Jakarta? Angke Kelapa Gading Malang? Malang
-                    chinese Restaurant
+                <section className="flex flex-col gap-4 text-center relative w-full h-dvh">
+                    <LocationComponent location={location} />
                 </section>
                 {/* 
                 Countdown / Save the date (opt) masukin calendar
