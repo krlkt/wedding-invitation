@@ -34,7 +34,10 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                     Kuta, Badung Regency, Bali 80364, Indonesia
                 </p>
                 <Button>
-                    <a href="https://maps.app.goo.gl/iu2DLDD165WpfF7PA">
+                    <a
+                        target="_blank"
+                        href="https://maps.app.goo.gl/iu2DLDD165WpfF7PA"
+                    >
                         Google maps
                     </a>
                 </Button>

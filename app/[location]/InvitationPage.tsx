@@ -7,6 +7,7 @@ import Avatar from '../components/Avatar';
 import Timeline from '../components/Timeline/Timeline';
 import InstagramIcon from '../icons/InstagramIcon';
 import LocationComponent, { Locations } from '../components/LocationComponent';
+import Button from '../components/Button';
 
 export default function InvitationPage({ location }: { location: Locations }) {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] =
@@ -98,7 +99,7 @@ export default function InvitationPage({ location }: { location: Locations }) {
                 </section>
                 {/* When? */}
                 <section className="text-center py-24 bg-white w-full ,t-10">
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 items-center">
                         <div className="font-cursive_nautigal text-8xl">
                             <p className="text-gray-400 opacity-60">Save</p>
                             <p className="text-gray-500 opacity-70 leading-8">
@@ -113,6 +114,14 @@ export default function InvitationPage({ location }: { location: Locations }) {
                             Karel & Sabrina
                         </p>
                         <p className="text-2xl text-gray-900">09/09/2025</p>
+                        <Button alternateBackground>
+                            <a
+                                target="_blank"
+                                href="https://calendar.google.com/calendar/event?action=TEMPLATE&amp;tmeid=X2M1cGpjb2ppOTFubDZ0YTM2MHIzaWtpaWFoMTNndWFrNzU0bmViamZkZyBrYXJlbGthcnVuaWEyNEBt&amp;tmsrc=karelkarunia24%40gmail.com"
+                            >
+                                Add to calendar
+                            </a>
+                        </Button>
                     </div>
                 </section>
                 {/* Where? */}
