@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import BlurryOverlay from './BlurryOverlay';
 import DinnerIcon from '../icons/DinnerIcon';
+import Button from './Button';
 
 export const locations = {
     bali: 'bali',
@@ -32,6 +33,11 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                     Jl. Raya Uluwatu Banjar Dinas Karang, Boma, Pecatu, South
                     Kuta, Badung Regency, Bali 80364, Indonesia
                 </p>
+                <Button>
+                    <a href="https://maps.app.goo.gl/iu2DLDD165WpfF7PA">
+                        Google maps
+                    </a>
+                </Button>
             </div>
         </div>
     </BlurryOverlay>
