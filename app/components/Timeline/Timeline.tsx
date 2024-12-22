@@ -67,8 +67,8 @@ const TimelineItem: FC<TimelineItemProps> = ({
                 <Image
                     src={imgSrc}
                     alt="image alt"
-                    layout="fill" // Fills the parent div
-                    objectFit="cover" // Ensures the image covers the div without stretching
+                    fill
+                    className="object-cover"
                 />
             </div>
             {/* Gradient overlay */}

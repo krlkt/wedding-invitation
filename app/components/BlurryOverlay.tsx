@@ -8,10 +8,9 @@ const BlurryOverlay: FC<PropsWithChildren> = ({ children }) => {
             <Image
                 src="/images/tirtha-bali-02.jpg"
                 alt="Background"
-                layout="fill"
-                objectFit="cover"
+                fill
                 quality={100}
-                className="-z-20 object-[45%]"
+                className="-z-20 object-cover object-[45%]"
             />
 
             {/* Dark Blur Overlay */}

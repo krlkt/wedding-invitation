@@ -8,6 +8,12 @@ import Timeline from '../components/Timeline/Timeline';
 import InstagramIcon from '../icons/InstagramIcon';
 import LocationComponent, { Locations } from '../components/LocationComponent';
 import Button from '../components/Button';
+// @ts-ignore
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
+import ImageGallery from '../components/ImageGallery';
 
 export default function InvitationPage({ location }: { location: Locations }) {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] =
@@ -128,6 +134,10 @@ export default function InvitationPage({ location }: { location: Locations }) {
                 <section className="flex flex-col gap-4 text-center relative w-full h-dvh">
                     <LocationComponent location={location} />
                 </section>
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh">
+                    <ImageGallery />
+                </section>
+
                 {/* 
                 Countdown / Save the date (opt) masukin calendar
                 When and where (Google map link) (How to differentiate bali malang jakarta)
