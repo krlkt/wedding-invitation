@@ -7,13 +7,17 @@ type Wish = {
     wish: string;
 };
 
-const WishForm = () => {
+const WishForm = ({ guestName }: { guestName: string }) => {
     const {
         register,
         reset,
         handleSubmit,
         formState: { isSubmitting },
-    } = useForm<Wish>();
+    } = useForm<Wish>({
+        defaultValues: {
+            name: guestName,
+        },
+    });
     const onSubmit = async (data: any) => {
         try {
             await addWish(data);

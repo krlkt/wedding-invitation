@@ -29,10 +29,7 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                     <p className="text-2xl font-semibold">Tirtha Uluwatu</p>
                     <p className="text-lg font-sans">15:00 WIB</p>
                 </div>
-                <p className="text-sm font-sans">
-                    Jl. Raya Uluwatu Banjar Dinas Karang, Boma, Pecatu, South
-                    Kuta, Badung Regency, Bali 80364, Indonesia
-                </p>
+                <p className="text-sm font-sans">Bali, Indonesia</p>
                 <Button>
                     <a
                         target="_blank"

@@ -12,16 +12,21 @@ import 'photoswipe/style.css';
 import ImageGallery from '../components/ImageGallery';
 import Gift from '../components/Gift';
 import Wishes from '../components/wish/Wishes';
-import RSVP from '../components/RSVP';
+import RSVPForm from '../components/rsvp/RSVPForm';
 import { Wish } from '../models/wish';
 import WishForm from '../components/wish/WishForm';
+import { RSVP } from '../models/rsvp';
 
 export default function InvitationPage({
     location,
     wishes,
+    guestName,
+    rsvp,
 }: {
     location: Locations;
     wishes: Array<Wish>;
+    guestName: string;
+    rsvp?: RSVP;
 }) {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] =
         useState<boolean>(true);
@@ -147,7 +152,7 @@ export default function InvitationPage({
                 </section>
                 {/* RSVP */}
                 <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh px-4">
-                    <RSVP />
+                    <RSVPForm guestName={guestName} rsvp={rsvp} />
                 </section>
                 {/* Wedding Gift */}
                 <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
@@ -163,7 +168,7 @@ export default function InvitationPage({
                         Drop a note of advice, a sweet wish, or just some love
                         in the comments below!
                     </p>
-                    <WishForm />
+                    <WishForm guestName={guestName} />
                     <Wishes wishes={wishes} />
                 </section>
                 <section className="p-8">

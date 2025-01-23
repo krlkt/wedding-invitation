@@ -8,6 +8,7 @@ import { baliGuests, jakartaGuests, malangGuests } from '../utils/guestList';
 import { Locations } from '../components/LocationComponent';
 import { query } from '../db/client';
 import { Wish } from '../models/wish';
+import { RSVP } from '../models/rsvp';
 
 export const revalidate = 0;
 
@@ -25,6 +26,13 @@ export default async function Page({
     const guestName = searchParams.to as string;
 
     const { rows: wishes } = await query<Wish>('SELECT * FROM wish');
+    const { rows } = await query<RSVP>(
+        `
+    SELECT * FROM rsvp WHERE name = $name
+`,
+        { name: guestName }
+    );
+    const rsvp = rows[0];
 
     if (
         params.location !== 'bali' &&
@@ -42,7 +50,12 @@ export default async function Page({
     }
 
     return 'opened' in searchParams ? (
-        <InvitationPage location={params.location} wishes={wishes} />
+        <InvitationPage
+            location={params.location}
+            wishes={wishes}
+            guestName={guestName}
+            rsvp={rsvp}
+        />
     ) : (
         <UnopenedInvitationPage guestName={guestName} />
     );
