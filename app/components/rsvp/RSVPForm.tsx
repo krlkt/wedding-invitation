@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Button from '../Button';
 import { addRSVP } from './action';
 
-const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp: RSVP }) => {
+const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
     const {
         register,
         reset,
