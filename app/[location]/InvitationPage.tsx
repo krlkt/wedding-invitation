@@ -8,12 +8,11 @@ import Timeline from '../components/Timeline/Timeline';
 import InstagramIcon from '../icons/InstagramIcon';
 import LocationComponent, { Locations } from '../components/LocationComponent';
 import Button from '../components/Button';
-// @ts-ignore
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import '@splidejs/react-splide/css';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/style.css';
 import ImageGallery from '../components/ImageGallery';
+import Gift from '../components/Gift';
+import WishForm from '../components/WishForm';
+import RSVP from '../components/RSVP';
 
 export default function InvitationPage({ location }: { location: Locations }) {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] =
@@ -134,10 +133,38 @@ export default function InvitationPage({ location }: { location: Locations }) {
                 <section className="flex flex-col gap-4 text-center relative w-full h-dvh">
                     <LocationComponent location={location} />
                 </section>
+                {/* Photo galery */}
                 <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh">
                     <ImageGallery />
                 </section>
-
+                {/* RSVP */}
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh px-4">
+                    <RSVP />
+                </section>
+                {/* Wedding Gift */}
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh px-4">
+                    <Gift />
+                </section>
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh px-4">
+                    <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">
+                        Your Wishes
+                    </h2>
+                    <p>
+                        Your love and well-wishes mean the world to us, and
+                        we&#39;re so excited to share this special day with you.
+                        Drop a note of advice, a sweet wish, or just some love
+                        in the comments below!
+                    </p>
+                    <WishForm />
+                </section>
+                <section>
+                    <h2 className="text-3xl font-cursive_nautigal text-gray-700 text-center">
+                        Thank you for being part of our journey and celebrating
+                        this special day with us. Your love and support mean the
+                        world, and we can&#39;t wait to share the joy of our
+                        wedding with you!
+                    </h2>
+                </section>
                 {/* 
                 Countdown / Save the date (opt) masukin calendar
                 When and where (Google map link) (How to differentiate bali malang jakarta)
