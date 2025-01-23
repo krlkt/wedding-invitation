@@ -6,12 +6,16 @@ import NotInGuestListPage from './NotInGuestListPage';
 import { notFound } from 'next/navigation';
 import { baliGuests, jakartaGuests, malangGuests } from '../utils/guestList';
 import { Locations } from '../components/LocationComponent';
+import { query } from '../db/client';
+import { Wish } from '../models/wish';
+
+export const revalidate = 0;
 
 export const metadata: Metadata = {
     title: "Karel & Sabrina's Wedding Invitation",
 };
 
-export default function Page({
+export default async function Page({
     params,
     searchParams,
 }: {
@@ -19,6 +23,8 @@ export default function Page({
     searchParams: { [key: string]: string | string[] | undefined };
 }) {
     const guestName = searchParams.to as string;
+
+    const { rows: wishes } = await query<Wish>('SELECT * FROM wish');
 
     if (
         params.location !== 'bali' &&
@@ -36,7 +42,7 @@ export default function Page({
     }
 
     return 'opened' in searchParams ? (
-        <InvitationPage location={params.location} />
+        <InvitationPage location={params.location} wishes={wishes} />
     ) : (
         <UnopenedInvitationPage guestName={guestName} />
     );

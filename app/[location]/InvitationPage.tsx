@@ -4,17 +4,25 @@ import { useEffect, useState } from 'react';
 import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
 import Avatar from '../components/Avatar';
-import Timeline from '../components/Timeline/Timeline';
+import Timeline from '../components/timeline/Timeline';
 import InstagramIcon from '../icons/InstagramIcon';
 import LocationComponent, { Locations } from '../components/LocationComponent';
 import Button from '../components/Button';
 import 'photoswipe/style.css';
 import ImageGallery from '../components/ImageGallery';
 import Gift from '../components/Gift';
-import WishForm from '../components/WishForm';
+import Wishes from '../components/wish/Wishes';
 import RSVP from '../components/RSVP';
+import { Wish } from '../models/wish';
+import WishForm from '../components/wish/WishForm';
 
-export default function InvitationPage({ location }: { location: Locations }) {
+export default function InvitationPage({
+    location,
+    wishes,
+}: {
+    location: Locations;
+    wishes: Array<Wish>;
+}) {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] =
         useState<boolean>(true);
 
@@ -156,6 +164,7 @@ export default function InvitationPage({ location }: { location: Locations }) {
                         in the comments below!
                     </p>
                     <WishForm />
+                    <Wishes wishes={wishes} />
                 </section>
                 <section className="p-8">
                     <p className="text-md text-center">

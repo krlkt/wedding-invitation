@@ -5,10 +5,12 @@ import { FC, PropsWithChildren } from 'react';
 interface ButtonProps {
     onClick?: () => void;
     alternateBackground?: boolean;
+    type?: 'button' | 'submit' | 'reset';
 }
 const Button: FC<PropsWithChildren<ButtonProps>> = ({
     onClick,
     alternateBackground = false,
+    type,
     children,
 }) => {
     return (
@@ -18,6 +20,7 @@ const Button: FC<PropsWithChildren<ButtonProps>> = ({
             className={`bg-opacity-40 ${
                 alternateBackground ? 'bg-blue-200' : 'bg-white'
             } rounded-full px-4 py-2`}
+            type={type}
         >
             {children}
         </motion.button>
