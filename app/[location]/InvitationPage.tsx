@@ -157,13 +157,13 @@ export default function InvitationPage({ location }: { location: Locations }) {
                     </p>
                     <WishForm />
                 </section>
-                <section>
-                    <h2 className="text-3xl font-cursive_nautigal text-gray-700 text-center">
+                <section className="p-8">
+                    <p className="text-md text-center">
                         Thank you for being part of our journey and celebrating
                         this special day with us. Your love and support mean the
                         world, and we can&#39;t wait to share the joy of our
                         wedding with you!
-                    </h2>
+                    </p>
                 </section>
                 {/* 
                 Countdown / Save the date (opt) masukin calendar
