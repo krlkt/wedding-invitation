@@ -111,7 +111,7 @@ export default function InvitationPage({
                     <Timeline />
                 </section>
                 {/* When? */}
-                <section className="text-center py-24 bg-white w-full ,t-10">
+                <section className="text-center py-24 bg-white w-full mt-10">
                     <div className="flex flex-col gap-2 items-center">
                         <div className="font-cursive_nautigal text-8xl">
                             <p className="text-gray-400 opacity-60">Save</p>
@@ -142,7 +142,7 @@ export default function InvitationPage({
                     <LocationComponent location={location} />
                 </section>
                 {/* Photo galery */}
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh">
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full my-8">
                     <ImageGallery />
                 </section>
                 {/* RSVP */}
@@ -150,10 +150,10 @@ export default function InvitationPage({
                     <RSVP />
                 </section>
                 {/* Wedding Gift */}
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh px-4">
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
                     <Gift />
                 </section>
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh px-4">
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4 my-8">
                     <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">
                         Your Wishes
                     </h2>
