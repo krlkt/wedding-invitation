@@ -18,6 +18,7 @@ import WishForm from '../components/wish/WishForm';
 import { RSVP } from '../models/rsvp';
 import Lenis from 'lenis';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import ZoomGridPhotos from '../components/zoomGridPhotos/ZoomGridPhotos';
 
 export default function InvitationPage({
     location,
@@ -31,16 +32,16 @@ export default function InvitationPage({
     rsvp?: RSVP;
 }) {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true);
+    // Section transition animation
     const sectionTransitionContainer = useRef(null);
     const { scrollYProgress } = useScroll({
         target: sectionTransitionContainer,
         offset: ['start start', 'end end'],
     });
-
-    const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
-    const scale2 = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
-    const rotate = useTransform(scrollYProgress, [0, 1], [0, -5]);
-    const rotate2 = useTransform(scrollYProgress, [0, 1], [-5, 0]);
+    const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+    const scale2 = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
+    const rotate = useTransform(scrollYProgress, [0, 1], [0, -2]);
+    const rotate2 = useTransform(scrollYProgress, [0, 1], [-2, 0]);
 
     // use lenis smooth scroll on page
     useEffect(() => {
@@ -127,11 +128,11 @@ export default function InvitationPage({
                     </motion.section>
                     {/* Grooms grid photos */}
                     <motion.section style={{ scale: scale2, rotate: rotate2 }} className="h-dvh bg-black">
-                        Grooms photos
+                        <ZoomGridPhotos />
                     </motion.section>
                 </div>
                 {/* History - Opt: Hide by default, open accordion to animate and show timeline */}
-                <section className="w-full p-4 flex flex-col gap-10 mt-10" id="history">
+                <section className="w-full p-4 flex flex-col gap-10 mt-[210dvh]" id="history">
                     <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">History</h2>
                     <Timeline />
                 </section>
