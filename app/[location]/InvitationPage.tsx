@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
 import Avatar from '../components/Avatar';
@@ -16,6 +16,8 @@ import RSVPForm from '../components/rsvp/RSVPForm';
 import { Wish } from '../models/wish';
 import WishForm from '../components/wish/WishForm';
 import { RSVP } from '../models/rsvp';
+import Lenis from 'lenis';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function InvitationPage({
     location,
@@ -28,8 +30,29 @@ export default function InvitationPage({
     guestName: string;
     rsvp?: RSVP;
 }) {
-    const [isLoaderScreenVisible, setIsLoaderScreenVisible] =
-        useState<boolean>(true);
+    const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true);
+    const sectionTransitionContainer = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: sectionTransitionContainer,
+        offset: ['start start', 'end end'],
+    });
+
+    const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
+    const scale2 = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+    const rotate = useTransform(scrollYProgress, [0, 1], [0, -5]);
+    const rotate2 = useTransform(scrollYProgress, [0, 1], [-5, 0]);
+
+    // use lenis smooth scroll on page
+    useEffect(() => {
+        const lenis = new Lenis();
+
+        function raf(time: any) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        requestAnimationFrame(raf);
+    }, []);
 
     useEffect(() => {
         const handleFirstVisit = () => {
@@ -57,80 +80,72 @@ export default function InvitationPage({
             <LoaderScreen isVisible={isLoaderScreenVisible} />
             <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
-                <section
-                    className="min-h-dvh text-center pt-10 flex flex-col gap-10"
-                    id="profile"
-                >
-                    <h2 className="text-5xl font-cursive_nautigal text-gray-700">
-                        Bride & Groom
-                    </h2>
-                    <div className="flex flex-col gap-4 items-center justify-center">
-                        <Avatar src="/images/wife_to_be.jpg" />
-                        <div className="flex flex-col gap-1">
-                            <h4 className="font-bold text-2xl text-gray-800">
-                                Sabrina Alvina Budiono
-                            </h4>
-                            <div className="text-gray-700">
-                                <p>First Daughter Of</p>
-                                <p>Hadi Budiono</p>
-                                <p>& Weny</p>
+                {/* Wrapper for section transition */}
+                <div ref={sectionTransitionContainer} className="relative h-[200vh] w-full">
+                    <motion.section
+                        style={{ scale, rotate }}
+                        className="sticky top-0 h-dvh text-center pt-10 flex flex-col gap-10 -z-10"
+                        id="profile"
+                    >
+                        <h2 className="text-5xl font-cursive_nautigal text-gray-700">Bride & Groom</h2>
+                        <div className="flex flex-col gap-4 items-center justify-center">
+                            <Avatar src="/images/wife_to_be.jpg" />
+                            <div className="flex flex-col gap-1">
+                                <h4 className="font-bold text-2xl text-gray-800">Sabrina Alvina Budiono</h4>
+                                <div className="text-gray-700">
+                                    <p>First Daughter Of</p>
+                                    <p>Hadi Budiono</p>
+                                    <p>& Weny</p>
+                                </div>
+                                <a
+                                    className="flex gap-2 justify-center items-center"
+                                    href="https://www.instagram.com/sabrinaalvina?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                                >
+                                    <InstagramIcon width="14px" />
+                                    <span className="text-sm">sabrinaalvina</span>
+                                </a>
                             </div>
-                            <a
-                                className="flex gap-2 justify-center items-center"
-                                href="https://www.instagram.com/sabrinaalvina?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-                            >
-                                <InstagramIcon width="14px" />
-                                <span className="text-sm">sabrinaalvina</span>
-                            </a>
                         </div>
-                    </div>
-                    <div className="flex gap-4 flex-col items-center justify-center ">
-                        <Avatar src="/images/husband_to_be.jpg" />
-                        <div className="flex flex-col gap-1">
-                            <h4 className="font-bold text-2xl text-gray-800">
-                                Karel Karunia
-                            </h4>
-                            <div className="text-gray-700">
-                                <p>Second Son Of</p>
-                                <p>Rendy Tirtanadi</p>
-                                <p>& Elliana Firmanto</p>
+                        <div className="flex gap-4 flex-col items-center justify-center ">
+                            <Avatar src="/images/husband_to_be.jpg" />
+                            <div className="flex flex-col gap-1">
+                                <h4 className="font-bold text-2xl text-gray-800">Karel Karunia</h4>
+                                <div className="text-gray-700">
+                                    <p>Second Son Of</p>
+                                    <p>Rendy Tirtanadi</p>
+                                    <p>& Elliana Firmanto</p>
+                                </div>
+                                <a
+                                    className="flex gap-2 justify-center items-center"
+                                    href="https://www.instagram.com/karelkarunia?igsh=aTJoeDVndXZmN3I4"
+                                >
+                                    <InstagramIcon width="14px" />
+                                    <span className="text-sm">karelkarunia</span>
+                                </a>
                             </div>
-                            <a
-                                className="flex gap-2 justify-center items-center"
-                                href="https://www.instagram.com/karelkarunia?igsh=aTJoeDVndXZmN3I4"
-                            >
-                                <InstagramIcon width="14px" />
-                                <span className="text-sm">karelkarunia</span>
-                            </a>
                         </div>
-                    </div>
-                </section>
+                    </motion.section>
+                    {/* Grooms grid photos */}
+                    <motion.section style={{ scale: scale2, rotate: rotate2 }} className="h-dvh bg-black">
+                        Grooms photos
+                    </motion.section>
+                </div>
                 {/* History - Opt: Hide by default, open accordion to animate and show timeline */}
-                <section
-                    className="w-full p-4 flex flex-col gap-10 mt-10"
-                    id="history"
-                >
-                    <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">
-                        History
-                    </h2>
+                <section className="w-full p-4 flex flex-col gap-10 mt-10" id="history">
+                    <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">History</h2>
                     <Timeline />
                 </section>
+
                 {/* When? */}
                 <section className="text-center py-24 bg-white w-full mt-10">
                     <div className="flex flex-col gap-2 items-center">
                         <div className="font-cursive_nautigal text-8xl">
                             <p className="text-gray-400 opacity-60">Save</p>
-                            <p className="text-gray-500 opacity-70 leading-8">
-                                the
-                            </p>
+                            <p className="text-gray-500 opacity-70 leading-8">the</p>
                             <p className="text-gray-600 ">Date</p>
                         </div>
-                        <p className="uppercase text-gray-600">
-                            for the wedding of
-                        </p>
-                        <p className="uppercase text-2xl font-semibold">
-                            Karel & Sabrina
-                        </p>
+                        <p className="uppercase text-gray-600">for the wedding of</p>
+                        <p className="uppercase text-2xl font-semibold">Karel & Sabrina</p>
                         <p className="text-2xl text-gray-900">09/09/2025</p>
                         <Button alternateBackground>
                             <a
@@ -159,24 +174,18 @@ export default function InvitationPage({
                     <Gift />
                 </section>
                 <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4 my-8">
-                    <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">
-                        Your Wishes
-                    </h2>
+                    <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">Your Wishes</h2>
                     <p>
-                        Your love and well-wishes mean the world to us, and
-                        we&#39;re so excited to share this special day with you.
-                        Drop a note of advice, a sweet wish, or just some love
-                        in the comments below!
+                        Your love and well-wishes mean the world to us, and we&#39;re so excited to share this special
+                        day with you. Drop a note of advice, a sweet wish, or just some love in the comments below!
                     </p>
                     <WishForm guestName={guestName} />
                     <Wishes wishes={wishes} />
                 </section>
                 <section className="p-8">
                     <p className="text-md text-center">
-                        Thank you for being part of our journey and celebrating
-                        this special day with us. Your love and support mean the
-                        world, and we can&#39;t wait to share the joy of our
-                        wedding with you!
+                        Thank you for being part of our journey and celebrating this special day with us. Your love and
+                        support mean the world, and we can&#39;t wait to share the joy of our wedding with you!
                     </p>
                 </section>
                 {/* 

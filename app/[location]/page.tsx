@@ -27,9 +27,7 @@ export default async function Page({
 
     const { rows: wishes } = await query<Wish>('SELECT * FROM wish');
     const { rows } = await query<RSVP>(
-        `
-    SELECT * FROM rsvp WHERE name = $name
-`,
+        `SELECT * FROM rsvp WHERE name = $name`,
         { name: guestName }
     );
     const rsvp = rows[0];
