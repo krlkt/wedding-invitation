@@ -53,7 +53,7 @@ const ZoomGridPhotos = () => {
     return (
         // Container for zoom scroll animation
         <div ref={zoomAnimationContainer} className="relative h-[300vh]">
-            <div className="sticky top-0 h-vh bg-black overflow-hidden">
+            <div className="sticky top-0 h-screen bg-black overflow-hidden">
                 <motion.h2
                     style={{ opacity: textOpacity }}
                     className="absolute text-3xl bottom-10 left-6 text-white z-10"
