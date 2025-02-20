@@ -1,92 +1,94 @@
-import { FC } from 'react';
-import Image from 'next/image';
+import { FC, ReactNode } from 'react';
+import MeetIcon from '../../icons/MeetIcon';
+import BusIcon from '../../icons/BusIcon';
+import CoupleIcon from '../../icons/CoupleIcon';
+import RingIcon from '../../icons/RingIcon';
+import CatIcon from '@/app/icons/CatIcon';
 
-const Timeline = () => (
-    <div id="history-container" className="relative flex flex-col gap-4">
-        {/* Vertical line for timeline */}
-        <div className="absolute left-[5px] top-0 h-full w-[2px] bg-slate-400"></div>
-        <TimelineItem
-            imgSrc="/images/sporthall.jpg"
-            title={'First met'}
-            date={'17th September 2020'}
-            content={'They met for the first time in a sport hall'}
-        />
-        <TimelineItem
-            imgSrc="/images/first_date.jpg"
-            title={'First date'}
-            date={'17th September 2020'}
-            content={
-                'Karel traveled to Berlin to meet Sabrina and have their first date :)'
-            }
-        />
-        <TimelineItem
-            imgSrc="/images/ask_out.jpg"
-            title={'Official relationship'}
-            date={'17th September 2020'}
-            content={'Karel asked Sabrina out!'}
-        />
-        <TimelineItem
-            imgSrc="/images/kyupie.jpg"
-            title={'Their first and second pet'}
-            date={'17th September 2020'}
-            content={'Kyupie is adopted!'}
-        />
-        <TimelineItem
-            imgSrc="/images/proposal.jpg"
-            title={'Proposal 💍'}
-            date={'17th September 2020'}
-            content={
-                'Karel planned with friends to surprise Sabrina for an unforgetable proposal'
-            }
-        />
-    </div>
-);
+const timelineData = [
+    {
+        icon: <MeetIcon />,
+        title: 'First Met',
+        date: 'September 2019',
+        description:
+            'Karel was on a vacation visiting his best friend in Berlin, where he met Sabrina for the first time in a sport hall',
+    },
+    {
+        icon: <BusIcon />,
+        title: 'First Date',
+        date: 'October 2019',
+        description:
+            'Karel traveled to Berlin from Trier by Bus (12 hours) to meet Sabrina and have their first date :)',
+    },
+    {
+        icon: <CoupleIcon />,
+        title: 'Official Relationship',
+        date: '2nd of February 2020',
+        description: 'They are on vacation to Prague, where they made their relationship official <3',
+    },
+    {
+        icon: <CatIcon />,
+        title: 'Kyupie and Mayo Arrives',
+        date: 'July & October 2023',
+        description:
+            'They decided to buy their first kitten - Kyupie, and 3 months later their second kitten - Mayo. Now they are living like a king and queen, all spoiled but it was still the best decision they ever made',
+    },
+    {
+        icon: <RingIcon />,
+        title: 'The Proposal',
+        date: '13th of August 2024',
+        description: 'Karel planned with friends to surprise Sabrina for an unforgetable camping proposal',
+    },
+];
+
+const Timeline = () => {
+    const isLeft = (index: number) => index % 2 === 0;
+    return (
+        <div className="px-4">
+            {timelineData.map(({ icon, title, date, description }, index) => (
+                <Row icon={icon} leftSide={isLeft(index)} title={title} date={date} description={description} />
+            ))}
+        </div>
+    );
+};
 
 export default Timeline;
 
-interface TimelineItemProps {
+interface RowProps extends ParagraphProps {
+    icon: ReactNode;
+    // Whether the description paragraph should be on the left side
+    leftSide: boolean;
+}
+
+const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
+    const wrappedIcon = <div className="text-secondary-main">{icon}</div>;
+
+    return (
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-8 relative">
+            {/* Left side */}
+            {leftSide ? <Paragraph title={title} date={date} description={description} /> : wrappedIcon}
+
+            {/* Vertical line in the middle */}
+            <div className="relative flex flex-col items-center  self-stretch">
+                <div className="w-[0.5px] h-full bg-secondary-main" />
+                <div className="absolute bottom-0 w-2 h-2 rounded-full bg-secondary-main" />
+            </div>
+
+            {/* Right side */}
+            {leftSide ? wrappedIcon : <Paragraph title={title} date={date} description={description} />}
+        </div>
+    );
+};
+
+interface ParagraphProps {
     title: string;
     date: string;
-    content: string;
-    imgSrc: string;
+    description: string;
 }
-const TimelineItem: FC<TimelineItemProps> = ({
-    title,
-    date,
-    content,
-    imgSrc,
-}) => (
-    <div className="flex gap-2">
-        {/* dot */}
-        <div className="relative z-10 flex-shrink-0">
-            <div className="w-3 h-3 bg-slate-400 rounded-full"></div>
-        </div>
-        {/* Image and content */}
-        <div className="bg-white shadow-sm border rounded w-full overflow-hidden relative min-h-48">
-            <div className="absolute top-0 left-0 w-full h-full z-0">
-                <Image
-                    src={imgSrc}
-                    alt="image alt"
-                    fill
-                    className="object-cover"
-                />
-            </div>
-            {/* Gradient overlay */}
-            <div className="absolute top-0 left-0 w-full h-full z-10 bg-gradient-to-b from-transparent to-black/70"></div>
-            {/* Content */}
-            <div className="absolute z-20 p-4 bottom-0">
-                {/* Title and Date inline */}
-                <div className="flex flex-wrap items-start gap-x-4 mb-1">
-                    <h5 className="text-white text-lg font-bold drop-shadow-md leading-tight">
-                        {title}
-                    </h5>
-                    <h6 className="text-white text-sm italic opacity-80">
-                        {date}
-                    </h6>
-                </div>
-                {/* Content */}
-                <p className="text-white text-sm">{content}</p>
-            </div>
-        </div>
+const Paragraph: FC<ParagraphProps> = ({ title, date, description }) => (
+    <div className="flex flex-col gap-2 text-sm py-2">
+        <h4 className="font-cursive text-2xl">{title}</h4>
+        <p className="font-serif font-semibold">{date}</p>
+        <p className="leading-4 font-serif">{description}</p>
     </div>
 );

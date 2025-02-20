@@ -66,7 +66,7 @@ const Groom = () => {
                 <div className="absolute text-white bottom-14 left-10">
                     <motion.h2
                         style={{ opacity: textOpacityGroom }}
-                        className="font-serifSuranna text-[64px] leading-tight"
+                        className="font-serifSuranna text-[64px] leading-tight drop-shadow-lg"
                     >
                         The Groom
                     </motion.h2>

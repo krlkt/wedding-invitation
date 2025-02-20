@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
-import Timeline from '../components/timeline/Timeline';
 import LocationComponent, { Locations } from '../components/LocationComponent';
 import Button from '../components/Button';
 import 'photoswipe/style.css';
@@ -19,6 +18,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Groom from '../components/zoomGridPhotos/Groom';
 import Hero from '../components/Hero';
 import Bride from '../components/zoomGridPhotos/Bride';
+import Timeline from '../components/timeline/Timeline';
 
 export default function InvitationPage({
     location,
@@ -97,9 +97,12 @@ export default function InvitationPage({
                 <section className="relative h-[300vh] bg-black w-full">
                     <Bride />
                 </section>
-                {/* History - Opt: Hide by default, open accordion to animate and show timeline */}
-                <section className="w-full p-4 flex flex-col gap-10" id="history">
-                    <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">History</h2>
+                {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
+                <section
+                    className="w-full p-4 flex flex-col gap-10 bg-primary-main text-secondary-main"
+                    id="love-story"
+                >
+                    <h2 className="text-5xl font-cursive_nautigal text-center">Love story</h2>
                     <Timeline />
                 </section>
 

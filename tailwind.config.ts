@@ -20,6 +20,14 @@ const config: Config = {
                 serifSuranna: ['Suranna', 'serif'],
                 cursive_nautigal: ['The Nautigal', 'cursive'],
             },
+            colors: {
+                primary: {
+                    main: '#1e2335',
+                },
+                secondary: {
+                    main: '#EAB387',
+                },
+            },
         },
     },
     plugins: [],
