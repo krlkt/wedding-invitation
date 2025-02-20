@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Tangerine:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Rouge+Script&family=Tangerine:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=The+Nautigal:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Suranna&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -16,12 +17,7 @@
 
 body {
     color: rgb(var(--foreground-rgb));
-    background: linear-gradient(
-            to bottom,
-            transparent,
-            rgb(var(--background-end-rgb))
-        )
-        rgb(var(--background-start-rgb));
+    background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 body.locked {
@@ -59,11 +55,7 @@ body.locked {
 }
 
 .overlay {
-    background: linear-gradient(
-        45deg,
-        hsla(0, 0%, 20%, 0.6) 0%,
-        hsla(0, 0%, 7%, 0.6) 80%
-    );
+    background: linear-gradient(45deg, hsla(0, 0%, 20%, 0.6) 0%, hsla(0, 0%, 7%, 0.6) 80%);
 }
 
 /* Loader css */

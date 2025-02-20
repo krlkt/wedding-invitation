@@ -1,15 +1,15 @@
-import styles from './zoomGridStyles.module.scss';
-import Image from 'next/image';
-import Groom1 from '../../../public/images/groom/groom1.jpg';
-import Groom2 from '../../../public/images/groom/groom2.jpg';
-import Groom3 from '../../../public/images/groom/groom3.jpg';
-import Groom4 from '../../../public/images/groom/groom4.jpg';
-import Groom5 from '../../../public/images/groom/groom5.jpg';
-import Groom6 from '../../../public/images/groom/groom6.jpg';
-import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import Image from 'next/image';
+import { useRef } from 'react';
+import styles from './zoomGridStyles.module.scss';
+import Bride1 from '../../../public/images/bride/bride1.jpg';
+import Bride2 from '../../../public/images/bride/bride2.jpg';
+import Bride3 from '../../../public/images/bride/bride3.jpg';
+import Bride4 from '../../../public/images/bride/bride4.jpg';
+import Bride5 from '../../../public/images/bride/bride5.jpg';
+import Bride6 from '../../../public/images/bride/bride6.jpg';
 
-const Groom = () => {
+const Bride = () => {
     // Zoom animation
     const zoomAnimationContainer = useRef(null);
     const { scrollYProgress } = useScroll({
@@ -22,58 +22,58 @@ const Groom = () => {
     const scale6 = useTransform(scrollYProgress, [0, 0.8], [1, 6]);
     const scale8 = useTransform(scrollYProgress, [0, 0.8], [1, 8]);
     const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9]);
-    const textOpacityGroom = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
+    const textOpacityBride = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
     const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1]);
 
     const pictures = [
         {
-            src: Groom1,
+            src: Bride1,
             scale: scale6,
         },
         {
-            src: Groom2,
+            src: Bride2,
             scale: scale5,
         },
         {
-            src: Groom3,
+            src: Bride3,
             scale: scale4,
         },
         {
-            src: Groom4,
+            src: Bride4,
             scale: scale5,
         },
         {
-            src: Groom5,
+            src: Bride5,
             scale: scale8,
         },
         {
-            src: Groom6,
+            src: Bride6,
             scale: scale9,
         },
     ];
     return (
         // Container for zoom scroll animation
-        <div ref={zoomAnimationContainer} className="relative h-[300vh]">
+        <div ref={zoomAnimationContainer} className="relative h-[300vh] w-full">
             <div className="sticky top-0 h-screen bg-black overflow-hidden">
                 {pictures.map(({ scale, src }, index) => (
                     // Element container div to make sure everything has the same layout
                     <motion.div key={index} style={{ scale }} className={styles.el}>
                         <div className={styles.imageContainer}>
-                            <Image src={src} fill alt={'Grooms Image'} placeholder="blur" className="object-cover" />
+                            <Image src={src} fill alt={'Brides Image'} placeholder="blur" className="object-cover" />
                         </div>
                     </motion.div>
                 ))}
                 <div className="absolute text-white bottom-14 left-10">
                     <motion.h2
-                        style={{ opacity: textOpacityGroom }}
+                        style={{ opacity: textOpacityBride }}
                         className="font-serifSuranna text-[64px] leading-tight"
                     >
-                        The Groom
+                        The Bride
                     </motion.h2>
                     <motion.h4 style={{ opacity: textOpacityParent }} className="text-md leading-5 drop-shadow-lg">
-                        Second son of <br />
-                        Rendy Tirtanadi <br />
-                        Elliana Firmanto
+                        First daughter of <br />
+                        Hadi Budiono <br />
+                        Weny
                     </motion.h4>
                 </div>
             </div>
@@ -81,4 +81,4 @@ const Groom = () => {
     );
 };
 
-export default Groom;
+export default Bride;

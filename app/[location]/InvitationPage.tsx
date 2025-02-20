@@ -18,6 +18,7 @@ import Lenis from 'lenis';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Groom from '../components/zoomGridPhotos/Groom';
 import Hero from '../components/Hero';
+import Bride from '../components/zoomGridPhotos/Bride';
 
 export default function InvitationPage({
     location,
@@ -92,8 +93,12 @@ export default function InvitationPage({
                         <Groom />
                     </motion.section>
                 </div>
+                {/* Grooms grid photos */}
+                <section className="relative h-[300vh] bg-black w-full">
+                    <Bride />
+                </section>
                 {/* History - Opt: Hide by default, open accordion to animate and show timeline */}
-                <section className="w-full p-4 flex flex-col gap-10 mt-[200vh]" id="history">
+                <section className="w-full p-4 flex flex-col gap-10" id="history">
                     <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">History</h2>
                     <Timeline />
                 </section>
