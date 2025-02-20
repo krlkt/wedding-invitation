@@ -9,7 +9,7 @@ import Groom6 from '../../../public/images/groom/groom6.jpg';
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-const ZoomGridPhotos = () => {
+const Groom = () => {
     // Zoom animation
     const zoomAnimationContainer = useRef(null);
     const { scrollYProgress } = useScroll({
@@ -73,4 +73,4 @@ const ZoomGridPhotos = () => {
     );
 };
 
-export default ZoomGridPhotos;
+export default Groom;

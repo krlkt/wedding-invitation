@@ -16,7 +16,7 @@ import WishForm from '../components/wish/WishForm';
 import { RSVP } from '../models/rsvp';
 import Lenis from 'lenis';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import ZoomGridPhotos from '../components/zoomGridPhotos/ZoomGridPhotos';
+import Groom from '../components/zoomGridPhotos/Groom';
 import Hero from '../components/Hero';
 
 export default function InvitationPage({
@@ -89,7 +89,7 @@ export default function InvitationPage({
                     </motion.section>
                     {/* Grooms grid photos */}
                     <motion.section style={{ scale: scale2, rotate: rotate2 }} className="h-[300vh] bg-black">
-                        <ZoomGridPhotos />
+                        <Groom />
                     </motion.section>
                 </div>
                 {/* History - Opt: Hide by default, open accordion to animate and show timeline */}
