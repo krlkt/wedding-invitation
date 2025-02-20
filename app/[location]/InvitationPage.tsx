@@ -44,7 +44,9 @@ export default function InvitationPage({
 
     // use lenis smooth scroll on page
     useEffect(() => {
-        const lenis = new Lenis();
+        const lenis = new Lenis({
+            wheelMultiplier: 2,
+        });
 
         function raf(time: any) {
             lenis.raf(time);
