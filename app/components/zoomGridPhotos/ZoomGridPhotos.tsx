@@ -17,11 +17,12 @@ const ZoomGridPhotos = () => {
         offset: ['start start', 'end end'],
     });
 
-    const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
-    const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
-    const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
-    const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
-    const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+    const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4]);
+    const scale5 = useTransform(scrollYProgress, [0, 0.8], [1, 5]);
+    const scale6 = useTransform(scrollYProgress, [0, 0.8], [1, 6]);
+    const scale8 = useTransform(scrollYProgress, [0, 0.8], [1, 8]);
+    const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9]);
+    const textOpacity = useTransform(scrollYProgress, [0.5, 0.8], [0, 1]);
 
     const pictures = [
         {
@@ -53,6 +54,12 @@ const ZoomGridPhotos = () => {
         // Container for zoom scroll animation
         <div ref={zoomAnimationContainer} className="relative h-[300dvh]">
             <div className="sticky top-0 h-dvh bg-black overflow-hidden">
+                <motion.h2
+                    style={{ opacity: textOpacity }}
+                    className="absolute text-3xl bottom-10 left-6 text-white z-10"
+                >
+                    The Groom
+                </motion.h2>
                 {pictures.map(({ scale, src }, index) => (
                     // Element container div to make sure everything has the same layout
                     <motion.div key={index} style={{ scale }} className={styles.el}>
