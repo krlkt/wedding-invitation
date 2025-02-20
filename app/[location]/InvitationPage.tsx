@@ -3,9 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
-import Avatar from '../components/Avatar';
 import Timeline from '../components/timeline/Timeline';
-import InstagramIcon from '../icons/InstagramIcon';
 import LocationComponent, { Locations } from '../components/LocationComponent';
 import Button from '../components/Button';
 import 'photoswipe/style.css';
@@ -39,10 +37,10 @@ export default function InvitationPage({
         target: sectionTransitionContainer,
         offset: ['start start', 'end end'],
     });
-    const scale = useTransform(scrollYProgress, [0, 0.333], [1, 0.7]);
-    const scale2 = useTransform(scrollYProgress, [0, 0.333], [0.7, 1]);
-    const rotate = useTransform(scrollYProgress, [0, 0.333], [0, -5]);
-    const rotate2 = useTransform(scrollYProgress, [0, 0.333], [-5, 0]);
+    const scale = useTransform(scrollYProgress, [0, 0.333], [1, 0.6]);
+    const scale2 = useTransform(scrollYProgress, [0, 0.333], [0.6, 1]);
+    const rotate = useTransform(scrollYProgress, [0, 0.333], [0, -4]);
+    const rotate2 = useTransform(scrollYProgress, [0, 0.333], [-4, 0]);
 
     // use lenis smooth scroll on page
     useEffect(() => {
@@ -83,17 +81,17 @@ export default function InvitationPage({
             <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
                 {/* Wrapper for section transition */}
-                <div ref={sectionTransitionContainer} className="relative h-[400dvh] w-full">
-                    <motion.section style={{ scale, rotate }} className="sticky top-0 h-dvh" id="profile">
+                <div ref={sectionTransitionContainer} className="relative h-[400vh] w-full">
+                    <motion.section style={{ scale, rotate }} className="sticky top-0 h-screen" id="profile">
                         <Hero />
                     </motion.section>
                     {/* Grooms grid photos */}
-                    <motion.section style={{ scale: scale2, rotate: rotate2 }} className="h-[300dvh] bg-black">
+                    <motion.section style={{ scale: scale2, rotate: rotate2 }} className="h-[300vh] bg-black">
                         <ZoomGridPhotos />
                     </motion.section>
                 </div>
                 {/* History - Opt: Hide by default, open accordion to animate and show timeline */}
-                <section className="w-full p-4 flex flex-col gap-10 mt-[210dvh]" id="history">
+                <section className="w-full p-4 flex flex-col gap-10 mt-[200vh]" id="history">
                     <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">History</h2>
                     <Timeline />
                 </section>
