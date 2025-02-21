@@ -46,7 +46,14 @@ const Timeline = () => {
     return (
         <div className="px-4">
             {timelineData.map(({ icon, title, date, description }, index) => (
-                <Row icon={icon} leftSide={isLeft(index)} title={title} date={date} description={description} />
+                <Row
+                    key={index}
+                    icon={icon}
+                    leftSide={isLeft(index)}
+                    title={title}
+                    date={date}
+                    description={description}
+                />
             ))}
         </div>
     );
