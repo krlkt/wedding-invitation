@@ -54,7 +54,7 @@ const Groom = () => {
     return (
         // Container for zoom scroll animation
         <div ref={zoomAnimationContainer} className="relative h-[300vh]">
-            <div className="sticky top-0 h-screen bg-black overflow-hidden">
+            <div className="sticky top-0 h-screen bg-primary-main overflow-hidden">
                 {pictures.map(({ scale, src }, index) => (
                     // Element container div to make sure everything has the same layout
                     <motion.div key={index} style={{ scale }} className={styles.el}>

@@ -5,6 +5,7 @@ import CoupleIcon from '../../icons/CoupleIcon';
 import RingIcon from '../../icons/RingIcon';
 import CatIcon from '@/app/icons/CatIcon';
 import { motion } from 'framer-motion';
+import { fadeInVariants } from '@/app/utils/animation';
 
 const timelineData = [
     {
@@ -109,17 +110,3 @@ const Paragraph: FC<ParagraphProps> = ({ title, date, description, index }) => (
         <p className="leading-4 font-serif">{description}</p>
     </div>
 );
-
-const fadeInVariants = {
-    initial: {
-        opacity: 0,
-        y: 100,
-    },
-    animate: {
-        opacity: 1,
-        y: 0,
-        transition: {
-            duration: 0.4,
-        },
-    },
-};

@@ -23,6 +23,8 @@ const config: Config = {
             colors: {
                 primary: {
                     main: '#1e2335',
+                    600: '#414b72',
+                    700: '#2e3651',
                 },
                 secondary: {
                     main: '#EAB387',

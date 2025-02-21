@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
 import LocationComponent, { Locations } from '../components/LocationComponent';
-import Button from '../components/Button';
 import 'photoswipe/style.css';
 import ImageGallery from '../components/ImageGallery';
 import Gift from '../components/Gift';
@@ -19,6 +18,7 @@ import Groom from '../components/zoomGridPhotos/Groom';
 import Hero from '../components/Hero';
 import Bride from '../components/zoomGridPhotos/Bride';
 import Timeline from '../components/timeline/Timeline';
+import SaveTheDate from '../components/SaveTheDate';
 
 export default function InvitationPage({
     location,
@@ -99,7 +99,7 @@ export default function InvitationPage({
                 </section>
                 {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
                 <section
-                    className="w-full p-4 flex flex-col gap-10 bg-primary-main text-secondary-main"
+                    className="w-full p-4 py-8 flex flex-col gap-10 bg-primary-main text-secondary-main"
                     id="love-story"
                 >
                     <h2 className="text-5xl font-cursive_nautigal text-center">Love story</h2>
@@ -108,24 +108,7 @@ export default function InvitationPage({
 
                 {/* When? */}
                 <section className="text-center py-24 bg-secondary-main w-full">
-                    <div className="flex flex-col gap-2 items-center">
-                        <div className="font-cursive_nautigal text-8xl">
-                            <p className="text-gray-400 opacity-60">Save</p>
-                            <p className="text-gray-500 opacity-70 leading-8">the</p>
-                            <p className="text-gray-600 ">Date</p>
-                        </div>
-                        <p className="uppercase text-gray-600">for the wedding of</p>
-                        <p className="uppercase text-2xl font-semibold">Karel & Sabrina</p>
-                        <p className="text-2xl text-gray-900">09/09/2025</p>
-                        <Button alternateBackground>
-                            <a
-                                target="_blank"
-                                href="https://calendar.google.com/calendar/event?action=TEMPLATE&amp;tmeid=X2M1cGpjb2ppOTFubDZ0YTM2MHIzaWtpaWFoMTNndWFrNzU0bmViamZkZyBrYXJlbGthcnVuaWEyNEBt&amp;tmsrc=karelkarunia24%40gmail.com"
-                            >
-                                Add to calendar
-                            </a>
-                        </Button>
-                    </div>
+                    <SaveTheDate />
                 </section>
                 {/* Where? */}
                 <section className="flex flex-col gap-4 text-center relative w-full h-dvh">

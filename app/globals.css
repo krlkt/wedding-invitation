@@ -11,13 +11,13 @@
 
 :root {
     --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 255, 255, 255;
-    --background-end-rgb: 219, 255, 255;
+    --background-start-color: white; /* White */
+    --background-end-color: #fff3ea;
 }
 
 body {
     color: rgb(var(--foreground-rgb));
-    background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+    background: linear-gradient(to bottom, transparent, var(--background-end-color)) var(--background-start-color);
 }
 
 body.locked {
