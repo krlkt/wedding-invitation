@@ -4,6 +4,7 @@ import BusIcon from '../../icons/BusIcon';
 import CoupleIcon from '../../icons/CoupleIcon';
 import RingIcon from '../../icons/RingIcon';
 import CatIcon from '@/app/icons/CatIcon';
+import { motion } from 'framer-motion';
 
 const timelineData = [
     {
@@ -53,6 +54,7 @@ const Timeline = () => {
                     title={title}
                     date={date}
                     description={description}
+                    index={index}
                 />
             ))}
         </div>
@@ -67,13 +69,19 @@ interface RowProps extends ParagraphProps {
     leftSide: boolean;
 }
 
-const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
+const Row: FC<RowProps> = ({ title, date, description, icon, leftSide, index }) => {
     const wrappedIcon = <div className="text-secondary-main">{icon}</div>;
 
     return (
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-8 relative">
+        <motion.div
+            className="grid grid-cols-[1fr_auto_1fr] items-center gap-8 relative"
+            variants={fadeInVariants}
+            initial="initial"
+            whileInView={'animate'}
+            viewport={{ once: true }}
+        >
             {/* Left side */}
-            {leftSide ? <Paragraph title={title} date={date} description={description} /> : wrappedIcon}
+            {leftSide ? <Paragraph index={index} title={title} date={date} description={description} /> : wrappedIcon}
 
             {/* Vertical line in the middle */}
             <div className="relative flex flex-col items-center  self-stretch">
@@ -82,8 +90,8 @@ const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
             </div>
 
             {/* Right side */}
-            {leftSide ? wrappedIcon : <Paragraph title={title} date={date} description={description} />}
-        </div>
+            {leftSide ? wrappedIcon : <Paragraph title={title} date={date} description={description} index={index} />}
+        </motion.div>
     );
 };
 
@@ -91,11 +99,27 @@ interface ParagraphProps {
     title: string;
     date: string;
     description: string;
+    // Used for staggering animation
+    index: number;
 }
-const Paragraph: FC<ParagraphProps> = ({ title, date, description }) => (
+const Paragraph: FC<ParagraphProps> = ({ title, date, description, index }) => (
     <div className="flex flex-col gap-2 text-sm py-2">
         <h4 className="font-cursive text-2xl">{title}</h4>
         <p className="font-serif font-semibold">{date}</p>
         <p className="leading-4 font-serif">{description}</p>
     </div>
 );
+
+const fadeInVariants = {
+    initial: {
+        opacity: 0,
+        y: 100,
+    },
+    animate: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.4,
+        },
+    },
+};

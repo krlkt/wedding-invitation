@@ -70,7 +70,7 @@ const Bride = () => {
                     >
                         The Bride
                     </motion.h2>
-                    <motion.h4 style={{ opacity: textOpacityParent }} className="text-md leading-5 drop-shadow-lg">
+                    <motion.h4 style={{ opacity: textOpacityParent }} className="text-lg leading-5 drop-shadow-lg">
                         First daughter of <br />
                         Hadi Budiono <br />
                         Weny

@@ -70,7 +70,7 @@ const Groom = () => {
                     >
                         The Groom
                     </motion.h2>
-                    <motion.h4 style={{ opacity: textOpacityParent }} className="text-md leading-5 drop-shadow-lg">
+                    <motion.h4 style={{ opacity: textOpacityParent }} className="text-lg leading-5 drop-shadow-lg">
                         Second son of <br />
                         Rendy Tirtanadi <br />
                         Elliana Firmanto

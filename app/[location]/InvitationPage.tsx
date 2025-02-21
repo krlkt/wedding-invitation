@@ -107,7 +107,7 @@ export default function InvitationPage({
                 </section>
 
                 {/* When? */}
-                <section className="text-center py-24 bg-white w-full mt-10">
+                <section className="text-center py-24 bg-secondary-main w-full">
                     <div className="flex flex-col gap-2 items-center">
                         <div className="font-cursive_nautigal text-8xl">
                             <p className="text-gray-400 opacity-60">Save</p>
