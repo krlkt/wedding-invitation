@@ -19,6 +19,8 @@ import Hero from '../components/Hero';
 import Bride from '../components/zoomGridPhotos/Bride';
 import Timeline from '../components/timeline/Timeline';
 import SaveTheDate from '../components/SaveTheDate';
+import BranchIcon from '../icons/BranchIcon';
+import FlowerWithBranchIcon from '../icons/FlowerWithBranchIcon';
 
 export default function InvitationPage({
     location,
@@ -107,7 +109,19 @@ export default function InvitationPage({
                 </section>
 
                 {/* When? */}
-                <section className="text-center py-24 bg-secondary-main w-full">
+                <section className="relative text-center py-24 bg-secondary-main w-full overflow-hidden">
+                    <div className="absolute top-0 w-20 h-20">
+                        <FlowerWithBranchIcon fromLeft={true} />
+                    </div>
+                    <div className="absolute bottom-0 w-20 h-20">
+                        <BranchIcon fromLeft={true} />
+                    </div>
+                    <div className="absolute bottom-0 w-20 h-20">
+                        <FlowerWithBranchIcon fromLeft={false} />
+                    </div>
+                    <div className="absolute top-0 w-20 h-20">
+                        <BranchIcon fromLeft={false} />
+                    </div>
                     <SaveTheDate />
                 </section>
                 {/* Where? */}

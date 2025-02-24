@@ -8,7 +8,7 @@ const SaveTheDate = () => (
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="flex flex-col gap-2 items-center text-primary-main"
+        className="relative flex flex-col gap-2 items-center text-primary-main"
     >
         <motion.div className="font-cursive_nautigal text-8xl">
             <motion.p className="text-primary-600/40" variants={Stagger.itemVariants}>
@@ -22,7 +22,7 @@ const SaveTheDate = () => (
         <motion.div variants={Stagger.itemVariants} className="flex flex-col gap-2 items-center">
             <motion.p className="uppercase ">for the wedding of</motion.p>
             <motion.p className="uppercase text-2xl font-semibold">Karel & Sabrina</motion.p>
-            <motion.p className="text-2xl">09/09/2025</motion.p>
+            <motion.p className="text-2xl">9th of September 2025</motion.p>
             <Button>
                 <a
                     target="_blank"
