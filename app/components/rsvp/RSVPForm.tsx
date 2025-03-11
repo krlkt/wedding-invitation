@@ -1,10 +1,12 @@
 import { RSVP } from '@/app/models/rsvp';
 import { useForm } from 'react-hook-form';
-import Button from '../Button';
 import { addRSVP } from './action';
-import Spinner from '../Spinner';
+import SubmitButton from '../SubmitButton';
+import { useSnackbar } from 'notistack';
 
 const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
+    const { enqueueSnackbar } = useSnackbar();
+
     const {
         register,
         handleSubmit,
@@ -17,8 +19,10 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
     const onSubmit = async (data: any) => {
         try {
             await addRSVP(data);
+            enqueueSnackbar('Successfuly submitted the form. Thank you for submitting!', { variant: 'success' });
         } catch (error) {
             console.error('Error submitting form:', error);
+            enqueueSnackbar(`Error submitting form: ${error}`, { variant: 'error' });
         }
     };
     return (
@@ -44,14 +48,7 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
                 <option value={'yes'}>Yes</option>
                 <option value={'no'}>No</option>
             </select>
-            <Button type="submit" disabled={isSubmitting}>
-                Submit
-                {isSubmitting && (
-                    <div className="w-4 ml-2 inline-block">
-                        <Spinner />
-                    </div>
-                )}
-            </Button>
+            <SubmitButton isSubmitting={isSubmitting} />
         </form>
     );
 };

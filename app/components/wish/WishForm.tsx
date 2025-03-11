@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
-import Button from '../Button';
 import { addWish } from './action';
+import SubmitButton from '../SubmitButton';
+import { useSnackbar } from 'notistack';
 
 type Wish = {
     name: string;
@@ -8,6 +9,8 @@ type Wish = {
 };
 
 const WishForm = ({ guestName }: { guestName: string }) => {
+    const { enqueueSnackbar } = useSnackbar();
+
     const {
         register,
         reset,
@@ -22,31 +25,23 @@ const WishForm = ({ guestName }: { guestName: string }) => {
         try {
             await addWish(data);
             reset(); // Reset the form fields after successful submission
+            enqueueSnackbar('Thank you for your wishes! 💕', { variant: 'success' });
         } catch (error) {
             console.error('Error submitting form:', error);
+            enqueueSnackbar(`Error submitting form: ${error}`, { variant: 'error' });
         }
     };
     return (
         <div>
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex-col flex gap-2"
-            >
-                <input
-                    placeholder="Name"
-                    className="w-full"
-                    {...register('name', { required: true })}
-                    type="text"
-                />
+            <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-2">
+                <input placeholder="Name" className="w-full" {...register('name', { required: true })} type="text" />
                 <textarea
                     placeholder="Write your beautiful message here.."
                     className="w-full"
                     {...register('wish', { required: true })}
                     rows={4}
                 />
-                <Button type="submit" disabled={isSubmitting}>
-                    Submit
-                </Button>
+                <SubmitButton isSubmitting={isSubmitting} />
             </form>
         </div>
     );

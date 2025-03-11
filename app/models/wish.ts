@@ -1,5 +1,5 @@
 export interface Wish {
-    id: string;
+    id: number;
     name: string;
     wish: string;
 }

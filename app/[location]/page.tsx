@@ -25,19 +25,12 @@ export default async function Page({
 }) {
     const guestName = searchParams.to as string;
 
-    const { rows: wishes } = await query<Wish>('SELECT * FROM wish');
-    const { rows } = await query<RSVP>(
-        `SELECT * FROM rsvp WHERE name = $name`,
-        { name: guestName }
-    );
+    const { rows: wishes } = await query<Wish>('SELECT * FROM wish ORDER BY created_at DESC');
+    console.log(wishes);
+    const { rows } = await query<RSVP>(`SELECT * FROM rsvp WHERE name = $name`, { name: guestName });
     const rsvp = rows[0];
 
-    if (
-        params.location !== 'bali' &&
-        params.location !== 'jakarta' &&
-        params.location !== 'malang'
-    )
-        return notFound();
+    if (params.location !== 'bali' && params.location !== 'jakarta' && params.location !== 'malang') return notFound();
 
     if (!('to' in searchParams)) {
         return <UnidentifiedPersonPage />;
@@ -48,12 +41,7 @@ export default async function Page({
     }
 
     return 'opened' in searchParams ? (
-        <InvitationPage
-            location={params.location}
-            wishes={wishes}
-            guestName={guestName}
-            rsvp={rsvp}
-        />
+        <InvitationPage location={params.location} wishes={wishes} guestName={guestName} rsvp={rsvp} />
     ) : (
         <UnopenedInvitationPage guestName={guestName} />
     );
