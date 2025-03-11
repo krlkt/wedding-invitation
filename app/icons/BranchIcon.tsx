@@ -17,7 +17,7 @@ const BranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
         },
         wiggle: {
             rotate: fromLeft ? [0, 2, -2, 2, -2, 0] : [-180, -184, -179, -185, -180, -180],
-            x: fromLeft ? [-1, -2, -3, -2, -3, -1] : [0, -2, 2, 3, -1, 1],
+            x: fromLeft ? [-1, -2, -3, -2, -3, -1] : [-5, -7, -5, -4, -6, -6],
             y: fromLeft ? [3, 2, 4, 6, 2, 3] : [0, 1, 3, 2, 4, 1],
             scale: 1.1, // Keep the scale consistent
             transition: {
