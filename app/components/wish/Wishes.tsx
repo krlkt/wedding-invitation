@@ -3,13 +3,9 @@ import BubbleText from './BubbleText';
 
 const Wishes = ({ wishes }: { wishes: Array<Wish> }) => {
     return (
-        <div className="max-h-[60%] space-y-2 overflow-y-auto p-2">
+        <div className="max-h-[60%] space-y-2 overflow-y-auto pl-3">
             {wishes.map((wish) => (
-                <BubbleText
-                    key={wish.name}
-                    name={wish.name}
-                    message={wish.wish}
-                />
+                <BubbleText key={wish.name} name={wish.name} message={wish.wish} />
             ))}
         </div>
     );

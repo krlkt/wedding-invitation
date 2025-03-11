@@ -28,6 +28,7 @@ const config: Config = {
                 },
                 secondary: {
                     main: '#EAB387',
+                    light: '#ffeace',
                 },
             },
         },

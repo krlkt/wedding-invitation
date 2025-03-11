@@ -22,6 +22,8 @@ import SaveTheDate from '../components/SaveTheDate';
 import BranchIcon from '../icons/BranchIcon';
 import FlowerWithBranchIcon from '../icons/FlowerWithBranchIcon';
 import SectionTitle from '../components/SectionTitle';
+import BorderedDiv from '../components/BorderedDiv';
+import Divider from '../components/wish/Divider';
 
 export default function InvitationPage({
     location,
@@ -135,21 +137,28 @@ export default function InvitationPage({
                     <ImageGallery />
                 </section>
                 {/* RSVP */}
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full h-dvh px-4">
-                    <RSVPForm guestName={guestName} rsvp={rsvp} />
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
+                    <BorderedDiv>
+                        <SectionTitle title="RSVP" />
+                        <RSVPForm guestName={guestName} rsvp={rsvp} />
+                    </BorderedDiv>
                 </section>
                 {/* Wedding Gift */}
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4 py-8">
                     <Gift />
                 </section>
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4 my-8">
-                    <h2 className="text-5xl font-cursive_nautigal text-gray-700 text-center">Your Wishes</h2>
-                    <p>
-                        Your love and well-wishes mean the world to us, and we&#39;re so excited to share this special
-                        day with you. Drop a note of advice, a sweet wish, or just some love in the comments below!
-                    </p>
-                    <WishForm guestName={guestName} />
-                    <Wishes wishes={wishes} />
+                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
+                    <BorderedDiv>
+                        <SectionTitle title="Your Wishes" />
+                        <p>
+                            Your love and well-wishes mean the world to us, and we&#39;re so excited to share this
+                            special day with you. Drop a note of advice, a sweet wish, or just some love in the comments
+                            below!
+                        </p>
+                        <WishForm guestName={guestName} />
+                        <Divider />
+                        <Wishes wishes={wishes} />
+                    </BorderedDiv>
                 </section>
                 <section className="p-8">
                     <p className="text-md text-center">
