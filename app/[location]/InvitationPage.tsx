@@ -6,7 +6,7 @@ import Music from '../components/Music';
 import LocationComponent, { Locations } from '../components/LocationComponent';
 import 'photoswipe/style.css';
 import ImageGallery from '../components/ImageGallery';
-import Gift from '../components/Gift';
+import Gift from '../components/gift/Gift';
 import Wishes from '../components/wish/Wishes';
 import RSVPForm from '../components/rsvp/RSVPForm';
 import { Wish } from '../models/wish';
