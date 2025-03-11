@@ -8,7 +8,7 @@ const FlowerWithBranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
         },
         onscreen: {
             translateX: fromLeft ? 10 : '80vw',
-            scale: 1.3, // Scale up while moving in
+            scale: 1.2, // Scale up while moving in
             transition: {
                 type: 'spring',
                 bounce: 0.3,
@@ -19,7 +19,7 @@ const FlowerWithBranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
             rotate: fromLeft ? [90, 92, 87, 89, 91, 89] : [274, 276, 272, 275, 270, 276],
             x: fromLeft ? [0, 2, -2, 2, -2, 0] : [-10, -7, -11, -8, -9, -10],
             y: fromLeft ? [0, -2, 2, -2, 2, 0] : [5, 4, 6, 5, 4, 6],
-            scale: 1.3, // Keep the scale consistent
+            scale: 1.2, // Keep the scale consistent
             transition: {
                 duration: 4,
                 repeat: Infinity,

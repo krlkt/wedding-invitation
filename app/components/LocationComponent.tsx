@@ -19,7 +19,7 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
     <BlurryOverlay>
         <div className="relative flex flex-col items-center justify-center text-center text-white h-full">
             {/* Round overlay */}
-            <div className="bg-black bg-opacity-65 p-5 py-24 rounded-full flex flex-col items-center justify-center w-5/6 gap-4">
+            <div className="bg-primary-main bg-opacity-65 p-5 py-24 rounded-full flex flex-col items-center justify-center w-5/6 gap-4">
                 {/* Location section content */}
                 <div className="w-16 flex items-center">
                     <DinnerIcon />
@@ -27,14 +27,11 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                 <h1 className="text-4xl font-bold">Reception</h1>
                 <div>
                     <p className="text-2xl font-semibold">Tirtha Uluwatu</p>
-                    <p className="text-lg font-sans">15:00 WIB</p>
+                    <p className="text-md font-sans">15:00 - Midnight</p>
+                    <p className="text-md font-sans">Bali, Indonesia</p>
                 </div>
-                <p className="text-sm font-sans">Bali, Indonesia</p>
                 <Button>
-                    <a
-                        target="_blank"
-                        href="https://maps.app.goo.gl/iu2DLDD165WpfF7PA"
-                    >
+                    <a target="_blank" href="https://maps.app.goo.gl/iu2DLDD165WpfF7PA">
                         Google maps
                     </a>
                 </Button>

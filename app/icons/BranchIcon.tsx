@@ -8,7 +8,7 @@ const BranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
         },
         onscreen: {
             translateX: fromLeft ? 10 : '80vw',
-            scale: 1.3, // Scale up while moving in
+            scale: 1.1, // Scale up while moving in
             transition: {
                 type: 'spring',
                 bounce: 0.3,
@@ -17,9 +17,9 @@ const BranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
         },
         wiggle: {
             rotate: fromLeft ? [0, 2, -2, 2, -2, 0] : [-180, -184, -179, -185, -180, -180],
-            x: fromLeft ? [0, 2, -2, 2, -2, 0] : [0, -2, 2, 3, -1, 1],
-            y: fromLeft ? [0, -2, 2, -2, 2, 0] : [0, 1, 3, 2, 4, 1],
-            scale: 1.3, // Keep the scale consistent
+            x: fromLeft ? [-1, -2, -3, -2, -3, -1] : [0, -2, 2, 3, -1, 1],
+            y: fromLeft ? [3, 2, 4, 6, 2, 3] : [0, 1, 3, 2, 4, 1],
+            scale: 1.1, // Keep the scale consistent
             transition: {
                 duration: 4,
                 repeat: Infinity,

@@ -21,6 +21,7 @@ import Timeline from '../components/timeline/Timeline';
 import SaveTheDate from '../components/SaveTheDate';
 import BranchIcon from '../icons/BranchIcon';
 import FlowerWithBranchIcon from '../icons/FlowerWithBranchIcon';
+import SectionTitle from '../components/SectionTitle';
 
 export default function InvitationPage({
     location,
@@ -104,7 +105,7 @@ export default function InvitationPage({
                     className="w-full p-4 py-8 flex flex-col gap-10 bg-primary-main text-secondary-main"
                     id="love-story"
                 >
-                    <h2 className="text-5xl font-cursive_nautigal text-center">Love story</h2>
+                    <SectionTitle title="Love Story" />
                     <Timeline />
                 </section>
 
@@ -130,6 +131,7 @@ export default function InvitationPage({
                 </section>
                 {/* Photo galery */}
                 <section className="flex flex-col gap-4 text-center justify-center relative w-full my-8">
+                    <SectionTitle title="Gallery" />
                     <ImageGallery />
                 </section>
                 {/* RSVP */}
