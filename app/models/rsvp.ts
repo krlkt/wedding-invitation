@@ -3,4 +3,5 @@ export interface RSVP {
     name: string;
     attend: string;
     guest_number: number;
+    notes: string;
 }

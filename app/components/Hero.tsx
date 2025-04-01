@@ -19,9 +19,6 @@ const Hero = () => (
                 Colossians 3:14
             </p>
         </div>
-        <div className="absolute top-0 right-0">
-            <h4 className="text-white drop-shadow-md p-2">&quot;Two souls, one heart&quot;</h4>
-        </div>
     </div>
 );
 

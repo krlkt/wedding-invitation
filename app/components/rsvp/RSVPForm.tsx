@@ -48,6 +48,16 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
                 <option value={'yes'}>Yes</option>
                 <option value={'no'}>No</option>
             </select>
+            <label htmlFor="notes">Chef notes</label>
+            <textarea
+                id="notes"
+                {...register('notes')}
+                rows={3}
+                placeholder="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave it
+                empty :D"
+            >
+                {rsvp?.notes ?? ''}
+            </textarea>
             <SubmitButton isSubmitting={isSubmitting} />
         </form>
     );
