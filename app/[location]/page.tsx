@@ -26,7 +26,6 @@ export default async function Page({
     const guestName = searchParams.to as string;
 
     const { rows: wishes } = await query<Wish>('SELECT * FROM wish ORDER BY created_at DESC');
-    console.log(wishes);
     const { rows } = await query<RSVP>(`SELECT * FROM rsvp WHERE name = $name`, { name: guestName });
     const rsvp = rows[0];
 

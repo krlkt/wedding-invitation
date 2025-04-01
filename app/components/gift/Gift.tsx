@@ -15,7 +15,6 @@ const Gift = () => {
             <Modal
                 open={open}
                 onClose={() => {
-                    console.log('clicked');
                     setOpen(false);
                 }}
             >
