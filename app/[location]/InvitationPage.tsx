@@ -165,6 +165,13 @@ export default function InvitationPage({
                         Thank you for being part of our journey and celebrating this special day with us. Your love and
                         support mean the world, and we can&#39;t wait to share the joy of our wedding with you!
                     </p>
+                    <p className="text-md text-center mt-4">
+                        This website is handcoded by your <u>one</u> and <u>only</u>{' '}
+                        <b>
+                            <a href="https://karelkarunia.vercel.app/">GROOM</a>
+                        </b>{' '}
+                        &#169;
+                    </p>
                 </section>
                 {/* 
                 Countdown / Save the date (opt) masukin calendar

@@ -20,6 +20,7 @@ const config: Config = {
                 serif: ['Cormorant Garamond', 'serif'],
                 serifSuranna: ['Suranna', 'serif'],
                 cursive_nautigal: ['The Nautigal', 'cursive'],
+                newYorker: ['NewYorkerFont', 'sans-serif'],
             },
             colors: {
                 primary: {
