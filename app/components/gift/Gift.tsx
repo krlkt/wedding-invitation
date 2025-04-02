@@ -61,7 +61,7 @@ const Gift = () => {
                 Thank you for your kindness! 💕
             </p>
             <div>
-                <Button alternateBackground onClick={() => setOpen(true)}>
+                <Button onClick={() => setOpen(true)}>
                     <span className="flex gap-2 justify-center items-center">
                         Send gift
                         <div className="w-4 h-4">

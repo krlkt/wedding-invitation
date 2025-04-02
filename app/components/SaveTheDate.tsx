@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import Button from './Button';
 import { Stagger } from '../utils/animation';
+import CalendarIcon from '../icons/CalendarIcon';
 
 const SaveTheDate = () => (
     <motion.div
@@ -28,7 +29,12 @@ const SaveTheDate = () => (
                     target="_blank"
                     href="https://calendar.google.com/calendar/event?action=TEMPLATE&amp;tmeid=X2M1cGpjb2ppOTFubDZ0YTM2MHIzaWtpaWFoMTNndWFrNzU0bmViamZkZyBrYXJlbGthcnVuaWEyNEBt&amp;tmsrc=karelkarunia24%40gmail.com"
                 >
-                    Add to calendar
+                    <span className="flex gap-2 justify-center items-center">
+                        Add to calendar
+                        <div className="w-4 h-4">
+                            <CalendarIcon />
+                        </div>
+                    </span>
                 </a>
             </Button>
         </motion.div>

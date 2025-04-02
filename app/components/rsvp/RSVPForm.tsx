@@ -58,6 +58,7 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
             >
                 {rsvp?.notes ?? ''}
             </textarea>
+            <div id="spacer" className="p-1" />
             <SubmitButton isSubmitting={isSubmitting} />
         </form>
     );

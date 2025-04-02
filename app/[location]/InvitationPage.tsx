@@ -107,7 +107,7 @@ export default function InvitationPage({
                     className="w-full p-4 py-8 flex flex-col gap-10 bg-primary-main text-secondary-main"
                     id="love-story"
                 >
-                    <SectionTitle title="Love Story" />
+                    <SectionTitle title="Love Story" color="secondary" />
                     <Timeline />
                 </section>
 

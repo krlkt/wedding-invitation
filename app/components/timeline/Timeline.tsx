@@ -26,14 +26,14 @@ const timelineData = [
         icon: <CoupleIcon />,
         title: 'Official Relationship',
         date: '2nd of February 2020',
-        description: 'They are on vacation to Prague, where they made their relationship official <3',
+        description: 'They are on a vacation to Prague, where they made their relationship official <3',
     },
     {
         icon: <CatIcon />,
         title: 'Kyupie and Mayo Arrives',
         date: 'July & October 2023',
         description:
-            'They decided to buy their first kitten - Kyupie, and 3 months later their second kitten - Mayo. Now they are living like a king and queen, all spoiled but it was still the best decision they ever made',
+            'They decided to buy their first kitten - Kyupie, and 3 months later their second kitten - Mayo. They have brought so much happiness to the couple and it was the best decision they ever made',
     },
     {
         icon: <RingIcon />,

@@ -2,6 +2,9 @@ import { FC } from 'react';
 import BlurryOverlay from './BlurryOverlay';
 import DinnerIcon from '../icons/DinnerIcon';
 import Button from './Button';
+import NavigationIcon from '../icons/NavigationIcon';
+import { motion } from 'framer-motion';
+import { Stagger } from '../utils/animation';
 
 export const locations = {
     bali: 'bali',
@@ -19,23 +22,39 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
     <BlurryOverlay>
         <div className="relative flex flex-col items-center justify-center text-center text-white h-full">
             {/* Round overlay */}
-            <div className="bg-primary-main bg-opacity-65 p-5 py-24 rounded-full flex flex-col items-center justify-center w-5/6 gap-4">
+            <motion.div
+                variants={Stagger.containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="bg-primary-main bg-opacity-65 p-5 py-24 rounded-full flex flex-col items-center justify-center w-5/6 gap-4"
+            >
                 {/* Location section content */}
+
                 <div className="w-16 flex items-center">
                     <DinnerIcon />
                 </div>
-                <h1 className="text-4xl font-bold">Reception</h1>
-                <div>
+                <motion.h1 variants={Stagger.itemVariants} className="text-4xl font-bold">
+                    Reception
+                </motion.h1>
+                <motion.div variants={Stagger.itemVariants}>
                     <p className="text-2xl font-semibold">Tirtha Uluwatu</p>
                     <p className="text-md font-sans">15:00 - Midnight</p>
                     <p className="text-md font-sans">Bali, Indonesia</p>
-                </div>
-                <Button>
-                    <a target="_blank" href="https://maps.app.goo.gl/iu2DLDD165WpfF7PA">
-                        Google maps
-                    </a>
-                </Button>
-            </div>
+                </motion.div>
+                <motion.div variants={Stagger.itemVariants}>
+                    <Button>
+                        <a target="_blank" href="https://maps.app.goo.gl/iu2DLDD165WpfF7PA">
+                            <span className="flex gap-2 justify-center items-center">
+                                Google maps
+                                <div className="w-4 h-4">
+                                    <NavigationIcon />
+                                </div>
+                            </span>
+                        </a>
+                    </Button>
+                </motion.div>
+            </motion.div>
         </div>
     </BlurryOverlay>
 );
