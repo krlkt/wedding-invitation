@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FC } from 'react';
-import { fadeInVariants } from '../utils/animation';
+import { textFadeInVariants } from '../utils/animation';
 
 interface SectionTitleProps {
     title: string;
@@ -9,7 +9,7 @@ interface SectionTitleProps {
 
 const SectionTitle: FC<SectionTitleProps> = ({ title, color = 'primary' }) => (
     <motion.h2
-        variants={fadeInVariants}
+        variants={textFadeInVariants}
         initial="initial"
         whileInView={'animate'}
         viewport={{ once: true }}
