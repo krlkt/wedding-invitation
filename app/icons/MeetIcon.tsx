@@ -1,5 +1,7 @@
+import { secondaryColorHex } from '../utils/constants';
+
 const MeetIcon = () => (
-    <svg fill="#EAB387" version="1.1" id="_x31_" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+    <svg fill={secondaryColorHex} version="1.1" id="_x31_" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
         <g>
             <ellipse
                 transform="matrix(0.9659 -0.2588 0.2588 0.9659 -11.3148 8.9075)"

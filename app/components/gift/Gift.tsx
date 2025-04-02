@@ -37,7 +37,6 @@ const Gift = () => {
                         </div>
                         <div className="text-left">
                             <p className="font-bold">Paypal</p>
-                            <p className="">*please choose friends and family</p>
                             <p>karelkarunia24@gmail.com</p>
                             <a
                                 href="https://paypal.me/karelkarunia"
@@ -47,6 +46,7 @@ const Gift = () => {
                             >
                                 Link to my paypal
                             </a>
+                            <p className="text-xs">*please choose friends and family</p>
                         </div>
                     </div>
                 </div>

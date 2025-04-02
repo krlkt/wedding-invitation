@@ -1,8 +1,10 @@
+import { secondaryColorHex } from '../utils/constants';
+
 const CoupleIcon = () => (
     <svg
         width="80%"
         height="80%"
-        fill="#EAB387"
+        fill={secondaryColorHex}
         version="1.1"
         id="Capa_1"
         xmlns="http://www.w3.org/2000/svg"

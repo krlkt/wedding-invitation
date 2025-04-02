@@ -89,7 +89,7 @@ export default function InvitationPage({
             <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
                 {/* Wrapper for section transition */}
-                <div ref={sectionTransitionContainer} className="relative h-[400vh] w-full">
+                <div ref={sectionTransitionContainer} className="relative h-[400vh] w-full bg-white">
                     <motion.section style={{ scale, rotate }} className="sticky top-0 h-screen" id="profile">
                         <Hero />
                     </motion.section>
@@ -170,8 +170,7 @@ export default function InvitationPage({
                 Countdown / Save the date (opt) masukin calendar
                 When and where (Google map link) (How to differentiate bali malang jakarta)
                 Photo galery
-                Confirmation (RSVP)
-                Wedding Gift (Bank bca/paypal)
+
                 Name and wish
                 Thank you
                 Show table sitting position (Bali only - opt) */}

@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import { secondaryColorHex } from './app/utils/constants';
 
 const config: Config = {
     content: [
@@ -27,7 +28,7 @@ const config: Config = {
                     700: '#2e3651',
                 },
                 secondary: {
-                    main: '#EAB387',
+                    main: secondaryColorHex,
                     light: '#ffeace',
                 },
             },

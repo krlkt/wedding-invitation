@@ -9,15 +9,11 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-    --foreground-rgb: 0, 0, 0;
-    --background-start-color: white; /* White */
-    --background-end-color: #fff3ea;
-}
-
 body {
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(to bottom, transparent, var(--background-end-color)) var(--background-start-color);
+    background-image: url('/images/white_background.png'); /* Set the background image */
+    background-repeat: repeat; /* Repeat the image */
+    background-size: auto; /* Keep the original size */
+    background-position: top left; /* Start repeating from the top-left corner */
 }
 
 body.locked {
