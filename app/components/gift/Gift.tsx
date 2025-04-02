@@ -28,7 +28,7 @@ const Gift = () => {
                             <p className="font-bold">OCBC</p>
                             Karel Karunia
                             <br />
-                            0129318264812
+                            505810127041
                         </div>
                     </div>
                     <div className="flex rounded-lg border-secondary-main border-2 p-4 items-center gap-4 background-pattern self-stretch justify-start">
@@ -37,8 +37,14 @@ const Gift = () => {
                         </div>
                         <div className="text-left">
                             <p className="font-bold">Paypal</p>
+                            <p className="">*please choose friends and family</p>
                             <p>karelkarunia24@gmail.com</p>
-                            <a href="paypal.com" className="underline">
+                            <a
+                                href="https://paypal.me/karelkarunia"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline"
+                            >
                                 Link to my paypal
                             </a>
                         </div>
