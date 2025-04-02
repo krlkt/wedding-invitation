@@ -13,17 +13,20 @@ const Hero = () => (
         <div className="mt-4 mx-4 h-[50%] relative shadow-lg drop-shadow-xl border-gray-600 border">
             <Image src={'/images/hero.png'} alt={'Hero Image'} className="object-cover object-[50%_20%]" fill />
         </div>
-        <div className="p-4 font-serif">
+        <div className="p-4 font-serif text-justify">
             <div className="flex gap-3 items-end">
                 <h1 className=" font-semibold text-3xl drop-shadow-2xl">Tying the knot</h1>
                 <div className="w-6 h-6">
                     <KnotIcon />
                 </div>
             </div>
-            <p className="text-md">
-                Karel Karunia & Sabrina Alvina Budiono are officially tying the knot! 🎉💍 Sources say love is in the
-                air, cake is being ordered, and Spotify wedding playlists are in FULL SEND MODE. Stay tuned for more
-                updates—aka, when they drop the wedding invite! 👀✨ #KarelGotSabrina #PutARingOnIt
+            <p className="text-md leading-tight mt-1">
+                Karel Karunia & Sabrina Alvina Budiono are officially tying the knot and have signed a long-term,
+                no-trade contract. Sources say the deal includes unlimited cuddles, joint Netflix accounts, and a
+                lifelong supply of "What do you want to eat?" debates!
+            </p>
+            <p className="text-md leading-tight mt-1">
+                Love experts confirm: this is not a drill. The wedding countdown begins! ⏳ #KarelGotSabrina
             </p>
             <p className="text-sm mt-4">&darr; Scroll down to find out more! &darr;</p>
         </div>
