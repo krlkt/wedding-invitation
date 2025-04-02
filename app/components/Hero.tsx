@@ -20,13 +20,11 @@ const Hero = () => (
                     <KnotIcon />
                 </div>
             </div>
-            <p className="text-md leading-tight mt-1">
+            <p className="text-md leading-tight mt-1 indent-6">
                 Karel Karunia & Sabrina Alvina Budiono are officially tying the knot and have signed a long-term,
                 no-trade contract. Sources say the deal includes unlimited cuddles, joint Netflix accounts, and a
-                lifelong supply of "What do you want to eat?" debates!
-            </p>
-            <p className="text-md leading-tight mt-1">
-                Love experts confirm: this is not a drill. The wedding countdown begins! ⏳ #KarelGotSabrina
+                lifelong supply of "What do you want to eat?" debates! Love experts confirm: this is not a drill. The
+                wedding countdown begins! ⏳ #KarelAndSabrinasHashtag
             </p>
             <p className="text-sm mt-4">&darr; Scroll down to find out more! &darr;</p>
         </div>

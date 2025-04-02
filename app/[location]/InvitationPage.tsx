@@ -90,7 +90,7 @@ export default function InvitationPage({
                 <Music />
                 {/* Wrapper for section transition */}
                 <div ref={sectionTransitionContainer} className="relative h-[400vh] w-full bg-white">
-                    <motion.section style={{ scale, rotate }} className="sticky top-0 h-screen" id="profile">
+                    <motion.section style={{ scale, rotate }} className="sticky top-0 h-dvh" id="profile">
                         <Hero />
                     </motion.section>
                     {/* Grooms grid photos */}
@@ -131,56 +131,52 @@ export default function InvitationPage({
                 <section className="flex flex-col gap-4 text-center relative w-full h-dvh">
                     <LocationComponent location={location} />
                 </section>
-                {/* Photo galery */}
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full my-8">
-                    <SectionTitle title="Gallery" />
-                    <ImageGallery />
-                </section>
-                {/* RSVP */}
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
-                    <BorderedDiv>
-                        <SectionTitle title="RSVP" />
-                        <RSVPForm guestName={guestName} rsvp={rsvp} />
-                    </BorderedDiv>
-                </section>
-                {/* Wedding Gift */}
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4 py-8">
-                    <Gift />
-                </section>
-                <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
-                    <BorderedDiv>
-                        <SectionTitle title="Your Wishes" />
-                        <p>
-                            Your love and well-wishes mean the world to us, and we&#39;re so excited to share this
-                            special day with you. Drop a note of advice, a sweet wish, or just some love in the comments
-                            below!
+                <div className="flex flex-col gap-8 my-8">
+                    {/* RSVP */}
+                    <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
+                        <BorderedDiv>
+                            <SectionTitle title="RSVP" />
+                            <RSVPForm guestName={guestName} rsvp={rsvp} />
+                        </BorderedDiv>
+                    </section>
+                    {/* Wedding Gift */}
+                    <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
+                        <Gift />
+                    </section>
+                    {/* Photo galery */}
+                    <section className="flex flex-col gap-4 text-center justify-center relative w-full">
+                        <SectionTitle title="Gallery" />
+                        <ImageGallery />
+                    </section>
+                    {/* Wishes */}
+                    <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
+                        <BorderedDiv>
+                            <SectionTitle title="Your Wishes" />
+                            <p>
+                                Your love and well-wishes mean the world to us, and we&#39;re so excited to share this
+                                special day with you. Drop a note of advice, a sweet wish, or just some love in the
+                                comments below!
+                            </p>
+                            <WishForm guestName={guestName} />
+                            <Divider />
+                            <Wishes wishes={wishes} />
+                        </BorderedDiv>
+                    </section>
+                    <section className="px-8">
+                        <p className="text-md text-center">
+                            Thank you for being part of our journey and celebrating this special day with us. Your love
+                            and support mean the world, and we can&#39;t wait to share the joy of our wedding with you!
                         </p>
-                        <WishForm guestName={guestName} />
-                        <Divider />
-                        <Wishes wishes={wishes} />
-                    </BorderedDiv>
-                </section>
-                <section className="p-8">
-                    <p className="text-md text-center">
-                        Thank you for being part of our journey and celebrating this special day with us. Your love and
-                        support mean the world, and we can&#39;t wait to share the joy of our wedding with you!
-                    </p>
-                    <p className="text-md text-center mt-4">
-                        This website is handcoded by your <u>one</u> and <u>only</u>{' '}
-                        <b>
-                            <a href="https://karelkarunia.vercel.app/">GROOM</a>
-                        </b>{' '}
-                        &#169;
-                    </p>
-                </section>
-                {/* 
-                Countdown / Save the date (opt) masukin calendar
-                When and where (Google map link) (How to differentiate bali malang jakarta)
-                Photo galery
-
-                Name and wish
-                Thank you
-                Show table sitting position (Bali only - opt) */}
+                        <p className="text-md text-center mt-4">
+                            This website is handcoded by your <u>one</u> and <u>only</u>{' '}
+                            <b>
+                                <a href="https://karelkarunia.vercel.app/">GROOM</a>
+                            </b>{' '}
+                            &#169;
+                        </p>
+                    </section>
+                </div>
+                {/* Countdown */}
             </main>
         </>
     );

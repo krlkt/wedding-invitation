@@ -27,7 +27,7 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="bg-primary-main bg-opacity-65 p-5 py-24 rounded-full flex flex-col items-center justify-center w-5/6 gap-4"
+                className="bg-primary-main bg-opacity-65 p-5 py-24 rounded-full flex flex-col items-center justify-center w-4/6 gap-4 border-2 border-secondary-main"
             >
                 {/* Location section content */}
 
@@ -39,8 +39,8 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                 </motion.h1>
                 <motion.div variants={Stagger.itemVariants}>
                     <p className="text-2xl font-semibold">Tirtha Uluwatu</p>
-                    <p className="text-md font-sans">15:00 - Midnight</p>
-                    <p className="text-md font-sans">Bali, Indonesia</p>
+                    <p className="text-md">15:00 - Midnight</p>
+                    <p className="text-md">Bali, Indonesia</p>
                 </motion.div>
                 <motion.div variants={Stagger.itemVariants}>
                     <Button>
