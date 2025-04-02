@@ -70,9 +70,15 @@ const Groom = () => {
                     >
                         The Groom
                     </motion.h2>
+                    <motion.h2
+                        style={{ opacity: textOpacityGroom }}
+                        className="font-serifSuranna text-[30px] leading-tight drop-shadow-lg"
+                    >
+                        Karel Karunia
+                    </motion.h2>
                     <motion.h4 style={{ opacity: textOpacityParent }} className="text-lg leading-5 drop-shadow-lg">
                         Second son of <br />
-                        Rendy Tirtanadi <br />
+                        Rendy Tirtanadi &<br />
                         Elliana Firmanto
                     </motion.h4>
                 </div>

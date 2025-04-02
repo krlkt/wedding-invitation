@@ -70,9 +70,15 @@ const Bride = () => {
                     >
                         The Bride
                     </motion.h2>
+                    <motion.h2
+                        style={{ opacity: textOpacityBride }}
+                        className="font-serifSuranna text-[30px] leading-tight drop-shadow-lg"
+                    >
+                        Sabrina Alvina Budiono
+                    </motion.h2>
                     <motion.h4 style={{ opacity: textOpacityParent }} className="text-lg leading-5 drop-shadow-lg">
                         First daughter of <br />
-                        Hadi Budiono <br />
+                        Hadi Budiono &<br />
                         Weny
                     </motion.h4>
                 </div>
