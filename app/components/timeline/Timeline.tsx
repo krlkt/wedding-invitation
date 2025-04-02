@@ -33,7 +33,7 @@ const timelineData = [
         title: 'Kyupie and Mayo Arrives',
         date: 'July & October 2023',
         description:
-            'They decided to buy their first kitten - Kyupie, and 3 months later their second kitten - Mayo. They have brought so much happiness to the couple and it was the best decision they ever made',
+            'They decided to buy their first kitten - Kyupie, and 3 months later their second kitten - Mayo. They have brought so much happiness to the couple and choosing them was the best decision they ever made',
     },
     {
         icon: <RingIcon />,
