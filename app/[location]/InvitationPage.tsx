@@ -90,7 +90,7 @@ export default function InvitationPage({
                 <Music />
                 {/* Wrapper for section transition */}
                 <div ref={sectionTransitionContainer} className="relative h-[400vh] w-full bg-white">
-                    <motion.section style={{ scale, rotate }} className="sticky top-0 h-dvh" id="profile">
+                    <motion.section style={{ scale, rotate }} className="sticky top-0 h-screen" id="profile">
                         <Hero />
                     </motion.section>
                     {/* Grooms grid photos */}
