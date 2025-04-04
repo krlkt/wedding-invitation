@@ -2,15 +2,14 @@ import Image from 'next/image';
 import KnotIcon from '../icons/KnotIcon';
 
 const Hero = () => (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full min-h-screen relative">
         <Image src={'/images/newspaper.png'} alt={'Newspaper Background Image'} className="-z-10 object-cover" fill />
         {/* Header */}
         <h1 className="font-newYorker text-5xl pt-6 text-center">The Berlin Times</h1>
         <h3 className="font-serif text-md mt-2 text-center bg-black text-white">
             Sport • Lifestyle • <span className="font-bold">Wedding</span> • Science • World
         </h3>
-        <h2 className="font-sans italic font-semibold text-5xl text-center text-red-500">Breaking News</h2>
-        <div className="mt-4 mx-4 h-[50%] relative shadow-lg drop-shadow-xl border-gray-600 border">
+        <div className="mt-4 mx-4 h-[420px] relative shadow-lg drop-shadow-xl border-gray-600 border">
             <Image src={'/images/hero.png'} alt={'Hero Image'} className="object-cover object-[50%_20%]" fill />
         </div>
         <div className="p-4 font-serif text-justify">
@@ -26,7 +25,7 @@ const Hero = () => (
                 lifelong supply of &quot;What do you want to eat?&quot; debates! Love experts confirm: this is not a
                 drill. The wedding countdown begins! ⏳ #KarelAndSabrinasHashtag
             </p>
-            <p className="text-sm mt-4">&darr; Scroll down to find out more! &darr;</p>
+            <p className="text-sm absolute bottom-4">&darr; Scroll down to find out more! &darr;</p>
         </div>
     </div>
 );
