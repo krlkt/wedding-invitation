@@ -35,8 +35,6 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
         setShowForm(true);
     };
 
-    console.log(rsvp?.attend);
-
     return !showForm ? (
         rsvp?.attend === 'yes' ? (
             <div>

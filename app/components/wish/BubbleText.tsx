@@ -45,7 +45,7 @@ function formatTimeAgo(dateString: string): string {
     }
 
     // More than 7 days → Pretty format with user's local time
-    return new Intl.DateTimeFormat(navigator.language, {
+    return new Intl.DateTimeFormat('en-US', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
