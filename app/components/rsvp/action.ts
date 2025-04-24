@@ -2,6 +2,7 @@
 
 import { query } from '@/app/db/client';
 import { RSVP } from '@/app/models/rsvp';
+import { revalidatePath } from 'next/cache';
 
 export const addRSVP = async (data: RSVP) => {
     await query(
@@ -14,4 +15,7 @@ export const addRSVP = async (data: RSVP) => {
             notes: data.notes,
         }
     );
+
+    // Update UI
+    revalidatePath('/');
 };
