@@ -43,7 +43,6 @@ const ImageGallery = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const splideRef = useRef(null);
 
-    console.log(currentIndex);
     return (
         <div>
             {/* Gallery main photo */}
