@@ -43,10 +43,6 @@ export default function InvitationPage({
         target: sectionTransitionContainer,
         offset: ['start start', 'end end'],
     });
-    const scale = useTransform(scrollYProgress, [0, 0.333], [1, 0.6]);
-    const scale2 = useTransform(scrollYProgress, [0, 0.333], [0.6, 1]);
-    const rotate = useTransform(scrollYProgress, [0, 0.333], [0, -4]);
-    const rotate2 = useTransform(scrollYProgress, [0, 0.333], [-4, 0]);
 
     // use lenis smooth scroll on page
     useEffect(() => {
@@ -88,15 +84,14 @@ export default function InvitationPage({
             <LoaderScreen isVisible={isLoaderScreenVisible} />
             <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
-                {/* Wrapper for section transition */}
-                <div ref={sectionTransitionContainer} className="relative h-[400vh] w-full bg-white">
-                    <motion.section style={{ scale, rotate }} className="sticky top-0 min-h-screen" id="profile">
+                <div className="relative w-full bg-white">
+                    <section className="min-h-screen" id="profile">
                         <Hero />
-                    </motion.section>
+                    </section>
                     {/* Grooms grid photos */}
-                    <motion.section style={{ scale: scale2, rotate: rotate2 }} className="h-[300vh] bg-black">
+                    <section className="h-[300vh] bg-black">
                         <Groom />
-                    </motion.section>
+                    </section>
                 </div>
                 {/* Grooms grid photos */}
                 <section className="relative h-[300vh] bg-black w-full">
@@ -170,8 +165,8 @@ export default function InvitationPage({
                         <p className="text-md text-center mt-4">
                             This website is handcoded by your <u>one</u> and <u>only</u>{' '}
                             <b>
-                                <a href="https://karelkarunia.vercel.app/">GROOM</a>
-                            </b>{' '}
+                                <u>GROOM</u>
+                            </b>
                             &#169;
                         </p>
                     </section>
