@@ -26,11 +26,6 @@ const Hero = () => (
                     First daughter of Hadi Budiono & Weny
                 </p>
             </div>
-            <div className="z-10">
-                <Button>
-                    <Link href={'#rsvp'}>RSVP</Link>
-                </Button>
-            </div>
         </div>
     </div>
 );
