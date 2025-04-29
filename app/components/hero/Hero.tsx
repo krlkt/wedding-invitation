@@ -1,7 +1,5 @@
 import Image from 'next/image';
 import './hero.css';
-import Link from 'next/link';
-import Button from '../Button';
 
 const Hero = () => (
     <div className="grow flex flex-col items-center justify-center w-full text-center">
@@ -12,6 +10,7 @@ const Hero = () => (
                     alt={'Karel & Sabrina Monogram'}
                     fill
                     className="scale-[2]"
+                    loading="eager"
                 />
             </div>
             <div id="hero-text" className="text-black z-10 flex flex-col">
