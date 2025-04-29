@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { addWish } from './action';
 import SubmitButton from '../SubmitButton';
 import { useSnackbar } from 'notistack';
+import TextField from '@mui/material/TextField';
 
 type Wish = {
     name: string;
@@ -34,12 +35,20 @@ const WishForm = ({ guestName }: { guestName: string }) => {
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-2">
-                <input placeholder="Name" className="w-full" {...register('name', { required: true })} type="text" />
-                <textarea
+                <TextField
+                    placeholder="Name"
+                    className="w-full"
+                    {...register('name', { required: true })}
+                    type="text"
+                    label="Name"
+                />
+                <TextField
+                    label="Message"
+                    multiline
+                    minRows={4}
                     placeholder="Write your beautiful message here.."
                     className="w-full"
                     {...register('wish', { required: true })}
-                    rows={4}
                 />
                 <SubmitButton isSubmitting={isSubmitting} />
             </form>
