@@ -22,8 +22,8 @@ const SaveTheDate = () => (
         </motion.div>
         <motion.div variants={Stagger.itemVariants} className="flex flex-col gap-2 items-center">
             <motion.p className="uppercase ">for the wedding of</motion.p>
-            <motion.p className="uppercase text-2xl font-semibold">Karel & Sabrina</motion.p>
-            <motion.p className="text-lg mb-4">9th of September 2025</motion.p>
+            <motion.p className="uppercase text-2xl">Karel & Sabrina</motion.p>
+            <motion.p className="text-2xl mb-4 font-semibold">9th of September 2025</motion.p>
             <Button>
                 <a
                     target="_blank"
