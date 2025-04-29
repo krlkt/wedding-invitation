@@ -5,10 +5,16 @@ import SubmitButton from '../SubmitButton';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import Button from '../Button';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import { useLocation } from '@/app/utils/useLocation';
 
 const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
     const { enqueueSnackbar } = useSnackbar();
     const [showForm, setShowForm] = useState<boolean>(!Boolean(rsvp));
+    const { location } = useLocation();
 
     const {
         register,
@@ -17,6 +23,7 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
     } = useForm<RSVP>({
         defaultValues: {
             name: guestName,
+            notes: '',
         },
     });
     const onSubmit = async (data: any) => {
@@ -35,54 +42,75 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
     };
 
     return !showForm ? (
-        rsvp?.attend === 'yes' ? (
-            <div>
-                <p className="text-2xl font-bold">Will attend</p>
-                <p>
-                    We are delighted to know that you will be there on our special day! See you on our wedding day! :D
-                </p>
-                <Button onClick={handleChangeClick}>Change answer</Button>
-            </div>
-        ) : (
-            <div>
-                <p>Unable to attend</p>
-                <p>Sad to know that you can&apos;t attend.. Hope to see you on another chance! ;&#41;</p>
-                <Button onClick={handleChangeClick}>Change answer</Button>
-            </div>
-        )
+        <div className="flex flex-col gap-4">
+            {rsvp?.attend === 'yes' ? (
+                <>
+                    <p className="text-2xl font-bold">Will attend</p>
+                    <p>
+                        We are delighted to know that you will be there on our special day! See you on our wedding day!
+                        :D
+                    </p>
+                    <div>
+                        <Button onClick={handleChangeClick}>Change answer</Button>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <p className="text-2xl font-bold">Unable to attend</p>
+                    <p>Sad to know that you can&apos;t attend.. Hope to see you on another chance! ;&#41;</p>
+                    <div>
+                        <Button onClick={handleChangeClick}>Change answer</Button>
+                    </div>
+                </>
+            )}
+        </div>
     ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-2 text-left">
-            <input readOnly className="w-full" {...register('name', { required: true })} />
-            <label htmlFor="guest_number">Number of guest&#40;s&#41;</label>
-            <select
+        <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-4 text-left">
+            <TextField
+                className="w-full"
+                {...register('name', { required: true })}
+                label="Name (readonly)"
+                slotProps={{
+                    input: {
+                        readOnly: true,
+                    },
+                }}
+            />
+            <TextField
+                select
                 id="guest_number"
                 className="w-full"
+                label="Number of guest(s)"
                 {...register('guest_number', { required: true })}
                 defaultValue={rsvp?.guest_number ?? 1}
             >
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-            </select>
-            <label htmlFor="attending">Are you attending?</label>
-            <select
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+            </TextField>
+            <TextField
+                select
                 id="attending"
                 className="w-full"
+                label="Are you attending?"
                 {...register('attend', { required: true })}
                 defaultValue={rsvp?.attend ?? 'yes'}
             >
-                <option value={'yes'}>Yes</option>
-                <option value={'no'}>No</option>
-            </select>
-            <label htmlFor="notes">Chef notes</label>
-            <textarea
-                id="notes"
-                {...register('notes')}
-                rows={3}
-                placeholder="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave it
+                <MenuItem value={'yes'}>Yes</MenuItem>
+                <MenuItem value={'no'}>No</MenuItem>
+            </TextField>
+            {location === 'bali' && (
+                <TextField
+                    id="notes"
+                    label="Chef notes"
+                    multiline
+                    minRows={3}
+                    maxRows={8}
+                    {...register('notes')}
+                    placeholder="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave it
                 empty :D"
-                defaultValue={rsvp?.notes ?? ''}
-            />
-            <div id="spacer" className="p-1" />
+                    defaultValue={rsvp?.notes ?? ''}
+                />
+            )}
             <SubmitButton isSubmitting={isSubmitting} />
         </form>
     );
