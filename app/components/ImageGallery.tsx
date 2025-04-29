@@ -81,13 +81,7 @@ const ImageGallery = () => {
                                         src={image.full}
                                         alt={`Thumbnail ${index + 1}`}
                                         onClick={open}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'cover',
-                                            cursor: 'pointer',
-                                            borderRadius: '1rem',
-                                        }}
+                                        className="w-[5rem] h-[5rem] sm:w-[6rem] sm:h-[6rem] md:w-[7rem] md:h-[7rem] object-cover rounded-xl cursor-pointer"
                                     />
                                 )}
                             </Item>
