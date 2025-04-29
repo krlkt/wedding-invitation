@@ -101,14 +101,6 @@ export default function InvitationPage({
                 <section className="relative h-[300vh] bg-black w-full">
                     <Bride />
                 </section>
-                {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
-                <section
-                    className="w-full p-4 py-8 flex flex-col gap-10 bg-primary-main text-secondary-main"
-                    id="love-story"
-                >
-                    <SectionTitle title="Love Story" color="secondary" />
-                    <Timeline />
-                </section>
 
                 {/* When? */}
                 <section className="relative text-center py-24 bg-secondary-main w-full overflow-hidden">
@@ -146,6 +138,14 @@ export default function InvitationPage({
                     <section className="flex flex-col gap-4 text-center justify-center relative w-full">
                         <SectionTitle title="Gallery" />
                         <ImageGallery />
+                    </section>
+                    {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
+                    <section
+                        className="w-full p-4 py-8 flex flex-col gap-10 bg-primary-main text-secondary-main"
+                        id="love-story"
+                    >
+                        <SectionTitle title="Love Story" color="secondary" />
+                        <Timeline />
                     </section>
                     {/* Wishes */}
                     <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
