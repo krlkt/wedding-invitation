@@ -16,6 +16,14 @@
     font-style: normal;
 }
 
+:root {
+    --background-primary: #1e2335;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     background-image: url('/images/white_background.png'); /* Set the background image */
     background-repeat: repeat; /* Repeat the image */

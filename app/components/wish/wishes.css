@@ -7,5 +7,5 @@
 }
 
 .visible-scroll::-webkit-scrollbar-thumb {
-    background: #1e2335;
+    background: var(--text-primary);
 }

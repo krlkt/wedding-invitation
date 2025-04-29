@@ -13,9 +13,9 @@ import { Wish } from '../models/wish';
 import WishForm from '../components/wish/WishForm';
 import { RSVP } from '../models/rsvp';
 import Lenis from 'lenis';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useScroll } from 'framer-motion';
 import Groom from '../components/zoomGridPhotos/Groom';
-import Hero from '../components/Hero';
+import Hero from '../components/hero/Hero';
 import Bride from '../components/zoomGridPhotos/Bride';
 import Timeline from '../components/timeline/Timeline';
 import SaveTheDate from '../components/SaveTheDate';
@@ -24,6 +24,7 @@ import FlowerWithBranchIcon from '../icons/FlowerWithBranchIcon';
 import SectionTitle from '../components/SectionTitle';
 import BorderedDiv from '../components/BorderedDiv';
 import Divider from '../components/wish/Divider';
+import './invitationpage.css';
 
 export default function InvitationPage({
     location,
@@ -85,7 +86,10 @@ export default function InvitationPage({
             <main className="flex min-h-screen w-screen flex-col items-center justify-between font-serif">
                 <Music />
                 <div className="relative w-full bg-white">
-                    <section className="min-h-screen" id="profile">
+                    <section
+                        className="min-h-screen hero-background flex flex-col relative overflow-hidden"
+                        id="profile"
+                    >
                         <Hero />
                     </section>
                     {/* Grooms grid photos */}
@@ -128,7 +132,7 @@ export default function InvitationPage({
                 </section>
                 <div className="flex flex-col gap-8 my-8">
                     {/* RSVP */}
-                    <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
+                    <section id="rsvp" className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
                         <BorderedDiv>
                             <SectionTitle title="RSVP" />
                             <RSVPForm guestName={guestName} rsvp={rsvp} />

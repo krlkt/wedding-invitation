@@ -24,13 +24,16 @@ const config: Config = {
             },
             colors: {
                 primary: {
-                    main: '#1e2335',
+                    main: 'var(--background-primary)',
                     600: '#414b72',
                     700: '#2e3651',
                 },
                 secondary: {
                     main: secondaryColorHex,
                     light: '#ffeace',
+                },
+                background: {
+                    primary: 'var(--background-primary)',
                 },
             },
         },

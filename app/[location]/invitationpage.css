@@ -1,0 +1,16 @@
+.hero-background {
+    background-image: url('/images/couplegif.gif');
+    background-size: cover;
+    background-position: top center;
+}
+
+.hero-background::before {
+    content: '';
+    width: 108%;
+    height: 30%;
+    position: absolute;
+    left: 50%;
+    bottom: 0%;
+    transform: translate(-50%, 0%);
+    background: linear-gradient(180deg, rgba(246, 246, 246, 0) 0%, var(--background-primary) 100%);
+}

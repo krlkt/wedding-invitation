@@ -30,7 +30,6 @@ const FlowerWithBranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
 
     return (
         <motion.svg
-            fill="#1e2335"
             width="100%"
             version="1.1"
             id="Capa_1"
@@ -40,7 +39,7 @@ const FlowerWithBranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
             initial="offscreen" // Start from the left
             whileInView="onscreen" // Move into view
             animate="wiggle" // Start wiggling after the slide-in
-            style={{ originX: '50%', originY: '50%' }}
+            style={{ originX: '50%', originY: '50%', fill: 'var(--text-primary)' }}
             viewport={{ once: true, amount: 0.1 }} // Trigger when 10% is in view
         >
             <g>
