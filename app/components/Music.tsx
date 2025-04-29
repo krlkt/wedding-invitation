@@ -40,7 +40,7 @@ const Music = () => {
 
     return (
         <>
-            <audio id="music" ref={audio} loop>
+            <audio preload="auto" id="music" ref={audio} loop>
                 <source src="/music/luckyme.mp3" type="audio/mpeg" />
             </audio>
             <AnimatePresence>
