@@ -14,7 +14,6 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
         register,
         handleSubmit,
         formState: { isSubmitting },
-        reset,
     } = useForm<RSVP>({
         defaultValues: {
             name: guestName,
@@ -38,7 +37,7 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
     return !showForm ? (
         rsvp?.attend === 'yes' ? (
             <div>
-                <p>Will attend</p>
+                <p className="text-2xl font-bold">Will attend</p>
                 <p>
                     We are delighted to know that you will be there on our special day! See you on our wedding day! :D
                 </p>
