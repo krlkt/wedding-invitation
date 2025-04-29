@@ -9,6 +9,7 @@ import { Locations } from '../components/LocationComponent';
 import { query } from '../db/client';
 import { Wish } from '../models/wish';
 import { RSVP } from '../models/rsvp';
+import { LocationProvider } from '../utils/useLocation';
 
 export const revalidate = 0;
 
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Page({
-    params,
+    params: { location },
     searchParams,
 }: {
     params: { location: Locations };
@@ -29,20 +30,24 @@ export default async function Page({
     const { rows } = await query<RSVP>(`SELECT * FROM rsvp WHERE name = $name`, { name: guestName });
     const rsvp = rows[0];
 
-    if (params.location !== 'bali' && params.location !== 'jakarta' && params.location !== 'malang') return notFound();
+    if (location !== 'bali' && location !== 'jakarta' && location !== 'malang') return notFound();
 
     if (!('to' in searchParams)) {
         return <UnidentifiedPersonPage />;
     }
 
-    if (!isInGuestList(params.location, guestName)) {
+    if (!isInGuestList(location, guestName)) {
         return <NotInGuestListPage guestName={guestName} />;
     }
 
-    return 'opened' in searchParams ? (
-        <InvitationPage location={params.location} wishes={wishes} guestName={guestName} rsvp={rsvp} />
-    ) : (
-        <UnopenedInvitationPage guestName={guestName} />
+    return (
+        <LocationProvider location={location}>
+            {'opened' in searchParams ? (
+                <InvitationPage location={location} wishes={wishes} guestName={guestName} rsvp={rsvp} />
+            ) : (
+                <UnopenedInvitationPage guestName={guestName} />
+            )}
+        </LocationProvider>
     );
 }
 

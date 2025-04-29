@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
 import LocationComponent, { Locations } from '../components/LocationComponent';
@@ -13,7 +13,6 @@ import { Wish } from '../models/wish';
 import WishForm from '../components/wish/WishForm';
 import { RSVP } from '../models/rsvp';
 import Lenis from 'lenis';
-import { useScroll } from 'framer-motion';
 import Groom from '../components/zoomGridPhotos/Groom';
 import Hero from '../components/hero/Hero';
 import Bride from '../components/zoomGridPhotos/Bride';
@@ -38,13 +37,6 @@ export default function InvitationPage({
     rsvp?: RSVP;
 }) {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true);
-    // Section transition animation
-    const sectionTransitionContainer = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: sectionTransitionContainer,
-        offset: ['start start', 'end end'],
-    });
-
     // use lenis smooth scroll on page
     useEffect(() => {
         const lenis = new Lenis({
