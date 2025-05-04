@@ -6,9 +6,7 @@ import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import Button from '../Button';
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
 import { useLocation } from '@/app/utils/useLocation';
 
 const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
@@ -80,7 +78,7 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
                 select
                 id="guest_number"
                 className="w-full"
-                label="Number of guest(s)"
+                label="Number of guest(s) including you"
                 {...register('guest_number', { required: true })}
                 defaultValue={rsvp?.guest_number ?? 1}
             >
@@ -106,9 +104,8 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
                     minRows={3}
                     maxRows={8}
                     {...register('notes')}
-                    placeholder="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave it
-                empty :D"
                     defaultValue={rsvp?.notes ?? ''}
+                    helperText="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave itempty :D"
                 />
             )}
             <SubmitButton isSubmitting={isSubmitting} />

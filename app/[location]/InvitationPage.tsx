@@ -92,6 +92,7 @@ export default function InvitationPage({
                             className="min-h-screen hero-background flex flex-col relative overflow-hidden"
                             id="profile"
                         >
+                            {/* TODO: Add scrolldown  */}
                             <Hero />
                         </section>
                         {/* Grooms grid photos */}
@@ -136,6 +137,7 @@ export default function InvitationPage({
                             </BorderedDiv>
                         </section>
                         {/* Wedding Gift */}
+                        {/* TODO: add QRIS */}
                         <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
                             <Gift />
                         </section>
@@ -173,7 +175,7 @@ export default function InvitationPage({
                                 with you!
                             </p>
                             <p className="text-md text-center mt-4">
-                                This website is handcoded by your <u>one</u> and <u>only</u>{' '}
+                                This wedding invitation is handcoded by your one and only{' '}
                                 <b>
                                     <u>GROOM</u>
                                 </b>
