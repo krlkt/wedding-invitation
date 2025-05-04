@@ -8,6 +8,7 @@ export const baliGuests = [
     'Cecillia Nadia',
     'Mama',
     'Papa',
+    'Dad',
 ];
 
 export const malangGuests = ['Karel Karunia', 'Natasya Diposubagio', 'Weny'];

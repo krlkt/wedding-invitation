@@ -14,7 +14,8 @@ const Hero = () => {
                         alt={'Karel & Sabrina Monogram'}
                         fill
                         className="scale-[2]"
-                        loading="eager"
+                        priority
+                        fetchPriority="high"
                     />
                 </div>
                 <div id="hero-text" className="text-black z-10 flex flex-col">
