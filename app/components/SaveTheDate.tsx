@@ -9,7 +9,7 @@ const SaveTheDate = () => (
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="relative flex flex-col gap-2 items-center text-primary-main py-14"
+        className="relative flex flex-col gap-2 items-center text-primary-main py-28"
     >
         <motion.div className="font-cursive_nautigal text-8xl">
             <motion.p className="text-primary-600/40" variants={Stagger.itemVariants}>

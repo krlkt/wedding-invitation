@@ -9,3 +9,14 @@
     border-radius: 390px;
     background: radial-gradient(50% 50% at 50% 50%, #fff -10%, rgba(255, 255, 255, 0) 100%);
 }
+
+.hero-background::before {
+    content: '';
+    width: 108%;
+    height: 30%;
+    position: absolute;
+    left: 50%;
+    bottom: 0%;
+    transform: translate(-50%, 0%);
+    background: linear-gradient(180deg, rgba(246, 246, 246, 0) 0%, var(--background-primary) 100%);
+}

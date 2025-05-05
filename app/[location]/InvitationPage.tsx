@@ -23,7 +23,6 @@ import FlowerWithBranchIcon from '../icons/FlowerWithBranchIcon';
 import SectionTitle from '../components/SectionTitle';
 import BorderedDiv from '../components/BorderedDiv';
 import Divider from '../components/wish/Divider';
-import './invitationpage.css';
 import Image from 'next/image';
 
 export default function InvitationPage({
@@ -77,21 +76,22 @@ export default function InvitationPage({
         <>
             <LoaderScreen isVisible={isLoaderScreenVisible} />
             <main className="flex w-full">
-                <div className="hidden md:block md:w-[60%] fixed left-0 top-0 w-full h-dvh overflow-hidden">
+                <div className="hidden md:block md:w-[60%] fixed left-0 top-0 w-full h-full overflow-hidden">
                     <Image
-                        src={'/images/couple3.jpg'}
+                        src={'/images/couple2.jpg'}
                         alt={'Couple photo'}
                         fill
                         className="w-full h-full object-cover"
                     />
                 </div>
-                <div className="flex min-h-screen md:w-[40%] flex-col items-center justify-between font-serif ml-auto md:ml-[60%]">
+                <div className="flex min-h-screen md:w-[40%] flex-col items-center justify-between font-serif ml-auto">
                     <Music />
                     <div className="relative w-full bg-white">
-                        <section
-                            className="min-h-screen hero-background flex flex-col relative overflow-hidden"
-                            id="profile"
-                        >
+                        <section className="min-h-screen flex flex-col relative overflow-hidden">
+                            <video autoPlay loop muted playsInline className="w-full h-full absolute object-cover">
+                                <source src="/hero.mp4" type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>
                             {/* TODO: Add scrolldown  */}
                             <Hero />
                         </section>
@@ -106,7 +106,7 @@ export default function InvitationPage({
                     </section>
 
                     {/* When? */}
-                    <section className="relative text-center py-24 bg-secondary-main w-full overflow-hidden">
+                    <section className="relative text-center bg-secondary-main w-full overflow-hidden">
                         <div className="absolute top-0 w-20 h-20">
                             <FlowerWithBranchIcon fromLeft={true} />
                         </div>

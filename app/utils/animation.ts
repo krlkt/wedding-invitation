@@ -7,7 +7,7 @@ export const fadeInVariants = {
         opacity: 1,
         y: 0,
         transition: {
-            duration: 1,
+            duration: 0.5,
             ease: 'easeInOut',
         },
     },
@@ -22,7 +22,7 @@ export const textFadeInVariants = {
         opacity: 1,
         y: 0,
         transition: {
-            duration: 0.5,
+            duration: 0.3,
         },
     },
 };
@@ -36,7 +36,7 @@ export const staggeredFadeInVariants = {
         opacity: 1,
         y: 0,
         transition: {
-            duration: 0.7,
+            duration: 0.3,
             staggerChildren: 0.5,
             ease: 'easeInOut',
         },
@@ -49,14 +49,14 @@ export const Stagger = {
         visible: {
             opacity: 1,
             transition: {
-                duration: 0.75,
-                staggerChildren: 0.5,
+                duration: 0.3,
+                staggerChildren: 0.2,
                 ease: 'easeInOut',
             },
         },
     },
     itemVariants: {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: 'easeInOut' } },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
     },
 };
