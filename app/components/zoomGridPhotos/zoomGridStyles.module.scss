@@ -7,54 +7,54 @@
     align-items: center;
     justify-content: center;
     .imageContainer {
-        width: 25vw;
-        height: 25vh;
+        width: 25%;
+        height: 25%;
         position: relative;
     }
     &:nth-of-type(1) {
         .imageContainer {
-            top: -52vw;
-            left: 7.5vw;
-            width: 40vw;
-            height: 20vh;
+            top: -26%;
+            left: 10%;
+            width: 40%;
+            height: 20%;
         }
     }
     &:nth-of-type(2) {
         .imageContainer {
-            top: -2.5vh;
-            left: -28vw;
-            width: 25vw;
-            height: 30vh;
+            top: -2.5%;
+            left: -28%;
+            width: 25%;
+            height: 30%;
         }
     }
     &:nth-of-type(3) {
         .imageContainer {
-            width: 25vw;
-            height: 25vh;
+            width: 25%;
+            height: 25%;
         }
     }
     &:nth-of-type(4) {
         .imageContainer {
-            top: 2.5vh;
-            left: 28vw;
-            width: 25vw;
-            height: 20vh;
+            top: 2.5%;
+            left: 28%;
+            width: 25%;
+            height: 20%;
         }
     }
     &:nth-of-type(5) {
         .imageContainer {
-            top: 26.5vh;
-            left: 17vw;
-            width: 35vw;
-            height: 25vh;
+            top: 26.5%;
+            left: 17%;
+            width: 35%;
+            height: 25%;
         }
     }
     &:nth-of-type(6) {
         .imageContainer {
-            top: 24vh;
-            left: -18vw;
-            width: 25vw;
-            height: 20vh;
+            top: 24%;
+            left: -18%;
+            width: 25%;
+            height: 20%;
         }
     }
 }
