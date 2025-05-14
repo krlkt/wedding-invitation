@@ -1,4 +1,4 @@
-import styles from './zoomGridStyles.module.scss';
+import './zoomGridPhotos.css';
 import Image from 'next/image';
 import Groom1 from '../../../public/images/groom/groom1.jpg';
 import Groom2 from '../../../public/images/groom/groom2.jpg';
@@ -18,7 +18,7 @@ const Groom = () => {
         offset: ['start start', 'end end'],
     });
 
-    const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4]);
+    const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4.15]);
     const scale5 = useTransform(scrollYProgress, [0, 0.8], [1, 5]);
     const scale6 = useTransform(scrollYProgress, [0, 0.8], [1, 6]);
     const scale8 = useTransform(scrollYProgress, [0, 0.8], [1, 8]);
@@ -66,13 +66,19 @@ const Groom = () => {
             <div className="sticky top-0 h-screen bg-primary-main overflow-hidden">
                 {pictures.map(({ scale, src }, index) => (
                     // Element container div to make sure everything has the same layout
-                    <motion.div key={index} style={{ scale }} className={styles.el}>
-                        <div className={styles.imageContainer}>
-                            <Image src={src} fill alt={'Grooms Image'} placeholder="blur" className="object-cover" />
+                    <motion.div key={index} style={{ scale }} className={'grid-placement'}>
+                        <div className={'imageContainer'}>
+                            <Image
+                                src={src}
+                                fill
+                                alt={'Grooms Image'}
+                                placeholder="blur"
+                                className="object-cover grid-image"
+                            />
                         </div>
                     </motion.div>
                 ))}
-                <div className="absolute text-white bottom-14 left-10">
+                <div className="absolute text-white bottom-16 left-10">
                     <motion.div style={{ opacity: textOpacityGroom }} className="relative">
                         <motion.h2 className="font-serifSuranna text-[48px] leading-tight drop-shadow-lg relative">
                             The Groom
@@ -97,6 +103,7 @@ const Groom = () => {
                         Elliana Firmanto
                     </motion.h4>
                 </div>
+                <motion.div style={{ opacity: textOpacityParent }} className="groom-text-overlay" />
             </div>
         </div>
     );

@@ -97,12 +97,12 @@ export default function InvitationPage({
                             <Hero />
                         </section>
                         {/* Grooms grid photos */}
-                        <section className="h-[300vh] bg-black">
+                        <section className="h-[300vh]">
                             <Groom />
                         </section>
                     </div>
-                    {/* Grooms grid photos */}
-                    <section className="relative h-[300vh] bg-black w-full">
+                    {/* Bride grid photos */}
+                    <section className="relative h-[300vh] w-full">
                         <Bride />
                     </section>
 

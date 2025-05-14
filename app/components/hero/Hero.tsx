@@ -18,7 +18,7 @@ const Hero = () => {
                         fetchPriority="high"
                     />
                 </div>
-                <div id="hero-text" className="text-black z-10 flex flex-col">
+                <div id="hero-text" className="text-primary-main z-10 flex flex-col">
                     <p className="text-xl mb-4">The wedding of</p>
                     <p className="font-cursive2 text-primary-main text-5xl">Karel</p>
                     {isJakartaOrMalang && (
