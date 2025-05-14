@@ -57,4 +57,22 @@
             height: 20%;
         }
     }
+    &:nth-of-type(7) {
+        .imageContainer {
+            top: -25%;
+            left: -30%;
+            width: 65%;
+            height: 30%;
+            rotate: 90deg;
+        }
+    }
+    &:nth-of-type(8) {
+        .imageContainer {
+            top: 33%;
+            right: -25%;
+            width: 62%;
+            height: 28%;
+            rotate: -90deg;
+        }
+    }
 }

@@ -33,6 +33,7 @@ const Hero = () => {
                             First daughter of Hadi Budiono & Weny
                         </p>
                     )}
+                    {!isJakartaOrMalang && <p className="text-xl">09.09.2025</p>}
                 </div>
             </div>
         </div>

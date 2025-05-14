@@ -1,1 +1,1 @@
-export const secondaryColorHex = '#EAB387';
+export const secondaryColorHex = '#fff';

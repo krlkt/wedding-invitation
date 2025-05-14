@@ -6,6 +6,7 @@ import Groom3 from '../../../public/images/groom/groom3.jpg';
 import Groom4 from '../../../public/images/groom/groom4.jpg';
 import Groom5 from '../../../public/images/groom/groom5.jpg';
 import Groom6 from '../../../public/images/groom/groom6.jpg';
+import Ornament1 from '../../../public/images/ornaments/orn2.png';
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
@@ -50,6 +51,14 @@ const Groom = () => {
             src: Groom6,
             scale: scale9,
         },
+        {
+            src: Ornament1,
+            scale: scale6,
+        },
+        {
+            src: Ornament1,
+            scale: scale8,
+        },
     ];
     return (
         // Container for zoom scroll animation
@@ -64,12 +73,18 @@ const Groom = () => {
                     </motion.div>
                 ))}
                 <div className="absolute text-white bottom-14 left-10">
-                    <motion.h2
-                        style={{ opacity: textOpacityGroom }}
-                        className="font-serifSuranna text-[64px] leading-tight drop-shadow-lg"
-                    >
-                        The Groom
-                    </motion.h2>
+                    <motion.div style={{ opacity: textOpacityGroom }} className="relative">
+                        <motion.h2 className="font-serifSuranna text-[48px] leading-tight drop-shadow-lg relative">
+                            The Groom
+                        </motion.h2>
+                        <Image
+                            src={'/images/bowtie.png'}
+                            alt={'Bowtie'}
+                            width={60}
+                            height={25}
+                            className="absolute -top-2 -right-7 rotate-45"
+                        />
+                    </motion.div>
                     <motion.h2
                         style={{ opacity: textOpacityGroom }}
                         className="font-serifSuranna text-[30px] leading-tight drop-shadow-lg"
