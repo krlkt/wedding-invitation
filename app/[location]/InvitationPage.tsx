@@ -75,7 +75,8 @@ export default function InvitationPage({
     return (
         <>
             <LoaderScreen isVisible={isLoaderScreenVisible} />
-            <main className="flex w-full">
+            <main className="relative flex w-full">
+                <div id="background-overlay" className="texture-overlay" />
                 <div className="hidden md:block md:w-[60%] fixed left-0 top-0 w-full h-full overflow-hidden">
                     <Image
                         src={'/images/couple2.jpg'}
