@@ -106,19 +106,7 @@ export default function InvitationPage({
                     </section>
 
                     {/* When? */}
-                    <section className="relative text-center bg-secondary-main w-full overflow-hidden">
-                        <div className="absolute top-0 w-20 h-20">
-                            <FlowerWithBranchIcon fromLeft={true} />
-                        </div>
-                        <div className="absolute bottom-0 w-20 h-20">
-                            <BranchIcon fromLeft={true} />
-                        </div>
-                        <div className="absolute bottom-0 w-20 h-20">
-                            <FlowerWithBranchIcon fromLeft={false} />
-                        </div>
-                        <div className="absolute top-0 w-20 h-20">
-                            <BranchIcon fromLeft={false} />
-                        </div>
+                    <section className="relative text-center w-full overflow-hidden">
                         <SaveTheDate />
                     </section>
                     {/* Where? */}
