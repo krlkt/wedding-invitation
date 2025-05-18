@@ -28,11 +28,12 @@ html {
     inset: 0; /* shorthand for top: 0; right: 0; bottom: 0; left: 0 */
     background-image: url('/images/white_bg.jpg');
     background-repeat: repeat;
-    background-size: 150px auto; /* Shrink width to 200px, auto height */
+    background-size: 150px auto; /* Shrink width, auto height */
     opacity: 0.2;
     mix-blend-mode: overlay;
     pointer-events: none;
     z-index: -10;
+    min-width: 500px;
 }
 
 body.locked {
