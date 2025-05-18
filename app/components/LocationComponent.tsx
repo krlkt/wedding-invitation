@@ -21,7 +21,7 @@ interface LocationProps {
 
 const LocationComponent: FC<LocationProps> = ({ location }) => (
     // <BlurryOverlay>
-    <div className="relative flex flex-col items-center justify-center text-center text-black py-16">
+    <div className="relative flex flex-col items-center justify-center text-center text-black">
         {/* Container */}
         <div className="w-full relative">
             {/* Ornament overlay */}

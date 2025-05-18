@@ -104,14 +104,17 @@ export default function InvitationPage({
                     <section className="relative h-[300vh] w-full">
                         <Bride />
                     </section>
-                    {/* When? */}
-                    <section className="relative text-center w-full overflow-hidden">
+                    {/* When and Where */}
+                    <section className="relative text-center w-full overflow-hidden pb-36">
+                        <div className="py-12">
+                            <SectionTitle title="The Wedding Day" />
+                        </div>
+
+                        <div className="flex flex-col gap-36 py-12">
+                            <SaveTheDate />
+                            <LocationComponent location={location} />
+                        </div>
                         <SaveTheDateOrnament />
-                        <SaveTheDate />
-                        {/* </section> */}
-                        {/* Where? */}
-                        {/* <section className="flex flex-col gap-4 text-center relative w-full h-dvh"> */}
-                        <LocationComponent location={location} />
                     </section>
                     <div className="flex flex-col gap-8 my-8 relative">
                         {/* RSVP */}

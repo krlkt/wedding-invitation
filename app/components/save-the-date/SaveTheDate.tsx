@@ -10,7 +10,7 @@ const SaveTheDate = () => (
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="relative flex flex-col gap-2 items-center justify-center text-primary-main my-48"
+        className="relative flex flex-col gap-2 items-center justify-center text-primary-main z-10"
     >
         <Image
             src={'/images/ornaments/orn_gate.png'}
@@ -30,9 +30,10 @@ const SaveTheDate = () => (
                 <motion.p variants={Stagger.itemVariants}>Date</motion.p>
             </motion.div>
             <motion.div variants={Stagger.itemVariants} className="flex flex-col gap-2 items-center">
-                <motion.p className="">for the wedding of</motion.p>
-                <motion.p className="uppercase text-xl">Karel & Sabrina</motion.p>
-                <motion.p className="text-lg mb-4 font-semibold">9th of September 2025</motion.p>
+                <motion.p className="text-2xl z-20 mb-4">
+                    TUESDAY
+                    <br /> Sept 9<sup>th</sup>, 2025
+                </motion.p>
                 <Button>
                     <a
                         target="_blank"
