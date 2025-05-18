@@ -29,8 +29,7 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                 viewport={{ once: true }}
                 className="bg-primary-main bg-opacity-65 p-5 py-24 rounded-full flex flex-col items-center justify-center w-4/6 gap-4 border-2 border-secondary-main"
             >
-                {/* Location section content */}
-
+                {/* Ornament overlay */}
                 <div className="w-16 flex items-center">
                     <DinnerIcon />
                 </div>
