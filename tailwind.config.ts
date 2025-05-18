@@ -18,7 +18,6 @@ const config: Config = {
                 cursive2: ['Tangerine', 'Alex Brush', 'cursive'],
                 cursive3: ['Rouge Script', 'Tangerine', 'Alex Brush', 'cursive'],
                 serif: ['Cormorant Garamond', 'serif'],
-                serifSuranna: ['Suranna', 'serif'],
                 cursive_nautigal: ['The Nautigal', 'cursive'],
                 newYorker: ['NewYorkerFont', 'sans-serif'],
             },

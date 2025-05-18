@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { useRef } from 'react';
 import './zoomGridPhotos.css';
@@ -25,6 +25,8 @@ const Bride = () => {
     const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9]);
     const textOpacityBride = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
     const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1]);
+    const bgOpacity = useTransform(scrollYProgress, [0.3, 0.8], [0, 0.4]);
+    const backgroundColor = useMotionTemplate`rgba(0,0,0, ${bgOpacity})`;
 
     const pictures = [
         {
@@ -78,24 +80,43 @@ const Bride = () => {
                         </div>
                     </motion.div>
                 ))}
-                <div className="absolute text-white bottom-14 left-10">
-                    <motion.h2
-                        style={{ opacity: textOpacityBride }}
-                        className="font-serifSuranna text-[64px] leading-tight drop-shadow-lg"
-                    >
-                        The Bride
-                    </motion.h2>
-                    <motion.h2
-                        style={{ opacity: textOpacityBride }}
-                        className="font-serifSuranna text-[30px] leading-tight drop-shadow-lg"
-                    >
-                        Sabrina Alvina Budiono
-                    </motion.h2>
-                    <motion.h4 style={{ opacity: textOpacityParent }} className="text-lg leading-5 drop-shadow-lg">
-                        First daughter of <br />
-                        Hadi Budiono &<br />
-                        Weny
-                    </motion.h4>
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-16">
+                    <motion.div style={{ opacity: textOpacityBride }} className="w-[360px] h-[280px] ">
+                        {/* Background box */}
+                        <div className="absolute inset-x-6 inset-y-3 bg-white/50 rounded-lg p-6 z-0" />
+
+                        {/* PNG frame */}
+                        <Image
+                            src="/images/ornaments/orn5.png"
+                            alt="Flower Frame"
+                            fill
+                            className="object-contain rotate-90 pointer-events-none select-none z-10 scale-150"
+                        />
+
+                        {/* Text layer */}
+                        <div className="absolute inset-x-10 inset-y-16 z-20 flex flex-col items-center justify-center">
+                            <motion.h2
+                                style={{ opacity: textOpacityBride }}
+                                className="text-[48px] leading-tight drop-shadow-lg"
+                            >
+                                The Bride
+                            </motion.h2>
+                            <motion.h2
+                                style={{ opacity: textOpacityBride }}
+                                className="font-cursive2 text-4xl leading-tight drop-shadow-lg"
+                            >
+                                Sabrina Alvina Budiono
+                            </motion.h2>
+                            <motion.h4
+                                style={{ opacity: textOpacityParent }}
+                                className="text-lg leading-5 drop-shadow-lg text-center"
+                            >
+                                First daughter of <br />
+                                Hadi Budiono &<br />
+                                Weny
+                            </motion.h4>
+                        </div>
+                    </motion.div>
                 </div>
                 <motion.div style={{ opacity: textOpacityParent }} className="groom-text-overlay" />
             </div>
