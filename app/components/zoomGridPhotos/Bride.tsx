@@ -64,7 +64,7 @@ const Bride = () => {
     ];
     return (
         // Container for zoom scroll animation
-        <div ref={zoomAnimationContainer} className="relative h-[300vh] w-full">
+        <div ref={zoomAnimationContainer} className="relative h-[300vh] w-full bg-secondary-main">
             <div className="sticky top-0 h-screen overflow-hidden">
                 {pictures.map(({ scale, src }, index) => (
                     // Element container div to make sure everything has the same layout
