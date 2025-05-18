@@ -106,9 +106,9 @@ export default function InvitationPage({
                     {/* When? */}
                     <section className="relative text-center w-full overflow-hidden">
                         <SaveTheDate />
-                    </section>
-                    {/* Where? */}
-                    <section className="flex flex-col gap-4 text-center relative w-full h-dvh">
+                        {/* </section> */}
+                        {/* Where? */}
+                        {/* <section className="flex flex-col gap-4 text-center relative w-full h-dvh"> */}
                         <LocationComponent location={location} />
                     </section>
                     <div className="flex flex-col gap-8 my-8 relative">

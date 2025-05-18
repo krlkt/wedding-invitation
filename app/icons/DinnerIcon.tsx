@@ -1,5 +1,5 @@
 const DinnerIcon = () => (
-    <svg fill="#fff" width="100%" viewBox="0 0 512.002 512.002">
+    <svg fill="#000" width="100%" viewBox="0 0 512.002 512.002">
         <g>
             <g>
                 <path

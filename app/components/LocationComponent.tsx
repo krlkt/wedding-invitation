@@ -5,6 +5,7 @@ import Button from './Button';
 import NavigationIcon from '../icons/NavigationIcon';
 import { motion } from 'framer-motion';
 import { Stagger } from '../utils/animation';
+import Image from 'next/image';
 
 export const locations = {
     bali: 'bali',
@@ -19,17 +20,26 @@ interface LocationProps {
 }
 
 const LocationComponent: FC<LocationProps> = ({ location }) => (
-    <BlurryOverlay>
-        <div className="relative flex flex-col items-center justify-center text-center text-white h-full">
+    // <BlurryOverlay>
+    <div className="relative flex flex-col items-center justify-center text-center text-black py-16">
+        {/* Container */}
+        <div className="w-full relative">
+            {/* Ornament overlay */}
+            <Image
+                src={'/images/ornaments/orn_gate.png'}
+                alt={'Ornament Flower'}
+                width={400}
+                height={1400}
+                className="absolute object-contain scale-150 rotate-180 w-full h-[22rem]"
+            />
             {/* Round overlay */}
             <motion.div
                 variants={Stagger.containerVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="bg-primary-main bg-opacity-65 p-5 py-24 rounded-full flex flex-col items-center justify-center w-4/6 gap-4 border-2 border-secondary-main"
+                className="relative m-auto p-5 rounded-full flex flex-col items-center justify-center w-4/6 gap-4"
             >
-                {/* Ornament overlay */}
                 <div className="w-16 flex items-center">
                     <DinnerIcon />
                 </div>
@@ -55,7 +65,8 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                 </motion.div>
             </motion.div>
         </div>
-    </BlurryOverlay>
+    </div>
+    // </BlurryOverlay>
 );
 
 export default LocationComponent;

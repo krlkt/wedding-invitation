@@ -3,7 +3,7 @@ import { FC, PropsWithChildren } from 'react';
 
 const BlurryOverlay: FC<PropsWithChildren> = ({ children }) => {
     return (
-        <div className="relative w-full h-screen overflow-hidden">
+        <div className="relative w-full h-screen">
             {/* Background Image */}
             <Image
                 src="/images/tirtha-bali-02.jpg"
