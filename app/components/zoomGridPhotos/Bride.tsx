@@ -97,6 +97,7 @@ const Bride = () => {
                         Weny
                     </motion.h4>
                 </div>
+                <motion.div style={{ opacity: textOpacityParent }} className="groom-text-overlay" />
             </div>
         </div>
     );
