@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
-import Button from './Button';
-import { Stagger } from '../utils/animation';
-import CalendarIcon from '../icons/CalendarIcon';
+import Button from '../Button';
+import { Stagger } from '../../utils/animation';
+import CalendarIcon from '../../icons/CalendarIcon';
 import Image from 'next/image';
 
 const SaveTheDate = () => (
@@ -10,7 +10,7 @@ const SaveTheDate = () => (
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="relative flex flex-col gap-2 items-center justify-center text-primary-main my-36"
+        className="relative flex flex-col gap-2 items-center justify-center text-primary-main my-48"
     >
         <Image
             src={'/images/ornaments/orn_gate.png'}

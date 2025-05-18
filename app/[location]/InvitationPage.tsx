@@ -17,11 +17,12 @@ import Groom from '../components/zoomGridPhotos/Groom';
 import Hero from '../components/hero/Hero';
 import Bride from '../components/zoomGridPhotos/Bride';
 import Timeline from '../components/timeline/Timeline';
-import SaveTheDate from '../components/SaveTheDate';
+import SaveTheDate from '../components/save-the-date/SaveTheDate';
 import SectionTitle from '../components/SectionTitle';
 import BorderedDiv from '../components/BorderedDiv';
 import Divider from '../components/wish/Divider';
 import Image from 'next/image';
+import SaveTheDateOrnament from '../components/save-the-date/SaveTheDateOrnament';
 
 export default function InvitationPage({
     location,
@@ -105,6 +106,7 @@ export default function InvitationPage({
                     </section>
                     {/* When? */}
                     <section className="relative text-center w-full overflow-hidden">
+                        <SaveTheDateOrnament />
                         <SaveTheDate />
                     </section>
                     {/* Where? */}
