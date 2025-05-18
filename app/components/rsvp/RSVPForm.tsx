@@ -89,7 +89,7 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
                 select
                 id="attending"
                 className="w-full"
-                label="Are you attending?"
+                label="Will you attend?"
                 {...register('attend', { required: true })}
                 defaultValue={rsvp?.attend ?? 'yes'}
             >

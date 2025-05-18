@@ -116,6 +116,12 @@ export default function InvitationPage({
                     <section className="relative text-center w-full overflow-hidden pb-44">
                         <div className="py-12">
                             <SectionTitle title="The Wedding Day" />
+                            <p className="px-10 py-2">
+                                Your presence is the greatest gift we could ask for. We truly hope to see you on our
+                                special day 💕
+                                <br />
+                                Our wedding will be held on...
+                            </p>
                         </div>
 
                         <div className="flex flex-col gap-48 py-16">
@@ -131,7 +137,7 @@ export default function InvitationPage({
                             className="flex flex-col gap-4 text-center justify-center relative w-full px-4"
                         >
                             <BorderedDiv>
-                                <SectionTitle title="RSVP" />
+                                <SectionTitle title="Let us know if you’ll be there..." />
                                 <RSVPForm guestName={guestName} rsvp={rsvp} />
                             </BorderedDiv>
                         </section>
