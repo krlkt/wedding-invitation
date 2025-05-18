@@ -55,7 +55,6 @@ const Timeline = () => {
                     title={title}
                     date={date}
                     description={description}
-                    index={index}
                 />
             ))}
         </div>
@@ -70,8 +69,10 @@ interface RowProps extends ParagraphProps {
     leftSide: boolean;
 }
 
-const Row: FC<RowProps> = ({ title, date, description, icon, leftSide, index }) => {
-    const wrappedIcon = <div className="text-secondary-main">{icon}</div>;
+const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
+    const wrappedIcon = (
+        <div className={`text-secondary-main max-w-40 min-w-28 ${!leftSide && 'justify-self-end'}`}>{icon}</div>
+    );
 
     return (
         <motion.div
@@ -82,7 +83,11 @@ const Row: FC<RowProps> = ({ title, date, description, icon, leftSide, index }) 
             viewport={{ once: true }}
         >
             {/* Left side */}
-            {leftSide ? <Paragraph index={index} title={title} date={date} description={description} /> : wrappedIcon}
+            {leftSide ? (
+                <Paragraph leftSide={leftSide} title={title} date={date} description={description} />
+            ) : (
+                wrappedIcon
+            )}
 
             {/* Vertical line in the middle */}
             <div className="relative flex flex-col items-center  self-stretch">
@@ -91,7 +96,11 @@ const Row: FC<RowProps> = ({ title, date, description, icon, leftSide, index }) 
             </div>
 
             {/* Right side */}
-            {leftSide ? wrappedIcon : <Paragraph title={title} date={date} description={description} index={index} />}
+            {leftSide ? (
+                wrappedIcon
+            ) : (
+                <Paragraph title={title} date={date} description={description} leftSide={leftSide} />
+            )}
         </motion.div>
     );
 };
@@ -100,11 +109,10 @@ interface ParagraphProps {
     title: string;
     date: string;
     description: string;
-    // Used for staggering animation
-    index: number;
+    leftSide: boolean;
 }
-const Paragraph: FC<ParagraphProps> = ({ title, date, description, index }) => (
-    <div className="flex flex-col gap-2 text-sm py-2">
+const Paragraph: FC<ParagraphProps> = ({ title, date, description, leftSide }) => (
+    <div className={`flex flex-col gap-2 text-sm py-2 ${leftSide && 'text-right'}`}>
         <h4 className="font-cursive text-2xl">{title}</h4>
         <p className="font-serif font-semibold">{date}</p>
         <p className="leading-4 font-serif">{description}</p>
