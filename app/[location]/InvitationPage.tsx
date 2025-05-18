@@ -18,8 +18,6 @@ import Hero from '../components/hero/Hero';
 import Bride from '../components/zoomGridPhotos/Bride';
 import Timeline from '../components/timeline/Timeline';
 import SaveTheDate from '../components/SaveTheDate';
-import BranchIcon from '../icons/BranchIcon';
-import FlowerWithBranchIcon from '../icons/FlowerWithBranchIcon';
 import SectionTitle from '../components/SectionTitle';
 import BorderedDiv from '../components/BorderedDiv';
 import Divider from '../components/wish/Divider';
@@ -77,7 +75,7 @@ export default function InvitationPage({
             <LoaderScreen isVisible={isLoaderScreenVisible} />
             <main className="relative flex w-full">
                 <div id="background-overlay" className="texture-overlay" />
-                <div className="hidden md:block md:w-[60%] fixed left-0 top-0 w-full h-full overflow-hidden">
+                <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden">
                     <Image
                         src={'/images/couple2.jpg'}
                         alt={'Couple photo'}
@@ -85,7 +83,7 @@ export default function InvitationPage({
                         className="w-full h-full object-cover"
                     />
                 </div>
-                <div className="flex min-h-screen md:w-[40%] flex-col items-center justify-between font-serif ml-auto">
+                <div className="flex min-h-screen md:w-[min(40%,450px)] flex-col items-center justify-between font-serif md:ml-[max(60%,100%-450px)]">
                     <Music />
                     <div className="relative w-full bg-white">
                         <section className="min-h-screen flex flex-col relative overflow-hidden">
@@ -105,7 +103,6 @@ export default function InvitationPage({
                     <section className="relative h-[300vh] w-full">
                         <Bride />
                     </section>
-
                     {/* When? */}
                     <section className="relative text-center w-full overflow-hidden">
                         <SaveTheDate />
