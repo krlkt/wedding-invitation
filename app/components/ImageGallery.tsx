@@ -76,12 +76,14 @@ const ImageGallery = () => {
                         <SplideSlide key={index}>
                             <Item original={image.full} width={image.width} height={image.height}>
                                 {({ ref, open }) => (
-                                    <img
+                                    <Image
                                         ref={ref}
                                         src={image.full}
                                         alt={`Thumbnail ${index + 1}`}
                                         onClick={open}
                                         className="w-[5rem] h-[5rem] sm:w-[6rem] sm:h-[6rem] md:w-[7rem] md:h-[7rem] object-cover rounded-xl cursor-pointer"
+                                        width={300}
+                                        height={300}
                                     />
                                 )}
                             </Item>
