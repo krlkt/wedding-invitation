@@ -104,13 +104,21 @@ export default function InvitationPage({
                     <section className="relative h-[300vh] w-full">
                         <Bride />
                     </section>
+                    {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
+                    <section
+                        className="w-full p-4 py-8 flex flex-col gap-10 bg-primary-main text-secondary-main"
+                        id="love-story"
+                    >
+                        <SectionTitle title="Love Story" color="secondary" />
+                        <Timeline />
+                    </section>
                     {/* When and Where */}
-                    <section className="relative text-center w-full overflow-hidden pb-36">
+                    <section className="relative text-center w-full overflow-hidden pb-44">
                         <div className="py-12">
                             <SectionTitle title="The Wedding Day" />
                         </div>
 
-                        <div className="flex flex-col gap-36 py-12">
+                        <div className="flex flex-col gap-48 py-16">
                             <SaveTheDate />
                             <LocationComponent location={location} />
                         </div>
@@ -136,14 +144,6 @@ export default function InvitationPage({
                         <section className="flex flex-col gap-4 text-center justify-center relative w-full">
                             <SectionTitle title="Gallery" />
                             <ImageGallery />
-                        </section>
-                        {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
-                        <section
-                            className="w-full p-4 py-8 flex flex-col gap-10 bg-primary-main text-secondary-main"
-                            id="love-story"
-                        >
-                            <SectionTitle title="Love Story" color="secondary" />
-                            <Timeline />
                         </section>
                         {/* Wishes */}
                         <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">

@@ -108,16 +108,13 @@
     background: linear-gradient(180deg, rgba(246, 246, 246, 0) 0%, var(--secondary-main) 100%);
 }
 
-.box-mask {
-    mask-image: url('/images/ornaments/orn5.png');
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
-
-    -webkit-mask-image: url('/images/ornaments/orn5.png'); /* for Safari */
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-
-    background-color: rgba(255, 192, 203, 0.4); /* your content background */
+.bride-text-overlay::before {
+    content: '';
+    width: 108%;
+    height: 6%;
+    position: absolute;
+    left: 50%;
+    bottom: 0%;
+    transform: translate(-50%, 0%);
+    background: linear-gradient(180deg, rgba(246, 246, 246, 0) 0%, var(--background-primary) 100%);
 }

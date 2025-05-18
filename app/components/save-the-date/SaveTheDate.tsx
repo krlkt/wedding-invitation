@@ -14,13 +14,13 @@ const SaveTheDate = () => (
     >
         <Image
             src={'/images/ornaments/orn_gate.png'}
-            alt={'Gate'}
-            width={500}
-            height={1400}
-            className="absolute min-w-[400px]"
+            alt={'Ornament Flower'}
+            width={400}
+            height={800}
+            className="absolute object-contain scale-150 w-[min(100%,400px)] h-[22rem]"
         />
-        <div className="relative py-10 w-full h-full">
-            <motion.div className="font-cursive_nautigal text-7xl">
+        <div className="relative w-full h-full">
+            <motion.div className="font-cursive_nautigal text-6xl pt-10">
                 <motion.p className="text-primary-600/40" variants={Stagger.itemVariants}>
                     Save
                 </motion.p>
@@ -29,7 +29,7 @@ const SaveTheDate = () => (
                 </motion.p>
                 <motion.p variants={Stagger.itemVariants}>Date</motion.p>
             </motion.div>
-            <motion.div variants={Stagger.itemVariants} className="flex flex-col gap-2 items-center">
+            <motion.div variants={Stagger.itemVariants}>
                 <motion.p className="text-2xl z-20 mb-4">
                     TUESDAY
                     <br /> Sept 9<sup>th</sup>, 2025

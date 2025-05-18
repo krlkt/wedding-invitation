@@ -29,7 +29,7 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                 src={'/images/ornaments/orn_gate.png'}
                 alt={'Ornament Flower'}
                 width={400}
-                height={1400}
+                height={800}
                 className="absolute object-contain scale-150 rotate-180 w-full h-[22rem]"
             />
             {/* Round overlay */}
