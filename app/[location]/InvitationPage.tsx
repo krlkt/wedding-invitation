@@ -139,14 +139,6 @@ export default function InvitationPage({
                             <div className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
                                 <SectionTitle title="Let us know if you’ll be there..." />
                                 <RSVPForm guestName={guestName} rsvp={rsvp} />
-                                {/* RSVP Frame */}
-                                <Image
-                                    src={'/images/ornaments/orn_gate.png'}
-                                    alt={'Ornament Flower'}
-                                    width={400}
-                                    height={800}
-                                    className="absolute object-contain scale-150 w-[min(100%,400px)] h-[22rem] -z-10 top-0 left-auto"
-                                />
                             </div>
                         </section>
                         {/* Wedding Gift */}
