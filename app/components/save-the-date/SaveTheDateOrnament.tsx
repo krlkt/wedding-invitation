@@ -28,14 +28,14 @@ const SaveTheDateOrnament = ({ downward = false }: { downward?: boolean }) => (
             alt={'blue flowers'}
             width={500}
             height={500}
-            className={`absolute -right-2 bottom-0 w-[55%] ${downward && 'rotate-180'}`}
+            className={`absolute -right-2 ${downward ? 'top-0' : 'bottom-0'} w-[55%] ${downward && 'rotate-180'}`}
         />
         <Image
             src={'/images/ornaments/orn4.png'}
             alt={'blue flowers'}
             width={500}
             height={500}
-            className={`absolute -left-4 bottom-0 w-[55%] ${downward && 'rotate-180'}`}
+            className={`absolute -left-4 w-[55%] ${downward ? 'top-0' : 'bottom-0'} ${downward && 'rotate-180'}`}
         />
         <Wiggle
             className={`absolute ${downward ? 'bottom-24' : '-bottom-2'} right-8 -z-10 w-[30%]`}

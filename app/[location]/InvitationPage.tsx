@@ -112,30 +112,19 @@ export default function InvitationPage({
                         <SectionTitle title="Love Story" color="secondary" />
                         <Timeline />
                     </section>
-                    {/* When and Where */}
-                    <section className="relative text-center w-full overflow-hidden pb-20">
-                        <div className="py-12">
-                            <SectionTitle title="The Wedding Day" />
-                            <p className="px-10 py-2">
-                                Your presence is the greatest gift we could ask for. We truly hope to see you on our
-                                special day 💕
-                                <br />
-                                Our wedding will be held on...
-                            </p>
-                        </div>
-
-                        <div className="flex flex-col gap-10 py-16">
-                            <div className="relative w-full h-[550px]">
-                                <SaveTheDate />
-                                <SaveTheDateOrnament downward />
-                            </div>
-                            <LocationComponent location={location} />
-                        </div>
+                    {/* When */}
+                    <section className="relative text-center w-full overflow-hidden h-[700px] flex flex-col justify-center items-center">
+                        <SaveTheDate />
+                    </section>
+                    {/* Where */}
+                    <section className="relative w-full h-[600px] flex flex-col items-center justify-center overflow-x-hidden">
+                        <SaveTheDateOrnament downward />
+                        <LocationComponent location={location} />
                         <SaveTheDateOrnament />
                     </section>
                     <div className="flex flex-col gap-8 my-8 relative">
                         {/* RSVP */}
-                        <section id="rsvp">
+                        <section id="rsvp" className="rounded-lg bg-blue-100/50 p-8 m-4">
                             <div className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
                                 <SectionTitle title="Let us know if you’ll be there..." />
                                 <RSVPForm guestName={guestName} rsvp={rsvp} />
