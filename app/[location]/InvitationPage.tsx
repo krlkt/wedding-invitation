@@ -113,7 +113,7 @@ export default function InvitationPage({
                         <Timeline />
                     </section>
                     {/* When and Where */}
-                    <section className="relative text-center w-full overflow-hidden pb-44">
+                    <section className="relative text-center w-full overflow-hidden pb-20">
                         <div className="py-12">
                             <SectionTitle title="The Wedding Day" />
                             <p className="px-10 py-2">
@@ -124,22 +124,30 @@ export default function InvitationPage({
                             </p>
                         </div>
 
-                        <div className="flex flex-col gap-48 py-16">
-                            <SaveTheDate />
+                        <div className="flex flex-col gap-10 py-16">
+                            <div className="relative w-full h-[550px]">
+                                <SaveTheDate />
+                                <SaveTheDateOrnament downward />
+                            </div>
                             <LocationComponent location={location} />
                         </div>
                         <SaveTheDateOrnament />
                     </section>
                     <div className="flex flex-col gap-8 my-8 relative">
                         {/* RSVP */}
-                        <section
-                            id="rsvp"
-                            className="flex flex-col gap-4 text-center justify-center relative w-full px-4"
-                        >
-                            <BorderedDiv>
+                        <section id="rsvp">
+                            <div className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
                                 <SectionTitle title="Let us know if you’ll be there..." />
                                 <RSVPForm guestName={guestName} rsvp={rsvp} />
-                            </BorderedDiv>
+                                {/* RSVP Frame */}
+                                <Image
+                                    src={'/images/ornaments/orn_gate.png'}
+                                    alt={'Ornament Flower'}
+                                    width={400}
+                                    height={800}
+                                    className="absolute object-contain scale-150 w-[min(100%,400px)] h-[22rem] -z-10 top-0 left-auto"
+                                />
+                            </div>
                         </section>
                         {/* Wedding Gift */}
                         {/* TODO: add QRIS */}
