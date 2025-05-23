@@ -117,7 +117,7 @@ export default function InvitationPage({
                         <SaveTheDate />
                     </section>
                     {/* Where */}
-                    <section className="relative w-full h-[600px] flex flex-col items-center justify-center overflow-x-hidden">
+                    <section className="relative w-full flex flex-col items-center justify-center overflow-x-hidden">
                         <SaveTheDateOrnament downward />
                         <LocationComponent location={location} />
                         <SaveTheDateOrnament />

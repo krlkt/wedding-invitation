@@ -25,7 +25,7 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="relative m-auto rounded-full flex flex-col items-center justify-center w-4/6 gap-4 bg-blue-100/50 p-12 text-center"
+        className="relative m-auto rounded-full flex flex-col items-center justify-center w-4/6 gap-4 bg-blue-100/50 p-12 text-center my-28"
     >
         <div className="w-16 flex items-center">
             <DinnerIcon />
