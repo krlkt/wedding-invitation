@@ -106,7 +106,7 @@ export default function InvitationPage({
                     </section>
                     {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
                     <section
-                        className="w-full flex flex-col gap-10 bg-primary-main text-secondary-main relative overflow-x-hidden p-4 py-8 pb-16"
+                        className="w-full flex flex-col gap-10 bg-primary-main text-secondary-main relative overflow-x-hidden p-4 py-8 pb-8"
                         id="love-story"
                     >
                         <SectionTitle title="Love Story" color="secondary" />

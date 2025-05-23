@@ -44,7 +44,7 @@ body.locked {
 .section-transition-secondary::before {
     content: '';
     width: 108%;
-    height: 8%;
+    height: 5%;
     position: absolute;
     left: 50%;
     bottom: 0%;
