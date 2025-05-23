@@ -106,14 +106,15 @@ export default function InvitationPage({
                     </section>
                     {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
                     <section
-                        className="w-full p-4 py-8 flex flex-col gap-10 bg-primary-main text-secondary-main"
+                        className="w-full flex flex-col gap-10 bg-primary-main text-secondary-main relative overflow-x-hidden p-4 py-8 pb-16"
                         id="love-story"
                     >
                         <SectionTitle title="Love Story" color="secondary" />
                         <Timeline />
+                        <div className="section-transition-secondary" />
                     </section>
                     {/* When */}
-                    <section className="relative text-center w-full overflow-hidden h-[700px] flex flex-col justify-center items-center">
+                    <section className="relative text-center w-full">
                         <SaveTheDate />
                     </section>
                     {/* Where */}
