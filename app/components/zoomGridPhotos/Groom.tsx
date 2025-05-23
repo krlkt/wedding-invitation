@@ -6,9 +6,8 @@ import Groom3 from '../../../public/images/groom/groom3.jpg';
 import Groom4 from '../../../public/images/groom/groom4.jpg';
 import Groom5 from '../../../public/images/groom/groom5.jpg';
 import Groom6 from '../../../public/images/groom/groom6.jpg';
-import Ornament1 from '../../../public/images/ornaments/orn2.png';
 import { useRef } from 'react';
-import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const Groom = () => {
     // Zoom animation
@@ -25,8 +24,6 @@ const Groom = () => {
     const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9]);
     const textOpacityGroom = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
     const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1]);
-    const bgOpacity = useTransform(scrollYProgress, [0.3, 0.8], [0, 0.4]);
-    const backgroundColor = useMotionTemplate`rgba(0,0,0, ${bgOpacity})`;
 
     const pictures = [
         {
@@ -53,14 +50,6 @@ const Groom = () => {
             src: Groom6,
             scale: scale9,
         },
-        {
-            src: Ornament1,
-            scale: scale6,
-        },
-        {
-            src: Ornament1,
-            scale: scale8,
-        },
     ];
     return (
         // Container for zoom scroll animation
@@ -80,45 +69,10 @@ const Groom = () => {
                         </div>
                     </motion.div>
                 ))}
-                {/* <div className="absolute text-white bottom-16 left-10">
-                    <motion.div style={{ backgroundColor: backgroundColor }} className="p-4 px-4 rounded-lg">
-                        <motion.div style={{ opacity: textOpacityGroom }} className="relative">
-                            <motion.h2 className="text-[48px] leading-tight drop-shadow-lg relative">
-                                The Groom
-                            </motion.h2>
-                            <Image
-                                src={'/images/bowtie.png'}
-                                alt={'Bowtie'}
-                                width={60}
-                                height={25}
-                                className="absolute -top-2 -right-7 rotate-45"
-                            />
-                        </motion.div>
-                        <motion.h2
-                            style={{ opacity: textOpacityGroom }}
-                            className="font-cursive2 text-4xl leading-tight drop-shadow-lg"
-                        >
-                            Karel Karunia
-                        </motion.h2>
-                        <motion.h4 style={{ opacity: textOpacityParent }} className="text-lg leading-5 drop-shadow-lg">
-                            Second son of <br />
-                            Rendy Tirtanadi &<br />
-                            Elliana Firmanto
-                        </motion.h4>
-                    </motion.div>
-                </div> */}
                 <div className="absolute left-1/2 -translate-x-1/2 bottom-16">
                     <motion.div style={{ opacity: textOpacityGroom }} className="w-[360px] h-[280px] ">
                         {/* Background box */}
                         <div className="absolute inset-x-6 inset-y-3 bg-black/50 rounded-lg p-6 z-0" />
-
-                        {/* PNG frame */}
-                        <Image
-                            src="/images/ornaments/orn5.png"
-                            alt="Flower Frame"
-                            fill
-                            className="object-contain rotate-90 pointer-events-none select-none z-10 scale-150"
-                        />
 
                         {/* Text layer */}
                         <div className="absolute inset-x-10 inset-y-16 z-20 flex flex-col items-center justify-center text-white">

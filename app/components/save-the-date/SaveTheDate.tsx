@@ -3,7 +3,6 @@ import Button from '../Button';
 import { Stagger } from '../../utils/animation';
 import CalendarIcon from '../../icons/CalendarIcon';
 import Image from 'next/image';
-import SectionTitle from '../SectionTitle';
 
 const SaveTheDate = () => (
     <motion.div
@@ -11,7 +10,7 @@ const SaveTheDate = () => (
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="relative flex flex-col gap-2 items-center justify-center text-primary-main z-10 w-full my-40"
+        className="relative flex flex-col gap-2 items-center justify-center text-primary-main z-10 w-full"
     >
         <Image
             src={'/images/ornaments/orn_gate.png'}

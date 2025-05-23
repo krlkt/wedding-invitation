@@ -114,7 +114,7 @@ export default function InvitationPage({
                         <div className="section-transition-secondary" />
                     </section>
                     {/* When */}
-                    <section className="relative text-center w-full">
+                    <section className="relative text-center w-full overflow-hidden h-[600px] flex flex-col justify-center items-center">
                         <SaveTheDate />
                     </section>
                     {/* Where */}
