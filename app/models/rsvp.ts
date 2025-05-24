@@ -1,7 +1,8 @@
 export interface RSVP {
-    id: string;
+    id: number;
     name: string;
     attend: string;
     guest_number: number;
     notes: string;
+    location: string;
 }
