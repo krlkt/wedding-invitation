@@ -144,17 +144,15 @@ export default function InvitationPage({
 
                         {/* Wishes */}
                         <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
-                            <BorderedDiv>
-                                <SectionTitle title="Your Wishes" />
-                                <p>
-                                    Your love and well-wishes mean the world to us, and we&#39;re so excited to share
-                                    this special day with you. Drop a note of advice, a sweet wish, or just some love in
-                                    the comments below!
-                                </p>
-                                <WishForm guestName={guestName} />
-                                <Divider />
-                                <Wishes wishes={wishes} />
-                            </BorderedDiv>
+                            <SectionTitle title="Your Wishes" />
+                            <p>
+                                Your love and well-wishes mean the world to us, and we&#39;re so excited to share this
+                                special day with you. Drop a note of advice, a sweet wish, or just some love in the
+                                comments below!
+                            </p>
+                            <WishForm guestName={guestName} />
+                            <Divider />
+                            <Wishes wishes={wishes} />
                         </section>
                         <section className="px-8">
                             <p className="text-md text-center">
