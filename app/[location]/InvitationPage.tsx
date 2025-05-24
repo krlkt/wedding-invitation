@@ -131,16 +131,17 @@ export default function InvitationPage({
                                 <RSVPForm guestName={guestName} rsvp={rsvp} />
                             </div>
                         </section>
-                        {/* Wedding Gift */}
-                        {/* TODO: add QRIS */}
-                        <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
-                            <Gift />
-                        </section>
                         {/* Photo galery */}
                         <section className="flex flex-col gap-4 text-center justify-center relative w-full">
                             <SectionTitle title="Gallery" />
                             <ImageGallery />
                         </section>
+                        {/* Wedding Gift */}
+                        {/* TODO: add QRIS */}
+                        <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
+                            <Gift />
+                        </section>
+
                         {/* Wishes */}
                         <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
                             <BorderedDiv>
