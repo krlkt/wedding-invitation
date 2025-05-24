@@ -25,8 +25,22 @@ export default async function Page({
     searchParams: { [key: string]: string | string[] | undefined };
 }) {
     const guestName = searchParams.to as string;
+    const wishPage = parseInt((searchParams.page as string) || '1');
+    const PAGE_SIZE = 10;
+    const offset = (wishPage - 1) * PAGE_SIZE;
 
-    const { rows: wishes } = await query<Wish>('SELECT * FROM wish ORDER BY created_at DESC');
+    // Fetch wishes for current page
+    const { rows: wishes } = await query<Wish>('SELECT * FROM wish ORDER BY created_at DESC LIMIT $1 OFFSET $2', [
+        PAGE_SIZE,
+        offset,
+    ]);
+    // Fetch total count of wishes
+    const { rows: countResult } = await query<{ count: string }>('SELECT COUNT(*) AS count FROM wish');
+    console.log(countResult);
+    const totalCount = parseInt(countResult[0].count);
+    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+    console.log(totalPages);
+    // Fetch Rsvp data for current guest
     const { rows } = await query<RSVP>(`SELECT * FROM rsvp WHERE name = $name`, { name: guestName });
     const rsvp = rows[0];
 
@@ -43,7 +57,12 @@ export default async function Page({
     return (
         <LocationProvider location={location}>
             {'opened' in searchParams ? (
-                <InvitationPage location={location} wishes={wishes} guestName={guestName} rsvp={rsvp} />
+                <InvitationPage
+                    location={location}
+                    wishes={{ wishes, wishPage, totalPages }}
+                    guestName={guestName}
+                    rsvp={rsvp}
+                />
             ) : (
                 <UnopenedInvitationPage guestName={guestName} />
             )}

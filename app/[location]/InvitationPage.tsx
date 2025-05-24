@@ -19,7 +19,6 @@ import Bride from '../components/zoomGridPhotos/Bride';
 import Timeline from '../components/timeline/Timeline';
 import SaveTheDate from '../components/save-the-date/SaveTheDate';
 import SectionTitle from '../components/SectionTitle';
-import BorderedDiv from '../components/BorderedDiv';
 import Divider from '../components/wish/Divider';
 import Image from 'next/image';
 import SaveTheDateOrnament from '../components/save-the-date/SaveTheDateOrnament';
@@ -31,7 +30,7 @@ export default function InvitationPage({
     rsvp,
 }: {
     location: Locations;
-    wishes: Array<Wish>;
+    wishes: { wishes: Array<Wish>; wishPage: number; totalPages: number };
     guestName: string;
     rsvp?: RSVP;
 }) {
