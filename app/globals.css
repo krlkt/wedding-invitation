@@ -41,6 +41,17 @@ body.locked {
     height: 100%; /* Ensure the body takes full height */
 }
 
+.section-transition-secondary::before {
+    content: '';
+    width: 108%;
+    height: 5%;
+    position: absolute;
+    left: 50%;
+    bottom: 0%;
+    transform: translate(-50%, 0%);
+    background: linear-gradient(180deg, var(--background-primary) 0%, var(--secondary-main) 100%);
+}
+
 #landing-section {
     width: 100%;
 }

@@ -74,7 +74,7 @@ export default function InvitationPage({
     return (
         <>
             <LoaderScreen isVisible={isLoaderScreenVisible} />
-            <main className="relative flex w-full bg-[#ceeaff]/10 min-w-[400px]">
+            <main className="relative flex w-full bg-[#ceeaff]/10 min-w-[300px]">
                 <div id="background-overlay" className="texture-overlay" />
                 <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden">
                     <Image
@@ -106,18 +106,19 @@ export default function InvitationPage({
                     </section>
                     {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
                     <section
-                        className="w-full p-4 py-8 flex flex-col gap-10 bg-primary-main text-secondary-main"
+                        className="w-full flex flex-col gap-10 bg-primary-main text-secondary-main relative overflow-x-hidden p-4 py-8 pb-8"
                         id="love-story"
                     >
                         <SectionTitle title="Love Story" color="secondary" />
                         <Timeline />
+                        <div className="section-transition-secondary" />
                     </section>
                     {/* When */}
-                    <section className="relative text-center w-full overflow-hidden h-[700px] flex flex-col justify-center items-center">
+                    <section className="relative text-center w-full overflow-hidden h-[600px] flex flex-col justify-center items-center">
                         <SaveTheDate />
                     </section>
                     {/* Where */}
-                    <section className="relative w-full h-[600px] flex flex-col items-center justify-center overflow-x-hidden">
+                    <section className="relative w-full flex flex-col items-center justify-center overflow-x-hidden">
                         <SaveTheDateOrnament downward />
                         <LocationComponent location={location} />
                         <SaveTheDateOrnament />
