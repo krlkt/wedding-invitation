@@ -72,6 +72,7 @@
         }
     }
     &:nth-of-type(7) {
+        z-index: -1;
         .imageContainer {
             top: -25%;
             left: -30%;
@@ -81,6 +82,7 @@
         }
     }
     &:nth-of-type(8) {
+        z-index: -1;
         .imageContainer {
             top: 33%;
             right: -25%;
