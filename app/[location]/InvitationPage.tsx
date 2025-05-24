@@ -74,7 +74,7 @@ export default function InvitationPage({
     return (
         <>
             <LoaderScreen isVisible={isLoaderScreenVisible} />
-            <main className="relative flex w-full bg-[#ceeaff]/10 min-w-[300px]">
+            <main className="relative flex w-full bg-[#ceeaff]/10">
                 <div id="background-overlay" className="texture-overlay" />
                 <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden">
                     <Image
