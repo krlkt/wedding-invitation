@@ -126,7 +126,7 @@ export default function InvitationPage({
                         {/* RSVP */}
                         <section id="rsvp" className="rounded-lg bg-blue-100/50 p-8 m-4">
                             <div className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
-                                <SectionTitle title="Let us know if you’ll be there..." />
+                                <SectionTitle title="RSVP" />
                                 <RSVPForm guestName={guestName} rsvp={rsvp} />
                             </div>
                         </section>
