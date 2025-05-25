@@ -1,6 +1,5 @@
-import { RSVP } from '@/app/models/rsvp';
+import { RSVPForm } from '@/app/models/rsvp';
 import { useForm } from 'react-hook-form';
-import { addRSVP } from './action';
 import SubmitButton from '../SubmitButton';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -8,25 +7,30 @@ import Button from '../Button';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useLocation } from '@/app/utils/useLocation';
+import { addParticipant } from '@/app/dashboard/action';
 
-const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
+const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
     const { enqueueSnackbar } = useSnackbar();
-    const [showForm, setShowForm] = useState<boolean>(!Boolean(rsvp));
+    const [showForm, setShowForm] = useState<boolean>(!Boolean(rsvp?.attend));
     const { location } = useLocation();
 
     const {
         register,
         handleSubmit,
         formState: { isSubmitting },
-    } = useForm<RSVP>({
+    } = useForm<RSVPForm>({
         defaultValues: {
-            name: guestName,
-            notes: '',
+            id: rsvp.id,
+            name: rsvp.name,
+            attend: rsvp.attend ?? '1',
+            notes: rsvp.notes ?? '',
+            location: rsvp.location,
+            max_guests: rsvp.max_guests,
         },
     });
     const onSubmit = async (data: any) => {
         try {
-            await addRSVP(data);
+            await addParticipant(data);
             enqueueSnackbar('Successfuly submitted the form. Thank you for submitting!', { variant: 'success' });
             setShowForm(false);
         } catch (error) {
@@ -82,8 +86,9 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
                 {...register('guest_number', { required: true })}
                 defaultValue={rsvp?.guest_number ?? 1}
             >
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
+                {Array.from({ length: rsvp?.max_guests ?? 2 }, (_, i) => (
+                    <MenuItem value={i + 1}>{i + 1}</MenuItem>
+                ))}
             </TextField>
             <TextField
                 select
@@ -113,4 +118,4 @@ const RSVPForm = ({ guestName, rsvp }: { guestName: string; rsvp?: RSVP }) => {
     );
 };
 
-export default RSVPForm;
+export default RSVPFORM;

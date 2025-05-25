@@ -8,7 +8,7 @@ import 'photoswipe/style.css';
 import ImageGallery from '../components/ImageGallery';
 import Gift from '../components/gift/Gift';
 import Wishes from '../components/wish/Wishes';
-import RSVPForm from '../components/rsvp/RSVPForm';
+import RSVPFORM from '../components/rsvp/RSVPForm';
 import { Wish } from '../models/wish';
 import WishForm from '../components/wish/WishForm';
 import { RSVP } from '../models/rsvp';
@@ -32,7 +32,7 @@ export default function InvitationPage({
     location: Locations;
     wishes: { wishes: Array<Wish>; wishPage: number; totalPages: number };
     guestName: string;
-    rsvp?: RSVP;
+    rsvp: RSVP;
 }) {
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true);
     // use lenis smooth scroll on page
@@ -127,7 +127,7 @@ export default function InvitationPage({
                         <section id="rsvp" className="rounded-lg bg-blue-100/50 p-8 m-4">
                             <div className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
                                 <SectionTitle title="RSVP" />
-                                <RSVPForm guestName={guestName} rsvp={rsvp} />
+                                <RSVPFORM rsvp={rsvp} />
                             </div>
                         </section>
                         {/* Photo galery */}
