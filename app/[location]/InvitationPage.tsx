@@ -77,12 +77,17 @@ export default function InvitationPage({
             <main className="relative flex w-full bg-[#ceeaff]/10">
                 <div id="background-overlay" className="texture-overlay" />
                 <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden">
-                    <Image
-                        src={'/images/galery/gal15.jpg'}
-                        alt={'Couple photo'}
-                        fill
-                        className="w-full h-full object-cover"
-                    />
+                    <div id="overlay" className="w-full h-full absolute -z-10 overlay" />
+                    <div id="hero" className="w-full h-full absolute -z-20">
+                        <Image
+                            alt={'Couple photo'}
+                            fill
+                            className="w-full h-full object-cover"
+                            sizes="100vw"
+                            src={'/images/galery/gal15.jpg'}
+                            priority={true}
+                        />
+                    </div>
                 </div>
                 <div className="flex flex-col items-center justify-between md:w-[min(40%,450px)] font-serif md:ml-[max(60%,100%-450px)]">
                     <Music />
