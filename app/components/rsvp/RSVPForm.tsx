@@ -93,7 +93,9 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
                     defaultValue={rsvp?.guest_number ?? 1}
                 >
                     {Array.from({ length: rsvp?.max_guests ?? 2 }, (_, i) => (
-                        <MenuItem value={i + 1}>{i + 1}</MenuItem>
+                        <MenuItem key={i} value={i + 1}>
+                            {i + 1}
+                        </MenuItem>
                     ))}
                 </TextField>
                 <TextField
