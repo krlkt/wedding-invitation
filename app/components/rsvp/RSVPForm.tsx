@@ -45,7 +45,15 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
 
     return !showForm ? (
         <div className="flex flex-col gap-4">
-            {rsvp?.attend === 'yes' ? (
+            {rsvp?.attend === 'no' ? (
+                <>
+                    <p className="text-2xl font-bold">Unable to attend</p>
+                    <p>Sad to know that you can&apos;t attend.. Hope to see you on another chance! ;&#41;</p>
+                    <div>
+                        <Button onClick={handleChangeClick}>Change answer</Button>
+                    </div>
+                </>
+            ) : (
                 <>
                     <p className="text-2xl font-bold">Will attend</p>
                     <p>
@@ -56,65 +64,64 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
                         <Button onClick={handleChangeClick}>Change answer</Button>
                     </div>
                 </>
-            ) : (
-                <>
-                    <p className="text-2xl font-bold">Unable to attend</p>
-                    <p>Sad to know that you can&apos;t attend.. Hope to see you on another chance! ;&#41;</p>
-                    <div>
-                        <Button onClick={handleChangeClick}>Change answer</Button>
-                    </div>
-                </>
             )}
         </div>
     ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-4 text-left">
-            <TextField
-                className="w-full"
-                {...register('name', { required: true })}
-                label="Name (readonly)"
-                slotProps={{
-                    input: {
-                        readOnly: true,
-                    },
-                }}
-            />
-            <TextField
-                select
-                id="guest_number"
-                className="w-full"
-                label="Number of guest(s) including you"
-                {...register('guest_number', { required: true })}
-                defaultValue={rsvp?.guest_number ?? 1}
-            >
-                {Array.from({ length: rsvp?.max_guests ?? 2 }, (_, i) => (
-                    <MenuItem value={i + 1}>{i + 1}</MenuItem>
-                ))}
-            </TextField>
-            <TextField
-                select
-                id="attending"
-                className="w-full"
-                label="Will you attend?"
-                {...register('attend', { required: true })}
-                defaultValue={rsvp?.attend ?? 'yes'}
-            >
-                <MenuItem value={'yes'}>Yes</MenuItem>
-                <MenuItem value={'no'}>No</MenuItem>
-            </TextField>
-            {location === 'bali' && (
+        <>
+            <p>
+                Please confirm your attendance before:
+                <br />
+                Aug 1<sup>st</sup>, 2025
+            </p>
+            <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-4 text-left">
                 <TextField
-                    id="notes"
-                    label="Chef notes"
-                    multiline
-                    minRows={3}
-                    maxRows={8}
-                    {...register('notes')}
-                    defaultValue={rsvp?.notes ?? ''}
-                    helperText="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave itempty :D"
+                    className="w-full"
+                    {...register('name', { required: true })}
+                    label="Name (readonly)"
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
+                    }}
                 />
-            )}
-            <SubmitButton isSubmitting={isSubmitting} />
-        </form>
+                <TextField
+                    select
+                    id="guest_number"
+                    className="w-full"
+                    label="Number of guest(s) including you"
+                    {...register('guest_number', { required: true })}
+                    defaultValue={rsvp?.guest_number ?? 1}
+                >
+                    {Array.from({ length: rsvp?.max_guests ?? 2 }, (_, i) => (
+                        <MenuItem value={i + 1}>{i + 1}</MenuItem>
+                    ))}
+                </TextField>
+                <TextField
+                    select
+                    id="attending"
+                    className="w-full"
+                    label="Will you attend?"
+                    {...register('attend', { required: true })}
+                    defaultValue={rsvp?.attend ?? 'yes'}
+                >
+                    <MenuItem value={'yes'}>Yes</MenuItem>
+                    <MenuItem value={'no'}>No</MenuItem>
+                </TextField>
+                {location === 'bali' && (
+                    <TextField
+                        id="notes"
+                        label="Chef notes"
+                        multiline
+                        minRows={3}
+                        maxRows={8}
+                        {...register('notes')}
+                        defaultValue={rsvp?.notes ?? ''}
+                        helperText="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave itempty :D"
+                    />
+                )}
+                <SubmitButton isSubmitting={isSubmitting} />
+            </form>
+        </>
     );
 };
 
