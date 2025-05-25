@@ -25,6 +25,7 @@ export default async function Page({
     searchParams: { [key: string]: string | string[] | undefined };
 }) {
     const guestName = searchParams.to as string;
+    const guestId = searchParams.id ? parseInt(searchParams.id as string) : -1;
     const wishPage = parseInt((searchParams.page as string) || '1');
     const PAGE_SIZE = 10;
     const offset = (wishPage - 1) * PAGE_SIZE;
@@ -39,7 +40,10 @@ export default async function Page({
     const totalCount = parseInt(countResult[0].count);
     const totalPages = Math.ceil(totalCount / PAGE_SIZE);
     // Fetch Rsvp data for current guest
-    const { rows } = await query<RSVP>(`SELECT * FROM rsvp WHERE name = $name`, { name: guestName });
+    const { rows } = await query<RSVP>(`SELECT * FROM rsvp WHERE id=$id AND name=$name`, {
+        id: guestId,
+        name: guestName,
+    });
     const rsvp = rows[0];
 
     if (location !== 'bali' && location !== 'jakarta' && location !== 'malang') return notFound();
@@ -48,7 +52,7 @@ export default async function Page({
         return <UnidentifiedPersonPage />;
     }
 
-    if (!isInGuestList(location, guestName)) {
+    if (rows.length === 0 || !rsvp || !guestId) {
         return <NotInGuestListPage guestName={guestName} />;
     }
 
@@ -62,21 +66,8 @@ export default async function Page({
                     rsvp={rsvp}
                 />
             ) : (
-                <UnopenedInvitationPage guestName={guestName} />
+                <UnopenedInvitationPage guestName={guestName} id={guestId} />
             )}
         </LocationProvider>
     );
-}
-
-function isInGuestList(location: string, guestName: string) {
-    switch (location) {
-        case 'bali':
-            return baliGuests.includes(guestName);
-        case 'jakarta':
-            return jakartaGuests.includes(guestName);
-        case 'malang':
-            return malangGuests.includes(guestName);
-        default:
-            return false;
-    }
 }
