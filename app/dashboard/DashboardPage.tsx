@@ -5,17 +5,17 @@ import * as XLSX from 'xlsx';
 import { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridRowsProp, GridActionsCellItem } from '@mui/x-data-grid';
 import { TextField, Button, Box, Stack, FormControl, InputLabel, Select, MenuItem, Typography } from '@mui/material';
-import { RSVP } from '../models/rsvp';
+import { RSVP, RSVPForm } from '../models/rsvp';
 import { addParticipant, getParticipants, deleteParticipant, importDataFromExcel } from './action';
 
 const DashboardPage = () => {
     const [data, setData] = useState<RSVP[]>([]);
     const [isImporting, setIsImporting] = useState(false);
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<RSVPForm>({
         name: '',
-        attend: 'no',
-        guest_number: 2,
-        notes: '',
+        attend: undefined,
+        guest_number: undefined,
+        notes: undefined,
         location: 'jakarta',
     });
 
@@ -24,9 +24,9 @@ const DashboardPage = () => {
         setData(participants);
     };
 
-    const addRow = async (data: RSVP) => {
+    const addRow = async (data: RSVPForm) => {
         await addParticipant(data);
-        setForm({ name: '', attend: '', guest_number: 1, notes: '', location: '' });
+        setForm({ name: '', attend: undefined, guest_number: undefined, notes: undefined });
         fetchData();
     };
 
@@ -94,6 +94,7 @@ const DashboardPage = () => {
             width: 100,
             getActions: (params) => [
                 <GridActionsCellItem
+                    key={params.id.toString()}
                     icon={
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +114,7 @@ const DashboardPage = () => {
         },
     ];
 
-    const rows: GridRowsProp = data;
+    const rows: GridRowsProp<RSVP> = data;
 
     return (
         <Box p={2}>
@@ -185,7 +186,7 @@ const DashboardPage = () => {
                 <TextField
                     label="Guest Number"
                     type="number"
-                    value={form.guest_number}
+                    value={form.guest_number || null}
                     onChange={(e) => setForm({ ...form, guest_number: Number(e.target.value) })}
                     sx={{ width: { xs: '100%', sm: 120 } }}
                 />
@@ -209,7 +210,6 @@ const DashboardPage = () => {
             <DataGrid
                 rows={rows}
                 columns={columns}
-                pageSize={5}
                 pageSizeOptions={[25, 50, 100]}
                 autoHeight
                 disableRowSelectionOnClick

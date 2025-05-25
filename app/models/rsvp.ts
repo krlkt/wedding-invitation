@@ -6,3 +6,5 @@ export interface RSVP {
     notes: string;
     location: string;
 }
+
+export type RSVPForm = Partial<Omit<RSVP, 'id'>>;
