@@ -4,7 +4,6 @@ import UnopenedInvitationPage from './UnopenedInvitationPage';
 import UnidentifiedPersonPage from './UnidentifiedPersonPage';
 import NotInGuestListPage from './NotInGuestListPage';
 import { notFound } from 'next/navigation';
-import { baliGuests, jakartaGuests, malangGuests } from '../utils/guestList';
 import { Locations } from '../components/LocationComponent';
 import { query } from '../db/client';
 import { Wish } from '../models/wish';
