@@ -15,6 +15,7 @@ const DashboardPage = () => {
         name: '',
         attend: undefined,
         guest_number: undefined,
+        max_guests: 2,
         notes: undefined,
         location: 'jakarta',
     });
@@ -26,7 +27,14 @@ const DashboardPage = () => {
 
     const addRow = async (data: RSVPForm) => {
         await addParticipant(data);
-        setForm({ name: '', attend: undefined, guest_number: undefined, notes: undefined });
+        setForm({
+            name: '',
+            attend: undefined,
+            guest_number: undefined,
+            max_guests: 2,
+            notes: undefined,
+            location: 'jakarta',
+        });
         fetchData();
     };
 
@@ -85,7 +93,15 @@ const DashboardPage = () => {
         { field: 'location', headerName: 'Location', width: 120, sortable: true, editable: true },
         { field: 'name', headerName: 'Name', width: 150, sortable: true, editable: true },
         { field: 'attend', headerName: 'Attend', width: 120, sortable: true, editable: true },
-        { field: 'guest_number', headerName: 'Guests', type: 'number', width: 100, sortable: true, editable: true },
+        { field: 'max_guests', headerName: 'Max guest', type: 'number', width: 100, sortable: true, editable: true },
+        {
+            field: 'guest_number',
+            headerName: 'Guest number',
+            type: 'number',
+            width: 100,
+            sortable: true,
+            editable: true,
+        },
         { field: 'notes', headerName: 'Notes', width: 200, editable: true },
         {
             field: 'actions',
@@ -174,6 +190,14 @@ const DashboardPage = () => {
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     sx={{ flex: 1 }}
+                />
+
+                <TextField
+                    label="Max guests"
+                    type="number"
+                    value={form.max_guests}
+                    onChange={(e) => setForm({ ...form, max_guests: Number(e.target.value) })}
+                    sx={{ width: { xs: '100%', sm: 120 } }}
                 />
 
                 <TextField
