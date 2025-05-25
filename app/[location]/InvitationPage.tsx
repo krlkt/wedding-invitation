@@ -22,6 +22,7 @@ import SectionTitle from '../components/SectionTitle';
 import Divider from '../components/wish/Divider';
 import Image from 'next/image';
 import SaveTheDateOrnament from '../components/save-the-date/SaveTheDateOrnament';
+import BorderedDiv from '../components/BorderedDiv';
 
 export default function InvitationPage({
     location,
@@ -83,7 +84,7 @@ export default function InvitationPage({
                         className="w-full h-full object-cover"
                     />
                 </div>
-                <div className="flex min-h-screen md:w-[min(40%,450px)] flex-col items-center justify-between font-serif md:ml-[max(60%,100%-450px)]">
+                <div className="flex flex-col items-center justify-between md:w-[min(40%,450px)] font-serif md:ml-[max(60%,100%-450px)]">
                     <Music />
                     <div className="relative w-full bg-white">
                         <section className="min-h-screen flex flex-col relative overflow-hidden">
@@ -98,14 +99,15 @@ export default function InvitationPage({
                         <section className="h-[300vh]">
                             <Groom />
                         </section>
+
+                        {/* Bride grid photos */}
+                        <section className="relative h-[300vh] w-full">
+                            <Bride />
+                        </section>
                     </div>
-                    {/* Bride grid photos */}
-                    <section className="relative h-[300vh] w-full">
-                        <Bride />
-                    </section>
                     {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
                     <section
-                        className="w-full flex flex-col gap-10 bg-primary-main text-secondary-main relative overflow-x-hidden p-4 py-8 pb-8"
+                        className="w-full flex flex-col bg-primary-main text-secondary-main relative overflow-x-hidden px-4 py-16"
                         id="love-story"
                     >
                         <SectionTitle title="Love Story" color="secondary" />
@@ -122,28 +124,32 @@ export default function InvitationPage({
                         <LocationComponent location={location} />
                         <SaveTheDateOrnament />
                     </section>
-                    <div className="flex flex-col gap-8 my-8 relative">
-                        {/* RSVP */}
-                        <section id="rsvp" className="rounded-lg bg-blue-100/50 p-8 m-4">
-                            <div className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
-                                <SectionTitle title="RSVP" />
-                                <RSVPFORM rsvp={rsvp} />
-                            </div>
-                        </section>
-                        {/* Photo galery */}
-                        <section className="flex flex-col gap-4 text-center justify-center relative w-full">
+                    {/* RSVP */}
+                    <section id="rsvp" className="pt-16">
+                        <BorderedDiv>
+                            <SectionTitle title="RSVP" />
+                            <RSVPFORM rsvp={rsvp} />
+                        </BorderedDiv>
+                    </section>
+                    {/* Photo galery */}
+                    <section className="pt-16">
+                        <div className='className="flex flex-col text-center justify-center relative w-full"'>
                             <SectionTitle title="Gallery" />
                             <ImageGallery />
-                        </section>
-                        {/* Wedding Gift */}
-                        {/* TODO: add QRIS */}
-                        <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
+                        </div>
+                    </section>
+                    {/* Wedding Gift */}
+                    {/* TODO: add QRIS */}
+                    <section className="pt-16 px-8">
+                        <BorderedDiv>
+                            <SectionTitle title="Gift" />
                             <Gift />
-                        </section>
-
-                        {/* Wishes */}
-                        <section className="flex flex-col gap-4 text-center justify-center relative w-full px-4">
-                            <SectionTitle title="Your Wishes" />
+                        </BorderedDiv>
+                    </section>
+                    {/* Wishes */}
+                    <section className="pt-16">
+                        <SectionTitle title="Your Wishes" />
+                        <div className="flex flex-col gap-4 text-center justify-center relative w-full px-4 ">
                             <p>
                                 Your love and well-wishes mean the world to us, and we&#39;re so excited to share this
                                 special day with you. Drop a note of advice, a sweet wish, or just some love in the
@@ -152,23 +158,21 @@ export default function InvitationPage({
                             <WishForm guestName={guestName} />
                             <Divider />
                             <Wishes wishes={wishes} />
-                        </section>
-                        <section className="px-8">
-                            <p className="text-md text-center">
-                                Thank you for being part of our journey and celebrating this special day with us. Your
-                                love and support mean the world, and we can&#39;t wait to share the joy of our wedding
-                                with you!
-                            </p>
-                            <p className="text-md text-center mt-4">
-                                This wedding invitation is handcoded by your one and only{' '}
-                                <b>
-                                    <u>GROOM</u>
-                                </b>
-                                &#169;
-                            </p>
-                        </section>
-                    </div>
-                    {/* Countdown */}
+                        </div>
+                    </section>
+                    <section className="p-8 pt-16">
+                        <p className="text-md text-center">
+                            Thank you for being part of our journey and celebrating this special day with us. Your love
+                            and support mean the world, and we can&#39;t wait to share the joy of our wedding with you!
+                        </p>
+                        <p className="text-md text-center mt-4">
+                            This wedding invitation is handcoded by your one and only{' '}
+                            <b>
+                                <u>GROOM</u>
+                            </b>
+                            &#169;
+                        </p>
+                    </section>
                 </div>
             </main>
         </>

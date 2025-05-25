@@ -1,8 +1,6 @@
 import GiftIcon from '../../icons/GiftIcon';
-import BorderedDiv from '../BorderedDiv';
 import Button from '../Button';
 import Modal from '../Modal';
-import SectionTitle from '../SectionTitle';
 import Image from 'next/image';
 import './gift.css';
 import { useState } from 'react';
@@ -11,7 +9,7 @@ const Gift = () => {
     const [open, setOpen] = useState<boolean>(false);
 
     return (
-        <BorderedDiv>
+        <div className="flex flex-col gap-4">
             <Modal
                 open={open}
                 onClose={() => {
@@ -51,26 +49,21 @@ const Gift = () => {
                     </div>
                 </div>
             </Modal>
-
-            <SectionTitle title="Your Love Is Our Greatest Gift" />
             <p className="text-md">
-                Having you celebrate with us is the greatest gift.
-                <br />
-                However, if you&#39;d like to send a token of your love, please click the button below.
+                Having you celebrate with us is the greatest gift. However, if you&#39;d like to send a token of your
+                love, please click the button below.
                 <br />
                 Thank you for your kindness! 💕
             </p>
-            <div>
-                <Button onClick={() => setOpen(true)}>
-                    <span className="flex gap-2 justify-center items-center">
-                        Send gift
-                        <div className="w-4 h-4">
-                            <GiftIcon />
-                        </div>
-                    </span>
-                </Button>
-            </div>
-        </BorderedDiv>
+            <Button onClick={() => setOpen(true)}>
+                <span className="flex gap-2 justify-center items-center">
+                    Send gift
+                    <div className="w-4 h-4">
+                        <GiftIcon />
+                    </div>
+                </span>
+            </Button>
+        </div>
     );
 };
 

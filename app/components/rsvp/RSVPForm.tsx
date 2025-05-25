@@ -68,7 +68,7 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
         </div>
     ) : (
         <>
-            <p>
+            <p className="mb-4">
                 Please confirm your attendance before:
                 <br />
                 Aug 1<sup>st</sup>, 2025

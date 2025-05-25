@@ -13,7 +13,7 @@ const SectionTitle: FC<SectionTitleProps> = ({ title, color = 'primary' }) => (
         initial="initial"
         whileInView={'animate'}
         viewport={{ once: true }}
-        className={`text-5xl font-serif text-center ${
+        className={`text-5xl font-serif text-center mb-6 ${
             color === 'secondary' ? 'text-secondary-main' : 'text-primary-main'
         }`}
     >

@@ -31,22 +31,22 @@ const Wishes = ({ wishes }: { wishes: { wishes: Array<Wish>; wishPage: number; t
                         createdAt={wish.created_at}
                     />
                 ))}
-                {/* Pagination Controls */}
-                <div className="flex justify-between pt-4 items-center">
-                    <Button disabled={wishPage === 1 || isPending} onClick={() => goToPage(wishPage - 1)}>
-                        Previous
-                    </Button>
-                    {isPending ? (
-                        <span className="text-sm text-gray-500 animate-pulse">Loading...</span>
-                    ) : (
-                        <span className="text-sm">
-                            Page {wishPage} of {totalPages}
-                        </span>
-                    )}
-                    <Button onClick={() => goToPage(wishPage + 1)} disabled={wishPage >= totalPages || isPending}>
-                        Next
-                    </Button>
-                </div>
+            </div>
+            {/* Pagination Controls */}
+            <div className="flex justify-between items-center">
+                <Button disabled={wishPage === 1 || isPending} onClick={() => goToPage(wishPage - 1)}>
+                    Previous
+                </Button>
+                {isPending ? (
+                    <span className="text-sm text-gray-500 animate-pulse">Loading...</span>
+                ) : (
+                    <span className="text-sm">
+                        Page {wishPage} of {totalPages}
+                    </span>
+                )}
+                <Button onClick={() => goToPage(wishPage + 1)} disabled={wishPage >= totalPages || isPending}>
+                    Next
+                </Button>
             </div>
         </div>
     );
