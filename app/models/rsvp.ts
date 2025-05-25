@@ -3,7 +3,7 @@ export interface RSVP {
     name: string;
     attend: string;
     guest_number: number;
-    max_guest: number;
+    max_guests: number;
     notes: string;
     location: string;
 }
