@@ -36,10 +36,8 @@ export default async function Page({
     ]);
     // Fetch total count of wishes
     const { rows: countResult } = await query<{ count: string }>('SELECT COUNT(*) AS count FROM wish');
-    console.log(countResult);
     const totalCount = parseInt(countResult[0].count);
     const totalPages = Math.ceil(totalCount / PAGE_SIZE);
-    console.log(totalPages);
     // Fetch Rsvp data for current guest
     const { rows } = await query<RSVP>(`SELECT * FROM rsvp WHERE name = $name`, { name: guestName });
     const rsvp = rows[0];
