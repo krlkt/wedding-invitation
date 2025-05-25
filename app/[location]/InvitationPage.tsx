@@ -125,7 +125,7 @@ export default function InvitationPage({
                         <SaveTheDateOrnament />
                     </section>
                     {/* RSVP */}
-                    <section id="rsvp" className="pt-16">
+                    <section id="rsvp" className="pt-16 p-8">
                         <BorderedDiv>
                             <SectionTitle title="RSVP" />
                             <RSVPFORM rsvp={rsvp} />

@@ -8,35 +8,85 @@ import Image from 'next/image';
 
 const images = [
     {
-        full: '/images/ask_out.jpg',
-        width: 3648,
-        height: 5672,
+        full: '/images/galery/gal1.jpg',
+        width: 3900,
+        height: 2600,
     },
     {
-        full: '/images/angke.jpg',
-        width: 1300,
-        height: 979,
+        full: '/images/galery/gal2.jpg',
+        width: 3500,
+        height: 5300,
     },
     {
-        full: '/images/couple2.jpg',
-        width: 2000,
-        height: 3000,
+        full: '/images/galery/gal3.jpg',
+        width: 5800,
+        height: 3900,
     },
     {
-        full: '/images/couple1.jpg',
-        width: 2000,
-        height: 3080,
+        full: '/images/galery/gal4.jpg',
+        width: 3800,
+        height: 5700,
     },
     {
-        full: '/images/couple3.jpg',
-        width: 5100,
-        height: 3400,
+        full: '/images/galery/gal5.jpg',
+        width: 4600,
+        height: 7000,
     },
     {
-        full: '/images/couple4.jpg',
-        width: 2000,
-        height: 3080,
+        full: '/images/galery/gal6.jpg',
+        width: 2600,
+        height: 3900,
     },
+    // {
+    //     full: '/images/galery/gal7.jpg',
+    //     width: 4000,
+    //     height: 6000,
+    // },
+    // {
+    //     full: '/images/galery/gal8.jpg',
+    //     width: 6000,
+    //     height: 4000,
+    // },
+    // {
+    //     full: '/images/galery/gal9.jpg',
+    //     width: 4000,
+    //     height: 6000,
+    // },
+    // {
+    //     full: '/images/galery/gal10.jpg',
+    //     width: 4300,
+    //     height: 6500,
+    // },
+    // {
+    //     full: '/images/galery/gal11.jpg',
+    //     width: 2600,
+    //     height: 3900,
+    // },
+    // {
+    //     full: '/images/galery/gal12.jpg',
+    //     width: 4000,
+    //     height: 6000,
+    // },
+    // {
+    //     full: '/images/galery/gal13.jpg',
+    //     width: 4000,
+    //     height: 6000,
+    // },
+    // {
+    //     full: '/images/galery/gal14.jpg',
+    //     width: 4500,
+    //     height: 6800,
+    // },
+    // {
+    //     full: '/images/galery/gal15.jpg',
+    //     width: 7000,
+    //     height: 4600,
+    // },
+    // {
+    //     full: '/images/galery/gal16.jpg',
+    //     width: 3800,
+    //     height: 5700,
+    // },
 ];
 
 const ImageGallery = () => {
@@ -44,7 +94,7 @@ const ImageGallery = () => {
     const splideRef = useRef(null);
 
     return (
-        <div>
+        <div className="w-full overflow-hidden">
             {/* Gallery main photo */}
             <div className="w-full h-[25rem] relative">
                 <Image
@@ -55,42 +105,44 @@ const ImageGallery = () => {
                 />
             </div>
             {/* Photo Slider */}
-            <Splide
-                ref={splideRef}
-                tag="section"
-                options={{
-                    type: 'loop',
-                    height: '8rem',
-                    padding: '2rem',
-                    gap: '1rem',
-                    focus: 'center',
-                    autoWidth: true,
-                }}
-                aria-label="Gallery"
-                onMoved={(_: any, newIndex: number) => {
-                    setCurrentIndex(newIndex);
-                }}
-            >
-                <Gallery>
-                    {images.map((image, index) => (
-                        <SplideSlide key={index}>
-                            <Item original={image.full} width={image.width} height={image.height}>
-                                {({ ref, open }) => (
-                                    <Image
-                                        ref={ref}
-                                        src={image.full}
-                                        alt={`Thumbnail ${index + 1}`}
-                                        onClick={open}
-                                        className="w-[5rem] h-[5rem] sm:w-[6rem] sm:h-[6rem] md:w-[7rem] md:h-[7rem] object-cover rounded-xl cursor-pointer"
-                                        width={300}
-                                        height={300}
-                                    />
-                                )}
-                            </Item>
-                        </SplideSlide>
-                    ))}
-                </Gallery>
-            </Splide>
+            <div className="w-full overflow-hidden">
+                <Splide
+                    ref={splideRef}
+                    tag="section"
+                    options={{
+                        type: 'loop',
+                        height: '8rem',
+                        padding: '2rem',
+                        gap: '1rem',
+                        focus: 'center',
+                        autoWidth: true,
+                    }}
+                    aria-label="Gallery"
+                    onMoved={(_: any, newIndex: number) => {
+                        setCurrentIndex(newIndex);
+                    }}
+                >
+                    <Gallery>
+                        {images.map((image, index) => (
+                            <SplideSlide key={index}>
+                                <Item original={image.full} width={image.width} height={image.height}>
+                                    {({ ref, open }) => (
+                                        <Image
+                                            ref={ref}
+                                            src={image.full}
+                                            alt={`Thumbnail ${index + 1}`}
+                                            onClick={open}
+                                            className="w-[5rem] h-[5rem] sm:w-[6rem] sm:h-[6rem] md:w-[7rem] md:h-[7rem] object-cover rounded-xl cursor-pointer"
+                                            width={300}
+                                            height={300}
+                                        />
+                                    )}
+                                </Item>
+                            </SplideSlide>
+                        ))}
+                    </Gallery>
+                </Splide>
+            </div>
         </div>
     );
 };

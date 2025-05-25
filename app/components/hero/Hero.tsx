@@ -22,16 +22,14 @@ const Hero = () => {
                     <p className="text-xl mb-4">The wedding of</p>
                     <p className="font-cursive2 text-primary-main text-5xl">Karel</p>
                     {isJakartaOrMalang && (
-                        <p className="font-serif text-primary-main text-md text-gray-600">
+                        <p className="text-primary-main text-md text-gray-600">
                             Second son of Rendy Tirtanadi & Elliana Firmanto
                         </p>
                     )}
                     <p className="font-cursive2 text-primary-main text-5xl">&</p>
                     <p className="font-cursive2 text-primary-main text-5xl">Sabrina</p>
                     {isJakartaOrMalang && (
-                        <p className="font-serif text-primary-main text-md text-gray-600">
-                            First daughter of Hadi Budiono & Weny
-                        </p>
+                        <p className="text-primary-main text-md text-gray-600">First daughter of Hadi Budiono & Weny</p>
                     )}
                     {!isJakartaOrMalang && <p className="text-xl">09.09.2025</p>}
                 </div>
