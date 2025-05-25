@@ -25,8 +25,8 @@ export const addParticipant = async (data: RSVPForm) => {
 
     await query(
         `
-        INSERT INTO rsvp (name, attend, guest_number, notes, location)
-        VALUES ($name, $attend, $guest_number, $notes, $location)
+        INSERT INTO rsvp (id, name, attend, guest_number, notes, location)
+        VALUES ($id, $name, $attend, $guest_number, $notes, $location)
         ON CONFLICT(id) DO UPDATE SET
             name = excluded.name,
             attend = excluded.attend,
@@ -35,6 +35,7 @@ export const addParticipant = async (data: RSVPForm) => {
             location = excluded.location;
         `,
         {
+            id: data.id ?? null, // pass null if undefined to allow auto-increment
             name: data.name,
             attend: data.attend ?? null,
             guest_number: data.guest_number ?? null,

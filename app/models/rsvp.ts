@@ -8,4 +8,4 @@ export interface RSVP {
     location: string;
 }
 
-export type RSVPForm = Partial<Omit<RSVP, 'id'>>;
+export type RSVPForm = Partial<RSVP>;
