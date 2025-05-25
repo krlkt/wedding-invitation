@@ -39,9 +39,10 @@ export default async function Page({
     const totalCount = parseInt(countResult[0].count);
     const totalPages = Math.ceil(totalCount / PAGE_SIZE);
     // Fetch Rsvp data for current guest
-    const { rows } = await query<RSVP>(`SELECT * FROM rsvp WHERE id=$id AND name=$name`, {
+    const { rows } = await query<RSVP>(`SELECT * FROM rsvp WHERE id=$id AND name=$name AND location=$location`, {
         id: guestId,
         name: guestName,
+        location: location,
     });
     const rsvp = rows[0];
 
