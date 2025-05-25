@@ -78,7 +78,7 @@ export default function InvitationPage({
                 <div id="background-overlay" className="texture-overlay" />
                 <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden">
                     <Image
-                        src={'/images/couple2.jpg'}
+                        src={'/images/galery/gal15.jpg'}
                         alt={'Couple photo'}
                         fill
                         className="w-full h-full object-cover"
