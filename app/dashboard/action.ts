@@ -5,6 +5,28 @@ import { RSVP, RSVPForm } from '@/app/models/rsvp';
 import { revalidatePath } from 'next/cache';
 
 const VALID_LOCATIONS = ['jakarta', 'bali', 'malang'];
+const BASE_URL = `http://karelandsabrina.vercel.app`;
+
+export const updateLink = async (data: RSVPForm) => {
+    let participantId = data.id;
+
+    // get last inserted id of new participant
+    if (!participantId) {
+        const { rows } = await query<{ id: number }>('SELECT last_insert_rowid() as id');
+        participantId = rows[0]?.id;
+    }
+    
+    const link = `${BASE_URL}/${data.location}?to=${data.name?.trim().replace(/ /g, '+')}&id=${participantId}`;
+
+    await query(`
+        UPDATE rsvp 
+        SET link = $link
+        WHERE id = $id
+    `, {
+        link: link, 
+        id: participantId
+    });
+}
 
 export const addParticipant = async (data: RSVPForm) => {
     // Validation
@@ -25,6 +47,10 @@ export const addParticipant = async (data: RSVPForm) => {
 
     if (typeof data.max_guests !== 'number' || !data.max_guests || data.max_guests === 0) {
         throw new Error(`Invalid max guests`);
+    }
+
+    if (data.guest_number && typeof data.guest_number === 'number' && data.guest_number > data.max_guests) {
+        throw new Error(`Maximal guest number was reached for row ${data}`);
     }
 
     await query(
@@ -49,6 +75,8 @@ export const addParticipant = async (data: RSVPForm) => {
             location: data.location,
         }
     );
+
+    await updateLink(data);
 
     // Update UI
     revalidatePath('/');
@@ -78,6 +106,7 @@ export const importDataFromExcel = async (rows: any[]) => {
                 guest_number: row.guest_number ? Number(row.guest_number) : undefined,
                 notes: row.notes ?? null,
                 location: row.location,
+                link: '',
             });
         } catch (err: any) {
             console.error('Skipping row due to error:', err.message);
@@ -89,3 +118,9 @@ export const importDataFromExcel = async (rows: any[]) => {
         throw new Error(`Some rows were skipped due to validation errors:\n\n${errors.join('\n')}`);
     }
 };
+
+// export const addLinkCol = async () => {
+//     await query(`ALTER TABLE rsvp ADD COLUMN link TEXT`);
+
+//     revalidatePath('/');
+// };

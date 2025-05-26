@@ -6,6 +6,7 @@ export interface RSVP {
     max_guests: number;
     notes: string;
     location: string;
+    link: string;
 }
 
 export type RSVPForm = Partial<RSVP>;
