@@ -42,7 +42,7 @@ export const addParticipant = async (data: RSVPForm) => {
     const invalidLocations = locations.filter((loc) => !VALID_LOCATIONS.includes(loc));
 
     if (invalidLocations.length > 0) {
-        throw new Error(`Invalid location(s) "${invalidLocations.join(', ')}" ${JSON.stringify(data)}`);
+        throw new Error(`Invalid location ${JSON.stringify(data)}`);
     }
 
     if (typeof data.max_guests !== 'number' || !data.max_guests || data.max_guests === 0) {
@@ -96,6 +96,7 @@ export const deleteParticipant = async (id: string) => {
 
 export const importDataFromExcel = async (rows: any[]) => {
     const errors: string[] = [];
+    let total = rows.length;
 
     for (const row of rows) {
         try {
@@ -109,13 +110,14 @@ export const importDataFromExcel = async (rows: any[]) => {
                 link: '',
             });
         } catch (err: any) {
-            console.error('Skipping row due to error:', err.message);
+            total--;
+            console.error('Error:', err.message);
             errors.push(err.message);
         }
     }
 
     if (errors.length > 0) {
-        throw new Error(`Some rows were skipped due to validation errors:\n\n${errors.join('\n')}`);
+        throw new Error(`${total} participants of total ${rows.length} were added. \n Some rows were skipped:\n\n${errors.join('\n')}`);
     }
 };
 
