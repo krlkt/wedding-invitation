@@ -85,14 +85,6 @@ const Bride = () => {
                         {/* Background box */}
                         <div className="absolute inset-x-6 inset-y-3 bg-white/50 rounded-lg p-6 z-0" />
 
-                        {/* PNG frame */}
-                        <Image
-                            src="/images/ornaments/orn5.png"
-                            alt="Flower Frame"
-                            fill
-                            className="object-contain rotate-90 pointer-events-none select-none z-10 scale-150"
-                        />
-
                         {/* Text layer */}
                         <div className="absolute inset-x-10 inset-y-16 z-20 flex flex-col items-center justify-center">
                             <motion.h2
