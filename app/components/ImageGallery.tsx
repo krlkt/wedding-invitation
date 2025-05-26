@@ -34,8 +34,8 @@ const images = [
     },
     {
         full: '/images/galery/gal6.jpg',
-        width: 2600,
-        height: 3900,
+        width: 7000,
+        height: 4600,
     },
     // {
     //     full: '/images/galery/gal7.jpg',
