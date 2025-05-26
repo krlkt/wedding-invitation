@@ -179,6 +179,16 @@ export default function InvitationPage({
                         </p>
                     </section>
                 </div>
+                {/* TODO LIST */}
+                {/* Create dresscode section */}
+                {/* Create FAQ section */}
+                {/* RSVP Food choices */}
+                {/* Complete fullscreen hero section */}
+                {/* Finish decoration and ornaments */}
+                {/* Adds animated kyupie mayo */}
+                {/* Create external Gallery section */}
+                {/* Create Prewed video section */}
+                {/* Adds animations */}
             </main>
         </>
     );
