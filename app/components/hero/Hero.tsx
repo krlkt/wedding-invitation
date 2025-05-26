@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import './hero.css';
 import { useLocation } from '@/app/utils/useLocation';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 const Hero = () => {
     const { location } = useLocation();
@@ -34,8 +36,37 @@ const Hero = () => {
                     {!isJakartaOrMalang && <p className="text-xl">09.09.2025</p>}
                 </div>
             </div>
+            <ScrollDownText />
         </div>
     );
 };
 
 export default Hero;
+
+const ScrollDownText = () => {
+    const [showPrompt, setShowPrompt] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowPrompt(true);
+        }, 10000); // 10 seconds
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    return showPrompt ? (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: [0.8, 1], y: [5, 0, 5] }}
+            transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: 'loop',
+                ease: 'easeInOut',
+            }}
+            className="flex absolute bottom-10 justify-center text-sm text-secondary-main"
+        >
+            ↓ Scroll Down ↓
+        </motion.div>
+    ) : null;
+};
