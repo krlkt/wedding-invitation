@@ -23,6 +23,7 @@ import Divider from '../components/wish/Divider';
 import Image from 'next/image';
 import SaveTheDateOrnament from '../components/save-the-date/SaveTheDateOrnament';
 import BorderedDiv from '../components/BorderedDiv';
+import DressCode from '../components/dresscode/DressCode';
 
 export default function InvitationPage({
     location,
@@ -143,6 +144,11 @@ export default function InvitationPage({
                             <ImageGallery />
                         </div>
                     </section>
+                    {/* Dress code */}
+                    <section className="pt-16">
+                        <SectionTitle title="Dress code" />
+                        <DressCode />
+                    </section>
                     {/* Wedding Gift */}
                     {/* TODO: add QRIS */}
                     <section className="pt-16 px-8">
@@ -183,6 +189,7 @@ export default function InvitationPage({
                 {/* Create dresscode section */}
                 {/* Create FAQ section */}
                 {/* RSVP Food choices */}
+                {/* RSVP checkedIn for D Day */}
                 {/* Complete fullscreen hero section */}
                 {/* Finish decoration and ornaments */}
                 {/* Adds animated kyupie mayo */}
