@@ -69,7 +69,7 @@ const Groom = () => {
                         </div>
                     </motion.div>
                 ))}
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-16">
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-8">
                     <motion.div style={{ opacity: textOpacityGroom }} className="w-[360px] h-[280px] ">
                         {/* Background box */}
                         <div className="absolute inset-x-6 inset-y-3 bg-black/50 rounded-lg p-6 z-0" />

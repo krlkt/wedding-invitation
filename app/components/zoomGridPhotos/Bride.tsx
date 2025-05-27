@@ -80,7 +80,7 @@ const Bride = () => {
                         </div>
                     </motion.div>
                 ))}
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-16">
+                <div className="absolute left-1/2 -translate-x-1/2 bottom-8">
                     <motion.div style={{ opacity: textOpacityBride }} className="w-[360px] h-[280px] ">
                         {/* Background box */}
                         <div className="absolute inset-x-6 inset-y-3 bg-white/50 rounded-lg p-6 z-0" />
