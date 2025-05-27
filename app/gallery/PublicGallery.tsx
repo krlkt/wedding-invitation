@@ -22,6 +22,10 @@ const images = [
     { src: '/images/gallery/gal14.jpg', width: 4500, height: 6800 },
     { src: '/images/gallery/gal15.jpg', width: 7000, height: 4600 },
     { src: '/images/gallery/gal16.jpg', width: 3800, height: 5700 },
+    { src: '/images/gallery/gal17.jpg', width: 3500, height: 5300 },
+    { src: '/images/gallery/gal18.jpg', width: 3800, height: 5700 },
+    { src: '/images/gallery/gal19.jpg', width: 2600, height: 3900 },
+    { src: '/images/gallery/gal20.jpg', width: 2600, height: 3900 },
 ];
 
 export default function WeddingGallery() {
@@ -40,7 +44,7 @@ export default function WeddingGallery() {
     return (
         <div className="min-h-screen bg-white px-2 py-4 text-center">
             <h1 className="text-4xl font-semibold text-center mb-4 font-serif">Photos of us 📸</h1>
-            <p className="mb-4">Click on the photo to open in fullscreen and swipe right or left</p>
+            <p className="mb-4">Click on the photo to open in fullscreen and swipe right/left to go next/previous</p>
             <Gallery>
                 <div className={`grid gap-1 transition-all duration-300 ${isPortrait ? 'grid-cols-2' : 'grid-cols-3'}`}>
                     {images.map(({ src, width, height }, idx) => (
