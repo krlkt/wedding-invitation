@@ -26,6 +26,7 @@ import BorderedDiv from '../components/BorderedDiv';
 import DressCode from '../components/dresscode/DressCode';
 import { motion } from 'framer-motion';
 import FAQ from '../components/faq/FAQ';
+import Button from '../components/Button';
 
 export default function InvitationPage({
     location,
@@ -95,7 +96,7 @@ export default function InvitationPage({
                             fill
                             className="w-full h-full object-cover"
                             sizes="100vw"
-                            src={'/images/galery/gal15.jpg'}
+                            src={'/images/gallery/gal15.jpg'}
                             priority={true}
                         />
                     </div>
@@ -147,11 +148,12 @@ export default function InvitationPage({
                             <RSVPFORM rsvp={rsvp} />
                         </BorderedDiv>
                     </section>
-                    {/* Photo galery */}
+                    {/* Photo gallery */}
                     <section className="pt-16">
                         <div className='className="flex flex-col text-center justify-center relative w-full"'>
                             <SectionTitle title="Gallery" />
                             <ImageGallery />
+                            <Button onClick={() => window.open('/gallery', '_blank')}>See more photos</Button>
                         </div>
                     </section>
                     {/* Dress code */}

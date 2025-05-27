@@ -8,82 +8,82 @@ import Image from 'next/image';
 
 const images = [
     {
-        full: '/images/galery/gal1.jpg',
+        full: '/images/gallery/gal1.jpg',
         width: 3900,
         height: 2600,
     },
     {
-        full: '/images/galery/gal2.jpg',
+        full: '/images/gallery/gal2.jpg',
         width: 3500,
         height: 5300,
     },
     {
-        full: '/images/galery/gal3.jpg',
+        full: '/images/gallery/gal3.jpg',
         width: 5800,
         height: 3900,
     },
     {
-        full: '/images/galery/gal4.jpg',
+        full: '/images/gallery/gal4.jpg',
         width: 3800,
         height: 5700,
     },
     {
-        full: '/images/galery/gal5.jpg',
+        full: '/images/gallery/gal5.jpg',
         width: 4600,
         height: 7000,
     },
     {
-        full: '/images/galery/gal6.jpg',
+        full: '/images/gallery/gal6.jpg',
         width: 7000,
         height: 4600,
     },
     // {
-    //     full: '/images/galery/gal7.jpg',
+    //     full: '/images/gallery/gal7.jpg',
     //     width: 4000,
     //     height: 6000,
     // },
     // {
-    //     full: '/images/galery/gal8.jpg',
+    //     full: '/images/gallery/gal8.jpg',
     //     width: 6000,
     //     height: 4000,
     // },
     // {
-    //     full: '/images/galery/gal9.jpg',
+    //     full: '/images/gallery/gal9.jpg',
     //     width: 4000,
     //     height: 6000,
     // },
     // {
-    //     full: '/images/galery/gal10.jpg',
+    //     full: '/images/gallery/gal10.jpg',
     //     width: 4300,
     //     height: 6500,
     // },
     // {
-    //     full: '/images/galery/gal11.jpg',
+    //     full: '/images/gallery/gal11.jpg',
     //     width: 2600,
     //     height: 3900,
     // },
     // {
-    //     full: '/images/galery/gal12.jpg',
+    //     full: '/images/gallery/gal12.jpg',
     //     width: 4000,
     //     height: 6000,
     // },
     // {
-    //     full: '/images/galery/gal13.jpg',
+    //     full: '/images/gallery/gal13.jpg',
     //     width: 4000,
     //     height: 6000,
     // },
     // {
-    //     full: '/images/galery/gal14.jpg',
+    //     full: '/images/gallery/gal14.jpg',
     //     width: 4500,
     //     height: 6800,
     // },
     // {
-    //     full: '/images/galery/gal15.jpg',
+    //     full: '/images/gallery/gal15.jpg',
     //     width: 7000,
     //     height: 4600,
     // },
     // {
-    //     full: '/images/galery/gal16.jpg',
+    //     full: '/images/gallery/gal16.jpg',
     //     width: 3800,
     //     height: 5700,
     // },
