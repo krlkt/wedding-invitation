@@ -24,6 +24,7 @@ import Image from 'next/image';
 import SaveTheDateOrnament from '../components/save-the-date/SaveTheDateOrnament';
 import BorderedDiv from '../components/BorderedDiv';
 import DressCode from '../components/dresscode/DressCode';
+import { motion } from 'framer-motion';
 
 export default function InvitationPage({
     location,
@@ -77,7 +78,7 @@ export default function InvitationPage({
             <LoaderScreen isVisible={isLoaderScreenVisible} />
             <main className="relative flex w-full bg-[#ceeaff]/10">
                 <div id="background-overlay" className="texture-overlay" />
-                <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden">
+                <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden z-10">
                     <div id="overlay" className="w-full h-full absolute -z-10 overlay" />
                     <div id="hero" className="w-full h-full absolute -z-20">
                         <Image
@@ -145,7 +146,26 @@ export default function InvitationPage({
                         </div>
                     </section>
                     {/* Dress code */}
-                    <section className="pt-16">
+                    <section className="pt-36 relative">
+                        <motion.div
+                            className="absolute -top-20 -left-[22rem]"
+                            animate={{
+                                rotate: [183, 178, 183],
+                                transition: {
+                                    duration: 6,
+                                    repeat: Infinity,
+                                    ease: 'easeInOut',
+                                },
+                            }}
+                            style={{ transformOrigin: 'center right' }}
+                        >
+                            <Image
+                                src={'/images/ornaments/orn6.png'}
+                                alt={'Ornament blue flower'}
+                                width={320}
+                                height={100}
+                            />
+                        </motion.div>
                         <SectionTitle title="Dress code" />
                         <DressCode />
                     </section>

@@ -52,7 +52,7 @@ const SaveTheDateOrnament = ({ downward = false }: { downward?: boolean }) => (
     </>
 );
 
-const Wiggle: FC<PropsWithChildren<{ className?: string; downward?: boolean }>> = ({
+export const Wiggle: FC<PropsWithChildren<{ className?: string; downward?: boolean }>> = ({
     children,
     downward,
     className,
