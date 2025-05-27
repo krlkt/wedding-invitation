@@ -42,7 +42,7 @@ const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
         <div className="w-1/2 h-full aspect-[1/1] relative p-2 border border-primary-main rounded-lg">
             <div className="w-full h-full relative overflow-hidden">
                 <Image
-                    src={sex === 'women' ? '/images/dresscode/women.png' : '/images/dresscode/women.png'}
+                    src={sex === 'women' ? '/images/dresscode/women.jpg' : '/images/dresscode/women.png'}
                     alt={'Women example dresscode'}
                     fill
                     className="rounded-lg object-bottom"
