@@ -23,8 +23,8 @@ const faq = [
 ];
 const FAQ = () => (
     <>
-        {faq.map(({ question, answer }) => (
-            <Accordion className="w-full">
+        {faq.map(({ question, answer }, index) => (
+            <Accordion key={index} className="w-full">
                 <AccordionSummary expandIcon={<DownIcon />} className="font-semibold text-xl">
                     {question}
                 </AccordionSummary>

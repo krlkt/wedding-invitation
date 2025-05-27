@@ -155,9 +155,9 @@ export default function InvitationPage({
                         </div>
                     </section>
                     {/* Dress code */}
-                    <section className="pt-36 relative">
+                    <section className="pt-52 relative w-full overflow-x-hidden">
                         <motion.div
-                            className="absolute -top-20 -left-[22rem]"
+                            className="absolute -top-20 -left-[28rem]"
                             animate={{
                                 rotate: [183, 178, 183],
                                 transition: {
@@ -171,7 +171,7 @@ export default function InvitationPage({
                             <Image
                                 src={'/images/ornaments/orn6.png'}
                                 alt={'Ornament blue flower'}
-                                width={320}
+                                width={400}
                                 height={100}
                             />
                         </motion.div>
