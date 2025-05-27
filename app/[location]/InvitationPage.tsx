@@ -25,6 +25,7 @@ import SaveTheDateOrnament from '../components/save-the-date/SaveTheDateOrnament
 import BorderedDiv from '../components/BorderedDiv';
 import DressCode from '../components/dresscode/DressCode';
 import { motion } from 'framer-motion';
+import FAQ from '../components/faq/FAQ';
 
 export default function InvitationPage({
     location,
@@ -169,6 +170,14 @@ export default function InvitationPage({
                         <SectionTitle title="Dress code" />
                         <DressCode />
                     </section>
+                    {/* FAQ */}
+                    <section className="pt-16 relative w-full">
+                        <SectionTitle title="FAQ" />
+                        <div className="w-full px-8">
+                            <FAQ />
+                        </div>
+                    </section>
+
                     {/* Wedding Gift */}
                     {/* TODO: add QRIS */}
                     <section className="pt-16 px-8">
