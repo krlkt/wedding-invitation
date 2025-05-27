@@ -81,6 +81,14 @@ export default function InvitationPage({
                 <div id="background-overlay" className="texture-overlay" />
                 <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden z-10">
                     <div id="overlay" className="w-full h-full absolute -z-10 overlay" />
+                    <div className="absolute bottom-1/2 translate-y-16 w-full text-center text-secondary-main font-serif">
+                        <h1 className="sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow-header">
+                            Karel and Sabrina
+                        </h1>
+                        <h2 className="sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-shadow-header font-cursive3 text-gray-300">
+                            09.09.2025
+                        </h2>
+                    </div>
                     <div id="hero" className="w-full h-full absolute -z-20">
                         <Image
                             alt={'Couple photo'}
@@ -221,6 +229,7 @@ export default function InvitationPage({
                 {/* RSVP checkedIn for D Day */}
                 {/* Complete fullscreen hero section */}
                 {/* Finish decoration and ornaments */}
+                {/* Fix layout bug in my iphone */}
                 {/* Adds animated kyupie mayo */}
                 {/* Create external Gallery section */}
                 {/* Create Prewed video section */}
