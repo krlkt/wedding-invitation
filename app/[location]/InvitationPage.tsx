@@ -225,15 +225,16 @@ export default function InvitationPage({
                     </section>
                 </div>
                 {/* TODO LIST */}
-                {/* Create dresscode section */}
+                {/* Create dresscode section - Done */}
                 {/* Create FAQ section */}
+                {/* Update values for jakarta and malang */}
                 {/* RSVP Food choices */}
                 {/* RSVP checkedIn for D Day */}
                 {/* Complete fullscreen hero section */}
                 {/* Finish decoration and ornaments */}
                 {/* Fix layout bug in my iphone */}
                 {/* Adds animated kyupie mayo */}
-                {/* Create external Gallery section */}
+                {/* Create external Gallery section - Done */}
                 {/* Create Prewed video section */}
                 {/* Adds animations */}
             </main>

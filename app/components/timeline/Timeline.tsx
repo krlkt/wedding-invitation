@@ -25,7 +25,11 @@ const timelineData = [
     {
         icon: <CoupleIcon />,
         title: 'Official Relationship',
-        date: '2nd of February 2020',
+        date: (
+            <>
+                February 2<sup>nd</sup>, 2020
+            </>
+        ),
         description: 'They are on a vacation to Prague, where they made their relationship official <3',
     },
     {
@@ -38,7 +42,11 @@ const timelineData = [
     {
         icon: <RingIcon />,
         title: 'The Proposal',
-        date: '13th of August 2024',
+        date: (
+            <>
+                August 13<sup>th</sup>, 2020
+            </>
+        ),
         description: 'Karel planned with friends to surprise Sabrina for an unforgetable camping proposal',
     },
 ];
@@ -112,9 +120,9 @@ interface ParagraphProps {
     leftSide: boolean;
 }
 const Paragraph: FC<ParagraphProps> = ({ title, date, description, leftSide }) => (
-    <div className={`flex flex-col gap-2 text-sm py-2 ${leftSide && 'text-right'}`}>
-        <h4 className="font-cursive text-2xl">{title}</h4>
-        <p className="font-serif font-semibold">{date}</p>
-        <p className="leading-4 font-serif">{description}</p>
+    <div className={`flex flex-col gap-1 font-serif text-sm py-2 ${leftSide && 'text-right'}`}>
+        <h4 className="text-2xl">{title}</h4>
+        <p className="font-semibold text-lg">{date}</p>
+        <p className="leading-4">{description}</p>
     </div>
 );
