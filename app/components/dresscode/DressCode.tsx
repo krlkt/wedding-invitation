@@ -39,8 +39,15 @@ const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
                     : 'Plain button shirt any color (blazer or vest optional) pair with closed toe shoes. 🤵 '}
             </p>
         </div>
-        <div className="w-1/2 h-full aspect-[1/1] relative p-2 border border-primary-main rounded-lg">
-            <div className="w-full h-full relative overflow-hidden">
+        <div className="w-1/2 h-full relative p-2 border border-primary-main rounded-lg">
+            <Image
+                src={'/images/ornaments/orn7.png'}
+                alt={'Blue ornament'}
+                className={`absolute top-0  ${sex === 'men' ? '-left-10' : '-right-10'}`}
+                width={80}
+                height={200}
+            />
+            <div className="w-full h-full aspect-[1/1] relative overflow-hidden">
                 <Image
                     src={sex === 'women' ? '/images/dresscode/women.jpg' : '/images/dresscode/men.jpg'}
                     alt={'Women example dresscode'}

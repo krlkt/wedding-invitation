@@ -153,7 +153,7 @@ export default function InvitationPage({
                         </div>
                     </section>
                     {/* Dress code */}
-                    <section className="pt-52 relative w-full overflow-hidden">
+                    <section className="pt-52 px-6 relative w-full overflow-hidden">
                         <motion.div
                             className="absolute -top-20 -left-[28rem]"
                             animate={{
