@@ -39,14 +39,15 @@ const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
                     : 'Plain button shirt any color (blazer or vest optional) pair with closed toe shoes. 🤵 '}
             </p>
         </div>
-        <div className="w-1/2 h-full relative p-2 border border-primary-main rounded-lg">
+        <div className="w-1/2 h-full relative p-2 border border-blue-800 rounded-lg">
             <Image
                 src={'/images/ornaments/orn7.png'}
                 alt={'Blue ornament'}
-                className={`absolute top-0  ${sex === 'men' ? '-left-10' : '-right-10'}`}
+                className={`absolute -top-8  ${sex === 'men' ? '-left-6' : '-right-6'}`}
                 width={80}
                 height={200}
             />
+
             <div className="w-full h-full aspect-[1/1] relative overflow-hidden">
                 <Image
                     src={sex === 'women' ? '/images/dresscode/women.jpg' : '/images/dresscode/men.jpg'}
@@ -55,6 +56,13 @@ const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
                     className="rounded-lg object-bottom"
                 />
             </div>
+            <Image
+                src={'/images/ornaments/baby_orn.png'}
+                alt={'Blue ornament'}
+                className={`absolute bottom-0  ${sex === 'men' ? '-left-12' : '-right-12'}`}
+                width={100}
+                height={200}
+            />
         </div>
     </div>
 );
