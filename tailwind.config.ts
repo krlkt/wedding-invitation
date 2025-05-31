@@ -34,6 +34,9 @@ const config: Config = {
                     primary: 'var(--background-primary)',
                 },
             },
+            height: {
+                'screen-safe': 'calc(var(--vh) * 100)',
+            },
         },
     },
     plugins: [],

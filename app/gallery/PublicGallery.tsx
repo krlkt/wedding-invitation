@@ -65,7 +65,7 @@ export default function WeddingGallery() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-white px-2 py-4 text-center">
+        <div className="bg-white px-2 py-4 text-center">
             <h1 className="text-4xl font-semibold text-center mb-4 font-serif">Photos of us 📸</h1>
             <p className="mb-4">Click on the photo to open in fullscreen and swipe right/left to go next/previous</p>
             <Gallery>

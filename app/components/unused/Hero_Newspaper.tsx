@@ -2,7 +2,7 @@ import Image from 'next/image';
 import KnotIcon from '../../icons/KnotIcon';
 
 const Hero = () => (
-    <div className="w-full h-full min-h-screen relative">
+    <div className="w-full h-screen-safe relative">
         <Image src={'/images/newspaper.png'} alt={'Newspaper Background Image'} className="-z-10 object-cover" fill />
         {/* Header */}
         <h1 className="font-newYorker text-5xl pt-6 text-center">The Berlin Times</h1>

@@ -104,7 +104,7 @@ export default function InvitationPage({
                 <div className="flex flex-col items-center justify-between md:w-[min(40%,450px)] font-serif md:ml-[max(60%,100%-450px)]">
                     <Music />
                     <div className="relative w-full bg-white">
-                        <section className="min-h-screen flex flex-col relative overflow-hidden">
+                        <section className="h-screen-safe flex flex-col relative overflow-hidden">
                             <video autoPlay loop muted playsInline className="w-full h-full absolute object-cover">
                                 <source src="/hero.mp4" type="video/mp4" />
                                 Your browser does not support the video tag.
@@ -113,14 +113,10 @@ export default function InvitationPage({
                             <Hero />
                         </section>
                         {/* Grooms grid photos */}
-                        <section className="h-[300vh]">
-                            <Groom />
-                        </section>
+                        <Groom />
 
                         {/* Bride grid photos */}
-                        <section className="relative h-[300vh] w-full">
-                            <Bride />
-                        </section>
+                        <Bride />
                     </div>
                     {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
                     <section
