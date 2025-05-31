@@ -115,7 +115,7 @@ const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
 
 interface ParagraphProps {
     title: string;
-    date: string;
+    date: string | ReactNode;
     description: string;
     leftSide: boolean;
 }
