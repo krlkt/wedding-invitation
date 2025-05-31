@@ -30,7 +30,7 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
         <div className="w-16 flex items-center">
             <DinnerIcon />
         </div>
-        <motion.h1 variants={Stagger.itemVariants} className="text-6xl font-cursive_nautigal">
+        <motion.h1 variants={Stagger.itemVariants} className="text-4xl font-serif">
             Reception
         </motion.h1>
         <motion.div variants={Stagger.itemVariants}>
