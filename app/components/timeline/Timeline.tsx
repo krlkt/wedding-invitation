@@ -30,7 +30,7 @@ const timelineData = [
                 February 2<sup>nd</sup>, 2020
             </>
         ),
-        description: 'They are on a vacation to Prague, where they made their relationship official <3',
+        description: 'They were on a vacation to Prague, where they made their relationship official <3',
     },
     {
         icon: <CatIcon />,

@@ -9,7 +9,7 @@ const BrideAndGroom = () => (
             <div className="flex flex-col gap-1">
                 <h4 className="font-bold text-2xl text-gray-800">Sabrina Alvina Budiono</h4>
                 <div className="text-gray-700">
-                    <p>First Daughter Of</p>
+                    <p>First child Of</p>
                     <p>Hadi Budiono</p>
                     <p>& Weny</p>
                 </div>
@@ -27,7 +27,7 @@ const BrideAndGroom = () => (
             <div className="flex flex-col gap-1">
                 <h4 className="font-bold text-2xl text-gray-800">Karel Karunia</h4>
                 <div className="text-gray-700">
-                    <p>Second Son Of</p>
+                    <p>Third child Of</p>
                     <p>Rendy Tirtanadi</p>
                     <p>& Elliana Firmanto</p>
                 </div>

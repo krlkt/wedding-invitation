@@ -103,7 +103,7 @@ const Bride = () => {
                                 style={{ opacity: textOpacityParent }}
                                 className="text-lg leading-5 drop-shadow-lg text-center"
                             >
-                                First daughter of <br />
+                                First child of <br />
                                 Hadi Budiono &<br />
                                 Weny
                             </motion.h4>

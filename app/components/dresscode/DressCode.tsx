@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 const DressCode = () => (
     <div className="w-full max-w-[650px] p-2 px-4 text-center space-y-8">
-        <p>Wedding vibe: Relaxed Elegant, Island Formal</p>
+        <p>Wedding vibe: Relaxed Formal</p>
         <div className="space-y-4">
             <ColorPalette />
             <p>We kindly suggest our guest to dress within this color palette for our special day</p>
@@ -35,8 +35,8 @@ const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
             <h6 className="text-2xl text-blue-800">{sex === 'women' ? 'Women' : 'Men'}</h6>
             <p className="text-sm">
                 {sex === 'women'
-                    ? 'Something pastel, avoid loud prints & patterns 💕. Bridesmaids, please use the baby blue dresses 👗 '
-                    : 'Plain button shirt any color (blazer or vest optional) pair with closed toe shoes. 😄 Groomsmen, please use black tuxedo suit, bow tie will be provided 🤵 '}
+                    ? 'Something pastel, avoid loud prints & patterns. 💕👗 '
+                    : 'Plain button shirt any color (blazer or vest optional) pair with closed toe shoes. 🤵 '}
             </p>
         </div>
         <div className="w-1/2 h-full aspect-[1/1] relative p-2 border border-primary-main rounded-lg">

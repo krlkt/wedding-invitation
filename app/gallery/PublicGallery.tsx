@@ -55,6 +55,12 @@ const images = [
     { src: '/images/bride/bride4.jpg', width: 3800, height: 5500 },
     { src: '/images/bride/bride5.jpg', width: 2600, height: 3900 },
     { src: '/images/bride/bride6.jpg', width: 3600, height: 5500 },
+    { src: '/images/groom/groom1.jpg', width: 3000, height: 4000 },
+    { src: '/images/groom/groom2.jpg', width: 3900, height: 5900 },
+    { src: '/images/groom/groom3.jpg', width: 4000, height: 6000 },
+    { src: '/images/groom/groom4.jpg', width: 3900, height: 2600 },
+    { src: '/images/groom/groom5.jpg', width: 3000, height: 4000 },
+    { src: '/images/groom/groom6.jpg', width: 4000, height: 6000 },
 ];
 
 export default function WeddingGallery() {

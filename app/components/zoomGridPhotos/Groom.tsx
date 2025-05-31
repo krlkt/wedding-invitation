@@ -92,7 +92,7 @@ const Groom = () => {
                                 style={{ opacity: textOpacityParent }}
                                 className="text-lg leading-5 drop-shadow-lg text-center"
                             >
-                                Second son of <br />
+                                Third child of <br />
                                 Rendy Tirtanadi &<br />
                                 Elliana Firmanto
                             </motion.h4>
