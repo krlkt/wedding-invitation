@@ -24,7 +24,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={inter.className}>
                 <Head>
-                    <link rel="preload" href="/hero.mp4" />
+                    <link rel="preload" as="video" href="/hero.mp4" type="video/mp4" />
                 </Head>
                 <Providers>{children}</Providers>
             </body>
