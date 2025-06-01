@@ -27,6 +27,7 @@ import DressCode from '../components/dresscode/DressCode';
 import { motion } from 'framer-motion';
 import FAQ from '../components/faq/FAQ';
 import Button from '../components/Button';
+import YouTubeEmbed from '../components/prewedding/YoutubeEmbed';
 
 export default function InvitationPage({
     location,
@@ -101,7 +102,7 @@ export default function InvitationPage({
                         />
                     </div>
                 </div>
-                <div className="flex flex-col items-center justify-between md:w-[min(40%,450px)] font-serif md:ml-[max(60%,100%-450px)]">
+                <div className="flex flex-col items-center justify-between md:w-[min(40%,450px)] font-serif md:ml-[max(60%,100%-450px)] overflow-x-clip">
                     <Music />
                     <div className="relative w-full bg-white">
                         <section className="h-screen-safe flex flex-col relative overflow-hidden">
@@ -176,6 +177,28 @@ export default function InvitationPage({
                         <SectionTitle title="Dress code" />
                         <DressCode />
                     </section>
+                    {/* Prewedding */}
+                    <section className="pt-16 pb-16 relative w-full">
+                        <SectionTitle title="Prewedding" />
+                        <div className="px-6">
+                            <YouTubeEmbed videoId="g9ZqnUOyeTc" />
+                        </div>
+                        <Image
+                            src={'/images/ornaments/baby_orn2.png'}
+                            alt={'Ornament blue flower'}
+                            width={150}
+                            height={150}
+                            className="absolute -bottom-8 -left-8 -rotate-[80deg] -z-10"
+                        />
+                        <Image
+                            src={'/images/ornaments/baby_orn2.png'}
+                            alt={'Ornament blue flower'}
+                            width={150}
+                            height={150}
+                            className="absolute -bottom-8 -right-8 -rotate-[180deg] -z-10"
+                        />
+                    </section>
+
                     {/* FAQ */}
                     <section className="pt-16 relative w-full">
                         <SectionTitle title="FAQ" />
