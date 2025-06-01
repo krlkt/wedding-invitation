@@ -5,7 +5,7 @@ import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
 import LocationComponent, { Locations } from '../components/LocationComponent';
 import 'photoswipe/style.css';
-import ImageGallery from '../components/ImageGallery';
+import ImageGallery from '../components/gallery/ImageGallery';
 import Gift from '../components/gift/Gift';
 import Wishes from '../components/wish/Wishes';
 import RSVPFORM from '../components/rsvp/RSVPForm';
@@ -28,6 +28,7 @@ import { motion } from 'framer-motion';
 import FAQ from '../components/faq/FAQ';
 import Button from '../components/Button';
 import YouTubeEmbed from '../components/prewedding/YoutubeEmbed';
+import ThumbnailCarousel from '../components/gallery/ThumbnailCarousel';
 
 export default function InvitationPage({
     location,
@@ -146,11 +147,13 @@ export default function InvitationPage({
                         </BorderedDiv>
                     </section>
                     {/* Photo gallery */}
-                    <section className="pt-16">
-                        <div className='className="flex flex-col text-center justify-center relative w-full"'>
+                    <section className="pt-16 w-full">
+                        <div className="flex flex-col items-center text-center relative w-full max-w-screen-md mx-auto">
                             <SectionTitle title="Gallery" />
-                            <ImageGallery />
-                            <Button onClick={() => window.open('/gallery', '_blank')}>See more photos</Button>
+                            <ThumbnailCarousel />
+                            <div className="mt-4">
+                                <Button onClick={() => window.open('/gallery', '_blank')}>See more photos</Button>
+                            </div>
                         </div>
                     </section>
                     {/* Dress code */}
