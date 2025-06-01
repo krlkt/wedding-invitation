@@ -178,24 +178,25 @@ export default function InvitationPage({
                         <DressCode />
                     </section>
                     {/* Prewedding */}
-                    <section className="pt-16 pb-16 relative w-full">
-                        <SectionTitle title="Prewedding" />
+                    <section className="py-16 relative w-full">
+                        <SectionTitle title="Footage" />
                         <div className="px-6">
                             <YouTubeEmbed videoId="g9ZqnUOyeTc" />
                         </div>
+                        <p className="text-center text-lg mt-4">Bali Prewedding</p>
                         <Image
                             src={'/images/ornaments/baby_orn2.png'}
                             alt={'Ornament blue flower'}
                             width={150}
                             height={150}
-                            className="absolute -bottom-8 -left-8 -rotate-[80deg] -z-10"
+                            className="absolute -bottom-0 -left-8 -rotate-[80deg] -z-10"
                         />
                         <Image
                             src={'/images/ornaments/baby_orn2.png'}
                             alt={'Ornament blue flower'}
                             width={150}
                             height={150}
-                            className="absolute -bottom-8 -right-8 -rotate-[180deg] -z-10"
+                            className="absolute -bottom-0 -right-8 -rotate-[180deg] -z-10"
                         />
                     </section>
 
