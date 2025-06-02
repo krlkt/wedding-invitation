@@ -212,7 +212,21 @@ export default function InvitationPage({
 
                     {/* Wedding Gift */}
                     {/* TODO: add QRIS */}
-                    <section className="pt-16 px-8">
+                    <section className="mt-20 px-8 relative">
+                        <Image
+                            src={'/images/ornaments/cats/mayo.webp'}
+                            alt={'Mayo'}
+                            width={100}
+                            height={100}
+                            className="absolute -top-16 left-0 opacity-90"
+                        />
+                        <Image
+                            src={'/images/ornaments/cats/kyupie.webp'}
+                            alt={'Kyupie'}
+                            width={100}
+                            height={100}
+                            className="absolute -bottom-16 right-0 opacity-90"
+                        />
                         <BorderedDiv>
                             <SectionTitle title="Gift" />
                             <Gift />
