@@ -5,7 +5,6 @@ import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
 import LocationComponent, { Locations } from '../components/LocationComponent';
 import 'photoswipe/style.css';
-import ImageGallery from '../components/gallery/ImageGallery';
 import Gift from '../components/gift/Gift';
 import Wishes from '../components/wish/Wishes';
 import RSVPFORM from '../components/rsvp/RSVPForm';
@@ -248,9 +247,6 @@ export default function InvitationPage({
                     </section>
                 </div>
                 {/* TODO LIST */}
-                {/* Create dresscode section - Done */}
-                {/* Create FAQ section */}
-                {/* Update values for jakarta and malang */}
                 {/* RSVP Food choices */}
                 {/* RSVP checkedIn for D Day */}
                 {/* Complete fullscreen hero section */}
@@ -258,8 +254,9 @@ export default function InvitationPage({
                 {/* Fix layout bug in my iphone */}
                 {/* Adds animated kyupie mayo */}
                 {/* Create external Gallery section - Done */}
-                {/* Create Prewed video section */}
+                {/* Create Prewed video section - Done */}
                 {/* Adds animations */}
+                {/* Update values for jakarta and malang */}
             </main>
         </>
     );
