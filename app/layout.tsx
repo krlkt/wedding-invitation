@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Providers from './components/Providers';
@@ -7,6 +7,7 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import ReactDOM from 'react-dom';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,6 +15,15 @@ export const metadata: Metadata = {
     title: 'Dashboard Wedding List',
     description: 'Dashboard Wedding List',
 };
+
+export const viewport: Viewport = {
+    viewportFit: 'cover',
+};
+
+export function PreloadResources() {
+    ReactDOM.preload('/hero.mp4', { as: 'video', type: 'video/mp4' });
+    return '...';
+}
 
 export default function RootLayout({
     children,
@@ -23,9 +33,6 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={inter.className}>
-                <Head>
-                    <link rel="preload" as="video" href="/hero.mp4" type="video/mp4" />
-                </Head>
                 <Providers>{children}</Providers>
             </body>
         </html>

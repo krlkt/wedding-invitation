@@ -8,8 +8,19 @@ inet 172.29.72.226/20
 
 From Windows, run:
 netsh interface portproxy add v4tov4 listenaddress=192.168.2.226 listenport=3000 connectaddress=172.29.72.226 connectport=3000
-
 This bridges your Windows IP to WSL2.
+
+netsh interface portproxy show all
+should say:
+
+```
+Address         Port        Address         Port
+--------------- ----------  --------------- ----------
+192.168.2.226   3000        172.29.72.226   3000
+```
+
+and: netstat -an | findstr :3000
+TCP 192.168.2.226:3000 0.0.0.0:0 LISTENING
 
 Then try accessing from iPhone again:
 http://192.168.2.226:3000
