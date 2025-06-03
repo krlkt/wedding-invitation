@@ -28,6 +28,7 @@ import FAQ from '../components/faq/FAQ';
 import Button from '../components/Button';
 import YouTubeEmbed from '../components/prewedding/YoutubeEmbed';
 import ThumbnailCarousel from '../components/gallery/ThumbnailCarousel';
+import { rotateAnimation } from '../utils/animation';
 
 export default function InvitationPage({
     location,
@@ -159,14 +160,7 @@ export default function InvitationPage({
                     <section className="pt-52 px-6 relative w-full overflow-hidden">
                         <motion.div
                             className="absolute -top-20 -left-[28rem]"
-                            animate={{
-                                rotate: [183, 178, 183],
-                                transition: {
-                                    duration: 6,
-                                    repeat: Infinity,
-                                    ease: 'easeInOut',
-                                },
-                            }}
+                            animate={rotateAnimation([183, 178, 183])}
                             style={{ transformOrigin: 'center right' }}
                         >
                             <Image
@@ -213,20 +207,20 @@ export default function InvitationPage({
                     {/* Wedding Gift */}
                     {/* TODO: add QRIS */}
                     <section className="mt-20 px-8 relative">
-                        <Image
-                            src={'/images/ornaments/cats/mayo.webp'}
-                            alt={'Mayo'}
-                            width={100}
-                            height={100}
+                        <motion.div
+                            animate={rotateAnimation([5, -5, 5])}
+                            style={{ transformOrigin: 'left center' }}
                             className="absolute -top-16 left-0 opacity-90"
-                        />
-                        <Image
-                            src={'/images/ornaments/cats/kyupie.webp'}
-                            alt={'Kyupie'}
-                            width={100}
-                            height={100}
+                        >
+                            <Image src={'/images/ornaments/cats/mayo.webp'} alt={'Mayo'} width={100} height={100} />
+                        </motion.div>
+                        <motion.div
+                            animate={rotateAnimation([5, -5, 5], 0.5)}
+                            style={{ transformOrigin: 'right center' }}
                             className="absolute -bottom-16 right-0 opacity-90"
-                        />
+                        >
+                            <Image src={'/images/ornaments/cats/kyupie.webp'} alt={'Kyupie'} width={100} height={100} />
+                        </motion.div>
                         <BorderedDiv>
                             <SectionTitle title="Gift" />
                             <Gift />
@@ -261,9 +255,7 @@ export default function InvitationPage({
                     </section>
                 </div>
                 {/* TODO LIST */}
-                {/* RSVP Food choices */}
                 {/* RSVP checkedIn for D Day */}
-                {/* Complete fullscreen hero section */}
                 {/* Finish decoration and ornaments */}
                 {/* Fix layout bug in my iphone */}
                 {/* Adds animated kyupie mayo */}
