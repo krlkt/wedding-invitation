@@ -139,7 +139,7 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
                             maxRows={8}
                             {...register('notes')}
                             defaultValue={rsvp?.notes ?? ''}
-                            helperText="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave itempty :D"
+                            helperText="Please tell us if you have any allergies or if you are a vegetarian / vegan (main course selection will be ignored). Otherwise please leave it empty :D"
                         />
                     </>
                 )}
