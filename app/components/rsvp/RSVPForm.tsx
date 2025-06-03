@@ -1,5 +1,5 @@
 import { RSVPForm } from '@/app/models/rsvp';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import SubmitButton from '../SubmitButton';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -8,6 +8,11 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useLocation } from '@/app/utils/useLocation';
 import { addParticipant } from '@/app/dashboard/action';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
 
 const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -18,12 +23,14 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
         register,
         handleSubmit,
         formState: { isSubmitting },
+        control,
     } = useForm<RSVPForm>({
         defaultValues: {
             id: rsvp.id,
             name: rsvp.name,
             attend: rsvp.attend ?? '1',
             notes: rsvp.notes ?? '',
+            food_choice: rsvp.food_choice ?? 'chicken',
             location: rsvp.location,
             max_guests: rsvp.max_guests,
         },
@@ -38,7 +45,6 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
             enqueueSnackbar(`Error submitting form: ${error}`, { variant: 'error' });
         }
     };
-
     const handleChangeClick = () => {
         setShowForm(true);
     };
@@ -110,16 +116,32 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
                     <MenuItem value={'no'}>No</MenuItem>
                 </TextField>
                 {location === 'bali' && (
-                    <TextField
-                        id="notes"
-                        label="Chef notes"
-                        multiline
-                        minRows={3}
-                        maxRows={8}
-                        {...register('notes')}
-                        defaultValue={rsvp?.notes ?? ''}
-                        helperText="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave itempty :D"
-                    />
+                    <>
+                        <Controller
+                            name="food_choice"
+                            control={control}
+                            rules={{ required: 'Must be selected' }}
+                            render={({ field }) => (
+                                <FormControl>
+                                    <FormLabel id="row-radio-buttons-group-label">Choose your main course</FormLabel>
+                                    <RadioGroup row aria-labelledby="row-radio-buttons-group-label" {...field}>
+                                        <FormControlLabel value="chicken" control={<Radio />} label="Chicken" />
+                                        <FormControlLabel value="lamb" control={<Radio />} label="Lamb" />
+                                    </RadioGroup>
+                                </FormControl>
+                            )}
+                        />
+                        <TextField
+                            id="notes"
+                            label="Chef notes"
+                            multiline
+                            minRows={3}
+                            maxRows={8}
+                            {...register('notes')}
+                            defaultValue={rsvp?.notes ?? ''}
+                            helperText="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave itempty :D"
+                        />
+                    </>
                 )}
                 <SubmitButton isSubmitting={isSubmitting} />
             </form>
