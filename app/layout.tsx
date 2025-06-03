@@ -22,7 +22,7 @@ export const viewport: Viewport = {
 
 export function PreloadResources() {
     ReactDOM.preload('/hero.mp4', { as: 'video', type: 'video/mp4' });
-    return '...';
+    return null;
 }
 
 export default function RootLayout({
