@@ -7,7 +7,9 @@ Look for something like:
 inet 172.29.72.226/20
 
 From Windows, run:
+netsh interface portproxy reset
 netsh interface portproxy add v4tov4 listenaddress=192.168.2.226 listenport=3000 connectaddress=172.29.72.226 connectport=3000
+
 This bridges your Windows IP to WSL2.
 
 netsh interface portproxy show all
@@ -26,6 +28,11 @@ Then try accessing from iPhone again:
 http://192.168.2.226:3000
 
 HANDLING REGISTRY ERROR:
+
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v IPEnableRouter /t REG_DWORD /d 1 /f
+Start-Service iphlpsvc
+Set-Service iphlpsvc -StartupType Automatic
+
 If:
 PS C:\WINDOWS\system32> reg query HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v IPEnableRouter
 
