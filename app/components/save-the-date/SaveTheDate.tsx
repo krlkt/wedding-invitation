@@ -37,7 +37,7 @@ const SaveTheDate = () => (
                 <Button>
                     <a
                         target="_blank"
-                        href="https://calendar.google.com/calendar/event?action=TEMPLATE&amp;tmeid=X2M1cGpjb2ppOTFubDZ0YTM2MHIzaWtpaWFoMTNndWFrNzU0bmViamZkZyBrYXJlbGthcnVuaWEyNEBt&amp;tmsrc=karelkarunia24%40gmail.com"
+                        href="https://www.google.com/calendar/render?action=TEMPLATE&text=Karel%20and%20Sabrina's%20Wedding%20Day&dates=20250909T070000Z/20250909T160000Z&details=The%20Day%20Karel%20and%20Sabrina%20Say%20%E2%80%98I%20Do%E2%80%99.%0A%0AA%20Celebration%20of%20Love%20and%20A%20Forever%20Promise%20%F0%9F%92%8D&location=Tirtha%20Uluwatu,%20Bali"
                     >
                         <span className="flex gap-2 justify-center items-center">
                             Add to calendar
