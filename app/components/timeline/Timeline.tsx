@@ -19,8 +19,7 @@ const timelineData = [
         icon: <BusIcon />,
         title: 'First Date',
         date: 'October 2019',
-        description:
-            'Karel traveled to Berlin from Trier by Bus (12 hours) to meet Sabrina and have their first date :)',
+        description: 'Karel traveled to Berlin from Trier by Bus (12 hours) to meet Sabrina and have their first date',
     },
     {
         icon: <CoupleIcon />,
@@ -44,10 +43,10 @@ const timelineData = [
         title: 'The Proposal',
         date: (
             <>
-                August 13<sup>th</sup>, 2020
+                August 13<sup>th</sup>, 2024
             </>
         ),
-        description: 'Karel planned with friends to surprise Sabrina for an unforgetable camping proposal',
+        description: 'Karel planned with friends to surprise Sabrina for an unforgettable camping proposal',
     },
 ];
 
