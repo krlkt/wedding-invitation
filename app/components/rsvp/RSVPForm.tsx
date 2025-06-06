@@ -13,6 +13,9 @@ import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@/app/icons/CheckIcon';
+import CrossIcon from '@/app/icons/CrossIcon';
 
 const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -53,7 +56,9 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
         <div className="flex flex-col gap-4">
             {rsvp?.attend === 'no' ? (
                 <>
-                    <p className="text-2xl font-bold">Unable to attend</p>
+                    <Alert icon={<CrossIcon />} severity="error" className="self-center">
+                        <p className="text-lg font-semibold">Unable to attend</p>
+                    </Alert>
                     <p>Sad to know that you can&apos;t attend.. Hope to see you on another chance! ;&#41;</p>
                     <div>
                         <Button onClick={handleChangeClick}>Change answer</Button>
@@ -61,7 +66,9 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
                 </>
             ) : (
                 <>
-                    <p className="text-2xl font-bold">Will attend</p>
+                    <Alert icon={<CheckIcon />} severity="success" className="self-center">
+                        <p className="text-lg font-semibold">Will attend</p>
+                    </Alert>
                     <p>
                         We are delighted to know that you will be there on our special day! See you on our wedding day!
                         :D

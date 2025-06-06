@@ -53,7 +53,7 @@ const timelineData = [
 const Timeline = () => {
     const isLeft = (index: number) => index % 2 === 0;
     return (
-        <div className="px-4">
+        <div>
             {timelineData.map(({ icon, title, date, description }, index) => (
                 <Row
                     key={index}

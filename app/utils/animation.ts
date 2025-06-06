@@ -50,14 +50,14 @@ export const Stagger = {
             opacity: 1,
             transition: {
                 duration: 0.3,
-                staggerChildren: 0.2,
+                staggerChildren: 0.26,
                 ease: 'easeInOut',
             },
         },
     },
     itemVariants: {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeInOut' } },
     },
 };
 

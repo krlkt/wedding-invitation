@@ -15,7 +15,7 @@ const Timeline = () => (
             imgSrc="/images/first_date.jpg"
             title={'First date'}
             date={'17th September 2020'}
-            content={'Karel traveled to Berlin to meet Sabrina and have their first date :)'}
+            content={'Karel traveled to Berlin to meet Sabrina and have their first date'}
         />
         <TimelineItem
             imgSrc="/images/ask_out.jpg"

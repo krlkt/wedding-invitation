@@ -1,23 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Tangerine:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Rouge+Script&family=Tangerine:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=The+Nautigal:wght@400;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Puppies+Play&family=The+Nautigal:wght@400;700&family=Updock&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-    font-family: 'NewYorkerFont';
-    src: url('/fonts/NewYorkerFont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 :root {
-    --background-primary: #1e2335;
-    --secondary-main: #f5fbff;
+    --background-primary: #0d2747;
+    --secondary-main: #fff;
 }
 
 html {
@@ -29,8 +17,8 @@ html {
     inset: 0; /* shorthand for top: 0; right: 0; bottom: 0; left: 0 */
     background-image: url('/images/white_bg.jpg');
     background-repeat: repeat;
-    background-size: 150px auto; /* Shrink width, auto height */
-    opacity: 0.2;
+    background-size: 1550px auto; /* Shrink width, auto height */
+    opacity: 0.1;
     mix-blend-mode: overlay;
     pointer-events: none;
     z-index: -10;

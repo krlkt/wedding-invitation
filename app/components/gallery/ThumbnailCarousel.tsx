@@ -51,7 +51,7 @@ export default function ThumbnailCarousel() {
         <Gallery>
             <div className="w-full mx-auto max-w-full overflow-hidden">
                 {/* Main Slider */}
-                <div className="mx-4 rounded-lg overflow-clip">
+                <div className="mx-6 rounded-lg overflow-clip">
                     <Splide
                         options={{
                             type: 'fade',
