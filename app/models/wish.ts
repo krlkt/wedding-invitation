@@ -3,4 +3,5 @@ export interface Wish {
     name: string;
     wish: string;
     created_at: string;
+    created_by_id: number;
 }

@@ -9,6 +9,7 @@ import { query } from '../db/client';
 import { Wish } from '../models/wish';
 import { RSVP } from '../models/rsvp';
 import { LocationProvider } from '../utils/useLocation';
+import { GuestIdProvider } from '../utils/useGuestId';
 
 export const revalidate = 0;
 
@@ -58,16 +59,18 @@ export default async function Page({
 
     return (
         <LocationProvider location={location}>
-            {'opened' in searchParams ? (
-                <InvitationPage
-                    location={location}
-                    wishes={{ wishes, wishPage, totalPages }}
-                    guestName={guestName}
-                    rsvp={rsvp}
-                />
-            ) : (
-                <UnopenedInvitationPage guestName={guestName} id={guestId} />
-            )}
+            <GuestIdProvider id={guestId}>
+                {'opened' in searchParams ? (
+                    <InvitationPage
+                        location={location}
+                        wishes={{ wishes, wishPage, totalPages }}
+                        guestName={guestName}
+                        rsvp={rsvp}
+                    />
+                ) : (
+                    <UnopenedInvitationPage guestName={guestName} id={guestId} />
+                )}
+            </GuestIdProvider>
         </LocationProvider>
     );
 }

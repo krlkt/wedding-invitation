@@ -3,23 +3,24 @@ import { addWish } from './action';
 import SubmitButton from '../SubmitButton';
 import { useSnackbar } from 'notistack';
 import TextField from '@mui/material/TextField';
+import { useGuestId } from '@/app/utils/useGuestId';
+import { Wish } from '@/app/models/wish';
 
-type Wish = {
-    name: string;
-    wish: string;
-};
+type WishFormType = Omit<Wish, 'created_at'>;
 
 const WishForm = ({ guestName }: { guestName: string }) => {
     const { enqueueSnackbar } = useSnackbar();
+    const { id } = useGuestId();
 
     const {
         register,
         reset,
         handleSubmit,
         formState: { isSubmitting },
-    } = useForm<Wish>({
+    } = useForm<WishFormType>({
         defaultValues: {
             name: guestName,
+            created_by_id: id,
         },
     });
     const onSubmit = async (data: any) => {
