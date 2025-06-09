@@ -5,7 +5,9 @@ const DressCode = () => (
         <p>Wedding vibe: Relaxed Formal</p>
         <div className="space-y-4">
             <ColorPalette />
-            <p>We kindly suggest our guest to dress within this color palette for our special day</p>
+            <p>
+                We kindly suggest our guest to use <b>palette</b> color for our special day
+            </p>
         </div>
         <MenWomenSection sex="women" />
         <MenWomenSection sex="men" />
