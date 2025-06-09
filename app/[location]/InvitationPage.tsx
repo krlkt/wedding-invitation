@@ -165,12 +165,13 @@ export default function InvitationPage({
                             <SectionTitle title="Gallery" />
                             <ThumbnailCarousel />
                             <div className="mt-4">
-                                <Button onClick={() => window.open('/gallery', '_blank')}>See more photos</Button>
+                                <Button onClick={() => window.open('/gallery', '_blank')}>See more photos 📸</Button>
                             </div>
                         </div>
                     </section>
                     {/* Prewedding */}
                     <section className="py-16 relative w-full">
+                        <SectionTitle title="Prewedding Video" size="medium" />
                         <div className="px-6">
                             <YouTubeEmbed videoId="g9ZqnUOyeTc" />
                         </div>
@@ -179,18 +180,18 @@ export default function InvitationPage({
                             alt={'Ornament blue flower'}
                             width={150}
                             height={150}
-                            className="absolute -bottom-0 -left-8 -rotate-[80deg] -z-10"
+                            className="absolute -bottom-3 -left-8 -rotate-[80deg] -z-10"
                         />
                         <Image
                             src={'/images/ornaments/baby_orn2.png'}
                             alt={'Ornament blue flower'}
                             width={150}
                             height={150}
-                            className="absolute -bottom-0 -right-8 -rotate-[180deg] -z-10"
+                            className="absolute -bottom-2 -right-8 -rotate-[180deg] -z-10"
                         />
                     </section>
                     {/* Dress code */}
-                    <section className="pt-52 px-6 relative w-full overflow-hidden">
+                    <section className="pt-52 px-6 relative w-full overflow-hidden pb-12">
                         <motion.div
                             className="absolute -top-20 -left-[28rem]"
                             animate={rotateAnimation([183, 178, 183])}
@@ -208,8 +209,8 @@ export default function InvitationPage({
                     </section>
 
                     {/* FAQ */}
-                    <section className="pt-16 relative w-full">
-                        <SectionTitle title="FAQ" />
+                    <section className="py-12 relative w-full bg-primary-main">
+                        <SectionTitle title="FAQ" color="secondary" />
                         <div className="w-full px-8">
                             <FAQ />
                         </div>

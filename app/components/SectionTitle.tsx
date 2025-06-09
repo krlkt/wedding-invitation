@@ -5,15 +5,16 @@ import { textFadeInVariants } from '../utils/animation';
 interface SectionTitleProps {
     title: string;
     color?: 'primary' | 'secondary';
+    size?: 'large' | 'medium';
 }
 
-const SectionTitle: FC<SectionTitleProps> = ({ title, color = 'primary' }) => (
+const SectionTitle: FC<SectionTitleProps> = ({ title, color = 'primary', size = 'large' }) => (
     <motion.h2
         variants={textFadeInVariants}
         initial="initial"
         whileInView={'animate'}
         viewport={{ once: true }}
-        className={`text-5xl font-heading text-center mb-6 ${
+        className={`${size === 'medium' ? 'text-3xl' : 'text-5xl'} font-heading text-center mb-6 ${
             color === 'secondary' ? 'text-secondary-main' : 'text-primary-main'
         }`}
     >
