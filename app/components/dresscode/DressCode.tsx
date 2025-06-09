@@ -35,8 +35,8 @@ const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
             <h6 className="text-2xl text-blue-800">{sex === 'women' ? 'Women' : 'Men'}</h6>
             <p className="text-sm">
                 {sex === 'women'
-                    ? 'Something pastel, preferably long, no white and no black 💕👗'
-                    : 'Suit or Blazer paired with pastel colored shirt 🤵 '}
+                    ? 'Something pastel, preferably long, no white and no black 👗'
+                    : 'Suit or Blazer paired with shirt (preferably pastel colored) 🤵 '}
             </p>
         </div>
         <div className="w-1/2 h-full relative p-2 border border-blue-800 rounded-lg">

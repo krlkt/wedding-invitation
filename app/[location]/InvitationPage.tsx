@@ -197,7 +197,7 @@ export default function InvitationPage({
                             alt={'Baby breath'}
                             width={200}
                             height={100}
-                            className="absolute rotate-90 -top-0 -left-16"
+                            className="absolute rotate-90 -top-0 -left-16 pointer-events-none"
                         />
                         <SectionTitle title="FAQ" color="secondary" />
                         <div className="w-full px-8">
@@ -208,9 +208,9 @@ export default function InvitationPage({
                             alt={'Baby breath'}
                             width={200}
                             height={100}
-                            className="absolute -rotate-180 bottom-12 -right-10"
+                            className="absolute -rotate-180 bottom-12 -right-10 pointer-events-none"
                         />
-                        <div className="section-transition-secondary" />
+                        <div className="section-transition-secondary-fix" />
                     </section>
                     {/* Dress code */}
                     <section className="pt-52 px-6 relative w-full overflow-hidden pb-12">

@@ -27,10 +27,10 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({ children, open, onClose }) =
             {open ? (
                 <div className="fixed h-dvh w-full top-0 left-0 z-40">
                     {/* Backdrop */}
-                    <div className="bg-black opacity-50 w-full h-full" />
+                    <div className="bg-black opacity-50 w-full h-full" onClick={onClose} />
                     {/* Drawer */}
                     <motion.div
-                        className="w-[80%] h-full bg-white absolute top-0 right-0"
+                        className="w-[80%] max-w-[25rem] h-full bg-white absolute top-0 right-0"
                         variants={modalSlide}
                         animate="enter"
                         exit={'exit'}
