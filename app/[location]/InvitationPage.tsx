@@ -160,7 +160,21 @@ export default function InvitationPage({
                         <div className="section-transition-secondary" />
                     </section>
                     {/* Photo gallery */}
-                    <section className="pt-16 w-full">
+                    <section className="pt-16 w-full relative">
+                        <Image
+                            src={'/images/ornaments/baby_orn2.png'}
+                            alt={'Ornament blue flower'}
+                            width={150}
+                            height={150}
+                            className="absolute top-3 -left-8 -z-10"
+                        />
+                        <Image
+                            src={'/images/ornaments/baby_orn2.png'}
+                            alt={'Ornament blue flower'}
+                            width={150}
+                            height={150}
+                            className="absolute top-3 -right-8 -rotate-[260deg] -z-10"
+                        />
                         <div className="flex flex-col items-center text-center relative w-full max-w-screen-md mx-auto">
                             <SectionTitle title="Gallery" />
                             <ThumbnailCarousel />
@@ -253,18 +267,25 @@ export default function InvitationPage({
                         <div className="section-transition-secondary" />
                     </section>
                     {/* Wishes */}
-                    <section className="pt-16 pb-10">
-                        <SectionTitle title="Your Wishes" />
-                        <div className="flex flex-col gap-4 text-center justify-center relative w-full px-6 ">
+                    <section className="pt-16 pb-10 px-6 relative flex flex-col gap-4">
+                        <div className="relative flex flex-col gap-4">
+                            <Image
+                                src={'/images/ornaments/frame/gate.png'}
+                                alt={'Gate'}
+                                width={300}
+                                height={300}
+                                className="absolute -z-10 scale-[2.2] left-1/2 -translate-x-1/2 translate-y-16 opacity-15"
+                            />
+                            <SectionTitle title="Your Wishes" />
                             <p>
                                 Your love and well-wishes mean the world to us, and we&#39;re so excited to share this
                                 special day with you. Drop a note of advice, a sweet wish, or just some love in the
                                 comments below!
                             </p>
                             <WishForm guestName={guestName} />
-                            <Divider />
-                            <Wishes wishes={wishes} />
                         </div>
+                        <Divider />
+                        <Wishes wishes={wishes} />
                     </section>
                     <section className="p-6 bg-primary-main text-secondary-main">
                         <p className="text-md text-center">
@@ -282,7 +303,6 @@ export default function InvitationPage({
                 </div>
                 {/* TODO LIST */}
                 {/* RSVP checkedIn for D Day */}
-                {/* Finish decoration and ornaments */}
                 {/* Adds animations */}
                 {/* Update values for jakarta and malang */}
             </main>
