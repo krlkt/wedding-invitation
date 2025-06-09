@@ -186,7 +186,6 @@ export default function InvitationPage({
                         <div className="px-6">
                             <YouTubeEmbed videoId="g9ZqnUOyeTc" />
                         </div>
-                        <p className="text-center text-lg mt-4">Bali Prewedding</p>
                         <Image
                             src={'/images/ornaments/baby_orn2.png'}
                             alt={'Ornament blue flower'}
