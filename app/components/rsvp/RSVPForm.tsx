@@ -84,7 +84,7 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
             <p className="mb-4">
                 Please confirm your attendance before:
                 <br />
-                Aug 1<sup>st</sup>, 2025
+                July 15<sup>th</sup>, 2025
             </p>
             <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-4 text-left">
                 <TextField

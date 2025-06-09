@@ -152,7 +152,7 @@ export default function InvitationPage({
                         <SaveTheDateOrnament />
                     </section>
                     {/* RSVP */}
-                    <section id="rsvp" className="relative py-12 p-6 bg-primary-main">
+                    <section id="rsvp" className="relative py-12 pb-16 p-6 bg-primary-main">
                         <BorderedDiv>
                             <SectionTitle title="RSVP" />
                             <RSVPFORM rsvp={rsvp} />
@@ -170,7 +170,7 @@ export default function InvitationPage({
                         </div>
                     </section>
                     {/* Prewedding */}
-                    <section className="py-16 relative w-full">
+                    <section className="py-16 pb-24 relative w-full">
                         <SectionTitle title="Prewedding Video" size="medium" />
                         <div className="px-6">
                             <YouTubeEmbed videoId="g9ZqnUOyeTc" />
@@ -180,15 +180,37 @@ export default function InvitationPage({
                             alt={'Ornament blue flower'}
                             width={150}
                             height={150}
-                            className="absolute -bottom-3 -left-8 -rotate-[80deg] -z-10"
+                            className="absolute bottom-3 -left-8 -rotate-[80deg] -z-10"
                         />
                         <Image
                             src={'/images/ornaments/baby_orn2.png'}
                             alt={'Ornament blue flower'}
                             width={150}
                             height={150}
-                            className="absolute -bottom-2 -right-8 -rotate-[180deg] -z-10"
+                            className="absolute bottom-3 -right-8 -rotate-[180deg] -z-10"
                         />
+                    </section>
+                    {/* FAQ */}
+                    <section className="py-16 pb-28 relative w-full bg-primary-main">
+                        <Image
+                            src={'/images/ornaments/baby_orn.png'}
+                            alt={'Baby breath'}
+                            width={200}
+                            height={100}
+                            className="absolute rotate-90 -top-0 -left-16"
+                        />
+                        <SectionTitle title="FAQ" color="secondary" />
+                        <div className="w-full px-8">
+                            <FAQ />
+                        </div>
+                        <Image
+                            src={'/images/ornaments/baby_orn4.png'}
+                            alt={'Baby breath'}
+                            width={200}
+                            height={100}
+                            className="absolute -rotate-180 bottom-12 -right-10"
+                        />
+                        <div className="section-transition-secondary" />
                     </section>
                     {/* Dress code */}
                     <section className="pt-52 px-6 relative w-full overflow-hidden pb-12">
@@ -207,29 +229,20 @@ export default function InvitationPage({
                         <SectionTitle title="Dress code" />
                         <DressCode />
                     </section>
-
-                    {/* FAQ */}
-                    <section className="py-12 relative w-full bg-primary-main">
-                        <SectionTitle title="FAQ" color="secondary" />
-                        <div className="w-full px-8">
-                            <FAQ />
-                        </div>
-                    </section>
-
                     {/* Wedding Gift */}
                     {/* TODO: add QRIS */}
-                    <section className="mt-20 px-8 relative">
+                    <section className="py-16 pb-20 px-8 relative bg-primary-main">
                         <motion.div
                             animate={rotateAnimation([5, -5, 5])}
                             style={{ transformOrigin: 'left center' }}
-                            className="absolute -top-16 left-0 opacity-90"
+                            className="absolute top-2 left-0"
                         >
                             <Image src={'/images/ornaments/cats/mayo.webp'} alt={'Mayo'} width={100} height={100} />
                         </motion.div>
                         <motion.div
                             animate={rotateAnimation([5, -5, 5], 0.5)}
                             style={{ transformOrigin: 'right center' }}
-                            className="absolute -bottom-16 right-0 opacity-90"
+                            className="absolute bottom-5 right-0 z-10"
                         >
                             <Image src={'/images/ornaments/cats/kyupie.webp'} alt={'Kyupie'} width={100} height={100} />
                         </motion.div>
@@ -237,9 +250,10 @@ export default function InvitationPage({
                             <SectionTitle title="Gift" />
                             <Gift />
                         </BorderedDiv>
+                        <div className="section-transition-secondary" />
                     </section>
                     {/* Wishes */}
-                    <section className="pt-16">
+                    <section className="pt-16 pb-10">
                         <SectionTitle title="Your Wishes" />
                         <div className="flex flex-col gap-4 text-center justify-center relative w-full px-6 ">
                             <p>
@@ -252,7 +266,7 @@ export default function InvitationPage({
                             <Wishes wishes={wishes} />
                         </div>
                     </section>
-                    <section className="p-6 pt-16">
+                    <section className="p-6 bg-primary-main text-secondary-main">
                         <p className="text-md text-center">
                             Thank you for being part of our journey and celebrating this special day with us. Your love
                             and support mean the world, and we can&#39;t wait to share the joy of our wedding with you!

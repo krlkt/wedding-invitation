@@ -9,12 +9,12 @@ interface BubbleTextProps {
 
 const BubbleText: FC<BubbleTextProps> = ({ name, message, createdAt }) => {
     return (
-        <div className="speech-bubble relative bg-white rounded-lg p-2 px-4 text-left shadow-sm">
+        <div className="speech-bubble relative bg-blue-50 rounded-lg p-2 px-4 text-left shadow-md">
             <div className="leading-none">
                 <span className="text-md font-semibold text-primary-main mr-2">{name}</span>
                 <span className="text-sm text-gray-600">{formatTimeAgo(createdAt)}</span>
             </div>
-            <p className="text-sm">{message}</p>
+            <p className="text-sm ">{message}</p>
         </div>
     );
 };
