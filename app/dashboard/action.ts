@@ -15,18 +15,21 @@ export const updateLink = async (data: RSVPForm) => {
         const { rows } = await query<{ id: number }>('SELECT last_insert_rowid() as id');
         participantId = rows[0]?.id;
     }
-    
+
     const link = `${BASE_URL}/${data.location}?to=${data.name?.trim().replace(/ /g, '+')}&id=${participantId}`;
 
-    await query(`
+    await query(
+        `
         UPDATE rsvp 
         SET link = $link
         WHERE id = $id
-    `, {
-        link: link, 
-        id: participantId
-    });
-}
+    `,
+        {
+            link: link,
+            id: participantId,
+        }
+    );
+};
 
 export const addParticipant = async (data: RSVPForm) => {
     // Validation
@@ -55,14 +58,15 @@ export const addParticipant = async (data: RSVPForm) => {
 
     await query(
         `
-        INSERT INTO rsvp (id, name, attend, max_guests, guest_number, notes, location)
-        VALUES ($id, $name, $attend, $max_guests, $guest_number, $notes, $location)
+        INSERT INTO rsvp (id, name, attend, max_guests, guest_number, notes, location, food_choice)
+        VALUES ($id, $name, $attend, $max_guests, $guest_number, $notes, $location, $food_choice)
         ON CONFLICT(id) DO UPDATE SET
             name = excluded.name,
             attend = excluded.attend,
             max_guests= excluded.max_guests,
             guest_number = excluded.guest_number,
             notes = excluded.notes,
+            food_choice=excluded.food_choice,
             location = excluded.location;
         `,
         {
@@ -72,6 +76,7 @@ export const addParticipant = async (data: RSVPForm) => {
             max_guests: data.max_guests,
             guest_number: data.guest_number ?? null,
             notes: data.notes ?? null,
+            food_choice: data.food_choice ?? null,
             location: data.location,
         }
     );
@@ -106,6 +111,7 @@ export const importDataFromExcel = async (rows: any[]) => {
                 max_guests: row.max_guests ?? 2,
                 guest_number: row.guest_number ? Number(row.guest_number) : undefined,
                 notes: row.notes ?? null,
+                food_choice: row.food_choice ?? null,
                 location: row.location,
                 link: '',
             });
@@ -117,12 +123,10 @@ export const importDataFromExcel = async (rows: any[]) => {
     }
 
     if (errors.length > 0) {
-        throw new Error(`${total} participants of total ${rows.length} were added. \n Some rows were skipped:\n\n${errors.join('\n')}`);
+        throw new Error(
+            `${total} participants of total ${rows.length} were added. \n Some rows were skipped:\n\n${errors.join(
+                '\n'
+            )}`
+        );
     }
 };
-
-// export const addLinkCol = async () => {
-//     await query(`ALTER TABLE rsvp ADD COLUMN link TEXT`);
-
-//     revalidatePath('/');
-// };

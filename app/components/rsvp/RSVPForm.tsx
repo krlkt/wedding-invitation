@@ -1,5 +1,5 @@
 import { RSVPForm } from '@/app/models/rsvp';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import SubmitButton from '../SubmitButton';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
@@ -8,6 +8,14 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useLocation } from '@/app/utils/useLocation';
 import { addParticipant } from '@/app/dashboard/action';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@/app/icons/CheckIcon';
+import CrossIcon from '@/app/icons/CrossIcon';
 
 const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -18,12 +26,14 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
         register,
         handleSubmit,
         formState: { isSubmitting },
+        control,
     } = useForm<RSVPForm>({
         defaultValues: {
             id: rsvp.id,
             name: rsvp.name,
             attend: rsvp.attend ?? '1',
             notes: rsvp.notes ?? '',
+            food_choice: rsvp.food_choice ?? 'chicken',
             location: rsvp.location,
             max_guests: rsvp.max_guests,
         },
@@ -38,7 +48,6 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
             enqueueSnackbar(`Error submitting form: ${error}`, { variant: 'error' });
         }
     };
-
     const handleChangeClick = () => {
         setShowForm(true);
     };
@@ -47,7 +56,9 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
         <div className="flex flex-col gap-4">
             {rsvp?.attend === 'no' ? (
                 <>
-                    <p className="text-2xl font-bold">Unable to attend</p>
+                    <Alert icon={<CrossIcon />} severity="error" className="self-center">
+                        <p className="text-lg font-semibold">Unable to attend</p>
+                    </Alert>
                     <p>Sad to know that you can&apos;t attend.. Hope to see you on another chance! ;&#41;</p>
                     <div>
                         <Button onClick={handleChangeClick}>Change answer</Button>
@@ -55,7 +66,9 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
                 </>
             ) : (
                 <>
-                    <p className="text-2xl font-bold">Will attend</p>
+                    <Alert icon={<CheckIcon />} severity="success" className="self-center">
+                        <p className="text-lg font-semibold">Will attend</p>
+                    </Alert>
                     <p>
                         We are delighted to know that you will be there on our special day! See you on our wedding day!
                         :D
@@ -110,16 +123,32 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
                     <MenuItem value={'no'}>No</MenuItem>
                 </TextField>
                 {location === 'bali' && (
-                    <TextField
-                        id="notes"
-                        label="Chef notes"
-                        multiline
-                        minRows={3}
-                        maxRows={8}
-                        {...register('notes')}
-                        defaultValue={rsvp?.notes ?? ''}
-                        helperText="Please tell us if you have any allergies or if you are a vegetarian/vegan. Otherwise please leave itempty :D"
-                    />
+                    <>
+                        <Controller
+                            name="food_choice"
+                            control={control}
+                            rules={{ required: 'Must be selected' }}
+                            render={({ field }) => (
+                                <FormControl>
+                                    <FormLabel id="row-radio-buttons-group-label">Choose your main course</FormLabel>
+                                    <RadioGroup row aria-labelledby="row-radio-buttons-group-label" {...field}>
+                                        <FormControlLabel value="chicken" control={<Radio />} label="Chicken" />
+                                        <FormControlLabel value="lamb" control={<Radio />} label="Lamb" />
+                                    </RadioGroup>
+                                </FormControl>
+                            )}
+                        />
+                        <TextField
+                            id="notes"
+                            label="Chef notes"
+                            multiline
+                            minRows={3}
+                            maxRows={8}
+                            {...register('notes')}
+                            defaultValue={rsvp?.notes ?? ''}
+                            helperText="Please tell us if you have any allergies or if you are a vegetarian / vegan (main course selection will be ignored). Otherwise please leave it empty :D"
+                        />
+                    </>
                 )}
                 <SubmitButton isSubmitting={isSubmitting} />
             </form>

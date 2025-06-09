@@ -65,7 +65,7 @@ const Bride = () => {
     return (
         // Container for zoom scroll animation
         <div ref={zoomAnimationContainer} className="relative h-[calc(var(--vh)*300)] w-full bg-secondary-main">
-            <div className="sticky top-0 h-screen-safe overflow-hidden">
+            <div className="sticky top-0 h-dvh overflow-hidden">
                 {pictures.map(({ scale, src }, index) => (
                     // Element container div to make sure everything has the same layout
                     <motion.div key={index} style={{ scale }} className={'grid-placement'}>
@@ -81,21 +81,21 @@ const Bride = () => {
                     </motion.div>
                 ))}
                 <div className="absolute left-1/2 -translate-x-1/2 bottom-8">
-                    <motion.div style={{ opacity: textOpacityBride }} className="w-[360px] h-[280px] ">
+                    <motion.div style={{ opacity: textOpacityBride }} className="w-[340px] h-[220px]">
                         {/* Background box */}
                         <div className="absolute inset-x-6 inset-y-3 bg-white/50 rounded-lg p-6 z-0" />
 
                         {/* Text layer */}
-                        <div className="absolute inset-x-10 inset-y-16 z-20 flex flex-col items-center justify-center">
+                        <div className="absolute inset-x-10 inset-y-16 z-20 flex flex-col gap-1 items-center justify-center">
                             <motion.h2
                                 style={{ opacity: textOpacityBride }}
-                                className="text-[48px] leading-tight drop-shadow-lg"
+                                className="text-4xl drop-shadow-lg font-semibold"
                             >
                                 The Bride
                             </motion.h2>
                             <motion.h2
                                 style={{ opacity: textOpacityBride }}
-                                className="font-cursive2 text-4xl leading-tight drop-shadow-lg"
+                                className="font-cursive2 text-4xl drop-shadow-lg"
                             >
                                 Sabrina Alvina Budiono
                             </motion.h2>

@@ -130,6 +130,7 @@ const DashboardPage = () => {
             },
         },
         { field: 'notes', headerName: 'Notes', width: 200, editable: true },
+        { field: 'food_choice', headerName: 'Food choice', width: 120, editable: true },
         {
             field: 'actions',
             type: 'actions',
@@ -225,28 +226,6 @@ const DashboardPage = () => {
                     value={form.max_guests}
                     onChange={(e) => setForm({ ...form, max_guests: Number(e.target.value) })}
                     sx={{ width: { xs: '100%', sm: 120 } }}
-                />
-
-                <TextField
-                    label="Attending (yes/no)"
-                    value={form.attend}
-                    onChange={(e) => setForm({ ...form, attend: e.target.value })}
-                    sx={{ flex: 1 }}
-                />
-
-                <TextField
-                    label="Guest Number"
-                    type="number"
-                    value={form.guest_number || null}
-                    onChange={(e) => setForm({ ...form, guest_number: Number(e.target.value) })}
-                    sx={{ width: { xs: '100%', sm: 120 } }}
-                />
-
-                <TextField
-                    label="Notes"
-                    value={form.notes}
-                    onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                    sx={{ flex: 2 }}
                 />
 
                 <Button

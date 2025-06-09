@@ -20,20 +20,24 @@ const Hero = () => {
                         fetchPriority="high"
                     />
                 </div>
-                <div id="hero-text" className="text-primary-main z-10 flex flex-col">
-                    <p className="text-xl mb-4">The wedding of</p>
-                    <p className="font-cursive2 text-primary-main text-5xl">Karel</p>
-                    {isJakartaOrMalang && (
-                        <p className="text-primary-main text-md text-gray-600">
-                            Third child of Rendy Tirtanadi & Elliana Firmanto
-                        </p>
-                    )}
-                    <p className="font-cursive2 text-primary-main text-5xl">&</p>
-                    <p className="font-cursive2 text-primary-main text-5xl">Sabrina</p>
-                    {isJakartaOrMalang && (
-                        <p className="text-primary-main text-md text-gray-600">First child of Hadi Budiono & Weny</p>
-                    )}
-                    {!isJakartaOrMalang && <p className="text-xl">09.09.2025</p>}
+                <div id="hero-text" className="text-primary-main z-10 flex flex-col font-heading gap-4">
+                    <p className="text-lg">The Wedding of</p>
+                    <div>
+                        <p className="font-cursive2 text-primary-main text-5xl">Karel</p>
+                        {isJakartaOrMalang && (
+                            <p className="text-primary-main text-md text-gray-600">
+                                Third child of Rendy Tirtanadi & Elliana Firmanto
+                            </p>
+                        )}
+                        <p className="font-cursive2 text-primary-main text-5xl">&</p>
+                        <p className="font-cursive2 text-primary-main text-5xl">Sabrina</p>
+                        {isJakartaOrMalang && (
+                            <p className="text-primary-main text-md text-gray-600">
+                                First child of Hadi Budiono & Weny
+                            </p>
+                        )}
+                    </div>
+                    {!isJakartaOrMalang && <p className="text-lg">09.09.2025</p>}
                 </div>
             </div>
             <ScrollDownText />

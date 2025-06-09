@@ -23,32 +23,32 @@ const variants = {
 
 const SaveTheDateOrnament = ({ downward = false }: { downward?: boolean }) => (
     <>
-        <Image
-            src={'/images/ornaments/orn4.png'}
-            alt={'blue flowers'}
-            width={500}
-            height={500}
-            className={`absolute -right-2 ${downward ? 'top-0' : 'bottom-0'} w-[55%] ${downward && 'rotate-180'}`}
-        />
-        <Image
-            src={'/images/ornaments/orn4.png'}
-            alt={'blue flowers'}
-            width={500}
-            height={500}
-            className={`absolute -left-4 w-[55%] ${downward ? 'top-0' : 'bottom-0'} ${downward && 'rotate-180'}`}
-        />
-        <Wiggle className={`absolute ${downward ? '-top-32' : '-bottom-2'} right-8 -z-10 w-[30%]`} downward={downward}>
+        <Wiggle className={`absolute ${downward ? '-top-32' : '-bottom-2'} right-8 w-[30%]`} downward={downward}>
             <Image src={'/images/ornaments/baby_orn.png'} alt={'baby breath flower'} width={500} height={500} />
         </Wiggle>
         <Wiggle
-            className={`absolute ${downward ? '-top-32' : '-bottom-2'} left-[calc(50%-60px)] -z-10 w-[30%]`}
+            className={`absolute ${downward ? '-top-32' : '-bottom-2'} left-[calc(50%-60px)] w-[30%]`}
             downward={downward}
         >
             <Image src={'/images/ornaments/baby_orn.png'} alt={'baby breath flower'} width={500} height={500} />
         </Wiggle>
-        <Wiggle className={`absolute ${downward ? '-top-32' : '-bottom-2'} left-8 -z-10 w-[30%]`} downward={downward}>
+        <Wiggle className={`absolute ${downward ? '-top-32' : '-bottom-2'} left-8 w-[30%]`} downward={downward}>
             <Image src={'/images/ornaments/baby_orn.png'} alt={'baby breath flower'} width={500} height={500} />
         </Wiggle>
+        <Image
+            src={'/images/ornaments/orn4.png'}
+            alt={'blue flowers'}
+            width={500}
+            height={500}
+            className={`absolute -right-2 ${downward ? '-top-4' : '-bottom-4'} w-[55%] ${downward && 'rotate-180'}`}
+        />
+        <Image
+            src={'/images/ornaments/orn4.png'}
+            alt={'blue flowers'}
+            width={500}
+            height={500}
+            className={`absolute -left-4 w-[55%] ${downward ? '-top-4' : '-bottom-4'} ${downward && 'rotate-180'}`}
+        />
     </>
 );
 

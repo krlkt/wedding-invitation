@@ -20,7 +20,12 @@ const Gift = () => {
                     Please send your gift to the following account numbers:
                     <div className="flex rounded-lg border-secondary-main border-2 p-4 items-center gap-4 background-pattern self-stretch justify-start">
                         <div id="logo" className="w-14 h-14 relative">
-                            <Image src="/images/ocbc.png" alt={'OCBC logo'} fill className="block h-auto w-full" />
+                            <Image
+                                src="/images/logos/ocbc.png"
+                                alt={'OCBC logo'}
+                                fill
+                                className="block h-auto w-full"
+                            />
                         </div>
                         <div className="text-left">
                             <p className="font-bold">OCBC</p>
@@ -31,7 +36,7 @@ const Gift = () => {
                     </div>
                     <div className="flex rounded-lg border-secondary-main border-2 p-4 items-center gap-4 background-pattern self-stretch justify-start">
                         <div id="logo" className="w-16 h-16 relative">
-                            <Image src="/images/paypal.png" alt={'Paypal logo'} fill className="block w-full" />
+                            <Image src="/images/logos/paypal.png" alt={'Paypal logo'} fill className="block w-full" />
                         </div>
                         <div className="text-left">
                             <p className="font-bold">Paypal</p>

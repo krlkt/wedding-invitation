@@ -5,7 +5,6 @@ import LoaderScreen from '../components/LoaderScreen';
 import Music from '../components/Music';
 import LocationComponent, { Locations } from '../components/LocationComponent';
 import 'photoswipe/style.css';
-import ImageGallery from '../components/gallery/ImageGallery';
 import Gift from '../components/gift/Gift';
 import Wishes from '../components/wish/Wishes';
 import RSVPFORM from '../components/rsvp/RSVPForm';
@@ -29,6 +28,7 @@ import FAQ from '../components/faq/FAQ';
 import Button from '../components/Button';
 import YouTubeEmbed from '../components/prewedding/YoutubeEmbed';
 import ThumbnailCarousel from '../components/gallery/ThumbnailCarousel';
+import { rotateAnimation } from '../utils/animation';
 
 export default function InvitationPage({
     location,
@@ -80,7 +80,7 @@ export default function InvitationPage({
     return (
         <>
             <LoaderScreen isVisible={isLoaderScreenVisible} />
-            <main className="relative flex w-full bg-[#ceeaff]/10">
+            <main className="relative flex w-full bg-secondary-main/90">
                 <div id="background-overlay" className="texture-overlay" />
                 <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden z-10">
                     <div id="overlay" className="w-full h-full absolute -z-10 overlay" />
@@ -106,45 +106,58 @@ export default function InvitationPage({
                 <div className="flex flex-col items-center justify-between md:w-[min(40%,450px)] font-serif md:ml-[max(60%,100%-450px)] overflow-x-clip">
                     <Music />
                     <div className="relative w-full bg-white">
-                        <section className="h-screen-safe flex flex-col relative overflow-hidden">
+                        <section className="h-dvh flex flex-col relative overflow-hidden">
                             <video autoPlay loop muted playsInline className="w-full h-full absolute object-cover">
                                 <source src="/hero.mp4" type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>
-                            {/* TODO: Add scrolldown  */}
                             <Hero />
                         </section>
                         {/* Grooms grid photos */}
                         <Groom />
-
                         {/* Bride grid photos */}
                         <Bride />
                     </div>
                     {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
                     <section
-                        className="w-full flex flex-col bg-primary-main text-secondary-main relative overflow-x-hidden px-4 py-16"
+                        className="w-full flex flex-col bg-primary-main text-secondary-main relative px-6 py-16"
                         id="love-story"
                     >
                         <SectionTitle title="Love Story" color="secondary" />
                         <Timeline />
-                        <div className="section-transition-secondary" />
                     </section>
-                    {/* When */}
-                    <section className="relative text-center w-full overflow-hidden h-[650px] flex flex-col justify-center items-center">
-                        <SaveTheDate />
-                    </section>
-                    {/* Where */}
-                    <section className="relative w-full flex flex-col items-center justify-center overflow-hidden">
+                    {/* When and where */}
+                    <section className="relative text-center w-full flex flex-col justify-center items-center py-24 bg-white overflow-hidden">
                         <SaveTheDateOrnament downward />
+                        <SaveTheDate />
+                        <div className="w-full h-20 bg-red-300 absolute top-1/2 -translate-y-1/2">
+                            <motion.div>
+                                <Image
+                                    src={'/images/ornaments/baby_orn3.png'}
+                                    alt={'Baby breath'}
+                                    width={100}
+                                    height={100}
+                                    className="absolute"
+                                />
+                                <Image
+                                    src={'/images/ornaments/baby_orn4.png'}
+                                    alt={'Baby breath'}
+                                    width={100}
+                                    height={100}
+                                    className="absolute"
+                                />
+                            </motion.div>
+                        </div>
                         <LocationComponent location={location} />
                         <SaveTheDateOrnament />
                     </section>
                     {/* RSVP */}
-                    <section id="rsvp" className="pt-16 p-8">
+                    <section id="rsvp" className="relative py-12 p-6 bg-primary-main">
                         <BorderedDiv>
                             <SectionTitle title="RSVP" />
                             <RSVPFORM rsvp={rsvp} />
                         </BorderedDiv>
+                        <div className="section-transition-secondary" />
                     </section>
                     {/* Photo gallery */}
                     <section className="pt-16 w-full">
@@ -156,33 +169,9 @@ export default function InvitationPage({
                             </div>
                         </div>
                     </section>
-                    {/* Dress code */}
-                    <section className="pt-52 px-6 relative w-full overflow-hidden">
-                        <motion.div
-                            className="absolute -top-20 -left-[28rem]"
-                            animate={{
-                                rotate: [183, 178, 183],
-                                transition: {
-                                    duration: 6,
-                                    repeat: Infinity,
-                                    ease: 'easeInOut',
-                                },
-                            }}
-                            style={{ transformOrigin: 'center right' }}
-                        >
-                            <Image
-                                src={'/images/ornaments/orn6.png'}
-                                alt={'Ornament blue flower'}
-                                width={400}
-                                height={100}
-                            />
-                        </motion.div>
-                        <SectionTitle title="Dress code" />
-                        <DressCode />
-                    </section>
                     {/* Prewedding */}
                     <section className="py-16 relative w-full">
-                        <SectionTitle title="Footage" />
+                        <SectionTitle title="Prewedding" />
                         <div className="px-6">
                             <YouTubeEmbed videoId="g9ZqnUOyeTc" />
                         </div>
@@ -201,6 +190,23 @@ export default function InvitationPage({
                             className="absolute -bottom-0 -right-8 -rotate-[180deg] -z-10"
                         />
                     </section>
+                    {/* Dress code */}
+                    <section className="pt-52 px-6 relative w-full overflow-hidden">
+                        <motion.div
+                            className="absolute -top-20 -left-[28rem]"
+                            animate={rotateAnimation([183, 178, 183])}
+                            style={{ transformOrigin: 'center right' }}
+                        >
+                            <Image
+                                src={'/images/ornaments/orn6.png'}
+                                alt={'Ornament blue flower'}
+                                width={400}
+                                height={100}
+                            />
+                        </motion.div>
+                        <SectionTitle title="Dress code" />
+                        <DressCode />
+                    </section>
 
                     {/* FAQ */}
                     <section className="pt-16 relative w-full">
@@ -212,7 +218,21 @@ export default function InvitationPage({
 
                     {/* Wedding Gift */}
                     {/* TODO: add QRIS */}
-                    <section className="pt-16 px-8">
+                    <section className="mt-20 px-8 relative">
+                        <motion.div
+                            animate={rotateAnimation([5, -5, 5])}
+                            style={{ transformOrigin: 'left center' }}
+                            className="absolute -top-16 left-0 opacity-90"
+                        >
+                            <Image src={'/images/ornaments/cats/mayo.webp'} alt={'Mayo'} width={100} height={100} />
+                        </motion.div>
+                        <motion.div
+                            animate={rotateAnimation([5, -5, 5], 0.5)}
+                            style={{ transformOrigin: 'right center' }}
+                            className="absolute -bottom-16 right-0 opacity-90"
+                        >
+                            <Image src={'/images/ornaments/cats/kyupie.webp'} alt={'Kyupie'} width={100} height={100} />
+                        </motion.div>
                         <BorderedDiv>
                             <SectionTitle title="Gift" />
                             <Gift />
@@ -221,7 +241,7 @@ export default function InvitationPage({
                     {/* Wishes */}
                     <section className="pt-16">
                         <SectionTitle title="Your Wishes" />
-                        <div className="flex flex-col gap-4 text-center justify-center relative w-full px-4 ">
+                        <div className="flex flex-col gap-4 text-center justify-center relative w-full px-6 ">
                             <p>
                                 Your love and well-wishes mean the world to us, and we&#39;re so excited to share this
                                 special day with you. Drop a note of advice, a sweet wish, or just some love in the
@@ -232,7 +252,7 @@ export default function InvitationPage({
                             <Wishes wishes={wishes} />
                         </div>
                     </section>
-                    <section className="p-8 pt-16">
+                    <section className="p-6 pt-16">
                         <p className="text-md text-center">
                             Thank you for being part of our journey and celebrating this special day with us. Your love
                             and support mean the world, and we can&#39;t wait to share the joy of our wedding with you!
@@ -247,18 +267,10 @@ export default function InvitationPage({
                     </section>
                 </div>
                 {/* TODO LIST */}
-                {/* Create dresscode section - Done */}
-                {/* Create FAQ section */}
-                {/* Update values for jakarta and malang */}
-                {/* RSVP Food choices */}
                 {/* RSVP checkedIn for D Day */}
-                {/* Complete fullscreen hero section */}
                 {/* Finish decoration and ornaments */}
-                {/* Fix layout bug in my iphone */}
-                {/* Adds animated kyupie mayo */}
-                {/* Create external Gallery section - Done */}
-                {/* Create Prewed video section */}
                 {/* Adds animations */}
+                {/* Update values for jakarta and malang */}
             </main>
         </>
     );

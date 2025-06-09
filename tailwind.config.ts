@@ -13,12 +13,10 @@ const config: Config = {
                 'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
             },
             fontFamily: {
-                cursive: ['Alex Brush', 'cursive'],
-                cursive2: ['Tangerine', 'Alex Brush', 'cursive'],
-                cursive3: ['Rouge Script', 'Tangerine', 'Alex Brush', 'cursive'],
+                cursive2: ['Updock', 'cursive'],
                 serif: ['Cormorant Garamond', 'serif'],
                 cursive_nautigal: ['The Nautigal', 'cursive'],
-                newYorker: ['NewYorkerFont', 'sans-serif'],
+                heading: ['Playful Display', 'serif'],
             },
             colors: {
                 primary: {
@@ -33,9 +31,6 @@ const config: Config = {
                 background: {
                     primary: 'var(--background-primary)',
                 },
-            },
-            height: {
-                'screen-safe': 'calc(var(--vh) * 100)',
             },
         },
     },
