@@ -130,21 +130,21 @@ export default function InvitationPage({
                     <section className="relative text-center w-full flex flex-col justify-center items-center py-24 bg-white overflow-hidden">
                         <SaveTheDateOrnament downward />
                         <SaveTheDate />
-                        <div className="w-full h-20 bg-red-300 absolute top-1/2 -translate-y-1/2">
+                        <div className="w-full h-20 absolute top-1/2 -translate-y-1/2">
                             <motion.div>
                                 <Image
-                                    src={'/images/ornaments/baby_orn3.png'}
-                                    alt={'Baby breath'}
-                                    width={100}
-                                    height={100}
-                                    className="absolute"
+                                    src={'/images/ornaments/baby_orn2.png'}
+                                    alt={'Ornament blue flower'}
+                                    width={120}
+                                    height={120}
+                                    className="absolute -top-2 -left-10 -rotate-[45deg] -z-10"
                                 />
                                 <Image
-                                    src={'/images/ornaments/baby_orn4.png'}
-                                    alt={'Baby breath'}
-                                    width={100}
-                                    height={100}
-                                    className="absolute"
+                                    src={'/images/ornaments/baby_orn2.png'}
+                                    alt={'Ornament blue flower'}
+                                    width={120}
+                                    height={120}
+                                    className="absolute -top-2 -right-10 -rotate-[195deg] -z-10"
                                 />
                             </motion.div>
                         </div>
@@ -171,7 +171,6 @@ export default function InvitationPage({
                     </section>
                     {/* Prewedding */}
                     <section className="py-16 relative w-full">
-                        <SectionTitle title="Prewedding" />
                         <div className="px-6">
                             <YouTubeEmbed videoId="g9ZqnUOyeTc" />
                         </div>
