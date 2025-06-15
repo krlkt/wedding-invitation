@@ -18,7 +18,7 @@ const faq = [
     },
     {
         question: 'What time should I arrive at your wedding ceremony?',
-        answer: 'The doors to the venue will open at 15:00. The wedding ceremony will be held at 16:00 in the chapel. We recommend arriving at the venue at least 30 minutes ahead of the ceremony start time to ensure you have enough time to walk to the ceremony space (located about a 5-minute walk from the parking lot) and find a seat.',
+        answer: 'The doors to the venue will open at 15:00. The wedding ceremony will be held at 16:00 in the chapel. We recommend arriving at the venue at 15:15 to ensure you have enough time to walk to the ceremony space (located about a 5-minute walk from the parking lot) and find a seat.',
     },
     {
         question: 'What time will your wedding reception end? Is there an after-party?',
