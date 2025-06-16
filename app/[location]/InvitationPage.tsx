@@ -30,6 +30,7 @@ import YouTubeEmbed from '../components/prewedding/YoutubeEmbed';
 import ThumbnailCarousel from '../components/gallery/ThumbnailCarousel';
 import { fadeInFromLeft, fadeInFromRight, fadeInVariants, rotateAnimation } from '../utils/animation';
 import FadeIn from '../components/FadeIn';
+import GrowIn from '../components/GrowIn';
 
 export default function InvitationPage({
     location,
@@ -286,20 +287,26 @@ export default function InvitationPage({
                     {/* Wishes */}
                     <section className="pt-16 pb-10 px-6 relative flex flex-col gap-4">
                         <div className="relative flex flex-col gap-4">
-                            <Image
-                                src={'/images/ornaments/frame/gate.png'}
-                                alt={'Gate'}
-                                width={300}
-                                height={300}
-                                className="absolute -z-10 scale-[2.2] left-1/2 -translate-x-1/2 translate-y-16 opacity-15"
-                            />
+                            <GrowIn className="absolute -z-10 left-1/2 ">
+                                <Image
+                                    src={'/images/ornaments/frame/gate.png'}
+                                    alt={'Gate'}
+                                    width={300}
+                                    height={300}
+                                    className="scale-[3.4] opacity-15 -translate-x-1/2 translate-y-36"
+                                />
+                            </GrowIn>
                             <SectionTitle title="Your Wishes" />
-                            <p>
-                                Your love and well-wishes mean the world to us, and we&#39;re so excited to share this
-                                special day with you. Drop a note of advice, a sweet wish, or just some love in the
-                                comments below!
-                            </p>
-                            <WishForm guestName={guestName} />
+                            <FadeIn>
+                                <p>
+                                    Your love and well-wishes mean the world to us, and we&#39;re so excited to share
+                                    this special day with you. Drop a note of advice, a sweet wish, or just some love in
+                                    the comments below!
+                                </p>
+                            </FadeIn>
+                            <FadeIn>
+                                <WishForm guestName={guestName} />
+                            </FadeIn>
                         </div>
                         <Divider />
                         <Wishes wishes={wishes} />

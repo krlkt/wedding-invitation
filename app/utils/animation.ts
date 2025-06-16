@@ -13,6 +13,21 @@ export const fadeInVariants = {
     },
 };
 
+export const growInVariants = {
+    initial: {
+        opacity: 0,
+        scale: 0.2,
+    },
+    animate: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+            duration: 0.6,
+            ease: 'easeInOut',
+        },
+    },
+};
+
 export const fadeInFromLeft = {
     initial: {
         opacity: 0,

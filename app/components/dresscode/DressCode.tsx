@@ -1,16 +1,23 @@
 import Image from 'next/image';
+import FadeIn from '../FadeIn';
 
 const DressCode = () => (
     <div className="w-full max-w-[650px] p-2 px-4 text-center space-y-8">
-        <p>Wedding vibe: Relaxed Formal</p>
-        <div className="space-y-4">
+        <FadeIn>
+            <p>Wedding vibe: Relaxed Formal</p>
+        </FadeIn>
+        <FadeIn className="space-y-4">
             <ColorPalette />
             <p>
                 We kindly suggest our guest to use <b>palette</b> color for our special day
             </p>
-        </div>
-        <MenWomenSection sex="women" />
-        <MenWomenSection sex="men" />
+        </FadeIn>
+        <FadeIn>
+            <MenWomenSection sex="women" />
+        </FadeIn>
+        <FadeIn>
+            <MenWomenSection sex="men" />
+        </FadeIn>
     </div>
 );
 
