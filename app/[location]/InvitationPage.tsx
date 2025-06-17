@@ -28,7 +28,9 @@ import FAQ from '../components/faq/FAQ';
 import Button from '../components/Button';
 import YouTubeEmbed from '../components/prewedding/YoutubeEmbed';
 import ThumbnailCarousel from '../components/gallery/ThumbnailCarousel';
-import { rotateAnimation } from '../utils/animation';
+import { fadeInFromLeft, fadeInFromRight, fadeInVariants, rotateAnimation } from '../utils/animation';
+import FadeIn from '../components/FadeIn';
+import GrowIn from '../components/GrowIn';
 
 export default function InvitationPage({
     location,
@@ -131,22 +133,24 @@ export default function InvitationPage({
                         <SaveTheDateOrnament downward />
                         <SaveTheDate />
                         <div className="w-full h-20 absolute top-1/2 -translate-y-1/2">
-                            <motion.div>
+                            <FadeIn from="left" className="absolute -top-2 -left-10 -z-10">
                                 <Image
                                     src={'/images/ornaments/baby_orn2.png'}
                                     alt={'Ornament blue flower'}
                                     width={120}
                                     height={120}
-                                    className="absolute -top-2 -left-10 -rotate-[45deg] -z-10"
+                                    className=" -rotate-[45deg]"
                                 />
+                            </FadeIn>
+                            <FadeIn from="right" className="absolute -top-2 -right-10 -z-10">
                                 <Image
                                     src={'/images/ornaments/baby_orn2.png'}
                                     alt={'Ornament blue flower'}
                                     width={120}
                                     height={120}
-                                    className="absolute -top-2 -right-10 -rotate-[195deg] -z-10"
+                                    className="-rotate-[195deg]"
                                 />
-                            </motion.div>
+                            </FadeIn>
                         </div>
                         <LocationComponent location={location} />
                         <SaveTheDateOrnament />
@@ -161,69 +165,83 @@ export default function InvitationPage({
                     </section>
                     {/* Photo gallery */}
                     <section className="pt-16 w-full relative">
-                        <Image
-                            src={'/images/ornaments/baby_orn2.png'}
-                            alt={'Ornament blue flower'}
-                            width={150}
-                            height={150}
-                            className="absolute top-3 -left-8 -z-10"
-                        />
-                        <Image
-                            src={'/images/ornaments/baby_orn2.png'}
-                            alt={'Ornament blue flower'}
-                            width={150}
-                            height={150}
-                            className="absolute top-3 -right-8 -rotate-[260deg] -z-10"
-                        />
+                        <FadeIn from="left" className="absolute top-3 -left-8 -z-10">
+                            <Image
+                                src={'/images/ornaments/baby_orn2.png'}
+                                alt={'Ornament blue flower'}
+                                width={150}
+                                height={150}
+                            />
+                        </FadeIn>
+                        <FadeIn from="right" className="absolute top-3 -right-8 -z-10">
+                            <Image
+                                src={'/images/ornaments/baby_orn2.png'}
+                                alt={'Ornament blue flower'}
+                                width={150}
+                                height={150}
+                                className="-rotate-[260deg]"
+                            />
+                        </FadeIn>
+
                         <div className="flex flex-col items-center text-center relative w-full max-w-screen-md mx-auto">
                             <SectionTitle title="Gallery" />
-                            <ThumbnailCarousel />
-                            <div className="mt-4">
+                            <FadeIn>
+                                <ThumbnailCarousel />
+                            </FadeIn>
+                            <FadeIn className="mt-4">
                                 <Button onClick={() => window.open('/gallery', '_blank')}>See more photos 📸</Button>
-                            </div>
+                            </FadeIn>
                         </div>
                     </section>
                     {/* Prewedding */}
                     <section className="py-16 pb-24 relative w-full">
                         <SectionTitle title="Prewedding Video" size="medium" />
-                        <div className="px-6">
+                        <FadeIn className="px-6">
                             <YouTubeEmbed videoId="g9ZqnUOyeTc" />
-                        </div>
-                        <Image
-                            src={'/images/ornaments/baby_orn2.png'}
-                            alt={'Ornament blue flower'}
-                            width={150}
-                            height={150}
-                            className="absolute bottom-3 -left-8 -rotate-[80deg] -z-10"
-                        />
-                        <Image
-                            src={'/images/ornaments/baby_orn2.png'}
-                            alt={'Ornament blue flower'}
-                            width={150}
-                            height={150}
-                            className="absolute bottom-3 -right-8 -rotate-[180deg] -z-10"
-                        />
+                        </FadeIn>
+                        <FadeIn from="left" className="absolute bottom-3 -left-8 -z-10">
+                            <Image
+                                src={'/images/ornaments/baby_orn2.png'}
+                                alt={'Ornament blue flower'}
+                                width={150}
+                                height={150}
+                                className="-rotate-[80deg]"
+                            />
+                        </FadeIn>
+                        <FadeIn from="right" className="absolute bottom-3 -right-8 -z-10">
+                            <Image
+                                src={'/images/ornaments/baby_orn2.png'}
+                                alt={'Ornament blue flower'}
+                                width={150}
+                                height={150}
+                                className="-rotate-[180deg]"
+                            />
+                        </FadeIn>
                     </section>
                     {/* FAQ */}
                     <section className="py-16 pb-28 relative w-full bg-primary-main">
-                        <Image
-                            src={'/images/ornaments/baby_orn.png'}
-                            alt={'Baby breath'}
-                            width={200}
-                            height={100}
-                            className="absolute rotate-90 -top-0 -left-16 pointer-events-none"
-                        />
+                        <FadeIn from="left" className="absolute -top-0 -left-16">
+                            <Image
+                                src={'/images/ornaments/baby_orn.png'}
+                                alt={'Baby breath'}
+                                width={200}
+                                height={100}
+                                className="rotate-90 pointer-events-none"
+                            />
+                        </FadeIn>
                         <SectionTitle title="FAQ" color="secondary" />
-                        <div className="w-full px-8">
+                        <FadeIn className="w-full px-8">
                             <FAQ />
-                        </div>
-                        <Image
-                            src={'/images/ornaments/baby_orn4.png'}
-                            alt={'Baby breath'}
-                            width={200}
-                            height={100}
-                            className="absolute -rotate-180 bottom-12 -right-10 pointer-events-none"
-                        />
+                        </FadeIn>
+                        <FadeIn from="right" className="absolute bottom-12 -right-10">
+                            <Image
+                                src={'/images/ornaments/baby_orn4.png'}
+                                alt={'Baby breath'}
+                                width={200}
+                                height={100}
+                                className="-rotate-180 pointer-events-none"
+                            />
+                        </FadeIn>
                         <div className="section-transition-secondary-fix" />
                     </section>
                     {/* Dress code */}
@@ -269,20 +287,26 @@ export default function InvitationPage({
                     {/* Wishes */}
                     <section className="pt-16 pb-10 px-6 relative flex flex-col gap-4">
                         <div className="relative flex flex-col gap-4">
-                            <Image
-                                src={'/images/ornaments/frame/gate.png'}
-                                alt={'Gate'}
-                                width={300}
-                                height={300}
-                                className="absolute -z-10 scale-[2.2] left-1/2 -translate-x-1/2 translate-y-16 opacity-15"
-                            />
+                            <GrowIn className="absolute -z-10 left-1/2 ">
+                                <Image
+                                    src={'/images/ornaments/frame/gate.png'}
+                                    alt={'Gate'}
+                                    width={300}
+                                    height={300}
+                                    className="scale-[3.4] opacity-15 -translate-x-1/2 translate-y-36"
+                                />
+                            </GrowIn>
                             <SectionTitle title="Your Wishes" />
-                            <p>
-                                Your love and well-wishes mean the world to us, and we&#39;re so excited to share this
-                                special day with you. Drop a note of advice, a sweet wish, or just some love in the
-                                comments below!
-                            </p>
-                            <WishForm guestName={guestName} />
+                            <FadeIn>
+                                <p>
+                                    Your love and well-wishes mean the world to us, and we&#39;re so excited to share
+                                    this special day with you. Drop a note of advice, a sweet wish, or just some love in
+                                    the comments below!
+                                </p>
+                            </FadeIn>
+                            <FadeIn>
+                                <WishForm guestName={guestName} />
+                            </FadeIn>
                         </div>
                         <Divider />
                         <Wishes wishes={wishes} />

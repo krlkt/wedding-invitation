@@ -4,6 +4,7 @@ import Modal from '../Modal';
 import Image from 'next/image';
 import './gift.css';
 import { useState } from 'react';
+import FadeIn from '../FadeIn';
 
 const Gift = () => {
     const [open, setOpen] = useState<boolean>(false);
@@ -54,20 +55,24 @@ const Gift = () => {
                     </div>
                 </div>
             </Modal>
-            <p className="text-md">
-                Having you celebrate with us is the greatest gift. However, if you&#39;d like to send a token of your
-                love, please click the button below.
-                <br />
-                Thank you for your kindness! 💕
-            </p>
-            <Button onClick={() => setOpen(true)}>
-                <span className="flex gap-2 justify-center items-center">
-                    Send gift
-                    <div className="w-4 h-4">
-                        <GiftIcon />
-                    </div>
-                </span>
-            </Button>
+            <FadeIn>
+                <p className="text-md">
+                    Having you celebrate with us is the greatest gift. However, if you&#39;d like to send a token of
+                    your love, please click the button below.
+                    <br />
+                    Thank you for your kindness! 💕
+                </p>
+            </FadeIn>
+            <FadeIn>
+                <Button onClick={() => setOpen(true)}>
+                    <span className="flex gap-2 justify-center items-center">
+                        Send gift
+                        <div className="w-4 h-4">
+                            <GiftIcon />
+                        </div>
+                    </span>
+                </Button>
+            </FadeIn>
         </div>
     );
 };

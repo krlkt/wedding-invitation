@@ -13,16 +13,47 @@ export const fadeInVariants = {
     },
 };
 
-export const textFadeInVariants = {
+export const growInVariants = {
     initial: {
         opacity: 0,
-        y: 100,
+        scale: 0.2,
     },
     animate: {
         opacity: 1,
-        y: 0,
+        scale: 1,
         transition: {
-            duration: 0.3,
+            duration: 0.6,
+            ease: 'easeInOut',
+        },
+    },
+};
+
+export const fadeInFromLeft = {
+    initial: {
+        opacity: 0,
+        x: -100,
+    },
+    animate: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 0.6,
+            ease: 'easeInOut',
+        },
+    },
+};
+
+export const fadeInFromRight = {
+    initial: {
+        opacity: 0,
+        x: 100,
+    },
+    animate: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 0.6,
+            ease: 'easeInOut',
         },
     },
 };
