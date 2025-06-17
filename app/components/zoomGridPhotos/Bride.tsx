@@ -9,6 +9,7 @@ import Bride4 from '../../../public/images/bride/bride4.jpg';
 import Bride5 from '../../../public/images/bride/bride5.jpg';
 import Bride6 from '../../../public/images/bride/bride6.jpg';
 import Ornament from '../../../public/images/ornaments/orn2.png';
+import InstagramIcon from '@/app/icons/InstagramIcon';
 
 const Bride = () => {
     // Zoom animation
@@ -91,7 +92,16 @@ const Bride = () => {
                                 style={{ opacity: textOpacityBride }}
                                 className="text-4xl drop-shadow-lg font-semibold"
                             >
-                                The Bride
+                                <span className="inline-flex items-center gap-2">
+                                    The Bride
+                                    <a
+                                        href="https://instagram.com/sabrinaalvina"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <InstagramIcon width={'25px'} />
+                                    </a>
+                                </span>
                             </motion.h2>
                             <motion.h2
                                 style={{ opacity: textOpacityBride }}

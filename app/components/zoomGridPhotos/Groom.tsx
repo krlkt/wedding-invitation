@@ -8,6 +8,7 @@ import Groom5 from '../../../public/images/groom/groom5.jpg';
 import Groom6 from '../../../public/images/groom/groom6.jpg';
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import InstagramIcon from '@/app/icons/InstagramIcon';
 
 const Groom = () => {
     // Zoom animation
@@ -80,7 +81,16 @@ const Groom = () => {
                                 style={{ opacity: textOpacityGroom }}
                                 className="text-4xl drop-shadow-lg font-semibold"
                             >
-                                The Groom
+                                <span className="inline-flex items-center gap-2">
+                                    The Groom
+                                    <a
+                                        href="https://instagram.com/karelkarunia"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <InstagramIcon width={'25px'} color="white" />
+                                    </a>
+                                </span>
                             </motion.h2>
                             <motion.h2
                                 style={{ opacity: textOpacityGroom }}
