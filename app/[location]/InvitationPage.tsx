@@ -28,7 +28,7 @@ import FAQ from '../components/faq/FAQ';
 import Button from '../components/Button';
 import YouTubeEmbed from '../components/prewedding/YoutubeEmbed';
 import ThumbnailCarousel from '../components/gallery/ThumbnailCarousel';
-import { fadeInFromLeft, fadeInFromRight, fadeInVariants, rotateAnimation } from '../utils/animation';
+import { rotateAnimation } from '../utils/animation';
 import FadeIn from '../components/FadeIn';
 import GrowIn from '../components/GrowIn';
 
@@ -132,26 +132,24 @@ export default function InvitationPage({
                     <section className="relative text-center w-full flex flex-col justify-center items-center py-24 bg-white overflow-hidden">
                         <SaveTheDateOrnament downward />
                         <SaveTheDate />
-                        <div className="w-full h-20 absolute top-1/2 -translate-y-1/2">
-                            <FadeIn from="left" className="absolute -top-2 -left-10 -z-10">
-                                <Image
-                                    src={'/images/ornaments/baby_orn2.png'}
-                                    alt={'Ornament blue flower'}
-                                    width={120}
-                                    height={120}
-                                    className=" -rotate-[45deg]"
-                                />
-                            </FadeIn>
-                            <FadeIn from="right" className="absolute -top-2 -right-10 -z-10">
-                                <Image
-                                    src={'/images/ornaments/baby_orn2.png'}
-                                    alt={'Ornament blue flower'}
-                                    width={120}
-                                    height={120}
-                                    className="-rotate-[195deg]"
-                                />
-                            </FadeIn>
-                        </div>
+                        <FadeIn from="left" className="absolute top-[46%] -left-4">
+                            <Image
+                                src={'/images/ornaments/baby_orn2.png'}
+                                alt={'Ornament blue flower'}
+                                width={120}
+                                height={120}
+                                className="-rotate-[45deg]"
+                            />
+                        </FadeIn>
+                        <FadeIn from="right" className="absolute top-[46%] -translate-y-4 -right-4">
+                            <Image
+                                src={'/images/ornaments/baby_orn2.png'}
+                                alt={'Ornament blue flower'}
+                                width={120}
+                                height={120}
+                                className="-rotate-[220deg]"
+                            />
+                        </FadeIn>
                         <LocationComponent location={location} />
                         <SaveTheDateOrnament />
                     </section>
@@ -185,12 +183,10 @@ export default function InvitationPage({
 
                         <div className="flex flex-col items-center text-center relative w-full max-w-screen-md mx-auto">
                             <SectionTitle title="Gallery" />
-                            <FadeIn>
-                                <ThumbnailCarousel />
-                            </FadeIn>
-                            <FadeIn className="mt-4">
+                            <ThumbnailCarousel />
+                            <div className="mt-4">
                                 <Button onClick={() => window.open('/gallery', '_blank')}>See more photos 📸</Button>
-                            </FadeIn>
+                            </div>
                         </div>
                     </section>
                     {/* Prewedding */}
@@ -327,7 +323,6 @@ export default function InvitationPage({
                 </div>
                 {/* TODO LIST */}
                 {/* RSVP checkedIn for D Day */}
-                {/* Adds animations */}
                 {/* Update values for jakarta and malang */}
             </main>
         </>

@@ -8,7 +8,7 @@ export const fadeInVariants = {
         y: 0,
         transition: {
             duration: 0.5,
-            ease: 'easeInOut',
+            ease: 'easeOut',
         },
     },
 };
@@ -23,7 +23,7 @@ export const growInVariants = {
         scale: 1,
         transition: {
             duration: 0.6,
-            ease: 'easeInOut',
+            ease: 'easeOut',
         },
     },
 };
@@ -38,7 +38,7 @@ export const fadeInFromLeft = {
         x: 0,
         transition: {
             duration: 0.6,
-            ease: 'easeInOut',
+            ease: 'easeOut',
         },
     },
 };
@@ -53,23 +53,7 @@ export const fadeInFromRight = {
         x: 0,
         transition: {
             duration: 0.6,
-            ease: 'easeInOut',
-        },
-    },
-};
-
-export const staggeredFadeInVariants = {
-    initial: {
-        opacity: 0,
-        y: 100,
-    },
-    animate: {
-        opacity: 1,
-        y: 0,
-        transition: {
-            duration: 0.3,
-            staggerChildren: 0.5,
-            ease: 'easeInOut',
+            ease: 'easeOut',
         },
     },
 };
@@ -80,15 +64,15 @@ export const Stagger = {
         visible: {
             opacity: 1,
             transition: {
-                duration: 0.3,
-                staggerChildren: 0.26,
-                ease: 'easeInOut',
+                duration: 0.5,
+                staggerChildren: 0.4,
+                ease: 'easeOut',
             },
         },
     },
     itemVariants: {
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeInOut' } },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
     },
 };
 
@@ -97,7 +81,7 @@ export const rotateAnimation = (degArray: Array<number>, delay?: number) => ({
     transition: {
         duration: 6,
         repeat: Infinity,
-        ease: 'easeInOut',
+        ease: 'easeOut',
         delay,
     },
 });

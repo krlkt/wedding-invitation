@@ -1,33 +1,24 @@
 import { motion } from 'framer-motion';
 import Button from '../Button';
-import { Stagger } from '../../utils/animation';
 import CalendarIcon from '../../icons/CalendarIcon';
 import Image from 'next/image';
+import GrowIn from '../GrowIn';
+import FadeIn from '../FadeIn';
 
 const SaveTheDate = () => (
-    <motion.div
-        variants={Stagger.containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="relative flex flex-col gap-2 items-center justify-center text-primary-main z-10 w-full py-28"
-    >
+    <div className="relative flex flex-col gap-2 items-center justify-center text-primary-main z-10 w-full py-28">
         <motion.div className="font-cursive_nautigal text-7xl">
-            <motion.p className="text-primary-600/40" variants={Stagger.itemVariants}>
-                Save
-            </motion.p>
-            <motion.p className="text-primary-700/60 leading-8" variants={Stagger.itemVariants}>
-                the
-            </motion.p>
-            <motion.p variants={Stagger.itemVariants}>Date</motion.p>
+            <FadeIn className="text-primary-600/40">Save</FadeIn>
+            <FadeIn className="text-primary-700/60 leading-8">the</FadeIn>
+            <FadeIn>Date</FadeIn>
         </motion.div>
-        <motion.div variants={Stagger.itemVariants} className="font-semibold">
+        <FadeIn className="font-semibold">
             <motion.p className="text-xl z-20">
                 TUESDAY
                 <br /> Sept 9<sup>th</sup>, 2025
             </motion.p>
-        </motion.div>
-        <motion.div variants={Stagger.itemVariants} className="mt-2">
+        </FadeIn>
+        <FadeIn className="mt-2">
             <Button>
                 <a
                     target="_blank"
@@ -41,11 +32,11 @@ const SaveTheDate = () => (
                     </span>
                 </a>
             </Button>
-        </motion.div>
-        <div className="absolute object-contain w-full h-full -z-10">
+        </FadeIn>
+        <GrowIn className="absolute object-contain w-full h-full -z-10">
             <Image src={'/images/ornaments/frame/orn_frame.png'} alt={'Ornament Flower'} fill />
-        </div>
-    </motion.div>
+        </GrowIn>
+    </div>
 );
 
 export default SaveTheDate;

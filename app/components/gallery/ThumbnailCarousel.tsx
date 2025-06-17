@@ -9,6 +9,7 @@ import { Gallery, Item } from 'react-photoswipe-gallery';
 import '@splidejs/react-splide/css';
 import 'photoswipe/dist/photoswipe.css';
 import './thumbnail-carousel.css';
+import FadeIn from '../FadeIn';
 
 const images = [
     {
@@ -51,7 +52,7 @@ export default function ThumbnailCarousel() {
         <Gallery>
             <div className="w-full mx-auto max-w-full overflow-hidden">
                 {/* Main Slider */}
-                <div className="mx-6 rounded-lg overflow-clip">
+                <FadeIn className="mx-6 rounded-lg overflow-clip">
                     <Splide
                         options={{
                             type: 'fade',
@@ -90,46 +91,48 @@ export default function ThumbnailCarousel() {
                             </SplideSlide>
                         ))}
                     </Splide>
-                </div>
+                </FadeIn>
                 {/* Thumbnail Slider */}
-                <Splide
-                    options={{
-                        rewind: true,
-                        perPage: 2.5,
-                        isNavigation: true,
-                        gap: '1rem',
-                        focus: 'center',
-                        pagination: false,
-                        arrows: true,
-                    }}
-                    onMounted={(splide: SplideInstance) => {
-                        thumbsRef.current = splide;
-                        // Sync main slider when thumbnail is moved
-                        splide.on('moved', (newIndex) => {
-                            if (mainRef.current && mainRef.current.index !== newIndex) {
-                                mainRef.current.go(newIndex);
-                            }
-                        });
-                        splide.on('click', () => {
-                            const index = splide.index;
-                            mainRef.current?.go(index);
-                        });
-                    }}
-                    aria-label="Thumbnail slider"
-                    className="w-full h-full"
-                >
-                    {images.map((image, index) => (
-                        <SplideSlide key={index}>
-                            <div className="aspect-[3/3] w-full rounded-lg overflow-hidden">
-                                <img
-                                    src={image.full}
-                                    alt={`Thumbnail ${index + 1}`}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                        </SplideSlide>
-                    ))}
-                </Splide>
+                <FadeIn from="left">
+                    <Splide
+                        options={{
+                            rewind: true,
+                            perPage: 2.5,
+                            isNavigation: true,
+                            gap: '1rem',
+                            focus: 'center',
+                            pagination: false,
+                            arrows: true,
+                        }}
+                        onMounted={(splide: SplideInstance) => {
+                            thumbsRef.current = splide;
+                            // Sync main slider when thumbnail is moved
+                            splide.on('moved', (newIndex) => {
+                                if (mainRef.current && mainRef.current.index !== newIndex) {
+                                    mainRef.current.go(newIndex);
+                                }
+                            });
+                            splide.on('click', () => {
+                                const index = splide.index;
+                                mainRef.current?.go(index);
+                            });
+                        }}
+                        aria-label="Thumbnail slider"
+                        className="w-full h-full"
+                    >
+                        {images.map((image, index) => (
+                            <SplideSlide key={index}>
+                                <div className="aspect-[3/3] w-full rounded-lg overflow-hidden">
+                                    <img
+                                        src={image.full}
+                                        alt={`Thumbnail ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            </SplideSlide>
+                        ))}
+                    </Splide>
+                </FadeIn>
             </div>
         </Gallery>
     );

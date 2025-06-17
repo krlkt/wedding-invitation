@@ -9,7 +9,7 @@ const FadeIn: FC<
         variants={from === 'right' ? fadeInFromRight : from === 'left' ? fadeInFromLeft : fadeInVariants}
         initial="initial"
         whileInView={'animate'}
-        viewport={{ once: true }}
+        // viewport={{ once: true }}
         {...props}
     >
         {children}

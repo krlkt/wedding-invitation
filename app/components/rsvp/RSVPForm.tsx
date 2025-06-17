@@ -16,6 +16,7 @@ import Radio from '@mui/material/Radio';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@/app/icons/CheckIcon';
 import CrossIcon from '@/app/icons/CrossIcon';
+import FadeIn from '../FadeIn';
 
 const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -81,77 +82,81 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
         </div>
     ) : (
         <>
-            <p className="mb-4">
+            <FadeIn className="mb-4">
                 Please confirm your attendance before:
                 <br />
                 July 9<sup>th</sup>, 2025
-            </p>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-4 text-left">
-                <TextField
-                    className="w-full"
-                    {...register('name', { required: true })}
-                    label="Name (readonly)"
-                    slotProps={{
-                        input: {
-                            readOnly: true,
-                        },
-                    }}
-                />
-                <TextField
-                    select
-                    id="guest_number"
-                    className="w-full"
-                    label="Number of guest(s) including you"
-                    {...register('guest_number', { required: true })}
-                    defaultValue={rsvp?.guest_number ?? 1}
-                >
-                    {Array.from({ length: rsvp?.max_guests ?? 2 }, (_, i) => (
-                        <MenuItem key={i} value={i + 1}>
-                            {i + 1}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <TextField
-                    select
-                    id="attending"
-                    className="w-full"
-                    label="Will you attend?"
-                    {...register('attend', { required: true })}
-                    defaultValue={rsvp?.attend ?? 'yes'}
-                >
-                    <MenuItem value={'yes'}>Yes</MenuItem>
-                    <MenuItem value={'no'}>No</MenuItem>
-                </TextField>
-                {location === 'bali' && (
-                    <>
-                        <Controller
-                            name="food_choice"
-                            control={control}
-                            rules={{ required: 'Must be selected' }}
-                            render={({ field }) => (
-                                <FormControl>
-                                    <FormLabel id="row-radio-buttons-group-label">Choose your main course</FormLabel>
-                                    <RadioGroup row aria-labelledby="row-radio-buttons-group-label" {...field}>
-                                        <FormControlLabel value="chicken" control={<Radio />} label="Chicken" />
-                                        <FormControlLabel value="lamb" control={<Radio />} label="Lamb" />
-                                    </RadioGroup>
-                                </FormControl>
-                            )}
-                        />
-                        <TextField
-                            id="notes"
-                            label="Chef notes"
-                            multiline
-                            minRows={3}
-                            maxRows={8}
-                            {...register('notes')}
-                            defaultValue={rsvp?.notes ?? ''}
-                            helperText="Please tell us if you have any allergies or if you are a vegetarian / vegan (main course selection will be ignored). Otherwise please leave it empty :D"
-                        />
-                    </>
-                )}
-                <SubmitButton isSubmitting={isSubmitting} />
-            </form>
+            </FadeIn>
+            <FadeIn>
+                <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-4 text-left">
+                    <TextField
+                        className="w-full"
+                        {...register('name', { required: true })}
+                        label="Name (readonly)"
+                        slotProps={{
+                            input: {
+                                readOnly: true,
+                            },
+                        }}
+                    />
+                    <TextField
+                        select
+                        id="guest_number"
+                        className="w-full"
+                        label="Number of guest(s) including you"
+                        {...register('guest_number', { required: true })}
+                        defaultValue={rsvp?.guest_number ?? 1}
+                    >
+                        {Array.from({ length: rsvp?.max_guests ?? 2 }, (_, i) => (
+                            <MenuItem key={i} value={i + 1}>
+                                {i + 1}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                    <TextField
+                        select
+                        id="attending"
+                        className="w-full"
+                        label="Will you attend?"
+                        {...register('attend', { required: true })}
+                        defaultValue={rsvp?.attend ?? 'yes'}
+                    >
+                        <MenuItem value={'yes'}>Yes</MenuItem>
+                        <MenuItem value={'no'}>No</MenuItem>
+                    </TextField>
+                    {location === 'bali' && (
+                        <>
+                            <Controller
+                                name="food_choice"
+                                control={control}
+                                rules={{ required: 'Must be selected' }}
+                                render={({ field }) => (
+                                    <FormControl>
+                                        <FormLabel id="row-radio-buttons-group-label">
+                                            Choose your main course
+                                        </FormLabel>
+                                        <RadioGroup row aria-labelledby="row-radio-buttons-group-label" {...field}>
+                                            <FormControlLabel value="chicken" control={<Radio />} label="Chicken" />
+                                            <FormControlLabel value="lamb" control={<Radio />} label="Lamb" />
+                                        </RadioGroup>
+                                    </FormControl>
+                                )}
+                            />
+                            <TextField
+                                id="notes"
+                                label="Chef notes"
+                                multiline
+                                minRows={3}
+                                maxRows={8}
+                                {...register('notes')}
+                                defaultValue={rsvp?.notes ?? ''}
+                                helperText="Please tell us if you have any allergies or if you are a vegetarian / vegan (main course selection will be ignored). Otherwise please leave it empty :D"
+                            />
+                        </>
+                    )}
+                    <SubmitButton isSubmitting={isSubmitting} />
+                </form>
+            </FadeIn>
         </>
     );
 };

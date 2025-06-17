@@ -4,6 +4,7 @@ import BubbleText from './BubbleText';
 import './wishes.css';
 import Button from '../Button';
 import { useTransition } from 'react';
+import FadeIn from '../FadeIn';
 
 const Wishes = ({ wishes }: { wishes: { wishes: Array<Wish>; wishPage: number; totalPages: number } }) => {
     const router = useRouter();
@@ -21,7 +22,7 @@ const Wishes = ({ wishes }: { wishes: { wishes: Array<Wish>; wishPage: number; t
     };
 
     return (
-        <div className="space-y-4">
+        <FadeIn className="space-y-4">
             <div className="space-y-2 pl-3 visible-scroll">
                 {wishArray.map((wish) => (
                     <BubbleText
@@ -48,7 +49,7 @@ const Wishes = ({ wishes }: { wishes: { wishes: Array<Wish>; wishPage: number; t
                     Next
                 </Button>
             </div>
-        </div>
+        </FadeIn>
     );
 };
 
