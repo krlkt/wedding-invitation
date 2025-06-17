@@ -88,7 +88,7 @@ const DashboardPage = () => {
                 await importDataFromExcel(data);
             } catch (e: any) {
                 const errorMessage = e?.message || 'Unknown error occurred during import.';
-                enqueueSnackbar(`${errorMessage}`, { variant: 'warning' });
+                enqueueSnackbar(`${errorMessage}`, { variant: 'warning', persist: true });
                 setIsImporting(false);
                 fetchData();
                 return;
