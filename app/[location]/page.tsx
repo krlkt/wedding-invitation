@@ -31,10 +31,12 @@ export default async function Page({
     const offset = (wishPage - 1) * PAGE_SIZE;
 
     // Fetch wishes for current page
-    const { rows: wishes } = await query<Wish>('SELECT * FROM wish ORDER BY created_at DESC LIMIT $1 OFFSET $2', [
+    const { rows: rawWishes } = await query<Wish>('SELECT * FROM wish ORDER BY created_at DESC LIMIT $1 OFFSET $2', [
         PAGE_SIZE,
         offset,
     ]);
+    const wishes = JSON.parse(JSON.stringify(rawWishes));
+
     // Fetch total count of wishes
     const { rows: countResult } = await query<{ count: string }>('SELECT COUNT(*) AS count FROM wish');
     const totalCount = parseInt(countResult[0].count);
@@ -45,7 +47,9 @@ export default async function Page({
         name: guestName,
         location: location,
     });
-    const rsvp = rows[0];
+    const rawRsvp = rows[0];
+    // This is needed because Next is complaining that "Only plain objects can be passed to Client Components from Server Components"
+    const rsvp = JSON.parse(JSON.stringify(rawRsvp));
 
     if (location !== 'bali' && location !== 'jakarta' && location !== 'malang') return notFound();
 
