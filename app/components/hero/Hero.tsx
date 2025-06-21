@@ -10,31 +10,26 @@ const Hero = () => {
     return (
         <div className="hero-background grow flex flex-col items-center justify-center w-full h-full text-center">
             <div className="inner-wrapper max-w-[600px] flex flex-col gap-4 relative px-[25%] py-[15%] items-center">
-                <div id="monogram" className="relative w-24 h-32">
+                <div id="monogram" className="relative w-24 h-28">
                     <Image
                         src={'/images/monogram/monogram.webp'}
                         alt={'Karel & Sabrina Monogram'}
                         fill
-                        className="scale-[2]"
                         priority
                         fetchPriority="high"
                     />
                 </div>
-                <div id="hero-text" className="text-primary-main z-10 flex flex-col font-heading gap-4">
+                <div id="hero-text" className="text-black z-10 flex flex-col font-heading gap-4">
                     <p className="text-lg">The Wedding of</p>
                     <div>
-                        <p className="font-cursive2 text-primary-main text-5xl">Karel</p>
+                        <p className="font-cursive2 text-5xl">Karel</p>
                         {isJakartaOrMalang && (
-                            <p className="text-primary-main text-md text-gray-600">
-                                Third child of Rendy Tirtanadi & Elliana Firmanto
-                            </p>
+                            <p className="text-md text-gray-600">Third child of Rendy Tirtanadi & Elliana Firmanto</p>
                         )}
-                        <p className="font-cursive2 text-primary-main text-5xl">&</p>
-                        <p className="font-cursive2 text-primary-main text-5xl">Sabrina</p>
+                        <p className="font-cursive2 text-5xl">&</p>
+                        <p className="font-cursive2 text-5xl">Sabrina</p>
                         {isJakartaOrMalang && (
-                            <p className="text-primary-main text-md text-gray-600">
-                                First child of Hadi Budiono & Weny
-                            </p>
+                            <p className="text-md text-gray-600">First child of Hadi Budiono & Weny</p>
                         )}
                     </div>
                     {!isJakartaOrMalang && <p className="text-lg">09.09.2025</p>}
