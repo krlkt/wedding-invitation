@@ -1,10 +1,15 @@
-//@ts-ignore
+'use client';
+
+import { useRef } from 'react';
+// @ts-ignore splide problem
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-import '@splidejs/react-splide/css'; // Splide CSS
+import type { Splide as SplideInstance } from '@splidejs/splide';
 import { Gallery, Item } from 'react-photoswipe-gallery';
-import 'photoswipe/dist/photoswipe.css'; // PhotoSwipe CSS
-import { useRef, useState } from 'react';
-import Image from 'next/image';
+
+import '@splidejs/react-splide/css';
+import 'photoswipe/dist/photoswipe.css';
+import './image-gallery.css';
+import FadeIn from '../FadeIn';
 
 const images = [
     {
@@ -37,114 +42,123 @@ const images = [
         width: 7000,
         height: 4600,
     },
-    // {
-    //     full: '/images/gallery/gal7.jpg',
-    //     width: 4000,
-    //     height: 6000,
-    // },
-    // {
-    //     full: '/images/gallery/gal8.jpg',
-    //     width: 6000,
-    //     height: 4000,
-    // },
-    // {
-    //     full: '/images/gallery/gal9.jpg',
-    //     width: 4000,
-    //     height: 6000,
-    // },
-    // {
-    //     full: '/images/gallery/gal10.jpg',
-    //     width: 4300,
-    //     height: 6500,
-    // },
-    // {
-    //     full: '/images/gallery/gal11.jpg',
-    //     width: 2600,
-    //     height: 3900,
-    // },
-    // {
-    //     full: '/images/gallery/gal12.jpg',
-    //     width: 4000,
-    //     height: 6000,
-    // },
-    // {
-    //     full: '/images/gallery/gal13.jpg',
-    //     width: 4000,
-    //     height: 6000,
-    // },
-    // {
-    //     full: '/images/gallery/gal14.jpg',
-    //     width: 4500,
-    //     height: 6800,
-    // },
-    // {
-    //     full: '/images/gallery/gal15.jpg',
-    //     width: 7000,
-    //     height: 4600,
-    // },
-    // {
-    //     full: '/images/gallery/gal16.jpg',
-    //     width: 3800,
-    //     height: 5700,
-    // },
+    {
+        full: '/images/gallery/gal48.jpg',
+        width: 1000,
+        height: 1500,
+    },
+    {
+        full: '/images/gallery/gal59.jpg',
+        width: 920,
+        height: 1300,
+    },
+    {
+        full: '/images/gallery/gal68.jpg',
+        width: 860,
+        height: 1470,
+    },
+    {
+        full: '/images/gallery/gal78.jpg',
+        width: 1500,
+        height: 750,
+    },
 ];
 
-const ImageGallery = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const splideRef = useRef(null);
+export default function ImageGallery() {
+    const mainRef = useRef<SplideInstance | null>(null);
+    const thumbsRef = useRef<SplideInstance | null>(null);
 
     return (
-        <div className="w-full overflow-hidden">
-            {/* Gallery main photo */}
-            <div className="w-full h-[25rem] relative">
-                <Image
-                    src={images[currentIndex].full}
-                    alt={'Gallery current focus'}
-                    fill
-                    className="object-cover p-4 rounded-[2rem]"
-                />
-            </div>
-            {/* Photo Slider */}
-            <div className="w-full overflow-hidden">
-                <Splide
-                    ref={splideRef}
-                    tag="section"
-                    options={{
-                        type: 'loop',
-                        height: '8rem',
-                        padding: '2rem',
-                        gap: '1rem',
-                        focus: 'center',
-                        autoWidth: true,
-                    }}
-                    aria-label="Gallery"
-                    onMoved={(_: any, newIndex: number) => {
-                        setCurrentIndex(newIndex);
-                    }}
-                >
-                    <Gallery>
+        <Gallery>
+            <div className="w-full mx-auto max-w-full overflow-hidden">
+                {/* Main Slider */}
+                <FadeIn className="mx-6 rounded-lg overflow-clip">
+                    <div className="relative">
+                        <Splide
+                            options={{
+                                type: 'fade',
+                                heightRatio: 1.3,
+                                pagination: false,
+                                arrows: false,
+                                cover: true,
+                            }}
+                            onMounted={(splide: SplideInstance) => {
+                                mainRef.current = splide;
+                            }}
+                            onMove={(_: SplideInstance, newIndex: number) => {
+                                thumbsRef.current?.go(newIndex);
+                            }}
+                            aria-label="Main image slider"
+                            className="mb-4 w-full"
+                        >
+                            {images.map((image, index) => (
+                                <SplideSlide key={index}>
+                                    <Item
+                                        original={image.full}
+                                        thumbnail={image.full}
+                                        width={image.width}
+                                        height={image.height}
+                                    >
+                                        {({ ref, open }) => (
+                                            <div ref={ref} onClick={open} className="cursor-pointer w-full h-full">
+                                                <img
+                                                    src={image.full}
+                                                    alt={`Image ${index + 1}`}
+                                                    className="object-cover w-full h-full"
+                                                />
+                                            </div>
+                                        )}
+                                    </Item>
+                                </SplideSlide>
+                            ))}
+                        </Splide>
+                        <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-white text-xs pointer-events-none bg-black bg-opacity-20 px-2 rounded-xl">
+                            Click to see fullscreen!
+                        </div>
+                    </div>
+                </FadeIn>
+                {/* Slider */}
+                <FadeIn from="left">
+                    <Splide
+                        options={{
+                            rewind: true,
+                            perPage: 2.5,
+                            isNavigation: true,
+                            gap: '1rem',
+                            focus: 'center',
+                            pagination: false,
+                            arrows: true,
+                        }}
+                        onMounted={(splide: SplideInstance) => {
+                            thumbsRef.current = splide;
+                            // Sync main slider when slider is moved
+                            splide.on('moved', (newIndex) => {
+                                if (mainRef.current && mainRef.current.index !== newIndex) {
+                                    mainRef.current.go(newIndex);
+                                }
+                            });
+                            splide.on('click', () => {
+                                const index = splide.index;
+                                mainRef.current?.go(index);
+                            });
+                        }}
+                        aria-label="Image slider"
+                        className="w-full h-full"
+                    >
                         {images.map((image, index) => (
                             <SplideSlide key={index}>
-                                <Item original={image.full} width={image.width} height={image.height}>
-                                    {({ ref, open }) => (
-                                        <Image
-                                            ref={ref}
-                                            src={image.full}
-                                            alt={`Thumbnail ${index + 1}`}
-                                            onClick={open}
-                                            className="w-[5rem] h-[5rem] sm:w-[6rem] sm:h-[6rem] md:w-[7rem] md:h-[7rem] object-cover rounded-xl cursor-pointer"
-                                            width={300}
-                                            height={300}
-                                        />
-                                    )}
-                                </Item>
+                                <div className="aspect-[3/3] w-full rounded-lg overflow-hidden">
+                                    <img
+                                        src={image.full}
+                                        alt={`Slider ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
                             </SplideSlide>
                         ))}
-                    </Gallery>
-                </Splide>
+                    </Splide>
+                </FadeIn>
             </div>
-        </div>
+        </Gallery>
     );
-};
-
-export default ImageGallery;
+}

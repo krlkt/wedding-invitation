@@ -27,7 +27,7 @@ import { motion } from 'framer-motion';
 import FAQ from '../components/faq/FAQ';
 import Button from '../components/Button';
 import YouTubeEmbed from '../components/prewedding/YoutubeEmbed';
-import ThumbnailCarousel from '../components/gallery/ThumbnailCarousel';
+import ImageGallery from '../components/gallery/ImageGallery';
 import { rotateAnimation } from '../utils/animation';
 import FadeIn from '../components/FadeIn';
 import GrowIn from '../components/GrowIn';
@@ -183,9 +183,11 @@ export default function InvitationPage({
 
                         <div className="flex flex-col items-center text-center relative w-full max-w-screen-md mx-auto">
                             <SectionTitle title="Gallery" />
-                            <ThumbnailCarousel />
+                            <ImageGallery />
                             <div className="mt-4">
-                                <Button onClick={() => window.open('/gallery', '_blank')}>See more photos 📸</Button>
+                                <Button onClick={() => window.open('/gallery', '_blank')}>
+                                    See the FULL gallery 📸
+                                </Button>
                             </div>
                         </div>
                     </section>
