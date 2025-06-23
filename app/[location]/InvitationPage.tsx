@@ -316,10 +316,11 @@ export default function InvitationPage({
                         </p>
                         <p className="text-md text-center mt-4">
                             This wedding invitation is handcoded by your one and only{' '}
-                            <b>
-                                <u>GROOM</u>
-                            </b>
-                            &#169;
+                            <a href="https://instagram.com/karelkarunia" target="_blank" rel="noopener noreferrer">
+                                <b>
+                                    <u>GROOM</u>&#169;
+                                </b>
+                            </a>
                         </p>
                     </section>
                 </div>
