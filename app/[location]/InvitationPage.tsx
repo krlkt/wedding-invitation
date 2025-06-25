@@ -84,7 +84,7 @@ export default function InvitationPage({
             <LoaderScreen isVisible={isLoaderScreenVisible} />
             <main className="relative flex w-full bg-secondary-main/90">
                 <div id="background-overlay" className="texture-overlay" />
-                <div className="hidden md:block md:w-[max(60%,100%-450px)] fixed left-0 top-0 w-full h-full overflow-hidden z-10">
+                <div className="hidden md:block md:flex-1 md:max-w-[calc(100%-450px)] w-full fixed left-0 top-0 h-full overflow-hidden z-10">
                     <div id="overlay" className="w-full h-full absolute -z-10 overlay" />
                     <div className="absolute bottom-1/2 translate-y-16 w-full text-center text-secondary-main font-serif">
                         <h1 className="sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-shadow-header">
@@ -105,7 +105,7 @@ export default function InvitationPage({
                         />
                     </div>
                 </div>
-                <div className="flex flex-col items-center justify-between md:w-[min(40%,450px)] font-serif md:ml-[max(60%,100%-450px)] overflow-x-clip">
+                <div className="flex flex-col items-center justify-between md:max-w-[450px] w-full font-serif ml-auto overflow-x-clip">
                     <Music />
                     <div className="relative w-full bg-white">
                         <section className="h-dvh flex flex-col relative overflow-hidden">
