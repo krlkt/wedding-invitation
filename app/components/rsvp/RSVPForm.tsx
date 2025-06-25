@@ -132,12 +132,28 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
                                 rules={{ required: 'Must be selected' }}
                                 render={({ field }) => (
                                     <FormControl>
-                                        <FormLabel id="row-radio-buttons-group-label">
+                                        <FormLabel id="row-radio-buttons-group-label" className="mb-2">
                                             Choose your main course
                                         </FormLabel>
                                         <RadioGroup row aria-labelledby="row-radio-buttons-group-label" {...field}>
-                                            <FormControlLabel value="chicken" control={<Radio />} label="Chicken" />
-                                            <FormControlLabel value="lamb" control={<Radio />} label="Lamb" />
+                                            <FormControlLabel
+                                                value="chicken"
+                                                control={<Radio />}
+                                                label={
+                                                    <p className="text-sm">
+                                                        Baked chicken leg wrapped in puff pastry with mushroom sauce
+                                                    </p>
+                                                }
+                                            />
+                                            <FormControlLabel
+                                                value="lamb"
+                                                control={<Radio />}
+                                                label={
+                                                    <p className="text-sm">
+                                                        Roasted lamb chop with miso and herb butter
+                                                    </p>
+                                                }
+                                            />
                                         </RadioGroup>
                                     </FormControl>
                                 )}
