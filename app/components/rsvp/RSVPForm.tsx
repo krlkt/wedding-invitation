@@ -32,7 +32,7 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
         defaultValues: {
             id: rsvp.id,
             name: rsvp.name,
-            attend: rsvp.attend ?? '1',
+            attend: rsvp.attend ?? 'yes',
             notes: rsvp.notes ?? '',
             food_choice: rsvp.food_choice ?? 'chicken',
             location: rsvp.location,
