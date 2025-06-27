@@ -186,7 +186,7 @@ export default function InvitationPage({
                             <ImageGallery />
                             <div className="mt-4">
                                 <Button onClick={() => window.open('/gallery', '_blank')}>
-                                    See the FULL gallery 📸
+                                    See even MORE photos HERE 📸
                                 </Button>
                             </div>
                         </div>
