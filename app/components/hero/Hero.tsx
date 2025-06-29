@@ -24,15 +24,25 @@ const Hero = () => {
                     <div>
                         <p className="font-cursive2 text-5xl">Karel</p>
                         {isJakartaOrMalang && (
-                            <p className="text-md text-gray-600">Third child of Rendy Tirtanadi & Elliana Firmanto</p>
+                            <p className="text-md text-gray-700">
+                                Third child of <br />
+                                Rendy Tirtanadi & Elliana Firmanto
+                            </p>
                         )}
                         <p className="font-cursive2 text-5xl">&</p>
                         <p className="font-cursive2 text-5xl">Sabrina</p>
                         {isJakartaOrMalang && (
-                            <p className="text-md text-gray-600">First child of Hadi Budiono & Weny</p>
+                            <p className="text-md text-gray-700">
+                                First child of <br />
+                                Hadi Budiono & Weny
+                            </p>
                         )}
                     </div>
-                    {!isJakartaOrMalang && <p className="text-lg">09.09.2025</p>}
+                    {!isJakartaOrMalang && (
+                        <p className="text-lg">
+                            {location === 'bali' ? '09.09.2025' : location === 'malang' ? '13.09.2025' : '20.09.2025'}
+                        </p>
+                    )}
                 </div>
             </div>
             <ScrollDownText />

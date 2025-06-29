@@ -91,7 +91,7 @@ export default function InvitationPage({
                             Karel and Sabrina
                         </h1>
                         <h2 className="sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-shadow-header font-cursive3 text-gray-300">
-                            09.09.2025
+                            {location === 'bali' ? '09.09.2025' : location === 'malang' ? '13.09.2025' : '20.09.2025'}
                         </h2>
                     </div>
                     <div id="hero" className="w-full h-full absolute -z-20">
@@ -154,7 +154,7 @@ export default function InvitationPage({
                         <SaveTheDateOrnament />
                     </section>
                     {/* RSVP */}
-                    <section id="rsvp" className="relative py-12 pb-16 p-6 bg-primary-main">
+                    <section id="rsvp" className="relative w-full py-12 pb-16 p-6 bg-primary-main">
                         <BorderedDiv>
                             <SectionTitle title="RSVP" />
                             <RSVPFORM rsvp={rsvp} />
@@ -217,48 +217,52 @@ export default function InvitationPage({
                         </FadeIn>
                     </section>
                     {/* FAQ */}
-                    <section className="py-16 pb-28 relative w-full bg-primary-main">
-                        <FadeIn from="left" className="absolute -top-0 -left-16">
-                            <Image
-                                src={'/images/ornaments/baby_orn.png'}
-                                alt={'Baby breath'}
-                                width={200}
-                                height={100}
-                                className="rotate-90 pointer-events-none"
-                            />
-                        </FadeIn>
-                        <SectionTitle title="FAQ" color="secondary" />
-                        <FadeIn className="w-full px-8">
-                            <FAQ />
-                        </FadeIn>
-                        <FadeIn from="right" className="absolute bottom-12 -right-10">
-                            <Image
-                                src={'/images/ornaments/baby_orn4.png'}
-                                alt={'Baby breath'}
-                                width={200}
-                                height={100}
-                                className="-rotate-180 pointer-events-none"
-                            />
-                        </FadeIn>
-                        <div className="section-transition-secondary-fix" />
-                    </section>
+                    {location === 'bali' && (
+                        <section className="py-16 pb-28 relative w-full bg-primary-main">
+                            <FadeIn from="left" className="absolute -top-0 -left-16">
+                                <Image
+                                    src={'/images/ornaments/baby_orn.png'}
+                                    alt={'Baby breath'}
+                                    width={200}
+                                    height={100}
+                                    className="rotate-90 pointer-events-none"
+                                />
+                            </FadeIn>
+                            <SectionTitle title="FAQ" color="secondary" />
+                            <FadeIn className="w-full px-8">
+                                <FAQ />
+                            </FadeIn>
+                            <FadeIn from="right" className="absolute bottom-12 -right-10">
+                                <Image
+                                    src={'/images/ornaments/baby_orn4.png'}
+                                    alt={'Baby breath'}
+                                    width={200}
+                                    height={100}
+                                    className="-rotate-180 pointer-events-none"
+                                />
+                            </FadeIn>
+                            <div className="section-transition-secondary-fix" />
+                        </section>
+                    )}
                     {/* Dress code */}
-                    <section className="pt-52 px-6 relative w-full overflow-hidden pb-12">
-                        <motion.div
-                            className="absolute -top-20 -left-[28rem]"
-                            animate={rotateAnimation([183, 178, 183])}
-                            style={{ transformOrigin: 'center right' }}
-                        >
-                            <Image
-                                src={'/images/ornaments/orn6.png'}
-                                alt={'Ornament blue flower'}
-                                width={400}
-                                height={100}
-                            />
-                        </motion.div>
-                        <SectionTitle title="Dress code" />
-                        <DressCode />
-                    </section>
+                    {location === 'bali' && (
+                        <section className="pt-52 px-6 relative w-full overflow-hidden pb-12">
+                            <motion.div
+                                className="absolute -top-20 -left-[28rem]"
+                                animate={rotateAnimation([183, 178, 183])}
+                                style={{ transformOrigin: 'center right' }}
+                            >
+                                <Image
+                                    src={'/images/ornaments/orn6.png'}
+                                    alt={'Ornament blue flower'}
+                                    width={400}
+                                    height={100}
+                                />
+                            </motion.div>
+                            <SectionTitle title="Dress code" />
+                            <DressCode />
+                        </section>
+                    )}
                     {/* Wedding Gift */}
                     {/* TODO: add QRIS */}
                     <section className="py-16 pb-20 px-8 relative bg-primary-main">

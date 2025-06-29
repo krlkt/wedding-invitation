@@ -26,13 +26,36 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
             </FadeIn>
             <FadeIn className="text-4xl font-heading">Reception</FadeIn>
             <FadeIn>
-                <p className="text-2xl font-semibold">Tirtha Uluwatu</p>
-                <p className="text-md">15:00 - Midnight</p>
-                <p className="text-md">Bali, Indonesia</p>
+                <p className="text-2xl font-semibold">
+                    {location === 'bali'
+                        ? 'Tirtha Uluwatu'
+                        : location === 'malang'
+                        ? 'KDS Restaurant'
+                        : 'Angke Kelapa Gading'}
+                </p>
+                <p className="text-md">
+                    {location === 'bali' ? '15:00 - Midnight' : location === 'malang' ? '6 PM – 10 PM' : '6 PM – 10 PM'}
+                </p>
+                <p className="text-md">
+                    {location === 'bali'
+                        ? 'Bali, Indonesia'
+                        : location === 'malang'
+                        ? 'Malang, Indonesia'
+                        : 'Jakarta, Indonesia'}
+                </p>
             </FadeIn>
             <FadeIn>
                 <Button>
-                    <a target="_blank" href="https://maps.app.goo.gl/iu2DLDD165WpfF7PA">
+                    <a
+                        target="_blank"
+                        href={
+                            location === 'bali'
+                                ? 'https://maps.app.goo.gl/iu2DLDD165WpfF7PA'
+                                : location === 'malang'
+                                ? 'https://maps.app.goo.gl/PNwWNcDREkXbNuiR7'
+                                : 'https://maps.app.goo.gl/HZzTRkNjrPdh4QLj8'
+                        }
+                    >
                         <span className="flex gap-2 justify-center items-center">
                             Google maps
                             <div className="w-4 h-4">

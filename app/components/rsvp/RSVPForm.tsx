@@ -85,7 +85,15 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
             <FadeIn className="mb-4">
                 Please confirm your attendance before:
                 <br />
-                July 9<sup>th</sup>, 2025
+                {location === 'bali' ? (
+                    <>
+                        July 9<sup>th</sup>, 2025
+                    </>
+                ) : (
+                    <>
+                        September 1<sup>st</sup>, 2025
+                    </>
+                )}
             </FadeIn>
             <FadeIn>
                 <form onSubmit={handleSubmit(onSubmit)} className="flex-col flex gap-4 text-left">
