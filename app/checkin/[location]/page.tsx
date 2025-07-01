@@ -15,7 +15,7 @@ async function getGuests(location: string): Promise<Guest[]> {
          WHERE r.location = ? AND (r.attend IS NULL OR r.attend != 'no')`,
         [location]
     );
-    return rows.map(row => ({ ...row })) as Guest[];
+    return rows.map((row: any) => ({ ...row })) as Guest[];
 }
 
 export default async function CheckinPage({ params }: { params: { location: string } }) {
