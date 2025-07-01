@@ -24,19 +24,32 @@ const Music = () => {
     });
 
     const handleMusicClick = useCallback(() => {
-        if (playMusic) {
-            audio.current?.pause();
-            setPlayMusic(false);
+        if (audio.current?.paused) {
+            audio.current?.play().catch(() => {
+                setPlayMusic(false);
+            });
         } else {
-            audio.current?.play();
-            setPlayMusic(true);
+            audio.current?.pause();
         }
-    }, [playMusic]);
+    }, []);
 
     useEffect(() => {
-        if (audio.current?.paused) setPlayMusic(false);
-        else setPlayMusic(true);
-    }, [playMusic]);
+        const audioElement = audio.current;
+        if (!audioElement) return;
+
+        const onPlay = () => setPlayMusic(true);
+        const onPause = () => setPlayMusic(false);
+
+        audioElement.addEventListener('play', onPlay);
+        audioElement.addEventListener('pause', onPause);
+
+        setPlayMusic(!audioElement.paused);
+
+        return () => {
+            audioElement.removeEventListener('play', onPlay);
+            audioElement.removeEventListener('pause', onPause);
+        };
+    }, []);
 
     return (
         <>
