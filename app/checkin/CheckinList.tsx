@@ -95,17 +95,19 @@ export default function CheckinList({ initialGuests }: CheckinListProps) {
                         margin="normal"
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
-                    <List>
-                        {filteredGuests.map((guest) => (
-                            <ListItem key={guest.id} divider>
-                                <ListItemText primary={guest.name} />
-                                <Switch
-                                    checked={!!guest.checked_in}
-                                    onChange={(e) => handleToggle(guest, e.target.checked)}
-                                />
-                            </ListItem>
-                        ))}
-                    </List>
+                    <div className="min-h-[300px] overflow-y-auto">
+                        <List>
+                            {filteredGuests.map((guest) => (
+                                <ListItem key={guest.id} divider>
+                                    <ListItemText primary={guest.name} />
+                                    <Switch
+                                        checked={!!guest.checked_in}
+                                        onChange={(e) => handleToggle(guest, e.target.checked)}
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </div>
                 </CardContent>
             </Card>
             <Modal
