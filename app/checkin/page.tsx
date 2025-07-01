@@ -1,8 +1,7 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import DashboardPage from './DashboardPage';
+import { cookies } from 'next/headers';
 
-export default async function Page() {
+export default function CheckinPage() {
     const cookieStore = cookies();
     const loggedIn = cookieStore.get('loggedIn');
 
@@ -10,5 +9,5 @@ export default async function Page() {
         redirect('/login');
     }
 
-    return <DashboardPage />;
+    redirect('/checkin/bali');
 }
