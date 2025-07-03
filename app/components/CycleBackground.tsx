@@ -11,29 +11,36 @@ const backgroundImagesSrc = [
 ];
 
 const CycleBackground: FC<PropsWithChildren> = ({ children }) => {
-    const [bgImageIndex, setBgImageIndex] = useState(0);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [previousImageIndex, setPreviousImageIndex] = useState<number | null>(
+        null
+    );
+    const [isFading, setIsFading] = useState(false);
 
+    // Preload images
     useEffect(() => {
-        const animationAndBackgroundInterval = setInterval(() => {
-            // Change background image
-            setBgImageIndex((currentBgImgIndex) =>
-                backgroundImagesSrc.length - 1 === currentBgImgIndex ? 0 : currentBgImgIndex + 1
-            );
-        }, 4000);
-
-        return () => clearInterval(animationAndBackgroundInterval);
-        // Prevent rerender by letting dependency array be empty
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        backgroundImagesSrc.forEach((src) => {
+            const img = new window.Image();
+            img.src = src;
+        });
     }, []);
 
+    // Cycle images
     useEffect(() => {
-        const hero = document.getElementById('hero');
-        if (!hero) return;
-        // Reset animation
-        hero.classList.remove('animateImage');
-        void hero.offsetWidth;
-        hero.classList.add('animateImage');
-    }, [bgImageIndex]);
+        const timer = setInterval(() => {
+            setIsFading(true);
+            setPreviousImageIndex(currentImageIndex);
+            setCurrentImageIndex(
+                (prev) => (prev + 1) % backgroundImagesSrc.length
+            );
+        }, 4000);
+        return () => clearInterval(timer);
+    }, [currentImageIndex]);
+
+    const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+        e.currentTarget.classList.add('animateImage');
+        setIsFading(false);
+    };
 
     return (
         <section
@@ -42,14 +49,29 @@ const CycleBackground: FC<PropsWithChildren> = ({ children }) => {
         >
             <div id="overlay" className="w-full h-full absolute -z-10 overlay" />
             <div id="hero" className="w-full h-full absolute -z-20">
+                {previousImageIndex !== null && (
+                    <Image
+                        key={previousImageIndex}
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        className="w-full h-full object-cover absolute inset-0 animateImage"
+                        src={backgroundImagesSrc[previousImageIndex]}
+                        alt="couple image"
+                        priority
+                    />
+                )}
                 <Image
+                    key={currentImageIndex}
                     width={0}
                     height={0}
                     sizes="100vw"
-                    className="w-full h-full object-cover animateImage"
-                    src={backgroundImagesSrc[bgImageIndex]}
+                    className="w-full h-full object-cover absolute inset-0 transition-opacity duration-1000"
+                    style={{ opacity: isFading ? 0 : 1 }}
+                    src={backgroundImagesSrc[currentImageIndex]}
                     alt="couple image"
-                    priority={true}
+                    priority
+                    onLoad={handleLoad}
                 />
             </div>
             {children}
