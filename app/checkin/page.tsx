@@ -6,7 +6,7 @@ export default function CheckinPage() {
     const loggedIn = cookieStore.get('loggedIn');
 
     if (!loggedIn || loggedIn.value !== 'true') {
-        redirect('/login');
+        redirect('/login?redirect=/checkin');
     }
 
     redirect('/checkin/bali');

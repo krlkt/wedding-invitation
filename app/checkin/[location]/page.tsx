@@ -23,7 +23,7 @@ export default async function CheckinPage({ params }: { params: { location: stri
     const loggedIn = cookieStore.get('loggedIn');
 
     if (!loggedIn || loggedIn.value !== 'true') {
-        redirect('/login');
+        redirect(`/login?redirect=/checkin/${params.location}`);
     }
 
     const validLocations = ['bali', 'jakarta', 'malang'];

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { TextField, Button, Typography, Alert } from '@mui/material';
 
 export default function LoginPage() {
@@ -9,6 +9,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -21,7 +22,8 @@ export default function LoginPage() {
         });
 
         if (res.ok) {
-            router.push('/checkin/bali'); // Redirect to a default checkin page after successful login
+            const redirectUrl = searchParams.get('redirect') || '/checkin/bali';
+            router.push(redirectUrl);
         } else {
             const data = await res.json();
             setError(data.message || 'Login failed');

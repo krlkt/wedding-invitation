@@ -7,7 +7,7 @@ export default async function Page() {
     const loggedIn = cookieStore.get('loggedIn');
 
     if (!loggedIn || loggedIn.value !== 'true') {
-        redirect('/login');
+        redirect('/login?redirect=/dashboard');
     }
 
     return <DashboardPage />;
