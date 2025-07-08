@@ -99,7 +99,7 @@ export default function CheckinList({ initialGuests }: CheckinListProps) {
                         <List>
                             {filteredGuests.map((guest) => (
                                 <ListItem key={guest.id} divider>
-                                    <ListItemText primary={guest.name} />
+                                    <ListItemText primary={guest.name} secondary={guest.location === 'malang' ? guest.group : ''} />
                                     <Switch
                                         checked={!!guest.checked_in}
                                         onChange={(e) => handleToggle(guest, e.target.checked)}

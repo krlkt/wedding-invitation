@@ -8,6 +8,7 @@ export interface RSVP {
     notes: string;
     location: string;
     link: string;
+    group?: string;
 }
 
 export type RSVPForm = Partial<RSVP>;

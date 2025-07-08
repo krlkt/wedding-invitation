@@ -50,6 +50,7 @@ const DashboardPage = () => {
             notes: undefined,
             location: 'jakarta',
             link: '',
+            group: undefined,
         });
         fetchData();
     };
@@ -131,6 +132,7 @@ const DashboardPage = () => {
         },
         { field: 'notes', headerName: 'Notes', width: 200, editable: true },
         { field: 'food_choice', headerName: 'Food choice', width: 120, editable: true },
+        { field: 'group', headerName: 'Group', width: 120, sortable: true, editable: true },
         {
             field: 'actions',
             type: 'actions',
@@ -219,6 +221,15 @@ const DashboardPage = () => {
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     sx={{ flex: 1 }}
                 />
+
+                {form.location === 'malang' && (
+                    <TextField
+                        label="Group"
+                        value={form.group || ''}
+                        onChange={(e) => setForm({ ...form, group: e.target.value })}
+                        sx={{ flex: 1 }}
+                    />
+                )}
 
                 <TextField
                     label="Max guests"

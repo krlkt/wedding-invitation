@@ -58,8 +58,8 @@ export const addParticipant = async (data: RSVPForm) => {
 
     await query(
         `
-        INSERT INTO rsvp (id, name, attend, max_guests, guest_number, notes, location, food_choice)
-        VALUES ($id, $name, $attend, $max_guests, $guest_number, $notes, $location, $food_choice)
+        INSERT INTO rsvp (id, name, attend, max_guests, guest_number, notes, location, food_choice, "group")
+        VALUES ($id, $name, $attend, $max_guests, $guest_number, $notes, $location, $food_choice, $group)
         ON CONFLICT(id) DO UPDATE SET
             name = excluded.name,
             attend = excluded.attend,
@@ -67,7 +67,8 @@ export const addParticipant = async (data: RSVPForm) => {
             guest_number = excluded.guest_number,
             notes = excluded.notes,
             food_choice=excluded.food_choice,
-            location = excluded.location;
+            location = excluded.location,
+            "group" = excluded."group";
         `,
         {
             id: data.id ?? null, // pass null if undefined to allow auto-increment
@@ -78,6 +79,7 @@ export const addParticipant = async (data: RSVPForm) => {
             notes: data.notes ?? null,
             food_choice: data.food_choice ?? null,
             location: data.location,
+            group: data.group ?? null,
         }
     );
 
@@ -113,7 +115,7 @@ export const importDataFromExcel = async (rows: any[]) => {
                 notes: row.notes ?? null,
                 food_choice: row.food_choice ?? null,
                 location: row.location,
-                link: '',
+                group: row.group ?? null
             });
         } catch (err: any) {
             total--;
