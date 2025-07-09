@@ -255,6 +255,7 @@ const DashboardPage = () => {
                 autoHeight
                 disableRowSelectionOnClick
                 processRowUpdate={processRowUpdate}
+                showToolbar
             />
         </Box>
     );
