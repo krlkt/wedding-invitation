@@ -21,9 +21,9 @@ import { RSVP, RSVPForm } from '../models/rsvp';
 import { addParticipant, getParticipants, deleteParticipant, importDataFromExcel } from './action';
 import { useSnackbar } from 'notistack';
 
-const DashboardPage = () => {
+const DashboardClientPage = ({ initialData }: { initialData: RSVP[] }) => {
     const { enqueueSnackbar } = useSnackbar();
-    const [data, setData] = useState<RSVP[]>([]);
+    const [data, setData] = useState<RSVP[]>(initialData);
     const [isImporting, setIsImporting] = useState(false);
     const [form, setForm] = useState<RSVPForm>({
         name: '',
@@ -34,9 +34,16 @@ const DashboardPage = () => {
         location: 'jakarta',
         link: '',
     });
+    const [filterModel, setFilterModel] = useState<GridFilterModel>({
+        items: [],
+        quickFilterExcludeHiddenColumns: true,
+        quickFilterValues: [''],
+    });
 
     const fetchData = async () => {
-        const participants = await getParticipants();
+        // Re-fetch all data if no initialData is provided (e.g., for the main dashboard)
+        // Or re-fetch based on the current location if it's a dynamic route
+        const participants = await getParticipants(); // This will fetch all data
         setData(participants);
     };
 
@@ -101,10 +108,6 @@ const DashboardPage = () => {
         };
         reader.readAsBinaryString(file);
     };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 90 },
@@ -261,7 +264,7 @@ const DashboardPage = () => {
     );
 };
 
-export default DashboardPage;
+export default DashboardClientPage;
 
 const LinkCell = ({ link }: { link: string }) => {
     const [hovered, setHovered] = useState(false);

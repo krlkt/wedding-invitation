@@ -1,8 +1,9 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import DashboardPage from './DashboardPage';
+import { getParticipants } from './action';
+import DashboardClientPage from './DashboardClientPage';
 
-export default async function Page() {
+export default async function DashboardPage() {
     const cookieStore = cookies();
     const loggedIn = cookieStore.get('loggedIn');
 
@@ -10,5 +11,6 @@ export default async function Page() {
         redirect('/login?redirect=/dashboard');
     }
 
-    return <DashboardPage />;
+    const data = await getParticipants();
+    return <DashboardClientPage initialData={data} />;
 }

@@ -89,8 +89,18 @@ export const addParticipant = async (data: RSVPForm) => {
     revalidatePath('/');
 };
 
-export const getParticipants = async () => {
-    const { rows } = await query<RSVP>(`SELECT * FROM rsvp ORDER BY id DESC`);
+export const getParticipants = async (location?: string) => {
+    let queryString = `SELECT * FROM rsvp`;
+    const params: (string | number)[] = [];
+
+    if (location) {
+        queryString += ` WHERE location = ?`;
+        params.push(location);
+    }
+
+    queryString += ` ORDER BY id DESC`;
+
+    const { rows } = await query<RSVP>(queryString, params);
     // Update UI
     revalidatePath('/');
     return rows;
