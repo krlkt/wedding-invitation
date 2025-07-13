@@ -2,7 +2,7 @@
 
 import '../globals.css';
 import * as XLSX from 'xlsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DataGrid, GridColDef, GridRowsProp, GridActionsCellItem } from '@mui/x-data-grid';
 import {
     TextField,
@@ -33,11 +33,6 @@ const DashboardClientPage = ({ initialData }: { initialData: RSVP[] }) => {
         notes: undefined,
         location: 'jakarta',
         link: '',
-    });
-    const [filterModel, setFilterModel] = useState<GridFilterModel>({
-        items: [],
-        quickFilterExcludeHiddenColumns: true,
-        quickFilterValues: [''],
     });
 
     const fetchData = async () => {
