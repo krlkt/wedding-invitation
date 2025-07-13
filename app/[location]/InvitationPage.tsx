@@ -43,6 +43,7 @@ export default function InvitationPage({
     guestName: string;
     rsvp: RSVP;
 }) {
+    const isMalang = location === 'malang';
     const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true);
     // use lenis smooth scroll on page
     useEffect(() => {
@@ -116,18 +117,20 @@ export default function InvitationPage({
                             <Hero />
                         </section>
                         {/* Grooms grid photos */}
-                        <Groom />
+                        {!isMalang && <Groom />}
                         {/* Bride grid photos */}
-                        <Bride />
+                        {!isMalang && <Bride />}
                     </div>
                     {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
-                    <section
-                        className="w-full flex flex-col bg-primary-main text-secondary-main relative px-6 py-16"
-                        id="love-story"
-                    >
-                        <SectionTitle title="Love Story" color="secondary" />
-                        <Timeline />
-                    </section>
+                    {!isMalang && (
+                        <section
+                            className="w-full flex flex-col bg-primary-main text-secondary-main relative px-6 py-16"
+                            id="love-story"
+                        >
+                            <SectionTitle title="Love Story" color="secondary" />
+                            <Timeline />
+                        </section>
+                    )}
                     {/* When and where */}
                     <section className="relative text-center w-full flex flex-col justify-center items-center py-24 bg-white overflow-hidden">
                         <SaveTheDateOrnament downward />
@@ -159,8 +162,22 @@ export default function InvitationPage({
                             <SectionTitle title="RSVP" />
                             <RSVPFORM rsvp={rsvp} />
                         </BorderedDiv>
-                        <div className="section-transition-secondary" />
+                        {!isMalang && <div className="section-transition-secondary" />}
                     </section>
+                    {/* Grooms grid photos */}
+                    {isMalang && <Groom />}
+                    {/* Bride grid photos */}
+                    {isMalang && <Bride />}
+                    {/* Love story - Opt: Hide by default, open accordion to animate and show timeline */}
+                    {isMalang && (
+                        <section
+                            className="w-full flex flex-col bg-primary-main text-secondary-main relative px-6 py-16"
+                            id="love-story"
+                        >
+                            <SectionTitle title="Love Story" color="secondary" />
+                            <Timeline />
+                        </section>
+                    )}
                     {/* Photo gallery */}
                     <section className="pt-16 w-full relative">
                         <FadeIn from="left" className="absolute top-3 -left-8 -z-10">

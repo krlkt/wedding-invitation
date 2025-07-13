@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 
 const Hero = () => {
     const { location } = useLocation();
-    const isJakartaOrMalang = location === 'malang' || location === 'jakarta';
     return (
         <div className="hero-background grow flex flex-col items-center justify-center w-full h-full text-center">
             <div className="inner-wrapper max-w-[600px] flex flex-col gap-4 relative px-[25%] py-[15%] items-center">
@@ -23,26 +22,12 @@ const Hero = () => {
                     <p className="text-lg">The Wedding of</p>
                     <div>
                         <p className="font-cursive2 text-5xl">Karel</p>
-                        {isJakartaOrMalang && (
-                            <p className="text-md text-gray-700">
-                                Third child of <br />
-                                Rendy Tirtanadi & Elliana Firmanto
-                            </p>
-                        )}
                         <p className="font-cursive2 text-5xl">&</p>
                         <p className="font-cursive2 text-5xl">Sabrina</p>
-                        {isJakartaOrMalang && (
-                            <p className="text-md text-gray-700">
-                                First child of <br />
-                                Hadi Budiono & Weny
-                            </p>
-                        )}
                     </div>
-                    {!isJakartaOrMalang && (
-                        <p className="text-lg">
-                            {location === 'bali' ? '09.09.2025' : location === 'malang' ? '13.09.2025' : '20.09.2025'}
-                        </p>
-                    )}
+                    <p className="text-lg">
+                        {location === 'bali' ? '09.09.2025' : location === 'malang' ? '13.09.2025' : '20.09.2025'}
+                    </p>
                 </div>
             </div>
             <ScrollDownText />
