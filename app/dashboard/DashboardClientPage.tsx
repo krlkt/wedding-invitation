@@ -189,6 +189,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                         params.api.setEditCellValue({ id: params.id, field: params.field, value: newValue });
                     }}
                     renderInput={(props) => <TextField {...props} />}
+                    style={{ width: '100%' }}
                 />
             ),
         },
@@ -218,6 +219,8 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
             ],
         },
     ];
+
+    const filteredColumns = location === 'malang' || location === 'jakarta' ? columns.filter(col => col.field !== 'notes' && col.field !== 'food_choice') : columns;
 
     const rows: GridRowsProp<RSVP> = data;
 
@@ -309,7 +312,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
 
             <DataGrid
                 rows={rows}
-                columns={columns}
+                columns={filteredColumns}
                 pageSizeOptions={[25, 50, 100]}
                 autoHeight
                 disableRowSelectionOnClick
