@@ -56,6 +56,14 @@ export const addParticipant = async (data: RSVPForm) => {
         throw new Error(`Maximal guest number was reached for row ${data}`);
     }
 
+    let group = data.group;
+    if (data.id && group === undefined) {
+        const { rows } = await query<{ group: string | undefined }>('SELECT "group" FROM rsvp WHERE id = ?', [data.id]);
+        if (rows.length > 0) {
+            group = rows[0].group;
+        }
+    }
+
     await query(
         `
         INSERT INTO rsvp (id, name, attend, max_guests, guest_number, notes, location, food_choice, "group")
@@ -79,7 +87,7 @@ export const addParticipant = async (data: RSVPForm) => {
             notes: data.notes ?? null,
             food_choice: data.food_choice ?? null,
             location: data.location,
-            group: data.group ?? null,
+            group: group ?? null,
         }
     );
 
@@ -125,7 +133,7 @@ export const importDataFromExcel = async (rows: any[]) => {
                 notes: row.notes ?? null,
                 food_choice: row.food_choice ?? null,
                 location: row.location,
-                group: row.group ?? null
+                group: row.group ?? null,
             });
         } catch (err: any) {
             total--;
