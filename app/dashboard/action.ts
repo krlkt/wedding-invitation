@@ -125,6 +125,12 @@ export const importDataFromExcel = async (rows: any[]) => {
 
     for (const row of rows) {
         try {
+            if (row.group) {
+                await query('INSERT INTO groups (name) VALUES ($name) ON CONFLICT(name) DO NOTHING', {
+                    name: row.group,
+                });
+            }
+
             await addParticipant({
                 name: row.name,
                 attend: row.attend ?? null,
