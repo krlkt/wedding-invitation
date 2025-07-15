@@ -2,8 +2,9 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getParticipants } from '../action';
 import DashboardClientPage from '../DashboardClientPage';
+import { Locations } from '../../components/LocationComponent';
 
-export default async function LocationDashboardPage({ params }: { params: { location: string } }) {
+export default async function LocationDashboardPage({ params }: { params: { location: Locations } }) {
     const cookieStore = cookies();
     const loggedIn = cookieStore.get('loggedIn');
 
@@ -12,5 +13,5 @@ export default async function LocationDashboardPage({ params }: { params: { loca
     }
 
     const data = await getParticipants(params.location);
-    return <DashboardClientPage initialData={data} />;
+    return <DashboardClientPage initialData={data} location={params.location} />;
 }

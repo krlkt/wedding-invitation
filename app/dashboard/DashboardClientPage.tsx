@@ -20,8 +20,9 @@ import {
 import { RSVP, RSVPForm } from '../models/rsvp';
 import { addParticipant, getParticipants, deleteParticipant, importDataFromExcel } from './action';
 import { useSnackbar } from 'notistack';
+import { Locations } from '../components/LocationComponent';
 
-const DashboardClientPage = ({ initialData }: { initialData: RSVP[] }) => {
+const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; location?: Locations }) => {
     const { enqueueSnackbar } = useSnackbar();
     const [data, setData] = useState<RSVP[]>(initialData);
     const [isImporting, setIsImporting] = useState(false);
@@ -38,7 +39,7 @@ const DashboardClientPage = ({ initialData }: { initialData: RSVP[] }) => {
     const fetchData = async () => {
         // Re-fetch all data if no initialData is provided (e.g., for the main dashboard)
         // Or re-fetch based on the current location if it's a dynamic route
-        const participants = await getParticipants(); // This will fetch all data
+        const participants = await getParticipants(location);
         setData(participants);
     };
 
