@@ -24,6 +24,10 @@ export default async function Page({
     params: { location: Locations };
     searchParams: { [key: string]: string | string[] | undefined };
 }) {
+    if (!('to' in searchParams)) {
+        return <UnidentifiedPersonPage />;
+    }
+
     const guestName = searchParams.to as string;
     const guestId = searchParams.id ? parseInt(searchParams.id as string) : -1;
     const wishPage = parseInt((searchParams.page as string) || '1');
@@ -47,19 +51,16 @@ export default async function Page({
         name: guestName,
         location: location,
     });
+
     const rawRsvp = rows[0];
+    if (rows.length === 0 || !rawRsvp || !guestId) {
+        return <NotInGuestListPage guestName={guestName} />;
+    }
+
     // This is needed because Next is complaining that "Only plain objects can be passed to Client Components from Server Components"
     const rsvp = JSON.parse(JSON.stringify(rawRsvp));
 
     if (location !== 'bali' && location !== 'jakarta' && location !== 'malang') return notFound();
-
-    if (!('to' in searchParams)) {
-        return <UnidentifiedPersonPage />;
-    }
-
-    if (rows.length === 0 || !rsvp || !guestId) {
-        return <NotInGuestListPage guestName={guestName} />;
-    }
 
     return (
         <LocationProvider location={location}>
