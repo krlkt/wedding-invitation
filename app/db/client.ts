@@ -13,9 +13,12 @@ const getDatabaseClient = () => {
     return client;
 };
 
+import { createGroupsTable } from './migrations';
+
 const initializeClient = () => {
     if (!client) {
         client = getDatabaseClient();
+        createGroupsTable();
     }
     return client;
 };

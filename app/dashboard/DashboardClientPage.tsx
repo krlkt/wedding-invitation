@@ -2,7 +2,7 @@
 
 import '../globals.css';
 import * as XLSX from 'xlsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridRowsProp, GridActionsCellItem } from '@mui/x-data-grid';
 import {
     TextField,
@@ -16,16 +16,29 @@ import {
     Typography,
     IconButton,
     Tooltip,
+    Autocomplete,
+    Paper,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemSecondaryAction,
 } from '@mui/material';
 import { RSVP, RSVPForm } from '../models/rsvp';
 import { addParticipant, getParticipants, deleteParticipant, importDataFromExcel } from './action';
 import { useSnackbar } from 'notistack';
 import { Locations } from '../components/LocationComponent';
 
+interface Group {
+    id: number;
+    name: string;
+}
+
 const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; location?: Locations }) => {
     const { enqueueSnackbar } = useSnackbar();
     const [data, setData] = useState<RSVP[]>(initialData);
     const [isImporting, setIsImporting] = useState(false);
+    const [groups, setGroups] = useState<Group[]>([]);
+    const [newGroupName, setNewGroupName] = useState('');
     const [form, setForm] = useState<RSVPForm>({
         name: '',
         attend: undefined,
@@ -36,9 +49,17 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
         link: '',
     });
 
+    const fetchGroups = async () => {
+        const response = await fetch('/api/groups');
+        const data = await response.json();
+        setGroups(data);
+    };
+
+    useEffect(() => {
+        fetchGroups();
+    }, []);
+
     const fetchData = async () => {
-        // Re-fetch all data if no initialData is provided (e.g., for the main dashboard)
-        // Or re-fetch based on the current location if it's a dynamic route
         const participants = await getParticipants(location);
         setData(participants);
     };
@@ -105,6 +126,29 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
         reader.readAsBinaryString(file);
     };
 
+    const handleAddGroup = async () => {
+        await fetch('/api/groups', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: newGroupName }),
+        });
+        setNewGroupName('');
+        fetchGroups();
+    };
+
+    const handleDeleteGroup = async (id: number) => {
+        await fetch('/api/groups', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id }),
+        });
+        fetchGroups();
+    };
+
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 90 },
         { field: 'location', headerName: 'Location', width: 120, sortable: true, editable: true },
@@ -131,7 +175,23 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
         },
         { field: 'notes', headerName: 'Notes', width: 200, editable: true },
         { field: 'food_choice', headerName: 'Food choice', width: 120, editable: true },
-        { field: 'group', headerName: 'Group', width: 120, sortable: true, editable: true },
+        {
+            field: 'group',
+            headerName: 'Group',
+            width: 150,
+            sortable: true,
+            editable: true,
+            renderEditCell: (params) => (
+                <Autocomplete
+                    options={groups.map((group) => group.name)}
+                    value={params.value}
+                    onChange={(event, newValue) => {
+                        params.api.setEditCellValue({ id: params.id, field: params.field, value: newValue });
+                    }}
+                    renderInput={(props) => <TextField {...props} />}
+                />
+            ),
+        },
         {
             field: 'actions',
             type: 'actions',
@@ -256,6 +316,46 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                 processRowUpdate={processRowUpdate}
                 showToolbar
             />
+
+            <Box mt={4}>
+                <Typography variant="h6" gutterBottom>
+                    Manage Groups
+                </Typography>
+                <Paper elevation={2} sx={{ p: 2 }}>
+                    <Stack direction="row" spacing={2} mb={2}>
+                        <TextField
+                            label="New Group Name"
+                            value={newGroupName}
+                            onChange={(e) => setNewGroupName(e.target.value)}
+                            fullWidth
+                        />
+                        <Button variant="contained" onClick={handleAddGroup}>
+                            Add Group
+                        </Button>
+                    </Stack>
+                    <List>
+                        {groups.map((group) => (
+                            <ListItem key={group.id} divider>
+                                <ListItemText primary={group.name} />
+                                <ListItemSecondaryAction>
+                                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteGroup(group.id)}>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="currentColor"
+                                            className="w-6 h-6 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Paper>
+            </Box>
         </Box>
     );
 };
