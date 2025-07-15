@@ -34,7 +34,7 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
             name: rsvp.name,
             attend: rsvp.attend ?? 'yes',
             notes: rsvp.notes ?? '',
-            food_choice: rsvp.food_choice ?? 'chicken',
+            food_choice: rsvp.location === 'bali' ? rsvp.food_choice ?? 'chicken' : undefined,
             location: rsvp.location,
             max_guests: rsvp.max_guests,
         },
