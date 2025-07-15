@@ -221,7 +221,10 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
     ];
 
     const filteredColumns = columns.filter(col => {
-        if (location === 'malang' || location === 'jakarta') {
+        if (location === 'jakarta') {
+            return col.field !== 'notes' && col.field !== 'food_choice' && col.field !== 'group';
+        }
+        if (location === 'malang') {
             return col.field !== 'notes' && col.field !== 'food_choice';
         }
         if (location === 'bali') {
@@ -270,7 +273,14 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                 <input type="file" hidden accept=".xlsx,.xls" onChange={handleImport} />
             </Button>
 
-            <Box component={Stack} spacing={2} direction={{ xs: 'column', sm: 'row' }} flexWrap="wrap" mb={4} alignItems="stretch">
+            <Box
+                component={Stack}
+                spacing={2}
+                direction={{ xs: 'column', sm: 'row' }}
+                flexWrap="wrap"
+                mb={4}
+                alignItems="stretch"
+            >
                 <FormControl sx={{ minWidth: 150, flex: 1 }}>
                     <InputLabel id="location-label">Location</InputLabel>
                     <Select
@@ -309,11 +319,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                     sx={{ width: { xs: '100%', sm: 120 } }}
                 />
 
-                <Button
-                    variant="contained"
-                    onClick={() => addRow(form)}
-                    sx={{ width: { xs: '100%', sm: 'auto' } }}
-                >
+                <Button variant="contained" onClick={() => addRow(form)} sx={{ width: { xs: '100%', sm: 'auto' } }}>
                     Add participant
                 </Button>
             </Box>
@@ -350,7 +356,11 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                                 <ListItem key={group.id} divider>
                                     <ListItemText primary={group.name} />
                                     <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteGroup(group.id)}>
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="delete"
+                                            onClick={() => handleDeleteGroup(group.id)}
+                                        >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="none"
@@ -359,7 +369,11 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                                                 stroke="currentColor"
                                                 className="w-6 h-6 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
                                             >
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                />
                                             </svg>
                                         </IconButton>
                                     </ListItemSecondaryAction>
