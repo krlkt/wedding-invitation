@@ -56,6 +56,10 @@ export const addParticipant = async (data: RSVPForm) => {
         throw new Error(`Maximal guest number was reached for row ${data}`);
     }
 
+    if (data.location !== 'bali') {
+        data.food_choice = null;
+    }
+
     let group = data.group;
     if (data.id && group === undefined) {
         const { rows } = await query<{ group: string | undefined }>('SELECT "group" FROM rsvp WHERE id = ?', [data.id]);

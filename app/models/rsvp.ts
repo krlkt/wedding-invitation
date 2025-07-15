@@ -4,7 +4,7 @@ export interface RSVP {
     attend: string;
     guest_number: number;
     max_guests: number;
-    food_choice: 'chicken' | 'lamb';
+    food_choice: 'chicken' | 'lamb' | null;
     notes: string;
     location: string;
     link: string;
