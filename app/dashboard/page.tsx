@@ -12,5 +12,6 @@ export default async function DashboardPage() {
     }
 
     const data = await getParticipants();
-    return <DashboardClientPage initialData={data} />;
+    const plainData = JSON.parse(JSON.stringify(data));
+    return <DashboardClientPage initialData={plainData} />;
 }

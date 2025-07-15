@@ -13,5 +13,7 @@ export default async function LocationDashboardPage({ params }: { params: { loca
     }
 
     const data = await getParticipants(params.location);
-    return <DashboardClientPage initialData={data} location={params.location} />;
+    const plainData = JSON.parse(JSON.stringify(data));
+
+    return <DashboardClientPage initialData={plainData} location={params.location} />;
 }
