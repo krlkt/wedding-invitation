@@ -220,7 +220,15 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
         },
     ];
 
-    const filteredColumns = location === 'malang' || location === 'jakarta' ? columns.filter(col => col.field !== 'notes' && col.field !== 'food_choice') : columns;
+    const filteredColumns = columns.filter(col => {
+        if (location === 'malang' || location === 'jakarta') {
+            return col.field !== 'notes' && col.field !== 'food_choice';
+        }
+        if (location === 'bali') {
+            return col.field !== 'group';
+        }
+        return true;
+    });
 
     const rows: GridRowsProp<RSVP> = data;
 
