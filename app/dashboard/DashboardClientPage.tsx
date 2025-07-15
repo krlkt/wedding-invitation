@@ -262,7 +262,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                 <input type="file" hidden accept=".xlsx,.xls" onChange={handleImport} />
             </Button>
 
-            <Box component={Stack} spacing={2} direction={{ xs: 'column', sm: 'row' }} flexWrap="wrap" mb={4}>
+            <Box component={Stack} spacing={2} direction={{ xs: 'column', sm: 'row' }} flexWrap="wrap" mb={4} alignItems="stretch">
                 <FormControl sx={{ minWidth: 150, flex: 1 }}>
                     <InputLabel id="location-label">Location</InputLabel>
                     <Select
@@ -304,7 +304,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                 <Button
                     variant="contained"
                     onClick={() => addRow(form)}
-                    sx={{ mt: { xs: 1, sm: 2 }, alignSelf: 'center', width: { xs: '100%', sm: 'auto' } }}
+                    sx={{ width: { xs: '100%', sm: 'auto' } }}
                 >
                     Add participant
                 </Button>
@@ -320,45 +320,47 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                 showToolbar
             />
 
-            <Box mt={4}>
-                <Typography variant="h6" gutterBottom>
-                    Manage Groups
-                </Typography>
-                <Paper elevation={2} sx={{ p: 2 }}>
-                    <Stack direction="row" spacing={2} mb={2}>
-                        <TextField
-                            label="New Group Name"
-                            value={newGroupName}
-                            onChange={(e) => setNewGroupName(e.target.value)}
-                            fullWidth
-                        />
-                        <Button variant="contained" onClick={handleAddGroup}>
-                            Add Group
-                        </Button>
-                    </Stack>
-                    <List>
-                        {groups.map((group) => (
-                            <ListItem key={group.id} divider>
-                                <ListItemText primary={group.name} />
-                                <ListItemSecondaryAction>
-                                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteGroup(group.id)}>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={1.5}
-                                            stroke="currentColor"
-                                            className="w-6 h-6 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-                                        >
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        ))}
-                    </List>
-                </Paper>
-            </Box>
+            {(!location || location === 'malang') && (
+                <Box mt={4}>
+                    <Typography variant="h6" gutterBottom>
+                        Manage Groups
+                    </Typography>
+                    <Paper elevation={2} sx={{ p: 2 }}>
+                        <Stack direction="row" spacing={2} mb={2} alignItems="stretch">
+                            <TextField
+                                label="New Group Name"
+                                value={newGroupName}
+                                onChange={(e) => setNewGroupName(e.target.value)}
+                                fullWidth
+                            />
+                            <Button variant="contained" onClick={handleAddGroup}>
+                                Add Group
+                            </Button>
+                        </Stack>
+                        <List>
+                            {groups.map((group) => (
+                                <ListItem key={group.id} divider>
+                                    <ListItemText primary={group.name} />
+                                    <ListItemSecondaryAction>
+                                        <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteGroup(group.id)}>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                strokeWidth={1.5}
+                                                stroke="currentColor"
+                                                className="w-6 h-6 text-red-500 hover:text-red-700 transition-colors cursor-pointer"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Paper>
+                </Box>
+            )}
         </Box>
     );
 };
