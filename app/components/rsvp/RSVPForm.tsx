@@ -91,7 +91,7 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
                     </>
                 ) : (
                     <>
-                        September 1<sup>st</sup>, 2025
+                        August 20<sup>th</sup>, 2025
                     </>
                 )}
             </FadeIn>
