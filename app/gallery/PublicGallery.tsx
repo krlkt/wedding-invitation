@@ -85,6 +85,11 @@ const images = [
     { src: '/images/gallery/gal77.jpg', width: 1400, height: 930 },
     { src: '/images/gallery/gal78.jpg', width: 1500, height: 750 },
     { src: '/images/gallery/gal79.jpg', width: 1000, height: 1500 },
+    { src: '/images/gallery/gal80.jpg', width: 3800, height: 2500 },
+    { src: '/images/gallery/gal81.jpg', width: 3900, height: 2600 },
+    { src: '/images/gallery/gal82.jpg', width: 2600, height: 3900 },
+    { src: '/images/gallery/gal83.jpg', width: 3500, height: 2300 },
+    { src: '/images/gallery/gal84.jpg', width: 3900, height: 2600 },
 ];
 
 export default function WeddingGallery() {
