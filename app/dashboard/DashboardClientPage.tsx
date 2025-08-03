@@ -268,10 +268,15 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                 </Box>
             )}
 
-            <Button variant="outlined" component="label" sx={{ mb: 3 }}>
-                Import from Excel
-                <input type="file" hidden accept=".xlsx,.xls" onChange={handleImport} />
-            </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Button variant="outlined" component="label">
+                    Import from Excel
+                    <input type="file" hidden accept=".xlsx,.xls" onChange={handleImport} />
+                </Button>
+                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    Total Confirmed Guests: {data.reduce((acc, curr) => (curr.attend?.toLowerCase() === 'yes' ? acc + curr.guest_number : acc), 0)}
+                </Typography>
+            </Box>
 
             <Box
                 component={Stack}
