@@ -220,7 +220,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
         },
     ];
 
-    const filteredColumns = columns.filter(col => {
+    const filteredColumns = columns.filter((col) => {
         if (location === 'jakarta') {
             return col.field !== 'notes' && col.field !== 'food_choice' && col.field !== 'group';
         }
@@ -274,7 +274,11 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                     <input type="file" hidden accept=".xlsx,.xls" onChange={handleImport} />
                 </Button>
                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    Total Confirmed Guests: {data.reduce((acc, curr) => (curr.attend?.toLowerCase() === 'yes' ? acc + curr.guest_number : acc), 0)}
+                    Total Confirmed Guests:{' '}
+                    {data.reduce(
+                        (acc, curr) => (curr.attend?.toLowerCase() === 'yes' ? acc + curr.guest_number : acc),
+                        0
+                    )}
                 </Typography>
             </Box>
 
@@ -307,7 +311,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                     sx={{ flex: 1 }}
                 />
 
-                {form.location === 'malang' && (
+                {form.location !== 'bali' && (
                     <TextField
                         label="Group"
                         value={form.group || ''}
