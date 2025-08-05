@@ -278,7 +278,8 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                     {data.reduce(
                         (acc, curr) => (curr.attend?.toLowerCase() === 'yes' ? acc + curr.guest_number : acc),
                         0
-                    )}
+                    )}{' '}
+                    / {data.reduce((acc, curr) => acc + curr.max_guests, 0)}
                 </Typography>
             </Box>
 
