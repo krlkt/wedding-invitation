@@ -222,7 +222,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
 
     const filteredColumns = columns.filter((col) => {
         if (location === 'jakarta') {
-            return col.field !== 'notes' && col.field !== 'food_choice' && col.field !== 'group';
+            return col.field !== 'notes' && col.field !== 'food_choice';
         }
         if (location === 'malang') {
             return col.field !== 'notes' && col.field !== 'food_choice';
@@ -344,7 +344,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                 showToolbar
             />
 
-            {(!location || location === 'malang') && (
+            {(!location || location !== 'bali') && (
                 <Box mt={4}>
                     <Typography variant="h6" gutterBottom>
                         Manage Groups
