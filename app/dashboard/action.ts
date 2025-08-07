@@ -3,6 +3,7 @@
 import { query } from '@/app/db/client';
 import { RSVP, RSVPForm } from '@/app/models/rsvp';
 import { revalidatePath } from 'next/cache';
+import { Guest } from '../models/guest';
 
 const VALID_LOCATIONS = ['jakarta', 'bali', 'malang'];
 const BASE_URL = `http://karelandsabrina.vercel.app`;
@@ -97,6 +98,35 @@ export const addParticipant = async (data: RSVPForm) => {
 
     await updateLink(data);
 
+    // Synchronize guests
+    const { rows: rsvps } = await query<RSVP>('SELECT * FROM rsvp WHERE name = ? AND location = ?', [
+        data.name.trim(),
+        data.location,
+    ]);
+    const rsvp = rsvps[0];
+
+    if (rsvp) {
+        if (rsvp.attend?.toLowerCase() === 'no') {
+            await query('DELETE FROM guests WHERE rsvp_id = ?', [rsvp.id]);
+        } else {
+            const { rows: existingGuests } = await query<Guest>('SELECT * FROM guests WHERE rsvp_id = ?', [rsvp.id]);
+            const guestsToCreate = rsvp.max_guests - existingGuests.length;
+
+            if (guestsToCreate > 0) {
+                for (let i = 0; i < guestsToCreate; i++) {
+                    const guestName =
+                        existingGuests.length + i === 0 ? rsvp.name : `${rsvp.name} +${existingGuests.length + i}`;
+                    await query('INSERT INTO guests (rsvp_id, name) VALUES (?, ?)', [rsvp.id, guestName]);
+                }
+            } else if (guestsToCreate < 0) {
+                const guestsToDelete = existingGuests.slice(guestsToCreate);
+                for (const guest of guestsToDelete) {
+                    await query('DELETE FROM guests WHERE id = ?', [guest.id]);
+                }
+            }
+        }
+    }
+
     // Update UI
     revalidatePath('/');
 };
@@ -119,6 +149,7 @@ export const getParticipants = async (location?: string) => {
 };
 
 export const deleteParticipant = async (id: string) => {
+    await query(`DELETE FROM guests WHERE rsvp_id = ?`, [id]);
     await query(`DELETE FROM rsvp WHERE id = ?`, [id]);
     revalidatePath('/');
 };
