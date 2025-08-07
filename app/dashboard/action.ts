@@ -84,7 +84,7 @@ export const addParticipant = async (data: RSVPForm) => {
         `,
         {
             id: data.id ?? null, // pass null if undefined to allow auto-increment
-            name: data.name,
+            name: data.name.trim(),
             attend: data.attend ?? null,
             max_guests: data.max_guests,
             guest_number: data.guest_number ?? null,
