@@ -273,14 +273,22 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                     Import from Excel
                     <input type="file" hidden accept=".xlsx,.xls" onChange={handleImport} />
                 </Button>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    Total Confirmed Guests:{' '}
-                    {data.reduce(
-                        (acc, curr) => (curr.attend?.toLowerCase() === 'yes' ? acc + curr.guest_number : acc),
-                        0
-                    )}{' '}
-                    / {data.reduce((acc, curr) => acc + curr.max_guests, 0)}
-                </Typography>
+                <Box textAlign={'right'}>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                        Total Confirmed Guests:{' '}
+                        {data.reduce(
+                            (acc, curr) => (curr.attend?.toLowerCase() === 'yes' ? acc + curr.guest_number : acc),
+                            0
+                        )}{' '}
+                        / {data.reduce((acc, curr) => acc + curr.max_guests, 0)}
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                        Possible Guests:{' '}
+                        {data
+                            .filter((p) => p.attend?.toLowerCase() !== 'yes' && p.attend?.toLowerCase() !== 'no')
+                            .reduce((acc, curr) => acc + curr.max_guests, 0)}
+                    </Typography>
+                </Box>
             </Box>
 
             <Box
