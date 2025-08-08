@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { query } from '../db/client';
 import { Guest } from '../models/guest';
 import { RSVP } from '../models/rsvp';
@@ -56,24 +57,30 @@ export const getTablesAndGuests = async (location: string): Promise<{ tables: Ta
 
 export const createTable = async (name: string, max_guests: number, location: string) => {
     await query('INSERT INTO tables (name, max_guests, location) VALUES (?, ?, ?)', [name, max_guests, location]);
+    revalidatePath(`/tables/${location}`);
 };
 
 export const updateTableName = async (id: number, name: string, location: string) => {
     await query('UPDATE tables SET name = ? WHERE id = ?', [name, id]);
+    revalidatePath(`/tables/${location}`);
 };
 
 export const updateTableMaxGuests = async (id: number, max_guests: number, location: string) => {
     await query('UPDATE tables SET max_guests = ? WHERE id = ?', [max_guests, id]);
+    revalidatePath(`/tables/${location}`);
 };
 
 export const deleteTable = async (id: number, location: string) => {
     await query('DELETE FROM tables WHERE id = ?', [id]);
+    revalidatePath(`/tables/${location}`);
 };
 
 export const moveGuestToTable = async (guestId: number, tableId: number | null, location: string) => {
     await query('UPDATE guests SET table_id = ? WHERE id = ?', [tableId, guestId]);
+    revalidatePath(`/tables/${location}`);
 };
 
 export const updateGuestName = async (guestId: number, name: string, location: string) => {
     await query('UPDATE guests SET name = ? WHERE id = ?', [name, guestId]);
+    revalidatePath(`/tables/${location}`);
 };

@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { FC, useRef, useState } from 'react';
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -31,6 +32,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
     location,
     onCreateTable,
 }) => {
+    const router = useRouter();
     const ref = useRef<HTMLDivElement>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [movingGuest, setMovingGuest] = useState<Guest | null>(null);
@@ -46,12 +48,14 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
     const handleCreateTable = async (event: React.FormEvent<HTMLFormElement>) => {
         await onCreateTable(event);
         setIsAddTableFormVisible(false);
+        router.refresh();
     };
 
     const [{ isOver: isOverUnassigned }, dropUnassigned] = useDrop(() => ({
         accept: 'guest',
         drop: async (item: { id: number }) => {
             await moveGuestToTable(item.id, null, location);
+            router.refresh();
         },
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
@@ -157,9 +161,6 @@ const TableManagementClientPage = ({
     initialUnassignedGuests,
     location,
 }: TableManagementClientPageProps) => {
-    const [tables, setTables] = useState<Table[]>(initialTables);
-    const [unassignedGuests, setUnassignedGuests] = useState<Guest[]>(initialUnassignedGuests);
-
     const handleCreateTable = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -172,8 +173,8 @@ const TableManagementClientPage = ({
     return (
         <DndProvider backend={HTML5Backend}>
             <TableManagementLayout
-                tables={tables}
-                unassignedGuests={unassignedGuests}
+                tables={initialTables}
+                unassignedGuests={initialUnassignedGuests}
                 location={location}
                 onCreateTable={handleCreateTable}
             />
