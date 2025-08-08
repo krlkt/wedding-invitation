@@ -29,7 +29,7 @@ export const VirtualizedGuestList = ({ guests, tables, location, onOpenMoveModal
             <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, position: 'relative' }}>
                 {rowVirtualizer.getVirtualItems().map((virtualItem) => (
                     <div
-                        key={virtualItem.key}
+                        key={guests[virtualItem.index].id}
                         style={{
                             position: 'absolute',
                             top: 0,
@@ -40,6 +40,7 @@ export const VirtualizedGuestList = ({ guests, tables, location, onOpenMoveModal
                         }}
                     >
                         <GuestComponent
+                            key={guests[virtualItem.index].id}
                             guest={guests[virtualItem.index]}
                             tables={tables}
                             location={location}
