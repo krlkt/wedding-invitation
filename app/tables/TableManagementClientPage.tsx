@@ -73,10 +73,12 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
             <div className="flex items-center mb-4">
                 <h1 className="text-2xl font-bold">Table Management ({location})</h1>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-12 2xl:grid-cols-6 gap-4">
                 <div
                     ref={ref}
-                    className={`md:col-span-1 bg-gray-100 p-4 rounded-lg ${isOverUnassigned ? 'bg-green-200' : ''}`}
+                    className={`md:col-span-3 2xl:col-span-1 bg-gray-100 p-4 rounded-lg ${
+                        isOverUnassigned ? 'bg-green-200' : ''
+                    }`}
                 >
                     <h2 className="text-xl font-bold mb-2">Unassigned Guests</h2>
                     <TextField
@@ -96,7 +98,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                         />
                     </div>
                 </div>
-                <div className="md:col-span-5 bg-gray-100 p-4 rounded-lg space-y-4">
+                <div className="md:col-span-9 2xl:col-span-5 bg-gray-100 p-4 rounded-lg space-y-4">
                     <div className="flex justify-between items-center">
                         <h2 className="text-xl font-bold mb-2">Tables</h2>
                         {!isAddTableFormVisible && (
