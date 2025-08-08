@@ -16,17 +16,27 @@ interface MoveGuestModalProps {
 
 export const MoveGuestModal: FC<MoveGuestModalProps> = ({ guest, tables, location, onClose }) => {
     const [selectedTable, setSelectedTable] = useState<number | null>(guest.table_id);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const handleMoveGuest = async () => {
         await moveGuestToTable(guest.id, selectedTable, location);
         onClose();
     };
 
+    const filteredTables = tables.filter((table) => table.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
     return (
         <Modal open={true} onClose={onClose}>
-            <div className="p-4">
+            <div className="p-4 flex flex-col h-full">
                 <h2 className="text-xl font-bold mb-4">Move {guest.name}</h2>
-                <div className="space-y-2">
+                <input
+                    type="text"
+                    placeholder="Search tables..."
+                    className="p-2 border rounded-md w-full mb-4"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <div className="space-y-2 overflow-y-auto flex-1">
                     <div
                         key="unassigned"
                         className={`p-2 rounded-md cursor-pointer ${
@@ -36,7 +46,7 @@ export const MoveGuestModal: FC<MoveGuestModalProps> = ({ guest, tables, locatio
                     >
                         Unassigned
                     </div>
-                    {tables.map((table) => (
+                    {filteredTables.map((table) => (
                         <div
                             key={table.id}
                             className={`p-2 rounded-md cursor-pointer ${
