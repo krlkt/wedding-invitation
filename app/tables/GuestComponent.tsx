@@ -2,7 +2,7 @@
 
 import { useDrag } from 'react-dnd';
 import { updateGuestName } from './actions';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Locations } from '../components/LocationComponent';
 import { Table } from '../models/table';
 import { Guest } from '../models/guest';
@@ -15,6 +15,7 @@ interface GuestComponentProps {
 }
 
 export const GuestComponent = ({ guest, tables, location, onOpenMoveModal }: GuestComponentProps) => {
+    const ref = useRef<HTMLDivElement>(null);
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'guest',
         item: { id: guest.id },
@@ -22,6 +23,8 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal }: Gue
             isDragging: !!monitor.isDragging(),
         }),
     }));
+
+    drag(ref);
 
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState(guest.name);
@@ -32,7 +35,7 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal }: Gue
     };
 
     return (
-        <div ref={drag} className={`p-2 rounded-md shadow-md ${isDragging ? 'opacity-50' : 'bg-white'}`}>
+        <div ref={ref} className={`p-2 rounded-md shadow-md ${isDragging ? 'opacity-50' : 'bg-white'}`}>
             <div className="flex justify-between items-center">
                 {isEditing ? (
                     <input

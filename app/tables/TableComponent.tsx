@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { moveGuestToTable, updateTableName, updateTableMaxGuests, deleteTable } from './actions';
 import { Locations } from '../components/LocationComponent';
@@ -16,6 +16,7 @@ interface TableComponentProps {
 }
 
 export const TableComponent = ({ table, tables, location, onOpenMoveModal }: TableComponentProps) => {
+    const ref = useRef<HTMLDivElement>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState(table.name);
     const [maxGuests, setMaxGuests] = useState(table.max_guests);
@@ -30,6 +31,8 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal }: Tab
         }),
     }));
 
+    drop(ref);
+
     const handleSave = async () => {
         await updateTableName(table.id, name, location);
         await updateTableMaxGuests(table.id, maxGuests, location);
@@ -43,7 +46,7 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal }: Tab
     };
 
     return (
-        <div ref={drop} className={`min-w-[20rem] p-4 rounded-lg ${isOver ? 'bg-green-200' : 'bg-white'}`}>
+        <div ref={ref} className={`min-w-[20rem] p-4 rounded-lg ${isOver ? 'bg-green-200' : 'bg-white'}`}>
             {isEditing ? (
                 <div className="flex justify-between items-center mb-2">
                     <input

@@ -1,14 +1,16 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Table, Guest, createTable, getTablesAndGuests, moveGuestToTable } from './actions';
+import { createTable, moveGuestToTable } from './actions';
 import { TableComponent } from './TableComponent';
 import { Locations } from '../components/LocationComponent';
 import { Button, TextField } from '@mui/material';
 import { VirtualizedGuestList } from './VirtualizedGuestList';
 import { MoveGuestModal } from './MoveGuestModal';
+import { Table } from '../models/table';
+import { Guest } from '../models/guest';
 
 interface TableManagementClientPageProps {
     initialTables: Table[];
@@ -29,6 +31,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
     location,
     onCreateTable,
 }) => {
+    const ref = useRef<HTMLDivElement>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [movingGuest, setMovingGuest] = useState<Guest | null>(null);
     const [isAddTableFormVisible, setIsAddTableFormVisible] = useState(false);
@@ -55,6 +58,8 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
         }),
     }));
 
+    dropUnassigned(ref);
+
     return (
         <div className="p-4">
             {movingGuest && (
@@ -70,7 +75,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
             </div>
             <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                 <div
-                    ref={dropUnassigned}
+                    ref={ref}
                     className={`md:col-span-1 bg-gray-100 p-4 rounded-lg ${isOverUnassigned ? 'bg-green-200' : ''}`}
                 >
                     <h2 className="text-xl font-bold mb-2">Unassigned Guests</h2>
