@@ -13,9 +13,10 @@ interface TableComponentProps {
     tables: Table[];
     location: Locations;
     onOpenMoveModal: (guest: Guest) => void;
+    tableSearchTerm: string;
 }
 
-export const TableComponent = ({ table, tables, location, onOpenMoveModal }: TableComponentProps) => {
+export const TableComponent = ({ table, tables, location, onOpenMoveModal, tableSearchTerm }: TableComponentProps) => {
     const ref = useRef<HTMLDivElement>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState(table.name);
@@ -45,6 +46,23 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal }: Tab
         }
     };
 
+    const getHighlightedText = (text: string, highlight: string) => {
+        const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+        return (
+            <span>
+                {parts.map((part, i) =>
+                    part.toLowerCase() === highlight.toLowerCase() ? (
+                        <span key={i} className="bg-yellow-200">
+                            {part}
+                        </span>
+                    ) : (
+                        part
+                    )
+                )}
+            </span>
+        );
+    };
+
     return (
         <div ref={ref} className={`min-w-[20rem] p-4 rounded-lg ${isOver ? 'bg-green-200' : 'bg-white'}`}>
             {isEditing ? (
@@ -71,7 +89,7 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal }: Tab
             ) : (
                 <div className="flex justify-between items-center mb-2">
                     <h3 className="font-bold">
-                        {table.name} ({table.guests.length}/{table.max_guests})
+                        {getHighlightedText(table.name, tableSearchTerm)} ({table.guests.length}/{table.max_guests})
                     </h3>
                     <div>
                         <button onClick={() => setIsEditing(true)} className="ml-2 bg-gray-200 p-1 rounded-md">
@@ -89,6 +107,7 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal }: Tab
                     tables={tables}
                     location={location}
                     onOpenMoveModal={onOpenMoveModal}
+                    tableSearchTerm={tableSearchTerm}
                 />
             </div>
         </div>

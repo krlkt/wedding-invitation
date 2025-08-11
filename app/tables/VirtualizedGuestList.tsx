@@ -12,9 +12,10 @@ interface VirtualizedGuestListProps {
     tables: Table[];
     location: Locations;
     onOpenMoveModal: (guest: Guest) => void;
+    tableSearchTerm: string;
 }
 
-export const VirtualizedGuestList = ({ guests, tables, location, onOpenMoveModal }: VirtualizedGuestListProps) => {
+export const VirtualizedGuestList = ({ guests, tables, location, onOpenMoveModal, tableSearchTerm }: VirtualizedGuestListProps) => {
     const parentRef = useRef<HTMLDivElement>(null);
 
     const rowVirtualizer = useVirtualizer({
@@ -45,6 +46,7 @@ export const VirtualizedGuestList = ({ guests, tables, location, onOpenMoveModal
                             tables={tables}
                             location={location}
                             onOpenMoveModal={onOpenMoveModal}
+                            tableSearchTerm={tableSearchTerm}
                         />
                     </div>
                 ))}

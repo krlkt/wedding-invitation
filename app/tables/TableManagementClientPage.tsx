@@ -35,6 +35,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
     const router = useRouter();
     const ref = useRef<HTMLDivElement>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [tableSearchTerm, setTableSearchTerm] = useState('');
     const [movingGuest, setMovingGuest] = useState<Guest | null>(null);
     const [isAddTableFormVisible, setIsAddTableFormVisible] = useState(false);
 
@@ -42,8 +43,24 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
         guest.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const filteredTables = tables
+        .map((table) => ({
+            ...table,
+            guests: table.guests.filter((guest) =>
+                guest.name.toLowerCase().includes(tableSearchTerm.toLowerCase())
+            ),
+        }))
+        .filter(
+            (table) =>
+                table.name.toLowerCase().includes(tableSearchTerm.toLowerCase()) ||
+                table.guests.length > 0
+        );
+
     const handleOpenMoveModal = (guest: Guest) => setMovingGuest(guest);
-    const handleCloseMoveModal = () => setMovingGuest(null);
+    const handleCloseMoveModal = () => {
+        setMovingGuest(null);
+        router.refresh();
+    };
 
     const handleCreateTable = async (event: React.FormEvent<HTMLFormElement>) => {
         await onCreateTable(event);
@@ -99,21 +116,31 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                             tables={tables}
                             location={location}
                             onOpenMoveModal={handleOpenMoveModal}
+                            tableSearchTerm={searchTerm}
                         />
                     </div>
                 </div>
                 <div className="md:col-span-9 2xl:col-span-5 bg-gray-100 p-4 rounded-lg space-y-4">
                     <div className="flex justify-between items-center">
                         <h2 className="text-xl font-bold mb-2">Tables</h2>
-                        {!isAddTableFormVisible && (
-                            <Button
-                                variant="contained"
-                                onClick={() => setIsAddTableFormVisible(true)}
-                                className="self-end"
-                            >
-                                +
-                            </Button>
-                        )}
+                        <div className='flex gap-2'>
+                            <TextField
+                                label="Search Tables"
+                                variant="outlined"
+                                value={tableSearchTerm}
+                                onChange={(e) => setTableSearchTerm(e.target.value)}
+                                sx={{ mb: 2 }}
+                            />
+                            {!isAddTableFormVisible && (
+                                <Button
+                                    variant="contained"
+                                    onClick={() => setIsAddTableFormVisible(true)}
+                                    className="self-end"
+                                >
+                                    +
+                                </Button>
+                            )}
+                        </div>
                     </div>
                     {isAddTableFormVisible && (
                         <div className="flex-grow">
@@ -140,13 +167,14 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                         </div>
                     )}
                     <div className="flex flex-wrap gap-2">
-                        {tables.map((table) => (
+                        {filteredTables.map((table) => (
                             <TableComponent
                                 key={table.id}
                                 table={table}
                                 tables={tables}
                                 location={location}
                                 onOpenMoveModal={handleOpenMoveModal}
+                                tableSearchTerm={tableSearchTerm}
                             />
                         ))}
                     </div>
