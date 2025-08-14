@@ -7,7 +7,8 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createTable, moveGuestToTable } from './actions';
 import { TableComponent } from './TableComponent';
 import { Locations } from '../components/LocationComponent';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { VirtualizedGuestList } from './VirtualizedGuestList';
 import { MoveGuestModal } from './MoveGuestModal';
 import { Table } from '../models/table';
@@ -43,18 +44,17 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
         guest.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const filteredTables = tables
-        .map((table) => ({
-            ...table,
-            guests: table.guests.filter((guest) =>
-                guest.name.toLowerCase().includes(tableSearchTerm.toLowerCase())
-            ),
-        }))
-        .filter(
-            (table) =>
-                table.name.toLowerCase().includes(tableSearchTerm.toLowerCase()) ||
-                table.guests.length > 0
+    const filteredTables = tables.filter((table) => {
+        if (tableSearchTerm.trim() === '') {
+            return true;
+        }
+        const searchTerm = tableSearchTerm.toLowerCase();
+        const tableNameMatch = table.name.toLowerCase().includes(searchTerm);
+        const guestNameMatch = table.guests.some((guest) =>
+            guest.name.toLowerCase().includes(searchTerm)
         );
+        return tableNameMatch || guestNameMatch;
+    });
 
     const handleOpenMoveModal = (guest: Guest) => setMovingGuest(guest);
     const handleCloseMoveModal = () => {
@@ -123,7 +123,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                 <div className="md:col-span-9 2xl:col-span-5 bg-gray-100 p-4 rounded-lg space-y-4">
                     <div className="flex justify-between items-center">
                         <h2 className="text-xl font-bold mb-2">Tables</h2>
-                        <div className='flex gap-2'>
+                        <div className='flex gap-2 items-center'>
                             <TextField
                                 label="Search Tables"
                                 variant="outlined"
@@ -132,13 +132,11 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                                 sx={{ mb: 2 }}
                             />
                             {!isAddTableFormVisible && (
-                                <Button
-                                    variant="contained"
+                                <IconButton
                                     onClick={() => setIsAddTableFormVisible(true)}
-                                    className="self-end"
                                 >
-                                    +
-                                </Button>
+                                    <AddIcon />
+                                </IconButton>
                             )}
                         </div>
                     </div>

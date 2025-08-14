@@ -14,7 +14,6 @@ import {
     Typography,
     Button,
     TextField,
-    IconButton,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
@@ -148,27 +147,25 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal, table
                                 {getHighlightedText(table.name, tableSearchTerm)} ({table.guests.length}/
                                 {table.max_guests})
                             </Typography>
-                            <div>
-                                <IconButton
+                            <div className="flex items-center">
+                                <div
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setIsEditing(true);
                                     }}
-                                    className="ml-2"
-                                    size="small"
+                                    className="ml-2 p-1 cursor-pointer"
                                 >
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton
+                                    <EditIcon fontSize="small" />
+                                </div>
+                                <div
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleDelete();
                                     }}
-                                    className="ml-2"
-                                    size="small"
+                                    className="ml-2 p-1 cursor-pointer"
                                 >
-                                    <DeleteIcon />
-                                </IconButton>
+                                    <DeleteIcon fontSize="small" />
+                                </div>
                             </div>
                         </div>
                     )}

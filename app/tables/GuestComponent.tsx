@@ -70,7 +70,10 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal, table
                         className="border p-1 rounded-md w-full"
                     />
                 ) : (
-                    <span onClick={() => setIsEditing(true)}>{getHighlightedText(guest.name, tableSearchTerm)}</span>
+                    <span onClick={() => setIsEditing(true)}>
+                        {getHighlightedText(guest.name, tableSearchTerm)}
+                        {guest.name !== guest.rsvp_name && <span className="text-xs text-gray-500 ml-1">({guest.rsvp_id})</span>}
+                    </span>
                 )}
                 <IconButton onClick={() => onOpenMoveModal(guest)} className="ml-2" size="small">
                     <OpenWithIcon />

@@ -31,7 +31,7 @@ export const synchronizeGuests = async (location: string) => {
 export const getTablesAndGuests = async (location: string): Promise<{ tables: Table[]; unassignedGuests: Guest[] }> => {
     const { rows: tables } = await query<Table>('SELECT * FROM tables WHERE location = ?', [location]);
     const { rows: rawGuests } = await query<any>(
-        'SELECT guests.id, guests.rsvp_id, guests.name, guests.table_id FROM guests JOIN rsvp ON guests.rsvp_id = rsvp.id WHERE rsvp.location = ?',
+        'SELECT guests.id, guests.rsvp_id, guests.name, guests.table_id, rsvp.name as rsvp_name FROM guests JOIN rsvp ON guests.rsvp_id = rsvp.id WHERE rsvp.location = ?',
         [location]
     );
 
@@ -40,6 +40,7 @@ export const getTablesAndGuests = async (location: string): Promise<{ tables: Ta
         rsvp_id: row.rsvp_id,
         name: row.name,
         table_id: row.table_id,
+        rsvp_name: row.rsvp_name,
     }));
 
     const tablesWithGuests = tables.map((table) => ({
