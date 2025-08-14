@@ -1,12 +1,24 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { moveGuestToTable, updateTableName, updateTableMaxGuests, deleteTable } from './actions';
 import { Locations } from '../components/LocationComponent';
 import { VirtualizedGuestList } from './VirtualizedGuestList';
 import { Table } from '../models/table';
 import { Guest } from '../models/guest';
+import {
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Typography,
+    Button,
+    TextField,
+    IconButton,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface TableComponentProps {
     table: Table;
@@ -21,6 +33,15 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal, table
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState(table.name);
     const [maxGuests, setMaxGuests] = useState(table.max_guests);
+    const [expanded, setExpanded] = useState(false);
+
+    useEffect(() => {
+        if (tableSearchTerm.length > 0) {
+            setExpanded(true);
+        } else {
+            setExpanded(false);
+        }
+    }, [tableSearchTerm]);
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: 'guest',
@@ -47,6 +68,9 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal, table
     };
 
     const getHighlightedText = (text: string, highlight: string) => {
+        if (!highlight) {
+            return <span>{text}</span>;
+        }
         const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
         return (
             <span>
@@ -64,52 +88,103 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal, table
     };
 
     return (
-        <div ref={ref} className={`min-w-[20rem] p-4 rounded-lg ${isOver ? 'bg-green-200' : 'bg-white'}`}>
-            {isEditing ? (
-                <div className="flex justify-between items-center mb-2">
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="border p-1 rounded-md w-full mr-2"
-                    />
-                    <input
-                        type="number"
-                        value={maxGuests}
-                        onChange={(e) => setMaxGuests(parseInt(e.target.value))}
-                        className="border p-1 rounded-md w-20"
-                    />
-                    <button onClick={handleSave} className="ml-2 bg-blue-500 text-white p-1 rounded-md">
-                        Save
-                    </button>
-                    <button onClick={() => setIsEditing(false)} className="ml-2 bg-gray-200 p-1 rounded-md">
-                        Cancel
-                    </button>
-                </div>
-            ) : (
-                <div className="flex justify-between items-center mb-2">
-                    <h3 className="font-bold">
-                        {getHighlightedText(table.name, tableSearchTerm)} ({table.guests.length}/{table.max_guests})
-                    </h3>
-                    <div>
-                        <button onClick={() => setIsEditing(true)} className="ml-2 bg-gray-200 p-1 rounded-md">
-                            Edit
-                        </button>
-                        <button onClick={handleDelete} className="ml-2 bg-red-500 text-white p-1 rounded-md">
-                            Delete
-                        </button>
+        <div ref={ref} className="min-w-[20rem] rounded-lg">
+            <Accordion
+                sx={{ backgroundColor: isOver ? '#a7f3d0' : 'white' }}
+                expanded={expanded}
+                onChange={() => setExpanded(!expanded)}
+            >
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={`panel-${table.id}-content`}
+                    id={`panel-${table.id}-header`}
+                >
+                    {isEditing ? (
+                        <div className="flex justify-between items-center w-full">
+                            <TextField
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="border p-1 rounded-md w-full mr-2"
+                                size="small"
+                                variant="outlined"
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                            <TextField
+                                type="number"
+                                value={maxGuests}
+                                onChange={(e) => setMaxGuests(parseInt(e.target.value))}
+                                className="border p-1 rounded-md w-28"
+                                size="small"
+                                variant="outlined"
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                            <Button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleSave();
+                                }}
+                                className="ml-2"
+                                variant="contained"
+                                size="small"
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsEditing(false);
+                                }}
+                                className="ml-2"
+                                variant="outlined"
+                                size="small"
+                            >
+                                Cancel
+                            </Button>
+                        </div>
+                    ) : (
+                        <div className="flex justify-between items-center w-full">
+                            <Typography sx={{ fontWeight: 'bold' }}>
+                                {getHighlightedText(table.name, tableSearchTerm)} ({table.guests.length}/
+                                {table.max_guests})
+                            </Typography>
+                            <div>
+                                <IconButton
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsEditing(true);
+                                    }}
+                                    className="ml-2"
+                                    size="small"
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDelete();
+                                    }}
+                                    className="ml-2"
+                                    size="small"
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </div>
+                        </div>
+                    )}
+                </AccordionSummary>
+                <AccordionDetails>
+                    <div className="space-y-2 mt-2 h-64 overflow-auto">
+                        <VirtualizedGuestList
+                            guests={table.guests}
+                            tables={tables}
+                            location={location}
+                            onOpenMoveModal={onOpenMoveModal}
+                            tableSearchTerm={tableSearchTerm}
+                        />
                     </div>
-                </div>
-            )}
-            <div className="space-y-2 mt-2 h-64 overflow-auto">
-                <VirtualizedGuestList
-                    guests={table.guests}
-                    tables={tables}
-                    location={location}
-                    onOpenMoveModal={onOpenMoveModal}
-                    tableSearchTerm={tableSearchTerm}
-                />
-            </div>
+                </AccordionDetails>
+            </Accordion>
         </div>
     );
 };

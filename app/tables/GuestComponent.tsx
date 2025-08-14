@@ -6,6 +6,8 @@ import { useRef, useState } from 'react';
 import { Locations } from '../components/LocationComponent';
 import { Table } from '../models/table';
 import { Guest } from '../models/guest';
+import { IconButton } from '@mui/material';
+import OpenWithIcon from '@mui/icons-material/OpenWith';
 
 interface GuestComponentProps {
     guest: Guest;
@@ -70,9 +72,9 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal, table
                 ) : (
                     <span onClick={() => setIsEditing(true)}>{getHighlightedText(guest.name, tableSearchTerm)}</span>
                 )}
-                <button onClick={() => onOpenMoveModal(guest)} className="ml-2 bg-gray-200 p-1 rounded-md">
-                    Move
-                </button>
+                <IconButton onClick={() => onOpenMoveModal(guest)} className="ml-2" size="small">
+                    <OpenWithIcon />
+                </IconButton>
             </div>
         </div>
     );
