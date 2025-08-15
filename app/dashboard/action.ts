@@ -112,7 +112,8 @@ export const addParticipant = async (data: RSVPForm) => {
             await query('DELETE FROM guests WHERE rsvp_id = ?', [rsvp.id]);
         } else {
             const { rows: existingGuests } = await query<Guest>('SELECT * FROM guests WHERE rsvp_id = ?', [rsvp.id]);
-            const guestsToCreate = rsvp.max_guests - existingGuests.length;
+            const targetGuestCount = rsvp.attend?.toLowerCase() === 'yes' ? rsvp.guest_number : rsvp.max_guests;
+            const guestsToCreate = targetGuestCount - existingGuests.length;
 
             if (guestsToCreate > 0) {
                 for (let i = 0; i < guestsToCreate; i++) {
