@@ -22,9 +22,10 @@ import {
     ListItem,
     ListItemText,
     ListItemSecondaryAction,
+    Switch,
 } from '@mui/material';
 import { RSVP, RSVPForm } from '../models/rsvp';
-import { addParticipant, getParticipants, deleteParticipant, importDataFromExcel } from './action';
+import { addParticipant, getParticipants, deleteParticipant, importDataFromExcel, updatePossiblyNotComing } from './action';
 import { useSnackbar } from 'notistack';
 import { Locations } from '../components/LocationComponent';
 
@@ -176,6 +177,22 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
         { field: 'notes', headerName: 'Notes', width: 200, editable: true },
         { field: 'food_choice', headerName: 'Food choice', width: 120, editable: true },
         {
+            field: 'possibly_not_coming',
+            headerName: 'Not coming?',
+            width: 120,
+            renderCell: (params) => (
+                <Switch
+                    checked={params.value ?? false}
+                    onChange={async (e) => {
+                        await updatePossiblyNotComing(params.id as number, e.target.checked);
+                        fetchData();
+                    }}
+                />
+            ),
+        },
+
+
+        {
             field: 'group',
             headerName: 'Group',
             width: 150,
@@ -285,7 +302,7 @@ const DashboardClientPage = ({ initialData, location }: { initialData: RSVP[]; l
                     <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                         Possible Guests:{' '}
                         {data
-                            .filter((p) => p.attend?.toLowerCase() !== 'yes' && p.attend?.toLowerCase() !== 'no')
+                            .filter((p) => p.attend?.toLowerCase() !== 'yes' && p.attend?.toLowerCase() !== 'no' && !p.possibly_not_coming)
                             .reduce((acc, curr) => acc + curr.max_guests, 0)}
                     </Typography>
                 </Box>

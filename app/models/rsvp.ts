@@ -9,6 +9,7 @@ export interface RSVP {
     location: string;
     link: string;
     group?: string;
+    possibly_not_coming: boolean;
 }
 
 export type RSVPForm = Partial<RSVP>;

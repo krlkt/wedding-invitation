@@ -71,8 +71,8 @@ export const addParticipant = async (data: RSVPForm) => {
 
     await query(
         `
-        INSERT INTO rsvp (id, name, attend, max_guests, guest_number, notes, location, food_choice, "group")
-        VALUES ($id, $name, $attend, $max_guests, $guest_number, $notes, $location, $food_choice, $group)
+        INSERT INTO rsvp (id, name, attend, max_guests, guest_number, notes, location, food_choice, "group", possibly_not_coming)
+        VALUES ($id, $name, $attend, $max_guests, $guest_number, $notes, $location, $food_choice, $group, $possibly_not_coming)
         ON CONFLICT(id) DO UPDATE SET
             name = excluded.name,
             attend = excluded.attend,
@@ -81,7 +81,8 @@ export const addParticipant = async (data: RSVPForm) => {
             notes = excluded.notes,
             food_choice=excluded.food_choice,
             location = excluded.location,
-            "group" = excluded."group";
+            "group" = excluded."group",
+            possibly_not_coming = excluded.possibly_not_coming;
         `,
         {
             id: data.id ?? null, // pass null if undefined to allow auto-increment
@@ -93,6 +94,7 @@ export const addParticipant = async (data: RSVPForm) => {
             food_choice: data.food_choice ?? null,
             location: data.location,
             group: group ?? null,
+            possibly_not_coming: data.possibly_not_coming ?? false,
         }
     );
 
@@ -190,4 +192,19 @@ export const importDataFromExcel = async (rows: any[]) => {
             )}`
         );
     }
+};
+
+export const updatePossiblyNotComing = async (id: number, possibly_not_coming: boolean) => {
+    await query(
+        `
+        UPDATE rsvp 
+        SET possibly_not_coming = $possibly_not_coming
+        WHERE id = $id
+    `,
+        {
+            possibly_not_coming: possibly_not_coming,
+            id: id,
+        }
+    );
+    revalidatePath('/');
 };
