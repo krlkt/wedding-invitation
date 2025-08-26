@@ -4,4 +4,5 @@ export interface Guest {
     name: string;
     table_id: number | null;
     rsvp_name: string;
+    checked_in: boolean;
 }

@@ -31,7 +31,7 @@ export const synchronizeGuests = async (location: string) => {
 export const getTablesAndGuests = async (location: string): Promise<{ tables: Table[]; unassignedGuests: Guest[] }> => {
     const { rows: tables } = await query<Table>('SELECT * FROM tables WHERE location = ? ORDER BY name ASC', [location]);
     const { rows: rawGuests } = await query<any>(
-        'SELECT guests.id, guests.rsvp_id, guests.name, guests.table_id, rsvp.name as rsvp_name FROM guests JOIN rsvp ON guests.rsvp_id = rsvp.id WHERE rsvp.location = ?',
+        'SELECT guests.id, guests.rsvp_id, guests.name, guests.table_id, rsvp.name as rsvp_name, guests.checked_in FROM guests JOIN rsvp ON guests.rsvp_id = rsvp.id WHERE rsvp.location = ?',
         [location]
     );
 
@@ -41,6 +41,7 @@ export const getTablesAndGuests = async (location: string): Promise<{ tables: Ta
         name: row.name,
         table_id: row.table_id,
         rsvp_name: row.rsvp_name,
+        checked_in: row.checked_in === 1, // Convert to boolean
     }));
 
     const tablesWithGuests = tables.map((table) => ({
@@ -83,5 +84,10 @@ export const moveGuestToTable = async (guestId: number, tableId: number | null, 
 
 export const updateGuestName = async (guestId: number, name: string, location: string) => {
     await query('UPDATE guests SET name = ? WHERE id = ?', [name, guestId]);
+    revalidatePath(`/tables/${location}`);
+};
+
+export const updateGuestCheckinStatus = async (guestId: number, isChecked: boolean, location: string) => {
+    await query('UPDATE guests SET checked_in = ? WHERE id = ?', [isChecked, guestId]);
     revalidatePath(`/tables/${location}`);
 };

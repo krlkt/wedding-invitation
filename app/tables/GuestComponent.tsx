@@ -8,6 +8,8 @@ import { Table } from '../models/table';
 import { Guest } from '../models/guest';
 import { IconButton } from '@mui/material';
 import OpenWithIcon from '@mui/icons-material/OpenWith';
+import { Switch } from '@mui/material';
+import { updateGuestCheckinStatus } from './actions';
 
 interface GuestComponentProps {
     guest: Guest;
@@ -31,10 +33,17 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal, table
 
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState(guest.name);
+    const [isChecked, setIsChecked] = useState(guest.checked_in);
 
     const handleNameChange = async () => {
         await updateGuestName(guest.id, name, location);
         setIsEditing(false);
+    };
+
+    const handleCheckinToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newCheckedState = e.target.checked;
+        setIsChecked(newCheckedState);
+        await updateGuestCheckinStatus(guest.id, newCheckedState, location);
     };
 
     const getHighlightedText = (text: string, highlight: string) => {
@@ -60,6 +69,7 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal, table
     return (
         <div ref={ref} className={`p-2 rounded-md shadow-md ${isDragging ? 'opacity-50' : 'bg-white'}`}>
             <div className="flex justify-between items-center">
+                <Switch checked={isChecked} onChange={handleCheckinToggle} size="small" />
                 {isEditing ? (
                     <input
                         type="text"
@@ -70,9 +80,11 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal, table
                         className="border p-1 rounded-md w-full"
                     />
                 ) : (
-                    <span onClick={() => setIsEditing(true)}>
+                    <span onClick={() => setIsEditing(true)} className="flex-grow">
                         {getHighlightedText(guest.name, tableSearchTerm)}
-                        {guest.name !== guest.rsvp_name && <span className="text-xs text-gray-500 ml-1">({guest.rsvp_id})</span>}
+                        {guest.name !== guest.rsvp_name && (
+                            <span className="text-xs text-gray-500 ml-1">({guest.rsvp_id})</span>
+                        )}
                     </span>
                 )}
                 <IconButton onClick={() => onOpenMoveModal(guest)} className="ml-2" size="small">
