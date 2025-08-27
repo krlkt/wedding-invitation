@@ -4,13 +4,15 @@ import { useRouter } from 'next/navigation';
 import { FC, useRef, useState } from 'react';
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { createTable, moveGuestToTable } from './actions';
+import { moveGuestToTable, synchronizeGuests } from './actions';
 import { TableComponent } from './TableComponent';
 import { Locations } from '../components/LocationComponent';
 import { Button, TextField, IconButton } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import { VirtualizedGuestList } from './VirtualizedGuestList';
 import { MoveGuestModal } from './MoveGuestModal';
+import { ManageTablesModal } from './ManageTablesModal';
+import { naturalSort } from '../utils/sort';
 import { Table } from '../models/table';
 import { Guest } from '../models/guest';
 
@@ -24,27 +26,29 @@ interface TableManagementLayoutProps {
     tables: Table[];
     unassignedGuests: Guest[];
     location: Locations;
-    onCreateTable: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }
 
 const TableManagementLayout: FC<TableManagementLayoutProps> = ({
     tables,
     unassignedGuests,
     location,
-    onCreateTable,
 }) => {
     const router = useRouter();
     const ref = useRef<HTMLDivElement>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [tableSearchTerm, setTableSearchTerm] = useState('');
     const [movingGuest, setMovingGuest] = useState<Guest | null>(null);
-    const [isAddTableFormVisible, setIsAddTableFormVisible] = useState(false);
+    const [isUnassignedGuestsOpen, setIsUnassignedGuestsOpen] = useState(true);
+    const [isSyncing, setIsSyncing] = useState(false);
+    const [isManageTablesModalOpen, setIsManageTablesModalOpen] = useState(false);
+
+    const sortedTables = [...tables].sort((a, b) => naturalSort(a.name, b.name));
 
     const filteredUnassignedGuests = unassignedGuests.filter((guest) =>
         guest.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const filteredTables = tables.filter((table) => {
+    const filteredTables = sortedTables.filter((table) => {
         if (tableSearchTerm.trim() === '') {
             return true;
         }
@@ -62,11 +66,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
         router.refresh();
     };
 
-    const handleCreateTable = async (event: React.FormEvent<HTMLFormElement>) => {
-        await onCreateTable(event);
-        setIsAddTableFormVisible(false);
-        router.refresh();
-    };
+    
 
     const [{ isOver: isOverUnassigned }, dropUnassigned] = useDrop(() => ({
         accept: 'guest',
@@ -83,25 +83,42 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
 
     return (
         <div className="p-4">
+            <ManageTablesModal open={isManageTablesModalOpen} onClose={() => setIsManageTablesModalOpen(false)} tables={sortedTables} location={location} />
             {movingGuest && (
                 <MoveGuestModal
                     guest={movingGuest}
-                    tables={tables}
+                    tables={sortedTables}
                     location={location}
                     onClose={handleCloseMoveModal}
                 />
             )}
-            <div className="flex items-center mb-4">
+            <div className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold">Table Management ({location})</h1>
+                <div className='flex gap-2'>
+                    <Button variant='contained' onClick={async () => {
+                        setIsSyncing(true);
+                        await synchronizeGuests(location);
+                        router.refresh();
+                        setIsSyncing(false);
+                    }} disabled={isSyncing}>{isSyncing ? 'Syncing...' : 'Synchronize'}</Button>
+                    <Button variant='contained' onClick={() => setIsManageTablesModalOpen(true)}>Manage Tables</Button>
+                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-12 2xl:grid-cols-6 gap-4">
                 <div
                     ref={ref}
                     className={`md:col-span-3 2xl:col-span-1 bg-gray-100 p-4 rounded-lg ${
                         isOverUnassigned ? 'bg-green-200' : ''
+                    } ${
+                        isUnassignedGuestsOpen ? 'block' : 'hidden'
                     }`}
                 >
-                    <h2 className="text-xl font-bold mb-2">Unassigned Guests</h2>
+                    <div className="flex justify-between items-center mb-2">
+                        <h2 className="text-xl font-bold">Unassigned Guests</h2>
+                        <IconButton onClick={() => setIsUnassignedGuestsOpen(false)}>
+                            <CloseIcon />
+                        </IconButton>
+                    </div>
                     <TextField
                         label="Search Guests"
                         variant="outlined"
@@ -109,20 +126,30 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         sx={{ mb: 2 }}
+                        size='small'
                     />
                     <div className="space-y-2 h-[calc(100vh-260px)]">
                         <VirtualizedGuestList
                             guests={filteredUnassignedGuests}
-                            tables={tables}
+                            tables={sortedTables}
                             location={location}
                             onOpenMoveModal={handleOpenMoveModal}
                             tableSearchTerm={searchTerm}
                         />
                     </div>
                 </div>
-                <div className="md:col-span-9 2xl:col-span-5 bg-gray-100 p-4 rounded-lg space-y-4">
+                <div className={`${
+                    isUnassignedGuestsOpen ? 'md:col-span-9 2xl:col-span-5' : 'md:col-span-12 2xl:col-span-6'
+                } bg-gray-100 p-4 rounded-lg space-y-4`}>
                     <div className="flex justify-between items-center">
-                        <h2 className="text-xl font-bold mb-2">Tables</h2>
+                        <div className='flex gap-2 items-center'>
+                            {!isUnassignedGuestsOpen && (
+                                <Button onClick={() => setIsUnassignedGuestsOpen(true)} variant='outlined' size='small'>
+                                    Show Unassigned Guests
+                                </Button>
+                            )}
+                            <h2 className="text-xl font-bold">Tables</h2>
+                        </div>
                         <div className='flex gap-2 items-center'>
                             <TextField
                                 label="Search Tables"
@@ -131,39 +158,9 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                                 onChange={(e) => setTableSearchTerm(e.target.value)}
                                 sx={{ mb: 2 }}
                             />
-                            {!isAddTableFormVisible && (
-                                <IconButton
-                                    onClick={() => setIsAddTableFormVisible(true)}
-                                >
-                                    <AddIcon />
-                                </IconButton>
-                            )}
                         </div>
                     </div>
-                    {isAddTableFormVisible && (
-                        <div className="flex-grow">
-                            <form onSubmit={handleCreateTable} className="flex space-x-2 mt-2">
-                                <TextField
-                                    type="text"
-                                    name="newTableName"
-                                    placeholder="Table Name"
-                                    className="w-full"
-                                />
-                                <TextField
-                                    type="number"
-                                    name="newTableMaxGuests"
-                                    placeholder="Max Guests"
-                                    defaultValue={10}
-                                />
-                                <Button type="submit" variant="contained">
-                                    Add Table
-                                </Button>
-                                <Button variant="outlined" onClick={() => setIsAddTableFormVisible(false)}>
-                                    Cancel
-                                </Button>
-                            </form>
-                        </div>
-                    )}
+                    
                     <div className="flex flex-wrap gap-2">
                         {filteredTables.map((table) => (
                             <TableComponent
@@ -187,14 +184,7 @@ const TableManagementClientPage = ({
     initialUnassignedGuests,
     location,
 }: TableManagementClientPageProps) => {
-    const handleCreateTable = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const form = event.currentTarget;
-        const newTableName = (form.elements.namedItem('newTableName') as HTMLInputElement).value;
-        const newTableMaxGuests = parseInt((form.elements.namedItem('newTableMaxGuests') as HTMLInputElement).value);
-        await createTable(newTableName, newTableMaxGuests, location);
-        form.reset();
-    };
+    
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -202,7 +192,6 @@ const TableManagementClientPage = ({
                 tables={initialTables}
                 unassignedGuests={initialUnassignedGuests}
                 location={location}
-                onCreateTable={handleCreateTable}
             />
         </DndProvider>
     );

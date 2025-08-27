@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { useDrop } from 'react-dnd';
-import { moveGuestToTable, updateTableName, updateTableMaxGuests, deleteTable } from './actions';
+import { moveGuestToTable } from './actions';
 import { Locations } from '../components/LocationComponent';
 import { VirtualizedGuestList } from './VirtualizedGuestList';
 import { Table } from '../models/table';
@@ -12,12 +12,8 @@ import {
     AccordionSummary,
     AccordionDetails,
     Typography,
-    Button,
-    TextField,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 interface TableComponentProps {
     table: Table;
@@ -29,9 +25,6 @@ interface TableComponentProps {
 
 export const TableComponent = ({ table, tables, location, onOpenMoveModal, tableSearchTerm }: TableComponentProps) => {
     const ref = useRef<HTMLDivElement>(null);
-    const [isEditing, setIsEditing] = useState(false);
-    const [name, setName] = useState(table.name);
-    const [maxGuests, setMaxGuests] = useState(table.max_guests);
     const [expanded, setExpanded] = useState(false);
 
     useEffect(() => {
@@ -54,17 +47,7 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal, table
 
     drop(ref);
 
-    const handleSave = async () => {
-        await updateTableName(table.id, name, location);
-        await updateTableMaxGuests(table.id, maxGuests, location);
-        setIsEditing(false);
-    };
-
-    const handleDelete = async () => {
-        if (window.confirm(`Are you sure you want to delete table ${table.name}?`)) {
-            await deleteTable(table.id, location);
-        }
-    };
+    
 
     const getHighlightedText = (text: string, highlight: string) => {
         if (!highlight) {
@@ -87,7 +70,7 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal, table
     };
 
     return (
-        <div ref={ref} className="min-w-[20rem] rounded-lg">
+        <div ref={ref} className="min-w-[16rem] rounded-lg">
             <Accordion
                 sx={{ backgroundColor: isOver ? '#a7f3d0' : 'white' }}
                 expanded={expanded}
@@ -98,77 +81,16 @@ export const TableComponent = ({ table, tables, location, onOpenMoveModal, table
                     aria-controls={`panel-${table.id}-content`}
                     id={`panel-${table.id}-header`}
                 >
-                    {isEditing ? (
-                        <div className="flex justify-between items-center w-full">
-                            <TextField
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                className="border p-1 rounded-md w-full mr-2"
-                                size="small"
-                                variant="outlined"
-                                onClick={(e) => e.stopPropagation()}
-                            />
-                            <TextField
-                                type="number"
-                                value={maxGuests}
-                                onChange={(e) => setMaxGuests(parseInt(e.target.value))}
-                                className="border p-1 rounded-md w-28"
-                                size="small"
-                                variant="outlined"
-                                onClick={(e) => e.stopPropagation()}
-                            />
-                            <Button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleSave();
-                                }}
-                                className="ml-2"
-                                variant="contained"
-                                size="small"
-                            >
-                                Save
-                            </Button>
-                            <Button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setIsEditing(false);
-                                }}
-                                className="ml-2"
-                                variant="outlined"
-                                size="small"
-                            >
-                                Cancel
-                            </Button>
-                        </div>
-                    ) : (
-                        <div className="flex justify-between items-center w-full">
-                            <Typography sx={{ fontWeight: 'bold' }}>
-                                {getHighlightedText(table.name, tableSearchTerm)} ({table.guests.length}/
-                                {table.max_guests})
+                    <div className="flex justify-between items-center w-full">
+                        <div className="flex-grow w-0 flex justify-between">
+                            <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={table.name}>
+                                {getHighlightedText(table.name, tableSearchTerm)}
                             </Typography>
-                            <div className="flex items-center">
-                                <div
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setIsEditing(true);
-                                    }}
-                                    className="ml-2 p-1 cursor-pointer"
-                                >
-                                    <EditIcon fontSize="small" />
-                                </div>
-                                <div
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleDelete();
-                                    }}
-                                    className="ml-2 p-1 cursor-pointer"
-                                >
-                                    <DeleteIcon fontSize="small" />
-                                </div>
-                            </div>
+                            <Typography sx={{ fontSize: '0.875rem', fontWeight: 'bold', whiteSpace: 'nowrap'}}>
+                                ({table.guests.length}/{table.max_guests})
+                            </Typography>
                         </div>
-                    )}
+                    </div>
                 </AccordionSummary>
                 <AccordionDetails>
                     <div className="space-y-2 mt-2 h-64 overflow-auto">

@@ -67,7 +67,7 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal, table
     };
 
     return (
-        <div ref={ref} className={`p-2 rounded-md shadow-md ${isDragging ? 'opacity-50' : 'bg-white'}`}>
+        <div ref={ref} className={`p-1 rounded-md shadow-md ${isDragging ? 'opacity-50' : 'bg-white'}`}>
             <div className="flex justify-between items-center">
                 <Switch checked={isChecked} onChange={handleCheckinToggle} size="small" />
                 {isEditing ? (
@@ -77,10 +77,10 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal, table
                         onChange={(e) => setName(e.target.value)}
                         onBlur={handleNameChange}
                         autoFocus
-                        className="border p-1 rounded-md w-full"
+                        className="border p-1 rounded-md w-full text-sm"
                     />
                 ) : (
-                    <span onClick={() => setIsEditing(true)} className="flex-grow">
+                    <span onClick={() => setIsEditing(true)} className="flex-grow text-sm">
                         {getHighlightedText(guest.name, tableSearchTerm)}
                         {guest.name !== guest.rsvp_name && (
                             <span className="text-xs text-gray-500 ml-1">({guest.rsvp_id})</span>
@@ -88,7 +88,7 @@ export const GuestComponent = ({ guest, tables, location, onOpenMoveModal, table
                     </span>
                 )}
                 <IconButton onClick={() => onOpenMoveModal(guest)} className="ml-2" size="small">
-                    <OpenWithIcon />
+                    <OpenWithIcon fontSize='small' />
                 </IconButton>
             </div>
         </div>
