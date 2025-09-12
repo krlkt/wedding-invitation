@@ -15,6 +15,8 @@ import { ManageTablesModal } from './ManageTablesModal';
 import { naturalSort } from '../utils/sort';
 import { Table } from '../models/table';
 import { Guest } from '../models/guest';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface TableManagementClientPageProps {
     initialTables: Table[];
@@ -28,11 +30,7 @@ interface TableManagementLayoutProps {
     location: Locations;
 }
 
-const TableManagementLayout: FC<TableManagementLayoutProps> = ({
-    tables,
-    unassignedGuests,
-    location,
-}) => {
+const TableManagementLayout: FC<TableManagementLayoutProps> = ({ tables, unassignedGuests, location }) => {
     const router = useRouter();
     const ref = useRef<HTMLDivElement>(null);
     const [searchTerm, setSearchTerm] = useState('');
@@ -54,9 +52,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
         }
         const searchTerm = tableSearchTerm.toLowerCase();
         const tableNameMatch = table.name.toLowerCase().includes(searchTerm);
-        const guestNameMatch = table.guests.some((guest) =>
-            guest.name.toLowerCase().includes(searchTerm)
-        );
+        const guestNameMatch = table.guests.some((guest) => guest.name.toLowerCase().includes(searchTerm));
         return tableNameMatch || guestNameMatch;
     });
 
@@ -66,7 +62,19 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
         router.refresh();
     };
 
-    
+    const handleExportPdf = () => {
+        const doc = new jsPDF();
+        const data = sortedTables.flatMap(table => 
+            table.guests.map(guest => [table.name, guest.name])
+        );
+
+        autoTable(doc, {
+            head: [['Table Name', 'Guest Name']],
+            body: data,
+        });
+
+        doc.save(`tables-${location}.pdf`);
+    };
 
     const [{ isOver: isOverUnassigned }, dropUnassigned] = useDrop(() => ({
         accept: 'guest',
@@ -83,7 +91,12 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
 
     return (
         <div className="p-4">
-            <ManageTablesModal open={isManageTablesModalOpen} onClose={() => setIsManageTablesModalOpen(false)} tables={sortedTables} location={location} />
+            <ManageTablesModal
+                open={isManageTablesModalOpen}
+                onClose={() => setIsManageTablesModalOpen(false)}
+                tables={sortedTables}
+                location={location}
+            />
             {movingGuest && (
                 <MoveGuestModal
                     guest={movingGuest}
@@ -94,14 +107,25 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
             )}
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold">Table Management ({location})</h1>
-                <div className='flex gap-2'>
-                    <Button variant='contained' onClick={async () => {
-                        setIsSyncing(true);
-                        await synchronizeGuests(location);
-                        router.refresh();
-                        setIsSyncing(false);
-                    }} disabled={isSyncing}>{isSyncing ? 'Syncing...' : 'Synchronize'}</Button>
-                    <Button variant='contained' onClick={() => setIsManageTablesModalOpen(true)}>Manage Tables</Button>
+                <div className="flex gap-2">
+                    <Button variant="contained" onClick={handleExportPdf}>
+                        Export as PDF
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={async () => {
+                            setIsSyncing(true);
+                            await synchronizeGuests(location);
+                            router.refresh();
+                            setIsSyncing(false);
+                        }}
+                        disabled={isSyncing}
+                    >
+                        {isSyncing ? 'Syncing...' : 'Synchronize'}
+                    </Button>
+                    <Button variant="contained" onClick={() => setIsManageTablesModalOpen(true)}>
+                        Manage Tables
+                    </Button>
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-12 2xl:grid-cols-6 gap-4">
@@ -109,9 +133,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                     ref={ref}
                     className={`md:col-span-3 2xl:col-span-1 bg-gray-100 p-4 rounded-lg ${
                         isOverUnassigned ? 'bg-green-200' : ''
-                    } ${
-                        isUnassignedGuestsOpen ? 'block' : 'hidden'
-                    }`}
+                    } ${isUnassignedGuestsOpen ? 'block' : 'hidden'}`}
                 >
                     <div className="flex justify-between items-center mb-2">
                         <h2 className="text-xl font-bold">Unassigned Guests</h2>
@@ -126,7 +148,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         sx={{ mb: 2 }}
-                        size='small'
+                        size="small"
                     />
                     <div className="space-y-2 h-[calc(100vh-260px)]">
                         <VirtualizedGuestList
@@ -138,19 +160,21 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                         />
                     </div>
                 </div>
-                <div className={`${
-                    isUnassignedGuestsOpen ? 'md:col-span-9 2xl:col-span-5' : 'md:col-span-12 2xl:col-span-6'
-                } bg-gray-100 p-4 rounded-lg space-y-4`}>
+                <div
+                    className={`${
+                        isUnassignedGuestsOpen ? 'md:col-span-9 2xl:col-span-5' : 'md:col-span-12 2xl:col-span-6'
+                    } bg-gray-100 p-4 rounded-lg space-y-4`}
+                >
                     <div className="flex justify-between items-center">
-                        <div className='flex gap-2 items-center'>
+                        <div className="flex gap-2 items-center">
                             {!isUnassignedGuestsOpen && (
-                                <Button onClick={() => setIsUnassignedGuestsOpen(true)} variant='outlined' size='small'>
+                                <Button onClick={() => setIsUnassignedGuestsOpen(true)} variant="outlined" size="small">
                                     Show Unassigned Guests
                                 </Button>
                             )}
                             <h2 className="text-xl font-bold">Tables</h2>
                         </div>
-                        <div className='flex gap-2 items-center'>
+                        <div className="flex gap-2 items-center">
                             <TextField
                                 label="Search Tables"
                                 variant="outlined"
@@ -160,7 +184,7 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
                             />
                         </div>
                     </div>
-                    
+
                     <div className="flex flex-wrap gap-2">
                         {filteredTables.map((table) => (
                             <TableComponent
@@ -184,8 +208,6 @@ const TableManagementClientPage = ({
     initialUnassignedGuests,
     location,
 }: TableManagementClientPageProps) => {
-    
-
     return (
         <DndProvider backend={HTML5Backend}>
             <TableManagementLayout
