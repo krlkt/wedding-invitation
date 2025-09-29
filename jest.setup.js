@@ -4,10 +4,9 @@ import { TextEncoder, TextDecoder } from 'util'
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
 
-// Note: MSW setup is commented out due to module compatibility issues
-// To enable MSW mocking, uncomment the following lines after resolving
-// the ECMAScript modules compatibility:
-//
+// Note: MSW setup requires additional ESM configuration
+// For now, API mocking is disabled but handlers are available for manual testing
+// To enable MSW, configure Jest with proper ESM support or downgrade to MSW v1
 // import { server } from './__tests__/mocks/server'
 // beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }))
 // afterEach(() => server.resetHandlers())

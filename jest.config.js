@@ -16,6 +16,10 @@ const customJestConfig = {
     '^@/utils/(.*)$': '<rootDir>/app/utils/$1',
   },
   testEnvironment: 'node',
+  // Transform ESM modules for MSW compatibility
+  transformIgnorePatterns: [
+    'node_modules/(?!(msw|@mswjs|@bundled-es-modules|until-async)/)',
+  ],
   testMatch: [
     '**/__tests__/**/*.test.(ts|tsx)',
     '**/?(*.)+(spec|test).(ts|tsx)'
