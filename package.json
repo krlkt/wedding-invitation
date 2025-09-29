@@ -6,7 +6,13 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "db:generate": "drizzle-kit generate",
+        "db:push": "drizzle-kit push",
+        "db:studio": "drizzle-kit studio",
+        "db:introspect": "drizzle-kit introspect",
+        "test": "jest",
+        "test:e2e": "playwright test"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
@@ -17,10 +23,12 @@
         "@mui/material": "^7.3.1",
         "@mui/x-charts": "^8.6.0",
         "@mui/x-data-grid": "^8.4.0",
+        "@paralleldrive/cuid2": "^2.2.2",
         "@splidejs/react-splide": "^0.7.12",
         "@tanstack/react-virtual": "^3.13.12",
         "cookie": "^1.0.2",
         "dotenv": "^16.4.7",
+        "drizzle-orm": "^0.44.5",
         "framer-motion": "^11.3.28",
         "jspdf": "^3.0.2",
         "jspdf-autotable": "^5.0.2",
@@ -40,14 +48,24 @@
         "xlsx": "^0.18.5"
     },
     "devDependencies": {
+        "@jest/globals": "^30.2.0",
+        "@playwright/test": "^1.55.1",
+        "@testing-library/jest-dom": "^6.8.0",
+        "@testing-library/react": "^16.3.0",
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",
         "csstype": "^3.0.10",
+        "drizzle-kit": "^0.31.5",
         "eslint": "^8",
         "eslint-config-next": "14.2.4",
+        "jest": "^30.2.0",
+        "jest-environment-jsdom": "^30.2.0",
+        "msw": "^2.11.3",
         "postcss": "^8",
         "tailwindcss": "^3.4.1",
-        "typescript": "^5"
+        "tsx": "^4.20.6",
+        "typescript": "^5",
+        "whatwg-fetch": "^3.6.20"
     }
 }
