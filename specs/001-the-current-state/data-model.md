@@ -56,7 +56,9 @@ interface WeddingConfiguration {
   groomName: string;
   brideName: string;
   weddingDate: Date;
-  monogram?: string;
+  monogramFilename?: string; // Uploaded monogram image
+  monogramFileSize?: number;
+  monogramMimeType?: string;
   groomFather?: string;
   groomMother?: string;
   brideFather?: string;
