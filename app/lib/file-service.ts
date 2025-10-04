@@ -7,7 +7,7 @@
 
 import { put, del } from '@vercel/blob'
 import { db } from './database'
-import { galleryItems, dressCodes, weddingConfigurations, type NewGalleryItem } from '@/db/schema'
+import { galleryItems, dressCodes, weddingConfigurations, type NewGalleryItem } from '@/app/db/schema'
 import { eq } from 'drizzle-orm'
 
 // File validation constants

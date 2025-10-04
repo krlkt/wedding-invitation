@@ -5,8 +5,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/session'
-import { updateLoveStorySegment, deleteLoveStorySegment } from '@/lib/content-service'
+import { requireAuth } from '@/app/lib/session'
+import { updateLoveStorySegment, deleteLoveStorySegment } from '@/app/lib/content-service'
 
 export async function PUT(
   request: NextRequest,

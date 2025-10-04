@@ -3,8 +3,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/session'
-import { updateGalleryPhoto, deleteGalleryPhoto } from '@/lib/file-service'
+import { requireAuth } from '@/app/lib/session'
+import { updateGalleryPhoto, deleteGalleryPhoto } from '@/app/lib/file-service'
 
 export async function PUT(
   request: NextRequest,

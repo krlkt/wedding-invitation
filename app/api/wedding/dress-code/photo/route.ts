@@ -3,8 +3,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/session'
-import { deleteDressCodePhoto } from '@/lib/file-service'
+import { requireAuth } from '@/app/lib/session'
+import { deleteDressCodePhoto } from '@/app/lib/file-service'
 
 export async function DELETE(request: NextRequest) {
   try {

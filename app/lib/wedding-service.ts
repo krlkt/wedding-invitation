@@ -12,7 +12,7 @@ import {
   type NewWeddingConfiguration,
   type WeddingConfiguration,
   type FeatureToggle,
-} from '@/db/schema'
+} from '@/app/db/schema'
 import { eq, and } from 'drizzle-orm'
 
 /**

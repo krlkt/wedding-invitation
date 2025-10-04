@@ -44,6 +44,11 @@ function extractSubdomain(hostname: string): string | null {
   // Split by dots
   const parts = host.split('.')
 
+  // For localhost development: support subdomain.localhost
+  if (parts.length === 2 && parts[1] === 'localhost') {
+    return parts[0]
+  }
+
   // For localhost or single-part domains, no subdomain
   if (parts.length <= 1 || host === 'localhost') {
     return null

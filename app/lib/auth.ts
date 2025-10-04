@@ -6,7 +6,7 @@
  */
 
 import { db } from './database'
-import { userAccounts, type NewUserAccount } from '@/db/schema'
+import { userAccounts, type NewUserAccount } from '@/app/db/schema'
 import { eq } from 'drizzle-orm'
 import bcrypt from 'bcryptjs'
 

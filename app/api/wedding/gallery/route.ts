@@ -3,8 +3,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/session'
-import { getGalleryPhotos } from '@/lib/file-service'
+import { requireAuth } from '@/app/lib/session'
+import { getGalleryPhotos } from '@/app/lib/file-service'
 
 export async function GET(request: NextRequest) {
   try {

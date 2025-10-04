@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { getWeddingConfigById } from '@/lib/wedding-service'
+import { getWeddingConfigById } from '@/app/lib/wedding-service'
 
 export async function GET(request: NextRequest) {
   try {

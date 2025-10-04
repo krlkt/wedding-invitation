@@ -5,8 +5,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { registerUser } from '@/lib/auth'
-import { createWeddingConfiguration } from '@/lib/wedding-service'
+import { registerUser } from '@/app/lib/auth'
+import { createWeddingConfiguration } from '@/app/lib/wedding-service'
 
 export async function POST(request: NextRequest) {
   try {

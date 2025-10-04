@@ -5,8 +5,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/session'
-import { publishWeddingConfig, getWeddingConfigById } from '@/lib/wedding-service'
+import { requireAuth } from '@/app/lib/session'
+import { publishWeddingConfig, getWeddingConfigById } from '@/app/lib/wedding-service'
 
 export async function POST(request: NextRequest) {
   try {

@@ -17,7 +17,7 @@ import {
   type NewFAQItem,
   type NewBankDetails,
   type NewDressCode,
-} from '@/db/schema'
+} from '@/app/db/schema'
 import { eq } from 'drizzle-orm'
 
 // ============================================================================

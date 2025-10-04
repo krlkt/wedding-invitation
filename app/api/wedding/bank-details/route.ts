@@ -3,8 +3,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/session'
-import { getBankDetails, updateBankDetails } from '@/lib/content-service'
+import { requireAuth } from '@/app/lib/session'
+import { getBankDetails, updateBankDetails } from '@/app/lib/content-service'
 
 export async function GET(request: NextRequest) {
   try {

@@ -5,8 +5,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/session'
-import { toggleFeature } from '@/lib/wedding-service'
+import { requireAuth } from '@/app/lib/session'
+import { toggleFeature } from '@/app/lib/wedding-service'
 
 const VALID_FEATURES = [
   'love_story',

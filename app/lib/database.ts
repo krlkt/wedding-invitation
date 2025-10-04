@@ -7,7 +7,7 @@
 
 import { drizzle } from 'drizzle-orm/libsql'
 import { createClient } from '@libsql/client'
-import * as schema from '@/db/schema'
+import * as schema from '@/app/db/schema'
 
 // Validate required environment variables
 if (!process.env.TURSO_DATABASE_URL) {

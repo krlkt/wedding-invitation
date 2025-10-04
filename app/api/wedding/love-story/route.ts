@@ -5,8 +5,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/session'
-import { getLoveStorySegments, createLoveStorySegment } from '@/lib/content-service'
+import { requireAuth } from '@/app/lib/session'
+import { getLoveStorySegments, createLoveStorySegment } from '@/app/lib/content-service'
 
 export async function GET(request: NextRequest) {
   try {
