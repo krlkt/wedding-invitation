@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { Guest } from '../models/guest';
 
 const VALID_LOCATIONS = ['jakarta', 'bali', 'malang'];
-const BASE_URL = `http://karelandsabrina.vercel.app`;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || `https://oialt.vercel.app`;
 
 export const updateLink = async (data: RSVPForm) => {
     let participantId = data.id;

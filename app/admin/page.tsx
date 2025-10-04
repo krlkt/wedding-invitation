@@ -78,7 +78,7 @@ export default async function AdminDashboard() {
               {weddingConfig.groomName} & {weddingConfig.brideName}
             </h1>
             <p className="text-sm text-gray-500">
-              {weddingConfig.subdomain}.wedding.com
+              {weddingConfig.subdomain}-oialt.vercel.app
             </p>
           </div>
           <a
