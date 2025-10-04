@@ -55,7 +55,7 @@ export default async function AdminDashboard() {
         <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">No Wedding Configuration Found</h1>
           <p className="text-gray-600 mb-6">
-            You don't have a wedding configuration yet. Please contact support to set up your wedding.
+            You don&apos;t have a wedding configuration yet. Please contact support to set up your wedding.
           </p>
           <a
             href="/api/auth/logout"
@@ -91,7 +91,7 @@ export default async function AdminDashboard() {
       </header>
 
       <main>
-        <ConfigDashboard initialConfig={weddingConfig} />
+        <ConfigDashboard />
       </main>
     </div>
   )

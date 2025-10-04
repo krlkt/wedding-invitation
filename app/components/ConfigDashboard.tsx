@@ -272,7 +272,7 @@ function BasicInfoForm({ config, onUpdate, saving }: any) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Groom's Father</label>
+          <label className="block text-sm font-medium mb-1">Groom&apos;s Father</label>
           <input
             type="text"
             value={formData.groomFather}
@@ -281,7 +281,7 @@ function BasicInfoForm({ config, onUpdate, saving }: any) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Groom's Mother</label>
+          <label className="block text-sm font-medium mb-1">Groom&apos;s Mother</label>
           <input
             type="text"
             value={formData.groomMother}
@@ -293,7 +293,7 @@ function BasicInfoForm({ config, onUpdate, saving }: any) {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Bride's Father</label>
+          <label className="block text-sm font-medium mb-1">Bride&apos;s Father</label>
           <input
             type="text"
             value={formData.brideFather}
@@ -302,7 +302,7 @@ function BasicInfoForm({ config, onUpdate, saving }: any) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Bride's Mother</label>
+          <label className="block text-sm font-medium mb-1">Bride&apos;s Mother</label>
           <input
             type="text"
             value={formData.brideMother}

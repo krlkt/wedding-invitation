@@ -8,7 +8,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { WeddingConfiguration } from '@/db/schema'
+import { WeddingConfiguration } from '@/app/db/schema'
 
 interface WeddingLayoutProps {
   subdomain: string

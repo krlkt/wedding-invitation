@@ -25,7 +25,10 @@ async function migrateData() {
     console.log('⚠️  User account already exists. Resuming migration...')
     const userResult = await client.execute('SELECT id FROM user_accounts LIMIT 1')
     const userId = userResult.rows[0].id as string
-    const weddingResult = await client.execute('SELECT id FROM wedding_configurations WHERE user_id = ?', [userId])
+    const weddingResult = await client.execute({
+      sql: 'SELECT id FROM wedding_configurations WHERE user_id = ?',
+      args: [userId]
+    })
     const weddingConfigId = weddingResult.rows[0].id as string
 
     await resumeMigration(weddingConfigId)
