@@ -44,7 +44,7 @@ export default async function AdminDashboard() {
   const session = await getSession()
 
   if (!session || !session.userId) {
-    redirect('/login?redirect=/admin')
+    redirect('/admin/login')
   }
 
   // Get user's wedding configuration
