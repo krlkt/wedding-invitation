@@ -11,6 +11,7 @@ import { db } from '@/app/lib/database'
 import { userAccounts, weddingConfigurations } from '@/app/db/schema'
 import { eq } from 'drizzle-orm'
 import ConfigDashboard from '@/app/components/ConfigDashboard'
+import LogoutButton from '@/app/components/LogoutButton'
 
 async function getSession() {
   const cookieStore = await cookies()
@@ -57,12 +58,7 @@ export default async function AdminDashboard() {
           <p className="text-gray-600 mb-6">
             You don&apos;t have a wedding configuration yet. Please contact support to set up your wedding.
           </p>
-          <a
-            href="/api/auth/logout"
-            className="block w-full text-center bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-700"
-          >
-            Logout
-          </a>
+          <LogoutButton fullWidth />
         </div>
       </div>
     )
@@ -81,12 +77,7 @@ export default async function AdminDashboard() {
               {weddingConfig.subdomain}-oialt.vercel.app
             </p>
           </div>
-          <a
-            href="/api/auth/logout"
-            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
-          >
-            Logout
-          </a>
+          <LogoutButton />
         </div>
       </header>
 
