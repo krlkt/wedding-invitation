@@ -69,6 +69,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Handle subdomain collision errors
+    if (error.message && error.message.includes('unique subdomain')) {
+      return NextResponse.json(
+        { success: false, error: 'Unable to generate unique subdomain. Please try again.' },
+        { status: 400 }
+      )
+    }
+
     console.error('Registration error:', error)
     return NextResponse.json(
       { success: false, error: 'Registration failed' },
