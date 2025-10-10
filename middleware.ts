@@ -20,6 +20,21 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Allow the login page to be accessed without a session
+  if (pathname.startsWith('/admin/login')) {
+    return NextResponse.next()
+  }
+
+  // Check authentication
+  const session = request.cookies.get('session')?.value
+  if (!session) {
+    const loginUrl = request.nextUrl.clone()
+    loginUrl.pathname = '/admin/login'
+    // Optionally, save the original path so user can return after login
+    loginUrl.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(loginUrl)
+  }
+
   // Extract subdomain from hostname
   const hostname = request.headers.get('host') || ''
   const subdomain = extractSubdomain(hostname)
