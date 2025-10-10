@@ -17,8 +17,23 @@ export default function ConfigDashboard() {
   const [activeTab, setActiveTab] = useState<'basic' | 'features' | 'content'>('basic')
   const [refreshTrigger, setRefreshTrigger] = useState(0)
 
+  //WIP: session check on dashboard load or time interval or user action?
+  const checkSession = async () => {
+      try {
+          const res = await fetch('/api/auth/session');
+          const data = await res.json();
+          if (!data.success) {
+          window.location.href = '/login';
+          }
+      } catch (err) {
+          console.error('Session check failed', err);
+          window.location.href = '/login';
+      }
+  };
+
   useEffect(() => {
     fetchConfig()
+    checkSession();
   }, [])
 
   async function fetchConfig() {
