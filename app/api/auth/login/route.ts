@@ -44,15 +44,20 @@ export async function POST(request: NextRequest) {
 
     // Set session cookie
     const cookieStore = await cookies()
-    cookieStore.set('session', JSON.stringify({
-      userId: user.userId,
-      weddingConfigId: weddingConfig.id,
-    }), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    })
+    cookieStore.set(
+      'session',
+      JSON.stringify({
+        userId: user.userId,
+        weddingConfigId: weddingConfig.id,
+        lastActivity: Date.now(),
+      }),
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
+      }
+    )
 
     return NextResponse.json({
       success: true,
