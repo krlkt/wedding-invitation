@@ -1,16 +1,17 @@
 <!--
 Sync Impact Report:
-Version change: 1.0.0 → 1.1.0
+Version change: 1.1.0 → 1.2.0
 Modified principles:
-- Testing Strategy: elevated from recommendations to mandatory requirements
-Added sections:
 - None
+Added sections:
+- Git Branch Naming Convention (under Development Workflow)
 Removed sections:
 - None
 Templates requiring updates:
-- ✅ plan-template.md - reviewed, testing references aligned
-- ✅ spec-template.md - reviewed, no testing-specific updates needed
-- ✅ tasks-template.md - reviewed, testing task generation aligned
+- ✅ plan-template.md - updated branch naming format in line 4
+- ✅ spec-template.md - no updates needed (references feature branch generically)
+- ✅ tasks-template.md - no updates needed (references feature directory, not branches)
+- ✅ README.md - reviewed, no branch naming references
 Follow-up TODOs:
 - None
 -->
@@ -98,6 +99,24 @@ tests/
 - **Test files**: `*.test.ts` or `*.test.tsx` for unit/component tests, `*.spec.ts` for e2e tests
 
 ## Development Workflow
+
+### Git Branch Naming Convention
+All feature branches MUST follow this naming pattern:
+```
+OIALT-{ticket-number}-{brief-description}
+```
+
+**Requirements**:
+- Prefix: `OIALT-` (connects branch to JIRA project)
+- Ticket number: JIRA ticket ID (e.g., `8`, `15`, `142`)
+- Brief description: kebab-case summary of the feature
+
+**Examples**:
+- `OIALT-8-login-page-redesign`
+- `OIALT-15-rsvp-form-validation`
+- `OIALT-42-gallery-upload-optimization`
+
+**Rationale**: This convention enables automatic branch-to-JIRA linking, improving traceability and project management workflow integration.
 
 ### Code Style Requirements
 - 4-space indentation (enforced by Prettier)
@@ -189,4 +208,4 @@ Deviations from this constitution require:
 2. Time-boxed implementation with review date
 3. Plan for eventual compliance or constitution update
 
-**Version**: 1.1.0 | **Ratified**: 2025-09-28 | **Last Amended**: 2025-09-28
+**Version**: 1.2.0 | **Ratified**: 2025-09-28 | **Last Amended**: 2025-10-12
