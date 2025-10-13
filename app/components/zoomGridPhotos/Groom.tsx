@@ -6,16 +6,43 @@ import Groom3 from '../../../public/images/groom/groom3.jpg';
 import Groom4 from '../../../public/images/groom/groom4.jpg';
 import Groom5 from '../../../public/images/groom/groom5.jpg';
 import Groom6 from '../../../public/images/groom/groom6.jpg';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import InstagramIcon from '@/app/icons/InstagramIcon';
+import { useScrollContainer } from '@/app/utils/ScrollContainerContext';
+import { useWeddingData } from '@/app/utils/useWeddingData';
 
 const Groom = () => {
+    // Get wedding data from context
+    const { config } = useWeddingData();
+
+    // Get scroll container from context (for embedded previews)
+    const { containerRef, isEmbedded } = useScrollContainer();
+
+    // Measure container height for embedded mode
+    const [containerHeight, setContainerHeight] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (isEmbedded && containerRef?.current) {
+            const updateHeight = () => {
+                const height = containerRef.current?.clientHeight;
+                if (height) {
+                    setContainerHeight(height);
+                }
+            };
+
+            updateHeight();
+            window.addEventListener('resize', updateHeight);
+            return () => window.removeEventListener('resize', updateHeight);
+        }
+    }, [isEmbedded, containerRef]);
+
     // Zoom animation
     const zoomAnimationContainer = useRef(null);
     const { scrollYProgress } = useScroll({
         target: zoomAnimationContainer,
         offset: ['start start', 'end end'],
+        container: containerRef, // Use container if provided, otherwise defaults to window
     });
 
     const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4.15]);
@@ -25,6 +52,13 @@ const Groom = () => {
     const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9]);
     const textOpacityGroom = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
     const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1]);
+
+    // Use measured container height for embedded mode, viewport height for fullscreen
+    const stickyHeightValue = isEmbedded && containerHeight ? `${containerHeight}px` : '';
+    const containerHeightValue = isEmbedded && containerHeight ? `${containerHeight * 3}px` : '';
+
+    const stickyHeightClass = isEmbedded ? '' : 'h-dvh';
+    const containerHeightClass = isEmbedded ? '' : 'h-[calc(var(--vh)*300)]';
 
     const pictures = [
         {
@@ -54,8 +88,15 @@ const Groom = () => {
     ];
     return (
         // Container for zoom scroll animation
-        <div ref={zoomAnimationContainer} className="relative h-[calc(var(--vh)*300)] w-full">
-            <div className="sticky top-0 h-dvh bg-primary-main overflow-hidden">
+        <div
+            ref={zoomAnimationContainer}
+            className={`relative ${containerHeightClass} w-full`}
+            style={isEmbedded && containerHeightValue ? { height: containerHeightValue } : undefined}
+        >
+            <div
+                className={`sticky top-0 ${stickyHeightClass} bg-primary-main overflow-hidden`}
+                style={isEmbedded && stickyHeightValue ? { height: stickyHeightValue } : undefined}
+            >
                 {pictures.map(({ scale, src }, index) => (
                     // Element container div to make sure everything has the same layout
                     <motion.div key={index} style={{ scale }} className={'grid-placement'}>
@@ -96,15 +137,15 @@ const Groom = () => {
                                 style={{ opacity: textOpacityGroom }}
                                 className="font-cursive2 text-4xl drop-shadow-lg"
                             >
-                                Karel Karunia
+                                {config.groomName}
                             </motion.h2>
                             <motion.h4
                                 style={{ opacity: textOpacityParent }}
                                 className="text-lg leading-5 drop-shadow-lg text-center"
                             >
-                                Third child of <br />
-                                Rendy Tirtanadi &<br />
-                                Elliana Firmanto
+                                Son of <br />
+                                {config.groomFather} &<br />
+                                {config.groomMother}
                             </motion.h4>
                         </div>
                     </motion.div>
