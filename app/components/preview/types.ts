@@ -54,6 +54,8 @@ export interface PreviewData {
  */
 export interface TemplateProps {
     data: PreviewData
+    mode?: 'fullscreen' | 'embedded' // fullscreen shows desktop filler, embedded shows only mobile view
+    scrollContainerRef?: React.RefObject<HTMLElement> // For embedded mode scroll animations
 }
 
 /**

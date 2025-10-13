@@ -22,12 +22,16 @@ interface TemplateRendererProps {
     templateId?: TemplateId
     data: TemplateProps['data']
     containerClassName?: string
+    mode?: 'fullscreen' | 'embedded'
+    scrollContainerRef?: React.RefObject<HTMLElement>
 }
 
 export default function TemplateRenderer({
     templateId = 'template-1',
     data,
     containerClassName = '',
+    mode = 'fullscreen',
+    scrollContainerRef,
 }: TemplateRendererProps) {
     const TemplateComponent = TEMPLATES[templateId]
 
@@ -41,7 +45,7 @@ export default function TemplateRenderer({
 
     return (
         <div className={containerClassName}>
-            <TemplateComponent data={data} />
+            <TemplateComponent data={data} mode={mode} scrollContainerRef={scrollContainerRef} />
         </div>
     )
 }
