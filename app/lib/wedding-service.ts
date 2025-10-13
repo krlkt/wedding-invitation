@@ -33,6 +33,14 @@ function generateSubdomain(groomName: string, brideName: string): string {
 }
 
 /**
+ * Check if subdomain is already taken
+ */
+export async function isSubdomainAvailable(subdomain: string): Promise<boolean> {
+  const existing = await getWeddingConfigBySubdomain(subdomain)
+  return !existing
+}
+
+/**
  * Create wedding configuration for a new user
  */
 export async function createWeddingConfiguration(
@@ -40,13 +48,29 @@ export async function createWeddingConfiguration(
   groomName: string,
   brideName: string
 ): Promise<WeddingConfiguration> {
-  // Generate unique subdomain
-  const subdomain = generateSubdomain(groomName, brideName)
+  // Try to generate unique subdomain with retry logic
+  let subdomain: string
+  let attempts = 0
+  const maxAttempts = 5
+
+  while (attempts < maxAttempts) {
+    subdomain = generateSubdomain(groomName, brideName)
+    const available = await isSubdomainAvailable(subdomain)
+
+    if (available) {
+      break
+    }
+
+    attempts++
+    if (attempts >= maxAttempts) {
+      throw new Error('Unable to generate unique subdomain. Please try again.')
+    }
+  }
 
   // Create wedding configuration
   const newConfig: NewWeddingConfiguration = {
     userId,
-    subdomain,
+    subdomain: subdomain!,
     groomName,
     brideName,
     weddingDate: new Date(), // Default to today, user will update

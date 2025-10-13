@@ -1,18 +1,18 @@
 <!--
 Sync Impact Report:
-Version change: 1.0.0 → 1.1.0
+Version change: 1.1.0 → 1.2.0
 Modified principles:
-- Testing Strategy: elevated from recommendations to mandatory requirements
+- Technology Stack Consistency: Added shadcn/ui for new components
 Added sections:
-- None
+- Principle VII: Next.js 14 Data Fetching Patterns (new mandatory data fetching guidelines)
 Removed sections:
 - None
 Templates requiring updates:
-- ✅ plan-template.md - reviewed, testing references aligned
-- ✅ spec-template.md - reviewed, no testing-specific updates needed
-- ✅ tasks-template.md - reviewed, testing task generation aligned
+- ✅ plan-template.md - reviewed, no structural changes needed
+- ✅ spec-template.md - reviewed, no requirement-specific updates needed
+- ✅ tasks-template.md - reviewed, data fetching pattern aligned with implementation tasks
 Follow-up TODOs:
-- None
+- Refactor existing components using useEffect + fetch to use Server Components (WeddingLayout.tsx is a candidate)
 -->
 
 # Wedding Invitation Constitution
@@ -23,9 +23,13 @@ Follow-up TODOs:
 All development must adhere to the established technology foundation:
 - **Next.js 14.2.4** with App Router architecture
 - **TypeScript** in strict mode (no `any` types without explicit justification)
-- **Tailwind CSS** for utility-first styling with **Material-UI** for complex components
+- **Tailwind CSS** for utility-first styling
+- **shadcn/ui** for new component implementations (Radix UI primitives)
+- **Material-UI** for legacy components (avoid for new features)
 - **Turso (libSQL)** for database operations
 - **React Hook Form** for all form implementations
+
+**Rationale**: Consistency ensures maintainability. shadcn/ui is preferred for new work due to better tree-shaking, TypeScript support, and alignment with Tailwind CSS.
 
 ### II. Performance-First Development
 Every feature must prioritize user experience:
@@ -33,6 +37,8 @@ Every feature must prioritize user experience:
 - Components must be server-side rendered by default; `'use client'` only when necessary
 - Database queries must be optimized and use proper indexing
 - Lazy loading for non-critical components and assets
+
+**Rationale**: Performance directly impacts user experience and SEO. Server-first rendering reduces JavaScript bundle size and improves Time to Interactive.
 
 ### III. Component Architecture Standards
 Consistent component design patterns:
@@ -42,6 +48,8 @@ Consistent component design patterns:
 - Context providers for shared state (following LocationProvider pattern)
 - Default exports for primary components
 
+**Rationale**: Functional components align with modern React patterns. Feature-based organization improves discoverability and reduces coupling.
+
 ### IV. Code Quality Requirements
 Non-negotiable quality standards:
 - All code must pass ESLint (next/core-web-vitals configuration)
@@ -49,12 +57,16 @@ Non-negotiable quality standards:
 - TypeScript strict mode with no implicit any
 - File organization follows feature-based structure
 
+**Rationale**: Automated tooling ensures consistency across contributors. Strict TypeScript prevents runtime type errors.
+
 ### V. Data & State Management
 Consistent data handling patterns:
 - Database models defined as TypeScript interfaces in `/app/models/`
 - Server Actions for mutations following Next.js App Router patterns
 - Context providers for cross-component state sharing
 - JSON serialization for server-to-client data transfer
+
+**Rationale**: Server Actions reduce API boilerplate and provide automatic revalidation. Context prevents prop drilling while maintaining reactivity.
 
 ### VI. Testing Standards
 Comprehensive testing must be implemented for all new features:
@@ -65,13 +77,28 @@ Comprehensive testing must be implemented for all new features:
 - Test coverage MUST meet minimum 80% threshold for new code
 - All tests MUST follow TDD principles: write failing tests before implementation
 
+**Rationale**: TDD prevents regressions, documents behavior, and ensures testability. 80% coverage threshold balances thoroughness with pragmatism.
+
+### VII. Next.js 14 Data Fetching Patterns
+Follow Next.js 14 App Router data fetching best practices:
+- Server Components MUST fetch data using async/await directly in the component
+- Client Components MUST receive data as props from parent Server Components
+- `useEffect` + `fetch` pattern MUST NOT be used for initial data loading
+- Server Actions MUST be used for mutations initiated from Client Components
+- API routes (`/app/api/*`) should only be used when Server Components/Actions aren't suitable (webhooks, external API integrations, client-side polling)
+- Data fetching errors MUST be handled with proper error boundaries or try/catch
+
+**Rationale**: Server Components eliminate request waterfalls by fetching data on the server before hydration. The `useEffect` + `fetch` pattern creates unnecessary client-side requests, delays rendering, and increases bundle size. Server Actions provide type-safe mutations with automatic revalidation, reducing API boilerplate and improving performance.
+
+**Migration Path**: Existing components using `useEffect` + `fetch` should be refactored during feature work or dedicated tech debt sprints.
+
 ## File Organization Standards
 
 ### Directory Structure
 ```
 app/
 ├── [location]/           # Dynamic route pages
-├── api/                  # API routes
+├── api/                  # API routes (use sparingly per Principle VII)
 ├── components/          # Feature-organized components
 │   ├── [feature]/       # Feature-specific components
 │   └── shared/          # Reusable components
@@ -114,6 +141,38 @@ tests/
 5. Implement responsive design using Tailwind's responsive utilities
 6. Add proper error handling and loading states
 7. Verify all tests pass before considering feature complete
+
+### Data Fetching Implementation
+1. **For Server Components** (default):
+   ```typescript
+   // ✅ CORRECT: Async Server Component
+   export default async function Page() {
+     const data = await fetchData()
+     return <ClientComponent data={data} />
+   }
+   ```
+
+2. **For Client Components** (when interactivity needed):
+   ```typescript
+   // ✅ CORRECT: Receive data from parent Server Component
+   'use client'
+   export default function ClientComponent({ data }) {
+     return <div>{data.name}</div>
+   }
+   ```
+
+3. **AVOID** (legacy pattern):
+   ```typescript
+   // ❌ WRONG: useEffect + fetch in Client Component
+   'use client'
+   export default function Component() {
+     const [data, setData] = useState(null)
+     useEffect(() => {
+       fetch('/api/data').then(r => r.json()).then(setData)
+     }, [])
+     return <div>{data?.name}</div>
+   }
+   ```
 
 ### Database Operations
 - Use parameterized queries to prevent SQL injection
@@ -189,4 +248,4 @@ Deviations from this constitution require:
 2. Time-boxed implementation with review date
 3. Plan for eventual compliance or constitution update
 
-**Version**: 1.1.0 | **Ratified**: 2025-09-28 | **Last Amended**: 2025-09-28
+**Version**: 1.2.0 | **Ratified**: 2025-09-28 | **Last Amended**: 2025-10-11

@@ -11,7 +11,8 @@ import { useEffect, useState } from 'react'
 import { WeddingConfiguration } from '@/app/db/schema'
 
 interface WeddingLayoutProps {
-  subdomain: string
+  subdomain?: string
+  config?: WeddingData
   children?: React.ReactNode
 }
 
@@ -19,12 +20,19 @@ interface WeddingData extends WeddingConfiguration {
   features: Record<string, boolean>
 }
 
-export default function WeddingLayout({ subdomain, children }: WeddingLayoutProps) {
-  const [wedding, setWedding] = useState<WeddingData | null>(null)
-  const [loading, setLoading] = useState(true)
+export default function WeddingLayout({ subdomain, config, children }: WeddingLayoutProps) {
+  const [wedding, setWedding] = useState<WeddingData | null>(config || null)
+  const [loading, setLoading] = useState(!config)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // If config is provided directly, skip fetching
+    if (config) {
+      setWedding(config)
+      setLoading(false)
+      return
+    }
+
     async function fetchWedding() {
       try {
         // Fetch wedding configuration by subdomain
@@ -46,7 +54,7 @@ export default function WeddingLayout({ subdomain, children }: WeddingLayoutProp
     if (subdomain) {
       fetchWedding()
     }
-  }, [subdomain])
+  }, [subdomain, config])
 
   if (loading) {
     return (
@@ -120,6 +128,61 @@ export default function WeddingLayout({ subdomain, children }: WeddingLayoutProp
       </section>
 
       {/* Conditional Sections Based on Features */}
+      {wedding.features?.love_story && (
+        <section className="py-16 px-4 bg-white">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-serif mb-8">Our Love Story</h2>
+            <p className="text-gray-600">Feature enabled - content coming soon</p>
+          </div>
+        </section>
+      )}
+
+      {wedding.features?.rsvp && (
+        <section className="py-16 px-4 bg-gray-50">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-serif mb-8">RSVP</h2>
+            <p className="text-gray-600">Feature enabled - content coming soon</p>
+          </div>
+        </section>
+      )}
+
+      {wedding.features?.gallery && (
+        <section className="py-16 px-4 bg-white">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-serif mb-8">Gallery</h2>
+            <p className="text-gray-600">Feature enabled - content coming soon</p>
+          </div>
+        </section>
+      )}
+
+      {wedding.features?.prewedding_videos && (
+        <section className="py-16 px-4 bg-gray-50">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-serif mb-8">Pre-Wedding Videos</h2>
+            <p className="text-gray-600">Feature enabled - content coming soon</p>
+          </div>
+        </section>
+      )}
+
+      {wedding.features?.faqs && (
+        <section className="py-16 px-4 bg-white">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-serif mb-8">FAQs</h2>
+            <p className="text-gray-600">Feature enabled - content coming soon</p>
+          </div>
+        </section>
+      )}
+
+      {wedding.features?.dress_code && (
+        <section className="py-16 px-4 bg-gray-50">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl font-serif mb-8">Dress Code</h2>
+            <p className="text-gray-600">Feature enabled - content coming soon</p>
+          </div>
+        </section>
+      )}
+
+      {/* Additional children (for custom sections) */}
       {children}
 
       {/* Footer */}

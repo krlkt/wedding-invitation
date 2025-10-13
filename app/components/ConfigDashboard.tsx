@@ -8,6 +8,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import LivePreview from './LivePreview'
 
 export default function ConfigDashboard() {
@@ -143,7 +145,14 @@ export default function ConfigDashboard() {
       <div className="w-1/2 overflow-auto bg-white border-r">
         <div className="sticky top-0 bg-white border-b z-10">
           <div className="p-6">
-            <h1 className="text-2xl font-bold mb-2">Wedding Configuration</h1>
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-2xl font-bold">Wedding Configuration</h1>
+              <Button asChild>
+                <Link href="/admin/preview" target="_blank">
+                  View Live Site
+                </Link>
+              </Button>
+            </div>
             <p className="text-sm text-gray-600">
               {config.subdomain}.yourdomain.com
             </p>
