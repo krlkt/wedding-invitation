@@ -9,7 +9,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import TemplateRenderer from './preview/TemplateRenderer';
 import type { PreviewData } from './preview/types';
 
@@ -22,6 +22,27 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
     const [previewData, setPreviewData] = useState<PreviewData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [containerHeight, setContainerHeight] = useState<number | null>(null);
+
+    // Measure container height and set CSS variable
+    useEffect(() => {
+        const updateHeight = () => {
+            if (scrollContainerRef.current) {
+                const height = scrollContainerRef.current.clientHeight;
+                setContainerHeight(height);
+            }
+        };
+
+        // Use setTimeout to ensure the container is rendered and has dimensions
+        const timer = setTimeout(updateHeight, 100);
+
+        window.addEventListener('resize', updateHeight);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('resize', updateHeight);
+        };
+    }, [previewData]);
 
     useEffect(() => {
         async function fetchPreview() {
@@ -81,9 +102,9 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
     }
 
     return (
-        <div className="live-preview h-full overflow-auto bg-white">
+        <div className="live-preview h-full flex flex-col bg-white">
             {/* Preview Header - Browser Chrome */}
-            <div className="sticky top-0 z-10 bg-gray-100 border-b px-4 py-2 flex items-center justify-between">
+            <div className="flex-shrink-0 z-10 bg-gray-100 border-b px-4 py-2 flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-red-500" />
                     <div className="w-3 h-3 rounded-full bg-yellow-500" />
@@ -97,10 +118,21 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
                 </div>
             </div>
 
-            {/* Preview Content - Scaled down for dashboard view */}
-            <div className="p-8">
-                <div className="max-w-4xl mx-auto shadow-2xl rounded-lg overflow-hidden transform scale-90 origin-top">
-                    <TemplateRenderer templateId="template-1" data={previewData} />
+            {/* Preview Content - Mobile view only for dashboard with scroll animations */}
+            <div className="flex-1 bg-gray-50 flex items-center justify-center p-4 overflow-hidden">
+                <div
+                    ref={scrollContainerRef}
+                    className="shadow-2xl rounded-lg overflow-y-auto overflow-x-hidden bg-white w-[450px] max-h-full"
+                    style={containerHeight ? {
+                        ['--container-height' as string]: `${containerHeight}px`,
+                    } : undefined}
+                >
+                    <TemplateRenderer
+                        templateId="template-1"
+                        data={previewData}
+                        mode="embedded"
+                        scrollContainerRef={scrollContainerRef}
+                    />
                 </div>
             </div>
         </div>
