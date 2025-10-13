@@ -9,11 +9,23 @@ import { db } from './database'
 import {
   weddingConfigurations,
   featureToggles,
+  loveStorySegments,
+  locationDetails,
+  galleryItems,
+  faqItems,
+  dressCodes,
+  bankDetails,
   type NewWeddingConfiguration,
   type WeddingConfiguration,
   type FeatureToggle,
+  type LoveStorySegment,
+  type LocationDetails,
+  type GalleryItem,
+  type FAQItem,
+  type DressCode,
+  type BankDetails,
 } from '@/app/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, asc } from 'drizzle-orm'
 
 /**
  * Generate URL-safe subdomain from names
@@ -228,4 +240,74 @@ export async function publishWeddingConfig(configId: string): Promise<WeddingCon
  */
 export async function unpublishWeddingConfig(configId: string): Promise<WeddingConfiguration> {
   return updateWeddingConfiguration(configId, { isPublished: false })
+}
+
+/**
+ * Get love story segments for a wedding
+ */
+export async function getLoveStorySegments(weddingConfigId: string): Promise<LoveStorySegment[]> {
+  return db
+    .select()
+    .from(loveStorySegments)
+    .where(eq(loveStorySegments.weddingConfigId, weddingConfigId))
+    .orderBy(asc(loveStorySegments.order))
+}
+
+/**
+ * Get location details for a wedding
+ */
+export async function getLocationDetails(weddingConfigId: string): Promise<LocationDetails[]> {
+  return db
+    .select()
+    .from(locationDetails)
+    .where(eq(locationDetails.weddingConfigId, weddingConfigId))
+    .orderBy(asc(locationDetails.order))
+}
+
+/**
+ * Get gallery items for a wedding
+ */
+export async function getGalleryItems(weddingConfigId: string): Promise<GalleryItem[]> {
+  return db
+    .select()
+    .from(galleryItems)
+    .where(eq(galleryItems.weddingConfigId, weddingConfigId))
+    .orderBy(asc(galleryItems.order))
+}
+
+/**
+ * Get FAQ items for a wedding
+ */
+export async function getFAQItems(weddingConfigId: string): Promise<FAQItem[]> {
+  return db
+    .select()
+    .from(faqItems)
+    .where(eq(faqItems.weddingConfigId, weddingConfigId))
+    .orderBy(asc(faqItems.order))
+}
+
+/**
+ * Get dress code for a wedding
+ */
+export async function getDressCode(weddingConfigId: string): Promise<DressCode | null> {
+  const [dressCode] = await db
+    .select()
+    .from(dressCodes)
+    .where(eq(dressCodes.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  return dressCode || null
+}
+
+/**
+ * Get bank details for a wedding
+ */
+export async function getBankDetails(weddingConfigId: string): Promise<BankDetails | null> {
+  const [details] = await db
+    .select()
+    .from(bankDetails)
+    .where(eq(bankDetails.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  return details || null
 }
