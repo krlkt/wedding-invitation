@@ -19,10 +19,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: any) {
     console.error('Get dress code error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to get dress code' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to get dress code' }, { status: 500 })
   }
 }
 

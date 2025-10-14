@@ -38,9 +38,9 @@ export default async function AdminPreviewPage() {
 
   if (!config) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Configuration Not Found</h1>
+          <h1 className="mb-2 text-2xl font-bold text-gray-900">Configuration Not Found</h1>
           <p className="text-gray-600">Unable to load your wedding configuration.</p>
         </div>
       </div>
@@ -49,14 +49,17 @@ export default async function AdminPreviewPage() {
 
   // Get feature toggles
   const features = await getFeatureToggles(config.id)
-  const featuresMap = features.reduce((acc, f) => {
-    acc[f.featureName] = f.isEnabled
-    return acc
-  }, {} as Record<string, boolean>)
+  const featuresMap = features.reduce(
+    (acc, f) => {
+      acc[f.featureName] = f.isEnabled
+      return acc
+    },
+    {} as Record<string, boolean>
+  )
 
   const configWithFeatures = {
     ...config,
-    features: featuresMap
+    features: featuresMap,
   }
 
   return <FullScreenPreview config={configWithFeatures} />

@@ -4,6 +4,7 @@
 **Prerequisites**: plan.md, research.md, data-model.md, contracts/, quickstart.md
 
 ## Execution Flow (main)
+
 ```
 1. Load plan.md from feature directory
    → ✓ Tech stack: Next.js 14.2.4, TypeScript, shadcn/ui, Turso
@@ -28,11 +29,14 @@
 ```
 
 ## Format: `[ID] [P?] Description`
+
 - **[P]**: Can run in parallel (different files, no dependencies)
 - Include exact file paths in descriptions
 
 ## Path Conventions
+
 Next.js App Router structure:
+
 - Components: `app/components/`
 - API routes: `app/api/`
 - Pages: `app/admin/`
@@ -332,6 +336,7 @@ T019 → T020, T021, T022 (T021-T022 parallel) → T023
 ## Parallel Execution Examples
 
 ### Launch Tests in Parallel (T002-T004, T006-T007):
+
 ```bash
 # Terminal 1
 yarn test __tests__/contracts/preview-api.test.ts --watch
@@ -347,7 +352,9 @@ yarn test __tests__/components/FullScreenPreview.test.tsx --watch
 ```
 
 ### Launch Implementation Tasks in Parallel (T012-T014):
+
 Since these modify different files, they can be done simultaneously or in quick succession:
+
 ```
 T012: LivePreview.tsx (1 line change)
 T013: Create FullScreenPreview component (new file)
@@ -357,35 +364,42 @@ T014: Update ConfigDashboard (add button)
 ---
 
 ## Notes
+
 - **[P] tasks** = different files, no dependencies, can run in parallel
 - **Verify tests fail** before implementing (TDD principle)
 - **Commit after each task** for clean git history
 - **Avoid**: modifying same file in parallel [P] tasks
 
 ## Task Generation Summary
-*Generated during main() execution*
+
+_Generated during main() execution_
 
 **From Contracts**:
+
 - preview-api.md → T002 (contract test)
 - register-api.md → T003 (contract test with subdomain validation)
 
 **From Data Model**:
+
 - No new entities (using existing Wedding Configuration)
 - Subdomain validation → T009, T010 (service layer)
 
 **From User Stories (Quickstart)**:
+
 - Subdomain uniqueness → T007 (integration test)
 - Full-screen preview access → T008 (integration test)
 - Manual testing scenarios → T019 (quickstart execution)
 
 **From Components**:
+
 - LivePreview update → T004 (test), T012 (implementation)
 - ConfigDashboard button → T005 (test), T014 (implementation)
 - FullScreenPreview → T006 (test), T013 (implementation)
 - Preview route → T015 (implementation)
 
 ## Validation Checklist
-*GATE: Checked before task execution*
+
+_GATE: Checked before task execution_
 
 - [x] All contracts have corresponding tests (T002, T003)
 - [x] All components have tests (T004, T005, T006)

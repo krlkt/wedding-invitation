@@ -5,32 +5,38 @@
 **Purpose**: Register new user account for wedding configuration access
 
 **Request**:
+
 ```typescript
 {
-  email: string;     // Valid email format, unique
-  password: string;  // Minimum 8 characters
-  groomName: string; // Required for initial wedding config
-  brideName: string; // Required for initial wedding config
+  email: string // Valid email format, unique
+  password: string // Minimum 8 characters
+  groomName: string // Required for initial wedding config
+  brideName: string // Required for initial wedding config
 }
 ```
 
 **Response (Success - 201)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
-    userId: string;
-    weddingConfigId: string;
-    subdomain: string; // Auto-generated from names
+    userId: string
+    weddingConfigId: string
+    subdomain: string // Auto-generated from names
   }
 }
 ```
 
 **Response (Error - 400)**:
+
 ```typescript
 {
-  success: false;
-  error: "Email already registered" | "Invalid email format" | "Password too short" | "Names required"
+  success: false
+  error: 'Email already registered' |
+    'Invalid email format' |
+    'Password too short' |
+    'Names required'
 }
 ```
 
@@ -41,30 +47,33 @@
 **Purpose**: Authenticate user and establish session
 
 **Request**:
+
 ```typescript
 {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 ```
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
-    userId: string;
-    weddingConfigId: string;
-    subdomain: string;
+    userId: string
+    weddingConfigId: string
+    subdomain: string
   }
 }
 ```
 
 **Response (Error - 401)**:
+
 ```typescript
 {
-  success: false;
-  error: "Invalid email or password"
+  success: false
+  error: 'Invalid email or password'
 }
 ```
 
@@ -77,10 +86,11 @@
 **Request**: No body required
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
-  message: "Logged out successfully"
+  success: true
+  message: 'Logged out successfully'
 }
 ```
 
@@ -93,21 +103,23 @@
 **Request**: No body required
 
 **Response (Authenticated - 200)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
-    userId: string;
-    weddingConfigId: string;
-    subdomain: string;
+    userId: string
+    weddingConfigId: string
+    subdomain: string
   }
 }
 ```
 
 **Response (Not Authenticated - 401)**:
+
 ```typescript
 {
-  success: false;
-  error: "Not authenticated"
+  success: false
+  error: 'Not authenticated'
 }
 ```

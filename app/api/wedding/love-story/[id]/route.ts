@@ -8,10 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/app/lib/session'
 import { updateLoveStorySegment, deleteLoveStorySegment } from '@/app/lib/content-service'
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await requireAuth()
     if (session instanceof NextResponse) return session

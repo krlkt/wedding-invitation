@@ -9,6 +9,7 @@
 **File**: `app/db/schema/weddings.ts`
 
 **Fields**:
+
 ```typescript
 {
   id: string (cuid2, primary key)
@@ -31,11 +32,13 @@
 ```
 
 **Existing Constraints**:
+
 - `subdomain` has UNIQUE constraint (line 18 in schema)
 - `userId` is unique (one wedding per user)
 - Foreign key cascade delete on user
 
 **Validation Rules** (for this feature):
+
 - Subdomain must be DNS-compliant:
   - Length: 1-63 characters
   - Characters: `[a-z0-9-]` only
@@ -45,11 +48,12 @@
 
 ###
 
- Preview Session (Conceptual)
+Preview Session (Conceptual)
 
 **Implementation**: Uses existing session authentication
 
 **Not a database entity** - leverages current cookie-based auth:
+
 ```typescript
 // Session structure (existing)
 {
@@ -60,6 +64,7 @@
 ```
 
 **Access Pattern**:
+
 1. User authenticates → session created
 2. Preview route reads session → fetches wedding config
 3. Renders preview using config data
@@ -95,6 +100,7 @@ Success               ↓
 ```
 
 **States**:
+
 - `Generating`: Initial subdomain creation from couple names
 - `Checking`: Querying database for existing subdomain
 - `Retrying`: Collision detected, generating new variant
@@ -117,11 +123,13 @@ Render preview
 ## Data Integrity Rules
 
 ### Database Level
+
 - **Unique constraint** on `subdomain` field (existing)
 - **Foreign key** from `userId` to `user_accounts` with cascade delete
 - **Not null** constraint on subdomain
 
 ### Application Level
+
 - **Pre-insertion validation**: Check subdomain availability before INSERT
 - **Retry logic**: Up to 5 attempts to generate unique subdomain
 - **Format validation**: Ensure DNS compliance before storage
@@ -132,6 +140,7 @@ Render preview
 ### New Query (to be added)
 
 **Check Subdomain Availability**:
+
 ```typescript
 // In wedding-service.ts
 async function isSubdomainAvailable(subdomain: string): Promise<boolean> {
@@ -146,6 +155,7 @@ async function isSubdomainAvailable(subdomain: string): Promise<boolean> {
 ```
 
 **Performance**:
+
 - Uses existing unique index on subdomain
 - O(log n) lookup time
 - < 5ms expected query time
@@ -153,6 +163,7 @@ async function isSubdomainAvailable(subdomain: string): Promise<boolean> {
 ### Modified Query
 
 **Create Wedding Configuration** (existing function - add retry logic):
+
 ```typescript
 // In wedding-service.ts
 async function createWeddingConfiguration(

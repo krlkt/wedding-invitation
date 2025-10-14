@@ -52,11 +52,12 @@ export default async function AdminDashboard() {
 
   if (!weddingConfig) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">No Wedding Configuration Found</h1>
-          <p className="text-gray-600 mb-6">
-            You don&apos;t have a wedding configuration yet. Please contact support to set up your wedding.
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+          <h1 className="mb-4 text-2xl font-bold text-gray-900">No Wedding Configuration Found</h1>
+          <p className="mb-6 text-gray-600">
+            You don&apos;t have a wedding configuration yet. Please contact support to set up your
+            wedding.
           </p>
           <LogoutButton fullWidth />
         </div>
@@ -67,15 +68,13 @@ export default async function AdminDashboard() {
   // Render the configuration dashboard
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <header className="border-b border-gray-200 bg-white shadow-sm">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
               {weddingConfig.groomName} & {weddingConfig.brideName}
             </h1>
-            <p className="text-sm text-gray-500">
-              {weddingConfig.subdomain}-oialt.vercel.app
-            </p>
+            <p className="text-sm text-gray-500">{weddingConfig.subdomain}-oialt.vercel.app</p>
           </div>
           <LogoutButton />
         </div>

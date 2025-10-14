@@ -18,8 +18,8 @@ describe('Wedding Configuration API Contract Tests', () => {
       headers: {
         'Content-Type': 'application/json',
         // TODO: Add authentication headers when session management is implemented
-        ...options.headers
-      }
+        ...options.headers,
+      },
     })
   }
 
@@ -28,7 +28,7 @@ describe('Wedding Configuration API Contract Tests', () => {
 
     it('should return 200 with wedding configuration for authenticated user', async () => {
       const response = await makeAuthenticatedRequest(endpoint, {
-        method: 'GET'
+        method: 'GET',
       })
 
       // This will fail until authentication and endpoint are implemented
@@ -53,8 +53,8 @@ describe('Wedding Configuration API Contract Tests', () => {
               instagram_link: expect.any(Boolean),
             },
             createdAt: expect.any(String),
-            updatedAt: expect.any(String)
-          }
+            updatedAt: expect.any(String),
+          },
         })
 
         // Validate ISO date format
@@ -66,7 +66,7 @@ describe('Wedding Configuration API Contract Tests', () => {
 
     it('should return 401 for unauthenticated requests', async () => {
       const response = await fetch(`${baseUrl}${endpoint}`, {
-        method: 'GET'
+        method: 'GET',
       })
 
       expect(response.status).toBe(401)
@@ -75,14 +75,14 @@ describe('Wedding Configuration API Contract Tests', () => {
     it('should return 404 when wedding configuration not found', async () => {
       // This would be tested with a user who has no wedding config
       const response = await makeAuthenticatedRequest(endpoint, {
-        method: 'GET'
+        method: 'GET',
       })
 
       if (response.status === 404) {
         const data = await response.json()
         expect(data).toMatchObject({
           success: false,
-          error: 'Wedding configuration not found'
+          error: 'Wedding configuration not found',
         })
       }
     })
@@ -102,12 +102,12 @@ describe('Wedding Configuration API Contract Tests', () => {
         brideFather: 'Michael Smith',
         brideMother: 'Sarah Smith',
         instagramLink: 'https://instagram.com/johnandjayne2024',
-        footerText: 'Join us for our special day!'
+        footerText: 'Join us for our special day!',
       }
 
       const response = await makeAuthenticatedRequest(endpoint, {
         method: 'PUT',
-        body: JSON.stringify(updateRequest)
+        body: JSON.stringify(updateRequest),
       })
 
       if (response.status === 200) {
@@ -124,46 +124,46 @@ describe('Wedding Configuration API Contract Tests', () => {
             brideFather: 'Michael Smith',
             brideMother: 'Sarah Smith',
             instagramLink: 'https://instagram.com/johnandjayne2024',
-            footerText: 'Join us for our special day!'
-          })
+            footerText: 'Join us for our special day!',
+          }),
         })
       }
     })
 
     it('should return 400 for invalid date format', async () => {
       const invalidRequest = {
-        weddingDate: 'invalid-date-format'
+        weddingDate: 'invalid-date-format',
       }
 
       const response = await makeAuthenticatedRequest(endpoint, {
         method: 'PUT',
-        body: JSON.stringify(invalidRequest)
+        body: JSON.stringify(invalidRequest),
       })
 
       if (response.status === 400) {
         const data = await response.json()
         expect(data).toMatchObject({
           success: false,
-          error: expect.stringContaining('date')
+          error: expect.stringContaining('date'),
         })
       }
     })
 
     it('should return 400 for invalid Instagram link', async () => {
       const invalidRequest = {
-        instagramLink: 'not-a-valid-url'
+        instagramLink: 'not-a-valid-url',
       }
 
       const response = await makeAuthenticatedRequest(endpoint, {
         method: 'PUT',
-        body: JSON.stringify(invalidRequest)
+        body: JSON.stringify(invalidRequest),
       })
 
       if (response.status === 400) {
         const data = await response.json()
         expect(data).toMatchObject({
           success: false,
-          error: expect.stringContaining('Instagram')
+          error: expect.stringContaining('Instagram'),
         })
       }
     })
@@ -179,18 +179,18 @@ describe('Wedding Configuration API Contract Tests', () => {
       'prewedding_videos',
       'faqs',
       'dress_code',
-      'instagram_link'
+      'instagram_link',
     ] as const
 
     it.each(validFeatures)('should toggle %s feature successfully', async (featureName) => {
       const toggleRequest = {
         featureName,
-        isEnabled: true
+        isEnabled: true,
       }
 
       const response = await makeAuthenticatedRequest(endpoint, {
         method: 'PUT',
-        body: JSON.stringify(toggleRequest)
+        body: JSON.stringify(toggleRequest),
       })
 
       if (response.status === 200) {
@@ -199,8 +199,8 @@ describe('Wedding Configuration API Contract Tests', () => {
           success: true,
           data: {
             featureName,
-            isEnabled: true
-          }
+            isEnabled: true,
+          },
         })
       }
     })
@@ -208,19 +208,19 @@ describe('Wedding Configuration API Contract Tests', () => {
     it('should return 400 for invalid feature name', async () => {
       const invalidRequest = {
         featureName: 'invalid_feature',
-        isEnabled: true
+        isEnabled: true,
       }
 
       const response = await makeAuthenticatedRequest(endpoint, {
         method: 'PUT',
-        body: JSON.stringify(invalidRequest)
+        body: JSON.stringify(invalidRequest),
       })
 
       if (response.status === 400) {
         const data = await response.json()
         expect(data).toMatchObject({
           success: false,
-          error: expect.any(String)
+          error: expect.any(String),
         })
       }
     })
@@ -231,7 +231,7 @@ describe('Wedding Configuration API Contract Tests', () => {
 
     it('should publish wedding configuration and return 200', async () => {
       const response = await makeAuthenticatedRequest(endpoint, {
-        method: 'POST'
+        method: 'POST',
       })
 
       if (response.status === 200) {
@@ -241,8 +241,8 @@ describe('Wedding Configuration API Contract Tests', () => {
           data: {
             isPublished: true,
             publishedAt: expect.any(String),
-            weddingUrl: expect.any(String)
-          }
+            weddingUrl: expect.any(String),
+          },
         })
 
         // Validate ISO timestamp format
@@ -259,7 +259,7 @@ describe('Wedding Configuration API Contract Tests', () => {
 
     it('should unpublish wedding configuration and return 200', async () => {
       const response = await makeAuthenticatedRequest(endpoint, {
-        method: 'POST'
+        method: 'POST',
       })
 
       if (response.status === 200) {
@@ -268,8 +268,8 @@ describe('Wedding Configuration API Contract Tests', () => {
           success: true,
           data: {
             isPublished: false,
-            unpublishedAt: expect.any(String)
-          }
+            unpublishedAt: expect.any(String),
+          },
         })
 
         // Validate ISO timestamp format

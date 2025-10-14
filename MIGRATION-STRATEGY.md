@@ -3,6 +3,7 @@
 ## Current State Analysis
 
 ### Existing Tables (Old Schema)
+
 - `rsvp` - 605 rows (singular name)
 - `wish` - 127 rows (singular name)
 - `guests` - 798 rows (already plural, but different columns)
@@ -10,6 +11,7 @@
 - `groups` - 14 rows (already plural, matches new schema)
 
 ### New Drizzle Schema Tables
+
 - `user_accounts` - NEW
 - `wedding_configurations` - NEW
 - `feature_toggles` - NEW
@@ -28,6 +30,7 @@
 ## The Problem
 
 Running `drizzle-kit push` will:
+
 1. Try to rename `rsvp` → `rsvps` (loses data)
 2. Try to rename `wish` → `wishes` (loses data)
 3. Try to add NOT NULL columns to existing `guests` and `tables` without defaults (FAILS)
@@ -35,6 +38,7 @@ Running `drizzle-kit push` will:
 ## Safe Migration Strategy
 
 ### Phase 1: Create New Tables Only
+
 1. Temporarily rename conflicting tables in Drizzle schema:
    - `rsvps` → `rsvps_new`
    - `wishes` → `wishes_new`
@@ -45,6 +49,7 @@ Running `drizzle-kit push` will:
 3. This creates all new tables alongside old ones (no data loss)
 
 ### Phase 2: Migrate Data
+
 1. Create default user account and wedding configuration
 2. Migrate data from old → new tables:
    - `rsvp` → `rsvps_new` (add wedding_config_id, timestamps)
@@ -54,6 +59,7 @@ Running `drizzle-kit push` will:
    - `groups` → `groups_new` (if needed)
 
 ### Phase 3: Swap Tables (Atomic)
+
 1. Begin transaction
 2. Drop old tables: `DROP TABLE rsvp, wish, guests, tables, groups`
 3. Rename new tables:
@@ -65,6 +71,7 @@ Running `drizzle-kit push` will:
 4. Commit transaction
 
 ### Phase 4: Verification
+
 1. Verify row counts match
 2. Verify relationships are intact
 3. Test API endpoints
@@ -73,6 +80,7 @@ Running `drizzle-kit push` will:
 ## Alternative: In-Place Migration
 
 Instead of rename approach, we could:
+
 1. Create all new tables with final names in a separate migration database
 2. Export old data
 3. Clear production database
@@ -84,6 +92,7 @@ This is RISKIER but simpler.
 ## Recommendation
 
 Use **Phase 1-4 approach** for maximum safety:
+
 - Zero downtime
 - No data loss
 - Easy rollback (just drop `_new` tables)

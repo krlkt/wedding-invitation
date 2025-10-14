@@ -1,67 +1,72 @@
-'use client';
+'use client'
 
-import { FC, useState } from 'react';
-import Modal from '../components/Modal';
-import { moveGuestToTable } from './actions';
-import { Locations } from '../components/LocationComponent';
-import { Guest } from '../models/guest';
-import { Table } from '../models/table';
+import { FC, useState } from 'react'
+import Modal from '../components/Modal'
+import { moveGuestToTable } from './actions'
+import { Locations } from '../components/LocationComponent'
+import { Guest } from '../models/guest'
+import { Table } from '../models/table'
 
 interface MoveGuestModalProps {
-    guest: Guest;
-    tables: Table[];
-    location: Locations;
-    onClose: () => void;
+  guest: Guest
+  tables: Table[]
+  location: Locations
+  onClose: () => void
 }
 
 export const MoveGuestModal: FC<MoveGuestModalProps> = ({ guest, tables, location, onClose }) => {
-    const [selectedTable, setSelectedTable] = useState<number | null>(guest.table_id);
-    const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTable, setSelectedTable] = useState<number | null>(guest.table_id)
+  const [searchTerm, setSearchTerm] = useState('')
 
-    const handleMoveGuest = async () => {
-        await moveGuestToTable(guest.id, selectedTable, location);
-        onClose();
-    };
+  const handleMoveGuest = async () => {
+    await moveGuestToTable(guest.id, selectedTable, location)
+    onClose()
+  }
 
-    const filteredTables = tables.filter((table) => table.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredTables = tables.filter((table) =>
+    table.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
-    return (
-        <Modal open={true} onClose={onClose}>
-            <div className="p-4 flex flex-col h-full">
-                <h2 className="text-xl font-bold mb-4">Move {guest.name}</h2>
-                <input
-                    type="text"
-                    placeholder="Search tables..."
-                    className="p-2 border rounded-md w-full mb-4"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <div className="space-y-2 overflow-y-auto flex-1">
-                    <div
-                        key="unassigned"
-                        className={`p-2 rounded-md cursor-pointer ${
-                            selectedTable === null ? 'bg-blue-200' : 'bg-gray-100'
-                        }`}
-                        onClick={() => setSelectedTable(null)}
-                    >
-                        Unassigned
-                    </div>
-                    {filteredTables.map((table) => (
-                        <div
-                            key={table.id}
-                            className={`p-2 rounded-md cursor-pointer ${
-                                selectedTable === table.id ? 'bg-blue-200' : 'bg-gray-100'
-                            }`}
-                            onClick={() => setSelectedTable(table.id)}
-                        >
-                            {table.name} ({table.guests.length}/{table.max_guests})
-                        </div>
-                    ))}
-                </div>
-                <button onClick={handleMoveGuest} className="mt-4 bg-blue-500 text-white p-2 rounded-md w-full">
-                    Move
-                </button>
+  return (
+    <Modal open={true} onClose={onClose}>
+      <div className="flex h-full flex-col p-4">
+        <h2 className="mb-4 text-xl font-bold">Move {guest.name}</h2>
+        <input
+          type="text"
+          placeholder="Search tables..."
+          className="mb-4 w-full rounded-md border p-2"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <div className="flex-1 space-y-2 overflow-y-auto">
+          <div
+            key="unassigned"
+            className={`cursor-pointer rounded-md p-2 ${
+              selectedTable === null ? 'bg-blue-200' : 'bg-gray-100'
+            }`}
+            onClick={() => setSelectedTable(null)}
+          >
+            Unassigned
+          </div>
+          {filteredTables.map((table) => (
+            <div
+              key={table.id}
+              className={`cursor-pointer rounded-md p-2 ${
+                selectedTable === table.id ? 'bg-blue-200' : 'bg-gray-100'
+              }`}
+              onClick={() => setSelectedTable(table.id)}
+            >
+              {table.name} ({table.guests.length}/{table.max_guests})
             </div>
-        </Modal>
-    );
-};
+          ))}
+        </div>
+        <button
+          onClick={handleMoveGuest}
+          className="mt-4 w-full rounded-md bg-blue-500 p-2 text-white"
+        >
+          Move
+        </button>
+      </div>
+    </Modal>
+  )
+}

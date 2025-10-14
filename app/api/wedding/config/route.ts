@@ -7,7 +7,11 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/app/lib/session'
-import { getWeddingConfigById, updateWeddingConfiguration, getFeatureToggles } from '@/app/lib/wedding-service'
+import {
+  getWeddingConfigById,
+  updateWeddingConfiguration,
+  getFeatureToggles,
+} from '@/app/lib/wedding-service'
 
 export async function GET(request: NextRequest) {
   try {
@@ -26,10 +30,13 @@ export async function GET(request: NextRequest) {
 
     // Get feature toggles
     const features = await getFeatureToggles(config.id)
-    const featuresMap = features.reduce((acc, f) => {
-      acc[f.featureName] = f.isEnabled
-      return acc
-    }, {} as Record<string, boolean>)
+    const featuresMap = features.reduce(
+      (acc, f) => {
+        acc[f.featureName] = f.isEnabled
+        return acc
+      },
+      {} as Record<string, boolean>
+    )
 
     return NextResponse.json({
       success: true,
@@ -85,19 +92,13 @@ export async function PUT(request: NextRequest) {
     if (weddingDate) {
       const date = new Date(weddingDate)
       if (isNaN(date.getTime())) {
-        return NextResponse.json(
-          { success: false, error: 'Invalid date format' },
-          { status: 400 }
-        )
+        return NextResponse.json({ success: false, error: 'Invalid date format' }, { status: 400 })
       }
     }
 
     // Validate Instagram link if provided
     if (instagramLink && !instagramLink.match(/^https?:\/\/.+/)) {
-      return NextResponse.json(
-        { success: false, error: 'Instagram link invalid' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Instagram link invalid' }, { status: 400 })
     }
 
     // Update configuration
@@ -115,10 +116,13 @@ export async function PUT(request: NextRequest) {
 
     // Get feature toggles
     const features = await getFeatureToggles(updated.id)
-    const featuresMap = features.reduce((acc, f) => {
-      acc[f.featureName] = f.isEnabled
-      return acc
-    }, {} as Record<string, boolean>)
+    const featuresMap = features.reduce(
+      (acc, f) => {
+        acc[f.featureName] = f.isEnabled
+        return acc
+      },
+      {} as Record<string, boolean>
+    )
 
     return NextResponse.json({
       success: true,

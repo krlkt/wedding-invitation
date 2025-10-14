@@ -27,7 +27,7 @@ async function migrateData() {
     const userId = userResult.rows[0].id as string
     const weddingResult = await client.execute({
       sql: 'SELECT id FROM wedding_configurations WHERE user_id = ?',
-      args: [userId]
+      args: [userId],
     })
     const weddingConfigId = weddingResult.rows[0].id as string
 
@@ -63,7 +63,17 @@ async function fullMigration() {
     sql: `INSERT INTO wedding_configurations
           (id, user_id, subdomain, groom_name, bride_name, wedding_date, is_published, created_at, updated_at)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    args: [weddingConfigId, userId, subdomain, 'Karel', 'Sabrina', weddingDate, 1, now.getTime(), now.getTime()],
+    args: [
+      weddingConfigId,
+      userId,
+      subdomain,
+      'Karel',
+      'Sabrina',
+      weddingDate,
+      1,
+      now.getTime(),
+      now.getTime(),
+    ],
   })
   console.log(`✅ Created wedding config: ${subdomain}`)
 
@@ -90,7 +100,7 @@ async function resumeMigration(weddingConfigId: string) {
   const oldRsvps = await client.execute('SELECT * FROM rsvp')
   const rsvpIdMap = new Map<number, string>()
 
-  const rsvpBatch = oldRsvps.rows.map(row => {
+  const rsvpBatch = oldRsvps.rows.map((row) => {
     const newId = createId()
     rsvpIdMap.set(row.id as number, newId)
 
@@ -115,7 +125,7 @@ async function resumeMigration(weddingConfigId: string) {
   const oldTables = await client.execute('SELECT * FROM tables')
   const tableIdMap = new Map<number, string>()
 
-  const tableBatch = oldTables.rows.map(row => {
+  const tableBatch = oldTables.rows.map((row) => {
     const newId = createId()
     tableIdMap.set(row.id as number, newId)
     return `('${newId}', '${weddingConfigId}', '${row.name.toString().replace(/'/g, "''")}', ${row.id}, ${row.max_guests}, '${row.location}', ${now.getTime()}, ${now.getTime()})`
@@ -131,7 +141,9 @@ async function resumeMigration(weddingConfigId: string) {
 
   // Get all RSVP data for lookup
   const rsvpsData = await client.execute('SELECT id, name, location FROM rsvps_new')
-  const rsvpLookup = new Map(rsvpsData.rows.map(r => [r.id as string, { name: r.name, location: r.location }]))
+  const rsvpLookup = new Map(
+    rsvpsData.rows.map((r) => [r.id as string, { name: r.name, location: r.location }])
+  )
 
   const guestBatch = []
   for (const row of oldGuests.rows) {
@@ -145,7 +157,9 @@ async function resumeMigration(weddingConfigId: string) {
     const rsvpName = rsvpInfo?.name || 'Unknown'
     const location = rsvpInfo?.location || 'jakarta'
 
-    guestBatch.push(`('${newId}', '${weddingConfigId}', '${newRsvpId}', ${newTableId ? `'${newTableId}'` : 'NULL'}, '${row.name.toString().replace(/'/g, "''")}', '${rsvpName.toString().replace(/'/g, "''")}', ${row.checked_in || 0}, '${location}', ${now.getTime()}, ${now.getTime()})`)
+    guestBatch.push(
+      `('${newId}', '${weddingConfigId}', '${newRsvpId}', ${newTableId ? `'${newTableId}'` : 'NULL'}, '${row.name.toString().replace(/'/g, "''")}', '${rsvpName.toString().replace(/'/g, "''")}', ${row.checked_in || 0}, '${location}', ${now.getTime()}, ${now.getTime()})`
+    )
   }
 
   // Insert guests in chunks
@@ -161,7 +175,7 @@ async function resumeMigration(weddingConfigId: string) {
   console.log('\nStep 6: Migrating Wishes...')
   const oldWishes = await client.execute('SELECT * FROM wish')
 
-  const wishBatch = oldWishes.rows.map(row => {
+  const wishBatch = oldWishes.rows.map((row) => {
     const newId = createId()
     const createdAt = row.created_at ? new Date(row.created_at as string).getTime() : now.getTime()
     return `('${newId}', '${weddingConfigId}', NULL, '${row.name.toString().replace(/'/g, "''")}', '${row.wish.toString().replace(/'/g, "''")}', ${createdAt}, ${now.getTime()})`
@@ -175,7 +189,7 @@ async function resumeMigration(weddingConfigId: string) {
   console.log('\nStep 7: Migrating Groups...')
   const oldGroups = await client.execute('SELECT * FROM groups')
 
-  const groupBatch = oldGroups.rows.map(row => {
+  const groupBatch = oldGroups.rows.map((row) => {
     const newId = createId()
     return `('${newId}', '${weddingConfigId}', '${row.name.toString().replace(/'/g, "''")}', NULL, ${now.getTime()}, ${now.getTime()})`
   })

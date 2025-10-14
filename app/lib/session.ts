@@ -45,10 +45,7 @@ export async function requireAuth(): Promise<Session | NextResponse> {
   const session = await getSession()
 
   if (!session) {
-    return NextResponse.json(
-      { success: false, error: 'Not authenticated' },
-      { status: 401 }
-    )
+    return NextResponse.json({ success: false, error: 'Not authenticated' }, { status: 401 })
   }
 
   return session

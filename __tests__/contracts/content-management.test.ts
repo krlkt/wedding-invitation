@@ -17,8 +17,8 @@ describe('Content Management API Contract Tests', () => {
       headers: {
         'Content-Type': 'application/json',
         // TODO: Add authentication headers when session management is implemented
-        ...options.headers
-      }
+        ...options.headers,
+      },
     })
   }
 
@@ -28,7 +28,7 @@ describe('Content Management API Contract Tests', () => {
 
       it('should return 200 with array of love story segments', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
-          method: 'GET'
+          method: 'GET',
         })
 
         if (response.status === 200) {
@@ -44,9 +44,9 @@ describe('Content Management API Contract Tests', () => {
                 iconType: expect.any(String),
                 order: expect.any(Number),
                 createdAt: expect.any(String),
-                updatedAt: expect.any(String)
-              })
-            ])
+                updatedAt: expect.any(String),
+              }),
+            ]),
           })
 
           // Validate date formats
@@ -68,12 +68,12 @@ describe('Content Management API Contract Tests', () => {
           description: 'We met at a coffee shop...',
           date: '2020-01-15T00:00:00.000Z',
           iconType: 'heart',
-          order: 1
+          order: 1,
         }
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: JSON.stringify(createRequest)
+          body: JSON.stringify(createRequest),
         })
 
         if (response.status === 201) {
@@ -88,8 +88,8 @@ describe('Content Management API Contract Tests', () => {
               iconType: 'heart',
               order: 1,
               createdAt: expect.any(String),
-              updatedAt: expect.any(String)
-            }
+              updatedAt: expect.any(String),
+            },
           })
         }
       })
@@ -102,12 +102,12 @@ describe('Content Management API Contract Tests', () => {
         const updateRequest = {
           title: 'Updated Meeting',
           description: 'Updated description...',
-          order: 2
+          order: 2,
         }
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'PUT',
-          body: JSON.stringify(updateRequest)
+          body: JSON.stringify(updateRequest),
         })
 
         if (response.status === 200) {
@@ -117,8 +117,8 @@ describe('Content Management API Contract Tests', () => {
             data: expect.objectContaining({
               title: 'Updated Meeting',
               description: 'Updated description...',
-              order: 2
-            })
+              order: 2,
+            }),
           })
         }
       })
@@ -130,14 +130,14 @@ describe('Content Management API Contract Tests', () => {
         const endpoint = `/api/wedding/love-story/${segmentId}`
 
         const response = await makeAuthenticatedRequest(endpoint, {
-          method: 'DELETE'
+          method: 'DELETE',
         })
 
         if (response.status === 200) {
           const data = await response.json()
           expect(data).toMatchObject({
             success: true,
-            message: 'Love story segment deleted'
+            message: 'Love story segment deleted',
           })
         }
       })
@@ -150,7 +150,7 @@ describe('Content Management API Contract Tests', () => {
 
       it('should return 200 with array of locations', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
-          method: 'GET'
+          method: 'GET',
         })
 
         if (response.status === 200) {
@@ -165,9 +165,9 @@ describe('Content Management API Contract Tests', () => {
                 address: expect.any(String),
                 order: expect.any(Number),
                 createdAt: expect.any(String),
-                updatedAt: expect.any(String)
-              })
-            ])
+                updatedAt: expect.any(String),
+              }),
+            ]),
           })
         }
       })
@@ -184,12 +184,12 @@ describe('Content Management API Contract Tests', () => {
           googleMapsLink: 'https://maps.google.com/...',
           ceremonyTime: '15:00',
           receptionTime: '18:00',
-          order: 1
+          order: 1,
         }
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: JSON.stringify(createRequest)
+          body: JSON.stringify(createRequest),
         })
 
         if (response.status === 201) {
@@ -203,8 +203,8 @@ describe('Content Management API Contract Tests', () => {
               googleMapsLink: 'https://maps.google.com/...',
               ceremonyTime: '15:00',
               receptionTime: '18:00',
-              order: 1
-            })
+              order: 1,
+            }),
           })
         }
       })
@@ -217,7 +217,7 @@ describe('Content Management API Contract Tests', () => {
 
       it('should return 200 with array of FAQ items', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
-          method: 'GET'
+          method: 'GET',
         })
 
         if (response.status === 200) {
@@ -231,9 +231,9 @@ describe('Content Management API Contract Tests', () => {
                 answer: expect.any(String),
                 order: expect.any(Number),
                 createdAt: expect.any(String),
-                updatedAt: expect.any(String)
-              })
-            ])
+                updatedAt: expect.any(String),
+              }),
+            ]),
           })
         }
       })
@@ -246,12 +246,12 @@ describe('Content Management API Contract Tests', () => {
         const createRequest = {
           question: 'What should I wear?',
           answer: 'Semi-formal attire is recommended.',
-          order: 1
+          order: 1,
         }
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: JSON.stringify(createRequest)
+          body: JSON.stringify(createRequest),
         })
 
         if (response.status === 201) {
@@ -261,8 +261,8 @@ describe('Content Management API Contract Tests', () => {
             data: expect.objectContaining({
               question: 'What should I wear?',
               answer: 'Semi-formal attire is recommended.',
-              order: 1
-            })
+              order: 1,
+            }),
           })
         }
       })
@@ -275,7 +275,7 @@ describe('Content Management API Contract Tests', () => {
 
       it('should return 200 with bank details', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
-          method: 'GET'
+          method: 'GET',
         })
 
         if (response.status === 200) {
@@ -285,9 +285,9 @@ describe('Content Management API Contract Tests', () => {
             data: {
               id: expect.any(String),
               createdAt: expect.any(String),
-              updatedAt: expect.any(String)
+              updatedAt: expect.any(String),
               // Optional fields: bankName, accountName, accountNumber, routingNumber, instructions
-            }
+            },
           })
         }
       })
@@ -302,12 +302,12 @@ describe('Content Management API Contract Tests', () => {
           accountName: 'John & Jane Wedding Fund',
           accountNumber: '1234567890',
           routingNumber: '987654321',
-          instructions: 'Please include names in memo'
+          instructions: 'Please include names in memo',
         }
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'PUT',
-          body: JSON.stringify(updateRequest)
+          body: JSON.stringify(updateRequest),
         })
 
         if (response.status === 200) {
@@ -319,8 +319,8 @@ describe('Content Management API Contract Tests', () => {
               accountName: 'John & Jane Wedding Fund',
               accountNumber: '1234567890',
               routingNumber: '987654321',
-              instructions: 'Please include names in memo'
-            })
+              instructions: 'Please include names in memo',
+            }),
           })
         }
       })
@@ -333,7 +333,7 @@ describe('Content Management API Contract Tests', () => {
 
       it('should return 200 with dress code information', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
-          method: 'GET'
+          method: 'GET',
         })
 
         if (response.status === 200) {
@@ -343,9 +343,9 @@ describe('Content Management API Contract Tests', () => {
             data: {
               id: expect.any(String),
               createdAt: expect.any(String),
-              updatedAt: expect.any(String)
+              updatedAt: expect.any(String),
               // Optional fields: title, description, photoFilename, photoUrl
-            }
+            },
           })
 
           // If photoUrl exists, validate it's a URL
@@ -362,12 +362,12 @@ describe('Content Management API Contract Tests', () => {
       it('should update dress code and return 200', async () => {
         const updateRequest = {
           title: 'Garden Party Attire',
-          description: 'Semi-formal dress recommended. Avoid stiletto heels for outdoor ceremony.'
+          description: 'Semi-formal dress recommended. Avoid stiletto heels for outdoor ceremony.',
         }
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'PUT',
-          body: JSON.stringify(updateRequest)
+          body: JSON.stringify(updateRequest),
         })
 
         if (response.status === 200) {
@@ -376,8 +376,9 @@ describe('Content Management API Contract Tests', () => {
             success: true,
             data: expect.objectContaining({
               title: 'Garden Party Attire',
-              description: 'Semi-formal dress recommended. Avoid stiletto heels for outdoor ceremony.'
-            })
+              description:
+                'Semi-formal dress recommended. Avoid stiletto heels for outdoor ceremony.',
+            }),
           })
         }
       })

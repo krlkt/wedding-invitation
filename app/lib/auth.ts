@@ -58,11 +58,7 @@ export async function authenticateUser(
   password: string
 ): Promise<{ userId: string; email: string } | null> {
   // Find user by email
-  const [user] = await db
-    .select()
-    .from(userAccounts)
-    .where(eq(userAccounts.email, email))
-    .limit(1)
+  const [user] = await db.select().from(userAccounts).where(eq(userAccounts.email, email)).limit(1)
 
   if (!user) {
     return null

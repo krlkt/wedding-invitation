@@ -58,9 +58,9 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto" />
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-gray-900" />
           <p className="mt-4 text-gray-600">Loading wedding invitation...</p>
         </div>
       </div>
@@ -69,9 +69,9 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
 
   if (error || !wedding) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Wedding Not Found</h1>
+          <h1 className="mb-2 text-2xl font-bold text-gray-900">Wedding Not Found</h1>
           <p className="text-gray-600">{error || 'This wedding invitation does not exist.'}</p>
         </div>
       </div>
@@ -80,9 +80,9 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
 
   if (!wedding.isPublished) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Coming Soon</h1>
+          <h1 className="mb-2 text-2xl font-bold text-gray-900">Coming Soon</h1>
           <p className="text-gray-600">This wedding invitation is not yet published.</p>
         </div>
       </div>
@@ -92,18 +92,18 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
   return (
     <div className="wedding-layout">
       {/* Hero Section */}
-      <section className="hero min-h-screen flex items-center justify-center bg-gradient-to-b from-pink-50 to-white">
-        <div className="text-center px-4">
+      <section className="hero flex min-h-screen items-center justify-center bg-gradient-to-b from-pink-50 to-white">
+        <div className="px-4 text-center">
           {wedding.monogramFilename && (
             <div className="mb-8">
               <img
                 src={`/api/files/${wedding.monogramFilename}`}
                 alt="Wedding Monogram"
-                className="w-32 h-32 mx-auto object-contain"
+                className="mx-auto h-32 w-32 object-contain"
               />
             </div>
           )}
-          <h1 className="text-6xl font-serif mb-4">
+          <h1 className="mb-4 font-serif text-6xl">
             {wedding.groomName} & {wedding.brideName}
           </h1>
           <p className="text-xl text-gray-600">
@@ -129,54 +129,54 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
 
       {/* Conditional Sections Based on Features */}
       {wedding.features?.love_story && (
-        <section className="py-16 px-4 bg-white">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-serif mb-8">Our Love Story</h2>
+        <section className="bg-white px-4 py-16">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 className="mb-8 font-serif text-4xl">Our Love Story</h2>
             <p className="text-gray-600">Feature enabled - content coming soon</p>
           </div>
         </section>
       )}
 
       {wedding.features?.rsvp && (
-        <section className="py-16 px-4 bg-gray-50">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-serif mb-8">RSVP</h2>
+        <section className="bg-gray-50 px-4 py-16">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 className="mb-8 font-serif text-4xl">RSVP</h2>
             <p className="text-gray-600">Feature enabled - content coming soon</p>
           </div>
         </section>
       )}
 
       {wedding.features?.gallery && (
-        <section className="py-16 px-4 bg-white">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-serif mb-8">Gallery</h2>
+        <section className="bg-white px-4 py-16">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 className="mb-8 font-serif text-4xl">Gallery</h2>
             <p className="text-gray-600">Feature enabled - content coming soon</p>
           </div>
         </section>
       )}
 
       {wedding.features?.prewedding_videos && (
-        <section className="py-16 px-4 bg-gray-50">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-serif mb-8">Pre-Wedding Videos</h2>
+        <section className="bg-gray-50 px-4 py-16">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 className="mb-8 font-serif text-4xl">Pre-Wedding Videos</h2>
             <p className="text-gray-600">Feature enabled - content coming soon</p>
           </div>
         </section>
       )}
 
       {wedding.features?.faqs && (
-        <section className="py-16 px-4 bg-white">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-serif mb-8">FAQs</h2>
+        <section className="bg-white px-4 py-16">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 className="mb-8 font-serif text-4xl">FAQs</h2>
             <p className="text-gray-600">Feature enabled - content coming soon</p>
           </div>
         </section>
       )}
 
       {wedding.features?.dress_code && (
-        <section className="py-16 px-4 bg-gray-50">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-serif mb-8">Dress Code</h2>
+        <section className="bg-gray-50 px-4 py-16">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 className="mb-8 font-serif text-4xl">Dress Code</h2>
             <p className="text-gray-600">Feature enabled - content coming soon</p>
           </div>
         </section>
@@ -186,7 +186,7 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
       {children}
 
       {/* Footer */}
-      <footer className="py-8 text-center bg-gray-50">
+      <footer className="bg-gray-50 py-8 text-center">
         {wedding.instagramLink && wedding.features.instagram_link && (
           <div className="mb-4">
             <a
@@ -199,10 +199,8 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
             </a>
           </div>
         )}
-        {wedding.footerText && (
-          <p className="text-gray-600 text-sm">{wedding.footerText}</p>
-        )}
-        <p className="text-gray-400 text-xs mt-2">
+        {wedding.footerText && <p className="text-sm text-gray-600">{wedding.footerText}</p>}
+        <p className="mt-2 text-xs text-gray-400">
           Created with ❤️ using Wedding Invitation Platform
         </p>
       </footer>

@@ -4,6 +4,7 @@
 **Input**: Feature specification from `/specs/002-improve-live-preview/spec.md`
 
 ## Execution Flow (/plan command scope)
+
 ```
 1. Load feature spec from Input path
    → ✓ Loaded successfully
@@ -27,9 +28,11 @@
 ```
 
 ## Summary
+
 Enhance admin dashboard preview functionality with full-screen viewing capability and implement robust subdomain uniqueness validation to prevent URL collisions during couple registration. Using shadcn/ui components for new UI elements.
 
 ## Technical Context
+
 **Language/Version**: TypeScript 5.x with Next.js 14.2.4
 **Primary Dependencies**: React 18, shadcn/ui (Radix UI primitives), Tailwind CSS, React Hook Form, Framer Motion
 **Storage**: Turso (libSQL) with Drizzle ORM
@@ -41,52 +44,60 @@ Enhance admin dashboard preview functionality with full-screen viewing capabilit
 **Scale/Scope**: Multi-tenant SaaS, ~100 concurrent couples initially
 
 ## Constitution Check
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 ### Technology Stack Consistency
+
 - ✅ Using Next.js 14.2.4 App Router
 - ✅ TypeScript strict mode
 - ✅ Tailwind CSS for utility-first styling
-- ⚠️  **UI Library Update**: Using shadcn/ui instead of Material-UI for new components
+- ⚠️ **UI Library Update**: Using shadcn/ui instead of Material-UI for new components
   - Rationale: Better alignment with Tailwind, smaller bundle size, better customization
   - Existing Material-UI components remain unchanged for now
 - ✅ Turso (libSQL) with Drizzle ORM
 - ✅ React Hook Form for forms (if needed)
 
 ### Performance-First Development
+
 - ✅ Server components by default, client components only when needed
 - ✅ Database queries optimized (existing unique index on subdomain)
 - ✅ Preview loads via API without heavy computation
 - ✅ shadcn/ui components are tree-shakeable and lightweight
 
 ### Component Architecture Standards
+
 - ✅ Functional components only
 - ✅ Feature-based organization in `/app/components/`
 - ✅ Context providers for shared state (session-based auth)
 - ✅ shadcn/ui components follow same patterns
 
 ### Code Quality Requirements
+
 - ✅ ESLint configured (next/core-web-vitals)
 - ✅ TypeScript strict mode
 - ✅ Feature-based file organization
 
 ### Data & State Management
+
 - ✅ Models in `/app/db/schema/`
 - ✅ API routes for mutations
 - ✅ JSON serialization for server-to-client data
 
 ### Testing Standards
+
 - ✅ Jest + React Testing Library for components
 - ✅ Playwright for E2E critical flows
 - ✅ MSW for API mocking
 - ✅ TDD approach: tests before implementation
-- ⚠️  Target: 80% test coverage for new code
+- ⚠️ Target: 80% test coverage for new code
 
 **Initial Constitution Check**: PASS (with UI library update noted)
 
 ## Project Structure
 
 ### Documentation (this feature)
+
 ```
 specs/002-improve-live-preview/
 ├── plan.md              # This file (/plan command output)
@@ -98,6 +109,7 @@ specs/002-improve-live-preview/
 ```
 
 ### Source Code (repository root)
+
 ```
 app/
 ├── admin/
@@ -139,6 +151,7 @@ __tests__/
 ## Phase 0: Outline & Research
 
 ### Research Tasks
+
 1. **Existing Preview Implementation Analysis**
    - Current LivePreview.tsx rendering approach
    - How configuration data is fetched and displayed
@@ -169,15 +182,19 @@ __tests__/
 ## Phase 1: Design & Contracts
 
 ### Entities (from existing schema)
+
 **Wedding Configuration** (existing in `/app/db/schema/weddings.ts`)
+
 - Already has unique constraint on subdomain field (line 18)
 - Fields: id, userId, subdomain, groomName, brideName, weddingDate, etc.
 
 **Preview Session** (conceptual - uses existing auth session)
+
 - Leverages existing cookie-based session authentication
 - No new entity needed - uses existing session structure
 
 ### API Contracts
+
 1. **GET /api/wedding/config** (existing - no changes needed)
    - Returns current user's wedding configuration
    - Used by both inline preview and full-screen preview
@@ -191,20 +208,24 @@ __tests__/
    - Uses existing session authentication
 
 ### Contract Tests
+
 - `__tests__/contracts/preview-api.test.ts`: Test preview data endpoint
 - `__tests__/contracts/register-api.test.ts`: Test subdomain validation errors
 
 ### Integration Tests
+
 - Subdomain collision detection and retry
 - Full-screen preview rendering
 - Preview button navigation
 
 ### Component Tests
+
 - FullScreenPreview component rendering (with shadcn components)
 - LivePreview URL display update
 - ConfigDashboard button addition (shadcn Button)
 
 ### Agent File Update
+
 - Update CLAUDE.md with new preview routes and subdomain validation logic
 - Add shadcn/ui to active technologies
 - Add recent changes: Preview improvements and subdomain uniqueness
@@ -212,9 +233,11 @@ __tests__/
 **Output**: data-model.md, contracts/, failing tests, quickstart.md, CLAUDE.md
 
 ## Phase 2: Task Planning Approach
-*This section describes what the /tasks command will do - DO NOT execute during /plan*
+
+_This section describes what the /tasks command will do - DO NOT execute during /plan_
 
 **Task Generation Strategy**:
+
 1. **Setup Tasks** (if needed)
    - Verify shadcn/ui setup or install required components
    - Add Button and Card components if not present
@@ -249,6 +272,7 @@ __tests__/
    - Manual testing: Verify subdomain uniqueness on registration
 
 **Ordering Strategy**:
+
 - Tests first (TDD)
 - Service layer before API routes before UI
 - Mark [P] for parallel-executable tasks (independent files)
@@ -258,23 +282,27 @@ __tests__/
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 
 ## Phase 3+: Future Implementation
-*These phases are beyond the scope of the /plan command*
+
+_These phases are beyond the scope of the /plan command_
 
 **Phase 3**: Task execution (/tasks command creates tasks.md)
 **Phase 4**: Implementation (execute tasks.md following constitutional principles)
 **Phase 5**: Validation (run tests, execute quickstart.md, verify 80% coverage)
 
 ## Complexity Tracking
-*No constitutional violations detected - UI library update is incremental improvement*
 
-| Consideration | Decision | Rationale |
-|---------------|----------|-----------|
+_No constitutional violations detected - UI library update is incremental improvement_
+
+| Consideration                    | Decision                           | Rationale                                                                      |
+| -------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------ |
 | shadcn/ui instead of Material-UI | Use shadcn for new components only | Better Tailwind integration, smaller bundle, existing MUI components unchanged |
 
 ## Progress Tracking
-*This checklist is updated during execution flow*
+
+_This checklist is updated during execution flow_
 
 **Phase Status**:
+
 - [x] Phase 0: Research complete (/plan command) - research.md created
 - [x] Phase 1: Design complete (/plan command) - contracts/, data-model.md, quickstart.md, CLAUDE.md created
 - [x] Phase 2: Task planning complete (/plan command - describe approach only)
@@ -283,10 +311,12 @@ __tests__/
 - [ ] Phase 5: Validation passed
 
 **Gate Status**:
+
 - [x] Initial Constitution Check: PASS
 - [x] Post-Design Constitution Check: PASS (shadcn/ui update documented)
 - [x] All NEEDS CLARIFICATION resolved (custom domain timeline deferred)
 - [x] Complexity deviations documented (UI library update noted)
 
 ---
-*Based on Constitution v1.1.0 - See `.specify/memory/constitution.md`*
+
+_Based on Constitution v1.1.0 - See `.specify/memory/constitution.md`_

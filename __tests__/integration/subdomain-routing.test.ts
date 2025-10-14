@@ -10,12 +10,12 @@ describe('Multi-tenant Subdomain Routing Test', () => {
     const testCases = [
       { subdomain: 'johnandjayne', expectTenant: true },
       { subdomain: 'karelabrina', expectTenant: true },
-      { subdomain: 'nonexistent', expectTenant: false }
+      { subdomain: 'nonexistent', expectTenant: false },
     ]
 
     for (const testCase of testCases) {
       const response = await fetch(`http://${testCase.subdomain}.localhost:3000`)
-      
+
       if (testCase.expectTenant) {
         expect([200, 404]).toContain(response.status) // 200 if published, 404 if not
       } else {

@@ -14,13 +14,13 @@ describe('Simple Testing Setup', () => {
 
   test('TypeScript is working', () => {
     interface TestInterface {
-      name: string;
-      age: number;
+      name: string
+      age: number
     }
 
     const testObj: TestInterface = {
       name: 'Test User',
-      age: 25
+      age: 25,
     }
 
     expect(testObj.name).toBe('Test User')

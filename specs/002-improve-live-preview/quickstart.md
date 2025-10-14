@@ -19,6 +19,7 @@ yarn dev
 **Objective**: Verify subdomain collision detection and retry logic
 
 **Steps**:
+
 ```bash
 # 1. Register first couple
 curl -X POST http://localhost:3000/api/auth/register \
@@ -51,6 +52,7 @@ curl -X POST http://localhost:3000/api/auth/register \
 ```
 
 **Success Criteria**:
+
 - ✅ Both registrations succeed
 - ✅ Subdomains are different despite same names
 - ✅ No database constraint errors
@@ -63,6 +65,7 @@ curl -X POST http://localhost:3000/api/auth/register \
 **Objective**: Verify full-screen preview route works for authenticated users
 
 **Steps**:
+
 ```bash
 # 1. Login as registered user
 curl -X POST http://localhost:3000/api/auth/login \
@@ -87,6 +90,7 @@ curl -X GET http://localhost:3000/admin/preview
 ```
 
 **Success Criteria**:
+
 - ✅ Authenticated users see full wedding preview
 - ✅ Unauthenticated users redirected to login
 - ✅ Preview reflects current configuration
@@ -99,20 +103,25 @@ curl -X GET http://localhost:3000/admin/preview
 **Objective**: Verify LivePreview component shows correct subdomain message
 
 **Steps**:
+
 1. Login to admin dashboard at `/admin`
 2. Check the preview section header
 3. Verify URL display shows appropriate message (not broken `yourdomain.com`)
 
 **Expected Display**:
+
 ```
 Preview: Your wedding site (Available with custom domain)
 ```
+
 Or:
+
 ```
 Preview: oialt.vercel.app (shared domain)
 ```
 
 **Success Criteria**:
+
 - ✅ No reference to non-existent `{subdomain}-oialt.vercel.app`
 - ✅ Message is clear and non-misleading
 - ✅ Visual preview still renders correctly below
@@ -124,6 +133,7 @@ Preview: oialt.vercel.app (shared domain)
 **Objective**: Verify new button navigates to full-screen preview
 
 **Manual Test**:
+
 1. Login to `/admin`
 2. Locate "View Live Site" button in ConfigDashboard
 3. Click button
@@ -132,6 +142,7 @@ Preview: oialt.vercel.app (shared domain)
 6. Verify no admin interface elements
 
 **Success Criteria**:
+
 - ✅ Button is visible and properly styled (shadcn Button component)
 - ✅ Click opens preview route
 - ✅ Preview shows complete wedding layout
@@ -144,11 +155,12 @@ Preview: oialt.vercel.app (shared domain)
 **Objective**: Verify friendly error messages on subdomain generation failure
 
 **Simulated Failure Test** (for contract tests):
+
 ```typescript
 // Mock isSubdomainAvailable to always return false
 jest.mock('@/app/lib/wedding-service', () => ({
   ...jest.requireActual('@/app/lib/wedding-service'),
-  isSubdomainAvailable: jest.fn().mockResolvedValue(false)
+  isSubdomainAvailable: jest.fn().mockResolvedValue(false),
 }))
 
 // Attempt registration
@@ -156,6 +168,7 @@ jest.mock('@/app/lib/wedding-service', () => ({
 ```
 
 **Expected Response**:
+
 ```json
 {
   "success": false,
@@ -164,6 +177,7 @@ jest.mock('@/app/lib/wedding-service', () => ({
 ```
 
 **Success Criteria**:
+
 - ✅ User-friendly error message (no technical jargon)
 - ✅ No database constraint errors exposed
 - ✅ Retry logic attempts exactly 5 times
@@ -174,6 +188,7 @@ jest.mock('@/app/lib/wedding-service', () => ({
 ## Performance Validation
 
 ### Subdomain Availability Check
+
 ```bash
 # Measure query performance
 time curl -X POST http://localhost:3000/api/auth/register \
@@ -184,6 +199,7 @@ time curl -X POST http://localhost:3000/api/auth/register \
 **Target**: < 200ms total registration time (including subdomain check)
 
 ### Preview Page Load
+
 ```bash
 # Measure preview page render time
 time curl -X GET http://localhost:3000/admin/preview -b cookies.txt

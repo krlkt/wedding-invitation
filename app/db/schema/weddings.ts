@@ -10,7 +10,9 @@ import { createId } from '@paralleldrive/cuid2'
 import { userAccounts } from './users'
 
 export const weddingConfigurations = sqliteTable('wedding_configurations', {
-  id: text('id').$defaultFn(() => createId()).primaryKey(),
+  id: text('id')
+    .$defaultFn(() => createId())
+    .primaryKey(),
   userId: text('user_id')
     .notNull()
     .references(() => userAccounts.id, { onDelete: 'cascade' })
@@ -32,8 +34,12 @@ export const weddingConfigurations = sqliteTable('wedding_configurations', {
   instagramLink: text('instagram_link'),
   footerText: text('footer_text'),
   isPublished: integer('is_published', { mode: 'boolean' }).notNull().default(false),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).$onUpdateFn(() => new Date()).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 })
 
 // TypeScript types inferred from schema

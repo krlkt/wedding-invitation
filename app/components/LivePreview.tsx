@@ -43,9 +43,9 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full bg-gray-50">
+      <div className="flex h-full items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mx-auto" />
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-pink-600" />
           <p className="mt-2 text-sm text-gray-600">Loading preview...</p>
         </div>
       </div>
@@ -54,7 +54,7 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
 
   if (!config) {
     return (
-      <div className="flex items-center justify-center h-full bg-gray-50">
+      <div className="flex h-full items-center justify-center bg-gray-50">
         <p className="text-gray-500">No configuration found</p>
       </div>
     )
@@ -63,11 +63,11 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
   return (
     <div className="live-preview h-full overflow-auto bg-white">
       {/* Preview Header - Browser Chrome */}
-      <div className="sticky top-0 z-10 bg-gray-100 border-b px-4 py-2 flex items-center justify-between">
+      <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-gray-100 px-4 py-2">
         <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 rounded-full bg-red-500" />
-          <div className="w-3 h-3 rounded-full bg-yellow-500" />
-          <div className="w-3 h-3 rounded-full bg-green-500" />
+          <div className="h-3 w-3 rounded-full bg-red-500" />
+          <div className="h-3 w-3 rounded-full bg-yellow-500" />
+          <div className="h-3 w-3 rounded-full bg-green-500" />
         </div>
         <div className="text-sm text-gray-600">
           Preview: Your wedding site (Custom subdomain available after domain setup)
@@ -79,7 +79,7 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
 
       {/* Preview Content - Scaled down for dashboard view */}
       <div className="p-8">
-        <div className="max-w-4xl mx-auto shadow-2xl rounded-lg overflow-hidden scale-90 origin-top">
+        <div className="mx-auto max-w-4xl origin-top scale-90 overflow-hidden rounded-lg shadow-2xl">
           {/* Reuse WeddingLayout component - single source of truth */}
           <WeddingLayout config={config} />
         </div>

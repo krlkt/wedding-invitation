@@ -21,21 +21,21 @@ export default function ConfigDashboard() {
 
   //WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
-      try {
-          const res = await fetch('/api/auth/session');
-          const data = await res.json();
-          if (!data.success) {
-          window.location.href = '/login';
-          }
-      } catch (err) {
-          console.error('Session check failed', err);
-          window.location.href = '/login';
+    try {
+      const res = await fetch('/api/auth/session')
+      const data = await res.json()
+      if (!data.success) {
+        window.location.href = '/login'
       }
-  };
+    } catch (err) {
+      console.error('Session check failed', err)
+      window.location.href = '/login'
+    }
+  }
 
   useEffect(() => {
     fetchConfig()
-    checkSession();
+    checkSession()
   }, [])
 
   async function fetchConfig() {
@@ -64,7 +64,7 @@ export default function ConfigDashboard() {
       if (response.ok) {
         const data = await response.json()
         setConfig(data.data)
-        setRefreshTrigger(prev => prev + 1)
+        setRefreshTrigger((prev) => prev + 1)
       }
     } catch (error) {
       console.error('Failed to update config:', error)
@@ -83,7 +83,7 @@ export default function ConfigDashboard() {
 
       if (response.ok) {
         fetchConfig()
-        setRefreshTrigger(prev => prev + 1)
+        setRefreshTrigger((prev) => prev + 1)
       }
     } catch (error) {
       console.error('Failed to toggle feature:', error)
@@ -126,9 +126,9 @@ export default function ConfigDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto" />
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-pink-600" />
           <p className="mt-4 text-gray-600">Loading dashboard...</p>
         </div>
       </div>
@@ -136,16 +136,16 @@ export default function ConfigDashboard() {
   }
 
   if (!config) {
-    return <div className="text-center p-8">No configuration found</div>
+    return <div className="p-8 text-center">No configuration found</div>
   }
 
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Left Panel - Configuration */}
-      <div className="w-1/2 overflow-auto bg-white border-r">
-        <div className="sticky top-0 bg-white border-b z-10">
+      <div className="w-1/2 overflow-auto border-r bg-white">
+        <div className="sticky top-0 z-10 border-b bg-white">
           <div className="p-6">
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <h1 className="text-2xl font-bold">Wedding Configuration</h1>
               <Button asChild>
                 <Link href="/admin/preview" target="_blank">
@@ -153,9 +153,7 @@ export default function ConfigDashboard() {
                 </Link>
               </Button>
             </div>
-            <p className="text-sm text-gray-600">
-              {config.subdomain}.yourdomain.com
-            </p>
+            <p className="text-sm text-gray-600">{config.subdomain}.yourdomain.com</p>
           </div>
 
           {/* Tabs */}
@@ -197,9 +195,7 @@ export default function ConfigDashboard() {
           {activeTab === 'basic' && (
             <BasicInfoForm config={config} onUpdate={updateConfig} saving={saving} />
           )}
-          {activeTab === 'features' && (
-            <FeaturesForm config={config} onToggle={toggleFeature} />
-          )}
+          {activeTab === 'features' && <FeaturesForm config={config} onToggle={toggleFeature} />}
           {activeTab === 'content' && (
             <div className="space-y-4">
               <p className="text-gray-600">Content management coming soon...</p>
@@ -211,12 +207,12 @@ export default function ConfigDashboard() {
         </div>
 
         {/* Publish Section */}
-        <div className="sticky bottom-0 bg-white border-t p-6">
+        <div className="sticky bottom-0 border-t bg-white p-6">
           {config.isPublished ? (
             <button
               onClick={handleUnpublish}
               disabled={saving}
-              className="w-full py-3 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50"
+              className="w-full rounded-lg bg-gray-600 px-4 py-3 text-white hover:bg-gray-700 disabled:opacity-50"
             >
               {saving ? 'Unpublishing...' : 'Unpublish Wedding'}
             </button>
@@ -224,7 +220,7 @@ export default function ConfigDashboard() {
             <button
               onClick={handlePublish}
               disabled={saving}
-              className="w-full py-3 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50"
+              className="w-full rounded-lg bg-pink-600 px-4 py-3 text-white hover:bg-pink-700 disabled:opacity-50"
             >
               {saving ? 'Publishing...' : 'Publish Wedding'}
             </button>
@@ -262,97 +258,97 @@ function BasicInfoForm({ config, onUpdate, saving }: any) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Groom Name</label>
+          <label className="mb-1 block text-sm font-medium">Groom Name</label>
           <input
             type="text"
             value={formData.groomName}
-            onChange={e => setFormData({ ...formData, groomName: e.target.value })}
-            className="w-full px-3 py-2 border rounded-lg"
+            onChange={(e) => setFormData({ ...formData, groomName: e.target.value })}
+            className="w-full rounded-lg border px-3 py-2"
             required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Bride Name</label>
+          <label className="mb-1 block text-sm font-medium">Bride Name</label>
           <input
             type="text"
             value={formData.brideName}
-            onChange={e => setFormData({ ...formData, brideName: e.target.value })}
-            className="w-full px-3 py-2 border rounded-lg"
+            onChange={(e) => setFormData({ ...formData, brideName: e.target.value })}
+            className="w-full rounded-lg border px-3 py-2"
             required
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Wedding Date</label>
+        <label className="mb-1 block text-sm font-medium">Wedding Date</label>
         <input
           type="date"
           value={formData.weddingDate}
-          onChange={e => setFormData({ ...formData, weddingDate: e.target.value })}
-          className="w-full px-3 py-2 border rounded-lg"
+          onChange={(e) => setFormData({ ...formData, weddingDate: e.target.value })}
+          className="w-full rounded-lg border px-3 py-2"
           required
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Groom&apos;s Father</label>
+          <label className="mb-1 block text-sm font-medium">Groom&apos;s Father</label>
           <input
             type="text"
             value={formData.groomFather}
-            onChange={e => setFormData({ ...formData, groomFather: e.target.value })}
-            className="w-full px-3 py-2 border rounded-lg"
+            onChange={(e) => setFormData({ ...formData, groomFather: e.target.value })}
+            className="w-full rounded-lg border px-3 py-2"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Groom&apos;s Mother</label>
+          <label className="mb-1 block text-sm font-medium">Groom&apos;s Mother</label>
           <input
             type="text"
             value={formData.groomMother}
-            onChange={e => setFormData({ ...formData, groomMother: e.target.value })}
-            className="w-full px-3 py-2 border rounded-lg"
+            onChange={(e) => setFormData({ ...formData, groomMother: e.target.value })}
+            className="w-full rounded-lg border px-3 py-2"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Bride&apos;s Father</label>
+          <label className="mb-1 block text-sm font-medium">Bride&apos;s Father</label>
           <input
             type="text"
             value={formData.brideFather}
-            onChange={e => setFormData({ ...formData, brideFather: e.target.value })}
-            className="w-full px-3 py-2 border rounded-lg"
+            onChange={(e) => setFormData({ ...formData, brideFather: e.target.value })}
+            className="w-full rounded-lg border px-3 py-2"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Bride&apos;s Mother</label>
+          <label className="mb-1 block text-sm font-medium">Bride&apos;s Mother</label>
           <input
             type="text"
             value={formData.brideMother}
-            onChange={e => setFormData({ ...formData, brideMother: e.target.value })}
-            className="w-full px-3 py-2 border rounded-lg"
+            onChange={(e) => setFormData({ ...formData, brideMother: e.target.value })}
+            className="w-full rounded-lg border px-3 py-2"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Instagram Link</label>
+        <label className="mb-1 block text-sm font-medium">Instagram Link</label>
         <input
           type="url"
           value={formData.instagramLink}
-          onChange={e => setFormData({ ...formData, instagramLink: e.target.value })}
-          className="w-full px-3 py-2 border rounded-lg"
+          onChange={(e) => setFormData({ ...formData, instagramLink: e.target.value })}
+          className="w-full rounded-lg border px-3 py-2"
           placeholder="https://instagram.com/..."
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Footer Text</label>
+        <label className="mb-1 block text-sm font-medium">Footer Text</label>
         <textarea
           value={formData.footerText}
-          onChange={e => setFormData({ ...formData, footerText: e.target.value })}
-          className="w-full px-3 py-2 border rounded-lg"
+          onChange={(e) => setFormData({ ...formData, footerText: e.target.value })}
+          className="w-full rounded-lg border px-3 py-2"
           rows={3}
         />
       </div>
@@ -360,7 +356,7 @@ function BasicInfoForm({ config, onUpdate, saving }: any) {
       <button
         type="submit"
         disabled={saving}
-        className="w-full py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50"
+        className="w-full rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700 disabled:opacity-50"
       >
         {saving ? 'Saving...' : 'Save Changes'}
       </button>
@@ -381,8 +377,8 @@ function FeaturesForm({ config, onToggle }: any) {
 
   return (
     <div className="space-y-4">
-      {features.map(feature => (
-        <div key={feature.name} className="flex items-center justify-between p-4 border rounded-lg">
+      {features.map((feature) => (
+        <div key={feature.name} className="flex items-center justify-between rounded-lg border p-4">
           <div>
             <h3 className="font-medium">{feature.label}</h3>
             <p className="text-sm text-gray-500">{feature.description}</p>

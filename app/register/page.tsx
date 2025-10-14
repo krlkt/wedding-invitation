@@ -76,11 +76,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 px-4">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Your Wedding Website</h1>
+        <div className="mb-8 text-center">
+          <h1 className="mb-2 text-3xl font-bold text-gray-900">Create Your Wedding Website</h1>
           <p className="text-gray-600">Start building your beautiful wedding invitation</p>
         </div>
 
@@ -88,10 +88,12 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Account Info Section */}
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">Account Information</h2>
+            <h2 className="border-b pb-2 text-lg font-semibold text-gray-700">
+              Account Information
+            </h2>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
                 Email Address
               </label>
               <input
@@ -101,13 +103,13 @@ export default function RegisterPage() {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-pink-500"
                 placeholder="your@email.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
                 Password
               </label>
               <input
@@ -117,13 +119,16 @@ export default function RegisterPage() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-pink-500"
                 placeholder="At least 8 characters"
               />
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="confirmPassword"
+                className="mb-2 block text-sm font-medium text-gray-700"
+              >
                 Confirm Password
               </label>
               <input
@@ -133,7 +138,7 @@ export default function RegisterPage() {
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-pink-500"
                 placeholder="Re-enter password"
               />
             </div>
@@ -141,11 +146,11 @@ export default function RegisterPage() {
 
           {/* Wedding Info Section */}
           <div className="space-y-4 pt-4">
-            <h2 className="text-lg font-semibold text-gray-700 border-b pb-2">Wedding Details</h2>
+            <h2 className="border-b pb-2 text-lg font-semibold text-gray-700">Wedding Details</h2>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="groomName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="groomName" className="mb-2 block text-sm font-medium text-gray-700">
                   Groom&apos;s Name
                 </label>
                 <input
@@ -155,13 +160,13 @@ export default function RegisterPage() {
                   required
                   value={formData.groomName}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-pink-500"
                   placeholder="John"
                 />
               </div>
 
               <div>
-                <label htmlFor="brideName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="brideName" className="mb-2 block text-sm font-medium text-gray-700">
                   Bride&apos;s Name
                 </label>
                 <input
@@ -171,7 +176,7 @@ export default function RegisterPage() {
                   required
                   value={formData.brideName}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-pink-500"
                   placeholder="Jane"
                 />
               </div>
@@ -180,7 +185,7 @@ export default function RegisterPage() {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700">
               {error}
             </div>
           )}
@@ -189,13 +194,29 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-pink-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
+            className="w-full rounded-lg bg-gradient-to-r from-pink-500 to-purple-500 px-4 py-3 font-semibold text-white shadow-lg transition-all hover:from-pink-600 hover:to-purple-600 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? (
               <span className="flex items-center justify-center">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
                 Creating your wedding website...
               </span>
@@ -205,18 +226,19 @@ export default function RegisterPage() {
           </button>
 
           {/* Login Link */}
-          <div className="text-center text-sm text-gray-600 pt-4">
+          <div className="pt-4 text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <Link href="/admin/login" className="text-pink-500 hover:text-pink-600 font-semibold">
+            <Link href="/admin/login" className="font-semibold text-pink-500 hover:text-pink-600">
               Sign in here
             </Link>
           </div>
         </form>
 
         {/* Info Text */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <p className="text-xs text-gray-500 text-center">
-            By creating an account, you&apos;ll get your own personalized wedding website with a unique subdomain.
+        <div className="mt-8 border-t border-gray-200 pt-6">
+          <p className="text-center text-xs text-gray-500">
+            By creating an account, you&apos;ll get your own personalized wedding website with a
+            unique subdomain.
           </p>
         </div>
       </div>

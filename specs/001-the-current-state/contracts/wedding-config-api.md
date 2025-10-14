@@ -7,6 +7,7 @@
 **Authorization**: Required (authenticated user)
 
 **Response (Success - 200)**:
+
 ```typescript
 {
   success: true;
@@ -40,10 +41,11 @@
 ```
 
 **Response (Error - 404)**:
+
 ```typescript
 {
-  success: false;
-  error: "Wedding configuration not found"
+  success: false
+  error: 'Wedding configuration not found'
 }
 ```
 
@@ -56,6 +58,7 @@
 **Authorization**: Required (authenticated user)
 
 **Request**:
+
 ```typescript
 {
   groomName?: string;
@@ -72,9 +75,10 @@
 ```
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
     // Updated wedding configuration object
     // Same structure as GET response
@@ -83,10 +87,11 @@
 ```
 
 **Response (Error - 400)**:
+
 ```typescript
 {
-  success: false;
-  error: "Invalid date format" | "Instagram link invalid" | "Validation error"
+  success: false
+  error: 'Invalid date format' | 'Instagram link invalid' | 'Validation error'
 }
 ```
 
@@ -99,20 +104,28 @@
 **Authorization**: Required (authenticated user)
 
 **Request**:
+
 ```typescript
 {
-  featureName: "love_story" | "rsvp" | "gallery" | "prewedding_videos" | "faqs" | "dress_code" | "instagram_link";
-  isEnabled: boolean;
+  featureName: 'love_story' |
+    'rsvp' |
+    'gallery' |
+    'prewedding_videos' |
+    'faqs' |
+    'dress_code' |
+    'instagram_link'
+  isEnabled: boolean
 }
 ```
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
-    featureName: string;
-    isEnabled: boolean;
+    featureName: string
+    isEnabled: boolean
   }
 }
 ```
@@ -128,13 +141,14 @@
 **Request**: No body required
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
-    isPublished: true;
-    publishedAt: string; // ISO timestamp
-    weddingUrl: string;  // Full subdomain URL
+    isPublished: true
+    publishedAt: string // ISO timestamp
+    weddingUrl: string // Full subdomain URL
   }
 }
 ```
@@ -150,12 +164,13 @@
 **Request**: No body required
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
-    isPublished: false;
-    unpublishedAt: string; // ISO timestamp
+    isPublished: false
+    unpublishedAt: string // ISO timestamp
   }
 }
 ```

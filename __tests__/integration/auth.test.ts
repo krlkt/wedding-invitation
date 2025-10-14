@@ -15,7 +15,7 @@ describe('Authentication Flow Integration Test', () => {
     email: `auth-test-${Date.now()}@example.com`,
     password: 'securePassword123',
     groomName: 'Auth Test Groom',
-    brideName: 'Auth Test Bride'
+    brideName: 'Auth Test Bride',
   }
 
   beforeAll(async () => {
@@ -23,7 +23,7 @@ describe('Authentication Flow Integration Test', () => {
     await fetch(`${baseUrl}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(testUser)
+      body: JSON.stringify(testUser),
     })
   })
 
@@ -35,8 +35,8 @@ describe('Authentication Flow Integration Test', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: testUser.email,
-          password: testUser.password
-        })
+          password: testUser.password,
+        }),
       })
 
       if (loginResponse.status === 200) {
@@ -47,14 +47,14 @@ describe('Authentication Flow Integration Test', () => {
           data: {
             userId: expect.any(String),
             weddingConfigId: expect.any(String),
-            subdomain: expect.any(String)
-          }
+            subdomain: expect.any(String),
+          },
         })
 
         // Step 2: Verify session is established by checking session endpoint
         const sessionResponse = await fetch(`${baseUrl}/api/auth/session`, {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
           // TODO: Include session cookies from login response
         })
 
@@ -65,14 +65,14 @@ describe('Authentication Flow Integration Test', () => {
           expect(sessionData.data).toMatchObject({
             userId: loginData.data.userId,
             weddingConfigId: loginData.data.weddingConfigId,
-            subdomain: loginData.data.subdomain
+            subdomain: loginData.data.subdomain,
           })
         }
 
         // Step 3: Verify authenticated user can access protected endpoints
         const configResponse = await fetch(`${baseUrl}/api/wedding/config`, {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
           // TODO: Include session cookies
         })
 
@@ -87,8 +87,8 @@ describe('Authentication Flow Integration Test', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: testUser.email,
-          password: 'wrongPassword'
-        })
+          password: 'wrongPassword',
+        }),
       })
 
       expect(invalidLogin.status).toBe(401)
@@ -97,7 +97,7 @@ describe('Authentication Flow Integration Test', () => {
         const errorData = await invalidLogin.json()
         expect(errorData).toMatchObject({
           success: false,
-          error: 'Invalid email or password'
+          error: 'Invalid email or password',
         })
       }
     })
@@ -108,8 +108,8 @@ describe('Authentication Flow Integration Test', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: 'nonexistent@example.com',
-          password: 'anypassword'
-        })
+          password: 'anypassword',
+        }),
       })
 
       expect(nonExistentLogin.status).toBe(401)
@@ -118,7 +118,7 @@ describe('Authentication Flow Integration Test', () => {
         const errorData = await nonExistentLogin.json()
         expect(errorData).toMatchObject({
           success: false,
-          error: 'Invalid email or password'
+          error: 'Invalid email or password',
         })
       }
     })
@@ -132,15 +132,15 @@ describe('Authentication Flow Integration Test', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: testUser.email,
-          password: testUser.password
-        })
+          password: testUser.password,
+        }),
       })
 
       if (loginResponse.status === 200) {
         // Step 2: Logout
         const logoutResponse = await fetch(`${baseUrl}/api/auth/logout`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
           // TODO: Include session cookies from login
         })
 
@@ -148,13 +148,13 @@ describe('Authentication Flow Integration Test', () => {
           const logoutData = await logoutResponse.json()
           expect(logoutData).toMatchObject({
             success: true,
-            message: 'Logged out successfully'
+            message: 'Logged out successfully',
           })
 
           // Step 3: Verify session is cleared
           const sessionResponse = await fetch(`${baseUrl}/api/auth/session`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
             // Using cookies from after logout (should be cleared)
           })
 
@@ -164,14 +164,14 @@ describe('Authentication Flow Integration Test', () => {
             const sessionData = await sessionResponse.json()
             expect(sessionData).toMatchObject({
               success: false,
-              error: 'Not authenticated'
+              error: 'Not authenticated',
             })
           }
 
           // Step 4: Verify protected endpoints return 401
           const configResponse = await fetch(`${baseUrl}/api/wedding/config`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
           })
 
           expect(configResponse.status).toBe(401)
@@ -183,7 +183,7 @@ describe('Authentication Flow Integration Test', () => {
       // Logout without being logged in
       const logoutResponse = await fetch(`${baseUrl}/api/auth/logout`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
 
       // Should still return success (idempotent operation)
@@ -191,7 +191,7 @@ describe('Authentication Flow Integration Test', () => {
         const logoutData = await logoutResponse.json()
         expect(logoutData).toMatchObject({
           success: true,
-          message: 'Logged out successfully'
+          message: 'Logged out successfully',
         })
       }
     })
@@ -205,8 +205,8 @@ describe('Authentication Flow Integration Test', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: testUser.email,
-          password: testUser.password
-        })
+          password: testUser.password,
+        }),
       })
 
       if (loginResponse.status === 200) {
@@ -216,7 +216,7 @@ describe('Authentication Flow Integration Test', () => {
         for (let i = 0; i < 3; i++) {
           const sessionResponse = await fetch(`${baseUrl}/api/auth/session`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
             // TODO: Include session cookies
           })
 
@@ -225,7 +225,7 @@ describe('Authentication Flow Integration Test', () => {
             expect(sessionData.data).toMatchObject({
               userId: loginData.data.userId,
               weddingConfigId: loginData.data.weddingConfigId,
-              subdomain: loginData.data.subdomain
+              subdomain: loginData.data.subdomain,
             })
           }
         }
@@ -240,8 +240,8 @@ describe('Authentication Flow Integration Test', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: testUser.email,
-            password: testUser.password
-          })
+            password: testUser.password,
+          }),
         })
       )
 
@@ -263,7 +263,7 @@ describe('Authentication Flow Integration Test', () => {
       const missingPassword = await fetch(`${baseUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: testUser.email })
+        body: JSON.stringify({ email: testUser.email }),
       })
 
       expect(missingPassword.status).toBe(400)
@@ -272,7 +272,7 @@ describe('Authentication Flow Integration Test', () => {
       const missingEmail = await fetch(`${baseUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: testUser.password })
+        body: JSON.stringify({ password: testUser.password }),
       })
 
       expect(missingEmail.status).toBe(400)
@@ -281,7 +281,7 @@ describe('Authentication Flow Integration Test', () => {
       const emptyBody = await fetch(`${baseUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: '{}'
+        body: '{}',
       })
 
       expect(emptyBody.status).toBe(400)
@@ -292,7 +292,7 @@ describe('Authentication Flow Integration Test', () => {
         "'; DROP TABLE users; --",
         "admin'--",
         "' OR '1'='1",
-        "' UNION SELECT * FROM users --"
+        "' UNION SELECT * FROM users --",
       ]
 
       for (const maliciousInput of sqlInjectionAttempts) {
@@ -301,8 +301,8 @@ describe('Authentication Flow Integration Test', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: maliciousInput,
-            password: 'anything'
-          })
+            password: 'anything',
+          }),
         })
 
         // Should not succeed and should not cause server error

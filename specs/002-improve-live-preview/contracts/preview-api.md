@@ -13,6 +13,7 @@
 **Authentication**: Required (session cookie)
 
 **Headers**:
+
 ```
 Cookie: session={...}
 ```
@@ -20,6 +21,7 @@ Cookie: session={...}
 ### Response
 
 **Success (200)**:
+
 ```json
 {
   "success": true,
@@ -53,6 +55,7 @@ Cookie: session={...}
 ```
 
 **Unauthorized (401)**:
+
 ```json
 {
   "success": false,
@@ -61,6 +64,7 @@ Cookie: session={...}
 ```
 
 **Not Found (404)**:
+
 ```json
 {
   "success": false,
@@ -71,6 +75,7 @@ Cookie: session={...}
 ### Usage Context
 
 **Used by**:
+
 1. `LivePreview` component in admin dashboard (inline preview)
 2. `/admin/preview` page route (full-screen preview)
 
@@ -91,6 +96,7 @@ Cookie: session={...}
 **Authentication**: Required (session cookie)
 
 **Headers**:
+
 ```
 Cookie: session={...}
 ```
@@ -99,6 +105,7 @@ Cookie: session={...}
 
 **Success (200)**:
 Returns HTML page with:
+
 - Full wedding site layout (WeddingLayout component)
 - User's wedding configuration data
 - No admin UI elements (clean preview)
@@ -111,6 +118,7 @@ Redirects to `/admin/login`
 **File**: `app/admin/preview/page.tsx`
 
 **Server Component**:
+
 ```typescript
 export default async function PreviewPage() {
   const session = await getSession()

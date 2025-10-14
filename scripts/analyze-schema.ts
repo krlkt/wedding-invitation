@@ -34,7 +34,9 @@ async function analyzeSchema() {
     const schemaResult = await client.execute(`PRAGMA table_info(${tableName})`)
     console.log('  Columns:')
     for (const col of schemaResult.rows) {
-      console.log(`    - ${col.name} (${col.type}) ${col.notnull ? 'NOT NULL' : 'NULL'} ${col.dflt_value ? `DEFAULT ${col.dflt_value}` : ''}`)
+      console.log(
+        `    - ${col.name} (${col.type}) ${col.notnull ? 'NOT NULL' : 'NULL'} ${col.dflt_value ? `DEFAULT ${col.dflt_value}` : ''}`
+      )
     }
 
     // Get row count

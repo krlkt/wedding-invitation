@@ -18,8 +18,8 @@ describe('Subdomain Validation Integration', () => {
   it('should throw error after 5 failed attempts', async () => {
     // TODO: Mock isSubdomainAvailable to always return false
 
-    await expect(
-      createWeddingConfiguration('user-123', 'John', 'Mary')
-    ).rejects.toThrow('Unable to generate unique subdomain')
+    await expect(createWeddingConfiguration('user-123', 'John', 'Mary')).rejects.toThrow(
+      'Unable to generate unique subdomain'
+    )
   })
 })

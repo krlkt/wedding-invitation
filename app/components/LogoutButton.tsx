@@ -30,7 +30,8 @@ export default function LogoutButton({ className, fullWidth }: LogoutButtonProps
     }
   }
 
-  const defaultClasses = 'bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+  const defaultClasses =
+    'bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
   const widthClass = fullWidth ? 'w-full' : ''
 
   return (

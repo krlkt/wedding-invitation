@@ -56,14 +56,16 @@ async function backupDatabase() {
         const columns = result.columns
 
         for (const row of result.rows) {
-          const values = columns.map((col) => {
-            const val = row[col]
-            if (val === null) return 'NULL'
-            if (typeof val === 'string') return `'${val.replace(/'/g, "''")}'`
-            if (typeof val === 'number') return val.toString()
-            if (typeof val === 'boolean') return val ? '1' : '0'
-            return `'${val}'`
-          }).join(', ')
+          const values = columns
+            .map((col) => {
+              const val = row[col]
+              if (val === null) return 'NULL'
+              if (typeof val === 'string') return `'${val.replace(/'/g, "''")}'`
+              if (typeof val === 'number') return val.toString()
+              if (typeof val === 'boolean') return val ? '1' : '0'
+              return `'${val}'`
+            })
+            .join(', ')
 
           sqlDump += `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${values});\n`
         }

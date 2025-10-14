@@ -48,19 +48,22 @@ const mockRSVP = {
 export const handlers = [
   // Auth API endpoints
   http.post('/api/auth/register', async ({ request }) => {
-    const body = await request.json() as any
-    return HttpResponse.json({
-      success: true,
-      data: {
-        userId: mockUserAccount.id,
-        weddingConfigId: mockWeddingConfig.id,
-        subdomain: body.groomName.toLowerCase() + '-' + body.brideName.toLowerCase(),
-      }
-    }, { status: 201 })
+    const body = (await request.json()) as any
+    return HttpResponse.json(
+      {
+        success: true,
+        data: {
+          userId: mockUserAccount.id,
+          weddingConfigId: mockWeddingConfig.id,
+          subdomain: body.groomName.toLowerCase() + '-' + body.brideName.toLowerCase(),
+        },
+      },
+      { status: 201 }
+    )
   }),
 
   http.post('/api/auth/login', async ({ request }) => {
-    const body = await request.json() as any
+    const body = (await request.json()) as any
     if (body.email === 'test@example.com' && body.password === 'password123') {
       return HttpResponse.json({
         success: true,
@@ -68,19 +71,22 @@ export const handlers = [
           userId: mockUserAccount.id,
           weddingConfigId: mockWeddingConfig.id,
           subdomain: mockWeddingConfig.subdomain,
-        }
+        },
       })
     }
-    return HttpResponse.json({
-      success: false,
-      error: 'Invalid email or password'
-    }, { status: 401 })
+    return HttpResponse.json(
+      {
+        success: false,
+        error: 'Invalid email or password',
+      },
+      { status: 401 }
+    )
   }),
 
   http.post('/api/auth/logout', () => {
     return HttpResponse.json({
       success: true,
-      message: 'Logged out successfully'
+      message: 'Logged out successfully',
     })
   }),
 
@@ -91,7 +97,7 @@ export const handlers = [
         userId: mockUserAccount.id,
         weddingConfigId: mockWeddingConfig.id,
         subdomain: mockWeddingConfig.subdomain,
-      }
+      },
     })
   }),
 
@@ -109,31 +115,31 @@ export const handlers = [
           faqs: true,
           dress_code: true,
           instagram_link: true,
-        }
-      }
+        },
+      },
     })
   }),
 
   http.put('/api/wedding/config', async ({ request }) => {
-    const body = await request.json() as any
+    const body = (await request.json()) as any
     return HttpResponse.json({
       success: true,
       data: {
         ...mockWeddingConfig,
         ...body,
         updatedAt: new Date().toISOString(),
-      }
+      },
     })
   }),
 
   http.put('/api/wedding/config/features', async ({ request }) => {
-    const body = await request.json() as any
+    const body = (await request.json()) as any
     return HttpResponse.json({
       success: true,
       data: {
         featureName: body.featureName,
         isEnabled: body.isEnabled,
-      }
+      },
     })
   }),
 
@@ -144,7 +150,7 @@ export const handlers = [
         isPublished: true,
         publishedAt: new Date().toISOString(),
         weddingUrl: `http://localhost:3000`,
-      }
+      },
     })
   }),
 
@@ -154,7 +160,7 @@ export const handlers = [
       data: {
         isPublished: false,
         unpublishedAt: new Date().toISOString(),
-      }
+      },
     })
   }),
 
@@ -164,30 +170,36 @@ export const handlers = [
   }),
 
   http.post('/api/rsvp', async ({ request }) => {
-    const body = await request.json() as any
-    return HttpResponse.json({
-      ...mockRSVP,
-      ...body,
-      id: 'rsvp_' + Date.now(),
-    }, { status: 201 })
+    const body = (await request.json()) as any
+    return HttpResponse.json(
+      {
+        ...mockRSVP,
+        ...body,
+        id: 'rsvp_' + Date.now(),
+      },
+      { status: 201 }
+    )
   }),
 
   // File upload endpoints
   http.post('/api/wedding/gallery/upload', () => {
-    return HttpResponse.json({
-      success: true,
-      data: {
-        id: 'gallery_123',
-        filename: 'test-photo.jpg',
-        originalName: 'wedding-photo.jpg',
-        fileSize: 1024000,
-        mimeType: 'image/jpeg',
-        order: 1,
-        photoUrl: 'http://localhost:3000/uploads/test-photo.jpg',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
-    }, { status: 201 })
+    return HttpResponse.json(
+      {
+        success: true,
+        data: {
+          id: 'gallery_123',
+          filename: 'test-photo.jpg',
+          originalName: 'wedding-photo.jpg',
+          fileSize: 1024000,
+          mimeType: 'image/jpeg',
+          order: 1,
+          photoUrl: 'http://localhost:3000/uploads/test-photo.jpg',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      },
+      { status: 201 }
+    )
   }),
 
   // Fallback for unhandled requests

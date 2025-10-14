@@ -11,7 +11,7 @@ global.fetch = jest.fn()
 
 describe('ConfigDashboard Component', () => {
   beforeEach(() => {
-    (global.fetch as jest.Mock).mockClear()
+    ;(global.fetch as jest.Mock).mockClear()
   })
 
   it('should render "View Live Site" button that links to /admin/preview', async () => {
@@ -22,12 +22,12 @@ describe('ConfigDashboard Component', () => {
       brideName: 'Mary',
       weddingDate: '2025-11-04',
       isPublished: false,
-      features: { love_story: true }
+      features: { love_story: true },
     }
 
     ;(global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
-      json: async () => ({ success: true, data: mockConfig })
+      json: async () => ({ success: true, data: mockConfig }),
     })
 
     render(<ConfigDashboard />)

@@ -71,7 +71,15 @@ async function migrateExistingData() {
 
     // Step 3: Create default feature toggles
     console.log('\n3. Creating feature toggles...')
-    const features = ['love_story', 'rsvp', 'gallery', 'prewedding_videos', 'faqs', 'dress_code', 'instagram_link']
+    const features = [
+      'love_story',
+      'rsvp',
+      'gallery',
+      'prewedding_videos',
+      'faqs',
+      'dress_code',
+      'instagram_link',
+    ]
     for (const feature of features) {
       await db.run(sql`
         INSERT INTO feature_toggles (id, wedding_config_id, feature_name, is_enabled, created_at, updated_at)
@@ -246,7 +254,6 @@ async function migrateExistingData() {
     console.log(`- Wishes: ${oldWishes.length}`)
     console.log(`- Groups: ${oldGroups.length}`)
     console.log(`\nIMPORTANT: Change the default password after migration!`)
-
   } catch (error) {
     console.error('Data migration failed:', error)
     throw error

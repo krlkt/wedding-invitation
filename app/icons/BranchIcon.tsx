@@ -1,51 +1,51 @@
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 
 const BranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
-    const variants = {
-        offscreen: {
-            translateX: fromLeft ? -60 : '100vw', // Start far to the left, outside the viewport
-            scale: 0.3,
-        },
-        onscreen: {
-            translateX: fromLeft ? 10 : '80vw',
-            scale: 1.1, // Scale up while moving in
-            transition: {
-                type: 'spring',
-                bounce: 0.3,
-                duration: 3,
-            },
-        },
-        wiggle: {
-            rotate: fromLeft ? [0, 2, -2, 2, -2, 0] : [-180, -184, -179, -185, -180, -180],
-            x: fromLeft ? [-1, -2, -3, -2, -3, -1] : [-5, -7, -5, -4, -6, -6],
-            y: fromLeft ? [3, 2, 4, 6, 2, 3] : [0, 1, 3, 2, 4, 1],
-            scale: 1.1, // Keep the scale consistent
-            transition: {
-                duration: 4,
-                repeat: Infinity,
-                ease: 'easeInOut',
-            },
-        },
-    };
+  const variants = {
+    offscreen: {
+      translateX: fromLeft ? -60 : '100vw', // Start far to the left, outside the viewport
+      scale: 0.3,
+    },
+    onscreen: {
+      translateX: fromLeft ? 10 : '80vw',
+      scale: 1.1, // Scale up while moving in
+      transition: {
+        type: 'spring',
+        bounce: 0.3,
+        duration: 3,
+      },
+    },
+    wiggle: {
+      rotate: fromLeft ? [0, 2, -2, 2, -2, 0] : [-180, -184, -179, -185, -180, -180],
+      x: fromLeft ? [-1, -2, -3, -2, -3, -1] : [-5, -7, -5, -4, -6, -6],
+      y: fromLeft ? [3, 2, 4, 6, 2, 3] : [0, 1, 3, 2, 4, 1],
+      scale: 1.1, // Keep the scale consistent
+      transition: {
+        duration: 4,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      },
+    },
+  }
 
-    return (
-        <motion.svg
-            version="1.1"
-            id="Capa_1"
-            xmlns="http://www.w3.org/2000/svg"
-            width="100%"
-            viewBox="0 0 494.226 494.226"
-            variants={variants}
-            initial="offscreen" // Start from the left
-            whileInView="onscreen" // Move into view
-            animate="wiggle" // Start wiggling after the slide-in
-            style={{ originX: '50%', originY: '50%', fill: 'var(--text-primary)' }}
-            viewport={{ once: true, amount: 0.1 }} // Trigger when 10% is in view
-        >
-            <g>
-                <g>
-                    <path
-                        d="M42.583,438.242c23.865-27.094,50.913-57.802,56.1-62.932l2.175-2.149l-0.002,3.054c0,2.025-0.087,4.189-0.173,6.317
+  return (
+    <motion.svg
+      version="1.1"
+      id="Capa_1"
+      xmlns="http://www.w3.org/2000/svg"
+      width="100%"
+      viewBox="0 0 494.226 494.226"
+      variants={variants}
+      initial="offscreen" // Start from the left
+      whileInView="onscreen" // Move into view
+      animate="wiggle" // Start wiggling after the slide-in
+      style={{ originX: '50%', originY: '50%', fill: 'var(--text-primary)' }}
+      viewport={{ once: true, amount: 0.1 }} // Trigger when 10% is in view
+    >
+      <g>
+        <g>
+          <path
+            d="M42.583,438.242c23.865-27.094,50.913-57.802,56.1-62.932l2.175-2.149l-0.002,3.054c0,2.025-0.087,4.189-0.173,6.317
        c-0.158,3.894-0.303,7.578,0.086,9.957c4.659,28.448,32.229,60.776,61.458,72.063c12.205,4.717,20.17,3.951,23.692-2.438
        c7.091-12.873-4.891-44.975-13.033-57.857c-5.309-8.409-19.678-28.779-38.38-36.337c-2.297-0.926-5.421-1.356-9.828-1.356
        c-2.84,0-5.895,0.179-8.848,0.354c-1.93,0.113-3.843,0.226-5.684,0.289l-3.315,0.114l2.384-2.306
@@ -103,11 +103,11 @@ const BranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
        c2.147,7.236,8.063,12.923,13.782,18.427c6.146,5.911,11.955,11.493,12.08,18.37c0.064,3.557-2.28,8.389-7.16,14.773
        c-2.4,2.465-24.473,27.856-43.944,50.262C18.05,448.136,3.92,464.393,0,468.77l8.604,7.847
        C13.186,471.619,26.887,456.063,42.583,438.242z"
-                    />
-                </g>
-            </g>
-        </motion.svg>
-    );
-};
+          />
+        </g>
+      </g>
+    </motion.svg>
+  )
+}
 
-export default BranchIcon;
+export default BranchIcon

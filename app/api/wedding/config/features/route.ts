@@ -28,10 +28,7 @@ export async function PUT(request: NextRequest) {
 
     // Validate feature name
     if (!featureName || !VALID_FEATURES.includes(featureName)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid feature name' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Invalid feature name' }, { status: 400 })
     }
 
     // Validate isEnabled
@@ -54,9 +51,6 @@ export async function PUT(request: NextRequest) {
     })
   } catch (error: any) {
     console.error('Toggle feature error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to toggle feature' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to toggle feature' }, { status: 500 })
   }
 }

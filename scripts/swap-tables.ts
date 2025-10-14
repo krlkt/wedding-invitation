@@ -19,7 +19,7 @@ async function swapTables() {
   console.log('⚠️  ATOMIC TABLE SWAP - This will DELETE old tables!')
   console.log('    Waiting 3 seconds... Press Ctrl+C to cancel\n')
 
-  await new Promise(resolve => setTimeout(resolve, 3000))
+  await new Promise((resolve) => setTimeout(resolve, 3000))
 
   console.log('🔄 Starting table swap...\n')
 
@@ -81,7 +81,6 @@ async function swapTables() {
     console.log('   2. Delete app/db/schema/legacy.ts')
     console.log('   3. Run drizzle-kit push to sync schema')
     console.log('   4. Test your application')
-
   } catch (error) {
     console.error('\n❌ Table swap failed:', error)
     console.error('\n⚠️  Your data is still safe in the *_new tables!')

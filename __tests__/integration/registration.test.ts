@@ -15,7 +15,7 @@ describe('User Registration Flow Integration Test', () => {
       email: `test-${Date.now()}@example.com`,
       password: 'securePassword123',
       groomName: 'John Doe',
-      brideName: 'Jane Smith'
+      brideName: 'Jane Smith',
     }
 
     it('should complete full registration workflow', async () => {
@@ -23,7 +23,7 @@ describe('User Registration Flow Integration Test', () => {
       const registrationResponse = await fetch(`${baseUrl}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(testUser)
+        body: JSON.stringify(testUser),
       })
 
       if (registrationResponse.status === 201) {
@@ -35,8 +35,8 @@ describe('User Registration Flow Integration Test', () => {
           data: {
             userId: expect.any(String),
             weddingConfigId: expect.any(String),
-            subdomain: expect.any(String)
-          }
+            subdomain: expect.any(String),
+          },
         })
 
         // Step 2: Verify user can immediately login with credentials
@@ -45,8 +45,8 @@ describe('User Registration Flow Integration Test', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: testUser.email,
-            password: testUser.password
-          })
+            password: testUser.password,
+          }),
         })
 
         if (loginResponse.status === 200) {
@@ -60,7 +60,7 @@ describe('User Registration Flow Integration Test', () => {
           // Step 3: Verify initial wedding configuration exists
           const configResponse = await fetch(`${baseUrl}/api/wedding/config`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
             // TODO: Add session cookies/auth headers from login
           })
 
@@ -81,8 +81,8 @@ describe('User Registration Flow Integration Test', () => {
                 prewedding_videos: expect.any(Boolean),
                 faqs: expect.any(Boolean),
                 dress_code: expect.any(Boolean),
-                instagram_link: expect.any(Boolean)
-              })
+                instagram_link: expect.any(Boolean),
+              }),
             })
           }
         }
@@ -96,8 +96,8 @@ describe('User Registration Flow Integration Test', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...testUser,
-          email: 'duplicate@example.com'
-        })
+          email: 'duplicate@example.com',
+        }),
       })
 
       // Second registration with same email
@@ -108,8 +108,8 @@ describe('User Registration Flow Integration Test', () => {
           ...testUser,
           email: 'duplicate@example.com',
           groomName: 'Different Groom',
-          brideName: 'Different Bride'
-        })
+          brideName: 'Different Bride',
+        }),
       })
 
       expect(duplicateRegistration.status).toBe(400)
@@ -118,7 +118,7 @@ describe('User Registration Flow Integration Test', () => {
         const errorData = await duplicateRegistration.json()
         expect(errorData).toMatchObject({
           success: false,
-          error: 'Email already registered'
+          error: 'Email already registered',
         })
       }
     })
@@ -128,26 +128,26 @@ describe('User Registration Flow Integration Test', () => {
         email: `user1-${Date.now()}@example.com`,
         password: 'password123',
         groomName: 'John',
-        brideName: 'Jane'
+        brideName: 'Jane',
       }
 
       const user2 = {
         email: `user2-${Date.now()}@example.com`,
         password: 'password123',
         groomName: 'John', // Same names
-        brideName: 'Jane'  // Same names
+        brideName: 'Jane', // Same names
       }
 
       const registration1 = await fetch(`${baseUrl}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user1)
+        body: JSON.stringify(user1),
       })
 
       const registration2 = await fetch(`${baseUrl}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user2)
+        body: JSON.stringify(user2),
       })
 
       if (registration1.status === 201 && registration2.status === 201) {
@@ -166,9 +166,9 @@ describe('User Registration Flow Integration Test', () => {
         body: JSON.stringify({
           email: `subdomain-test-${Date.now()}@example.com`,
           password: 'password123',
-          groomName: 'John-Michael O\'Connor',
-          brideName: 'Jane-Marie Smith-Jones'
-        })
+          groomName: "John-Michael O'Connor",
+          brideName: 'Jane-Marie Smith-Jones',
+        }),
       })
 
       if (registration.status === 201) {

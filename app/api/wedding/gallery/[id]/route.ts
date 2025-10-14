@@ -6,10 +6,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/app/lib/session'
 import { updateGalleryPhoto, deleteGalleryPhoto } from '@/app/lib/file-service'
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await requireAuth()
     if (session instanceof NextResponse) return session
@@ -26,10 +23,7 @@ export async function PUT(
     })
   } catch (error: any) {
     console.error('Update gallery photo error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to update photo' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to update photo' }, { status: 500 })
   }
 }
 
@@ -50,9 +44,6 @@ export async function DELETE(
     })
   } catch (error: any) {
     console.error('Delete gallery photo error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to delete photo' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to delete photo' }, { status: 500 })
   }
 }

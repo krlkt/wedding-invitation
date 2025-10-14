@@ -7,7 +7,12 @@
 
 import { put, del } from '@vercel/blob'
 import { db } from './database'
-import { galleryItems, dressCodes, weddingConfigurations, type NewGalleryItem } from '@/app/db/schema'
+import {
+  galleryItems,
+  dressCodes,
+  weddingConfigurations,
+  type NewGalleryItem,
+} from '@/app/db/schema'
 import { eq } from 'drizzle-orm'
 
 // File validation constants
@@ -124,11 +129,7 @@ export async function updateGalleryPhoto(
  */
 export async function deleteGalleryPhoto(photoId: string): Promise<void> {
   // Get photo details
-  const [photo] = await db
-    .select()
-    .from(galleryItems)
-    .where(eq(galleryItems.id, photoId))
-    .limit(1)
+  const [photo] = await db.select().from(galleryItems).where(eq(galleryItems.id, photoId)).limit(1)
 
   if (!photo) {
     throw new Error('Photo not found')

@@ -12,7 +12,7 @@ describe('Publish/Unpublish Workflow Test', () => {
     email: `publish-test-${Date.now()}@example.com`,
     password: 'publishPassword123',
     groomName: 'Publish Test Groom',
-    brideName: 'Publish Test Bride'
+    brideName: 'Publish Test Bride',
   }
 
   beforeAll(async () => {
@@ -20,16 +20,16 @@ describe('Publish/Unpublish Workflow Test', () => {
     await fetch(`${baseUrl}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(testUser)
+      body: JSON.stringify(testUser),
     })
-    
+
     await fetch(`${baseUrl}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         email: testUser.email,
-        password: testUser.password
-      })
+        password: testUser.password,
+      }),
     })
 
     // Set up complete wedding configuration
@@ -39,8 +39,8 @@ describe('Publish/Unpublish Workflow Test', () => {
       body: JSON.stringify({
         weddingDate: '2024-10-15T00:00:00.000Z',
         groomName: testUser.groomName,
-        brideName: testUser.brideName
-      })
+        brideName: testUser.brideName,
+      }),
     })
   })
 
@@ -56,19 +56,19 @@ describe('Publish/Unpublish Workflow Test', () => {
       // Step 2: Publish wedding
       const publishResponse = await fetch(`${baseUrl}/api/wedding/publish`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
 
       if (publishResponse.status === 200) {
         const publishData = await publishResponse.json()
-        
+
         expect(publishData).toMatchObject({
           success: true,
           data: {
             isPublished: true,
             publishedAt: expect.any(String),
-            weddingUrl: expect.any(String)
-          }
+            weddingUrl: expect.any(String),
+          },
         })
 
         const weddingUrl = publishData.data.weddingUrl
@@ -88,18 +88,18 @@ describe('Publish/Unpublish Workflow Test', () => {
         // Step 5: Unpublish wedding
         const unpublishResponse = await fetch(`${baseUrl}/api/wedding/unpublish`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         })
 
         if (unpublishResponse.status === 200) {
           const unpublishData = await unpublishResponse.json()
-          
+
           expect(unpublishData).toMatchObject({
             success: true,
             data: {
               isPublished: false,
-              unpublishedAt: expect.any(String)
-            }
+              unpublishedAt: expect.any(String),
+            },
           })
 
           // Step 6: Verify configuration shows unpublished status
@@ -124,13 +124,13 @@ describe('Publish/Unpublish Workflow Test', () => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          weddingDate: null
-        })
+          weddingDate: null,
+        }),
       })
 
       const publishResponse = await fetch(`${baseUrl}/api/wedding/publish`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
 
       // Should fail validation due to missing required fields
@@ -148,19 +148,19 @@ describe('Publish/Unpublish Workflow Test', () => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          weddingDate: '2024-11-20T00:00:00.000Z'
-        })
+          weddingDate: '2024-11-20T00:00:00.000Z',
+        }),
       })
 
       // Publish twice
       const firstPublish = await fetch(`${baseUrl}/api/wedding/publish`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
 
       const secondPublish = await fetch(`${baseUrl}/api/wedding/publish`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
 
       // Both should succeed (idempotent operation)
