@@ -65,6 +65,44 @@ export function validateInstagramLink(link: string): { valid: boolean; error?: s
 }
 
 /**
+ * T013: Validates if a URL is a valid Instagram profile URL (boolean return for API use)
+ *
+ * Valid formats:
+ * - https://instagram.com/username
+ * - https://www.instagram.com/username
+ */
+export function isValidInstagramUrl(url: string): boolean {
+  if (!url || typeof url !== 'string') {
+    return false;
+  }
+
+  try {
+    const urlObj = new URL(url);
+
+    // Check protocol (must be HTTPS)
+    if (urlObj.protocol !== 'https:') {
+      return false;
+    }
+
+    // Check hostname
+    const validHostnames = ['instagram.com', 'www.instagram.com'];
+    if (!validHostnames.includes(urlObj.hostname)) {
+      return false;
+    }
+
+    // Check that there's a path (username)
+    if (!urlObj.pathname || urlObj.pathname === '/') {
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    // Invalid URL format
+    return false;
+  }
+}
+
+/**
  * Validate subdomain format
  */
 export function validateSubdomain(subdomain: string): { valid: boolean; error?: string } {

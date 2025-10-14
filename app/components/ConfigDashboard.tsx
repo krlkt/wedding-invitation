@@ -153,7 +153,7 @@ export default function ConfigDashboard() {
                                 </Link>
                             </Button>
                         </div>
-                        <p className="text-sm text-gray-600">{config.subdomain}.yourdomain.com</p>
+                        <p className="text-sm text-gray-600">{config.subdomain}.oial-wedding.com</p>
                     </div>
 
                     {/* Tabs */}
@@ -194,14 +194,7 @@ export default function ConfigDashboard() {
                 <div className="p-6">
                     {activeTab === 'basic' && <BasicInfoForm config={config} onUpdate={updateConfig} saving={saving} />}
                     {activeTab === 'features' && <FeaturesForm config={config} onToggle={toggleFeature} />}
-                    {activeTab === 'content' && (
-                        <div className="space-y-4">
-                            <p className="text-gray-600">Content management coming soon...</p>
-                            <p className="text-sm text-gray-500">
-                                Manage love story, locations, FAQs, and other content here.
-                            </p>
-                        </div>
-                    )}
+                    {activeTab === 'content' && <ContentForm config={config} onUpdate={updateConfig} saving={saving} />}
                 </div>
 
                 {/* Publish Section */}
@@ -243,8 +236,6 @@ function BasicInfoForm({ config, onUpdate, saving }: any) {
         groomMother: config.groomMother || '',
         brideFather: config.brideFather || '',
         brideMother: config.brideMother || '',
-        instagramLink: config.instagramLink || '',
-        footerText: config.footerText || '',
     });
 
     function handleSubmit(e: React.FormEvent) {
@@ -330,15 +321,91 @@ function BasicInfoForm({ config, onUpdate, saving }: any) {
                 </div>
             </div>
 
-            <div>
-                <label className="block text-sm font-medium mb-1">Instagram Link</label>
-                <input
-                    type="url"
-                    value={formData.instagramLink}
-                    onChange={(e) => setFormData({ ...formData, instagramLink: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg"
-                    placeholder="https://instagram.com/..."
-                />
+            <button
+                type="submit"
+                disabled={saving}
+                className="w-full py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50"
+            >
+                {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+        </form>
+    );
+}
+
+function ContentForm({ config, onUpdate, saving }: any) {
+    const [formData, setFormData] = useState({
+        groomsInstagramLink: config.groomsInstagramLink || '',
+        brideInstagramLink: config.brideInstagramLink || '',
+        footerText: config.footerText || '',
+    });
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    function validateUrl(url: string, fieldName: string): boolean {
+        if (!url) return true; // Optional field
+        try {
+            const urlObj = new URL(url);
+            if (!['instagram.com', 'www.instagram.com'].includes(urlObj.hostname)) {
+                setErrors((prev) => ({ ...prev, [fieldName]: 'Must be an Instagram URL' }));
+                return false;
+            }
+            setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors[fieldName];
+                return newErrors;
+            });
+            return true;
+        } catch {
+            setErrors((prev) => ({ ...prev, [fieldName]: 'Invalid URL format' }));
+            return false;
+        }
+    }
+
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        setErrors({});
+
+        // Validate URLs
+        const groomValid = validateUrl(formData.groomsInstagramLink, 'groomsInstagramLink');
+        const brideValid = validateUrl(formData.brideInstagramLink, 'brideInstagramLink');
+
+        if (groomValid && brideValid) {
+            onUpdate(formData);
+        }
+    }
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-sm font-medium mb-1">Groom&apos;s Instagram Link</label>
+                    <input
+                        type="url"
+                        value={formData.groomsInstagramLink}
+                        onChange={(e) => setFormData({ ...formData, groomsInstagramLink: e.target.value })}
+                        className={`w-full px-3 py-2 border rounded-lg ${
+                            errors.groomsInstagramLink ? 'border-red-500' : ''
+                        }`}
+                        placeholder="https://instagram.com/..."
+                    />
+                    {errors.groomsInstagramLink && (
+                        <p className="text-red-500 text-xs mt-1">{errors.groomsInstagramLink}</p>
+                    )}
+                </div>
+                <div>
+                    <label className="block text-sm font-medium mb-1">Bride&apos;s Instagram Link</label>
+                    <input
+                        type="url"
+                        value={formData.brideInstagramLink}
+                        onChange={(e) => setFormData({ ...formData, brideInstagramLink: e.target.value })}
+                        className={`w-full px-3 py-2 border rounded-lg ${
+                            errors.brideInstagramLink ? 'border-red-500' : ''
+                        }`}
+                        placeholder="https://instagram.com/..."
+                    />
+                    {errors.brideInstagramLink && (
+                        <p className="text-red-500 text-xs mt-1">{errors.brideInstagramLink}</p>
+                    )}
+                </div>
             </div>
 
             <div>
@@ -348,6 +415,7 @@ function BasicInfoForm({ config, onUpdate, saving }: any) {
                     onChange={(e) => setFormData({ ...formData, footerText: e.target.value })}
                     className="w-full px-3 py-2 border rounded-lg"
                     rows={3}
+                    placeholder="Thank you for celebrating with us..."
                 />
             </div>
 
@@ -370,7 +438,11 @@ function FeaturesForm({ config, onToggle }: any) {
         { name: 'prewedding_videos', label: 'Pre-wedding Videos', description: 'Video embeds' },
         { name: 'faqs', label: 'FAQs', description: 'Frequently asked questions' },
         { name: 'dress_code', label: 'Dress Code', description: 'Attire guidelines' },
-        { name: 'instagram_link', label: 'Instagram Link', description: 'Social media link' },
+        {
+            name: 'instagram_links',
+            label: 'Instagram Links',
+            description: 'Show social media links of bride and groom',
+        },
         { name: 'wishes', label: 'Wishes', description: 'Guest wishes and messages' },
     ];
 

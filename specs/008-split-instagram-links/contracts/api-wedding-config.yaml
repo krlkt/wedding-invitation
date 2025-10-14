@@ -1,0 +1,223 @@
+openapi: 3.0.0
+info:
+  title: Wedding Configuration API - Instagram Links Update
+  version: 1.1.0
+  description: API contract for updating wedding configuration with split Instagram links
+
+paths:
+  /api/wedding/config:
+    put:
+      summary: Update wedding configuration
+      description: Update wedding configuration fields including new split Instagram links
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groomsInstagramLink:
+                  type: string
+                  format: uri
+                  nullable: true
+                  maxLength: 500
+                  pattern: '^https://(www\.)?instagram\.com/.+'
+                  description: Instagram profile URL for the groom
+                  example: "https://instagram.com/groomhandle"
+                brideInstagramLink:
+                  type: string
+                  format: uri
+                  nullable: true
+                  maxLength: 500
+                  pattern: '^https://(www\.)?instagram\.com/.+'
+                  description: Instagram profile URL for the bride
+                  example: "https://instagram.com/bridehandle"
+                footerText:
+                  type: string
+                  nullable: true
+                  maxLength: 500
+                  description: Custom footer text for the wedding website
+                  example: "Looking forward to celebrating with you!"
+                groomName:
+                  type: string
+                  description: Name of the groom
+                brideName:
+                  type: string
+                  description: Name of the bride
+                weddingDate:
+                  type: string
+                  format: date
+                  description: Wedding date in YYYY-MM-DD format
+                groomFather:
+                  type: string
+                  nullable: true
+                groomMother:
+                  type: string
+                  nullable: true
+                brideFather:
+                  type: string
+                  nullable: true
+                brideMother:
+                  type: string
+                  nullable: true
+              example:
+                groomName: "John"
+                brideName: "Jane"
+                weddingDate: "2025-06-15"
+                groomsInstagramLink: "https://instagram.com/john_doe"
+                brideInstagramLink: "https://instagram.com/jane_doe"
+                footerText: "Thank you for being part of our special day!"
+      responses:
+        '200':
+          description: Configuration updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/WeddingConfiguration'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid Instagram URL for groom"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Unauthorized"
+
+    get:
+      summary: Get wedding configuration
+      description: Retrieve current wedding configuration including Instagram links
+      responses:
+        '200':
+          description: Configuration retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/WeddingConfiguration'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Unauthorized"
+
+components:
+  schemas:
+    WeddingConfiguration:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique configuration ID
+        userId:
+          type: string
+          description: Associated user account ID
+        subdomain:
+          type: string
+          description: Subdomain for the wedding website
+        groomName:
+          type: string
+          description: Name of the groom
+        brideName:
+          type: string
+          description: Name of the bride
+        weddingDate:
+          type: integer
+          description: Wedding date as Unix timestamp
+        groomFather:
+          type: string
+          nullable: true
+        groomMother:
+          type: string
+          nullable: true
+        brideFather:
+          type: string
+          nullable: true
+        brideMother:
+          type: string
+          nullable: true
+        groomsInstagramLink:
+          type: string
+          nullable: true
+          description: Instagram URL for the groom
+        brideInstagramLink:
+          type: string
+          nullable: true
+          description: Instagram URL for the bride
+        footerText:
+          type: string
+          nullable: true
+          description: Custom footer text
+        isPublished:
+          type: boolean
+          description: Whether the wedding website is published
+        features:
+          type: object
+          additionalProperties:
+            type: boolean
+          description: Feature toggle states
+        createdAt:
+          type: integer
+          description: Creation timestamp
+        updatedAt:
+          type: integer
+          description: Last update timestamp
+      example:
+        id: "clxyz123abc"
+        userId: "usr_abc123"
+        subdomain: "john-and-jane"
+        groomName: "John Doe"
+        brideName: "Jane Smith"
+        weddingDate: 1718409600000
+        groomFather: "Robert Doe"
+        groomMother: "Mary Doe"
+        brideFather: "James Smith"
+        brideMother: "Patricia Smith"
+        groomsInstagramLink: "https://instagram.com/john_doe"
+        brideInstagramLink: "https://instagram.com/jane_smith"
+        footerText: "Thank you for celebrating with us!"
+        isPublished: true
+        features:
+          love_story: true
+          rsvp: true
+          gallery: true
+          instagram_links: true
+          wishes: true
+        createdAt: 1704067200000
+        updatedAt: 1718409600000

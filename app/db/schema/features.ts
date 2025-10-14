@@ -22,7 +22,7 @@ export const featureToggles = sqliteTable('feature_toggles', {
       'prewedding_videos',
       'faqs',
       'dress_code',
-      'instagram_link',
+      'instagram_links',
       'wishes'
     ]
   }).notNull(),

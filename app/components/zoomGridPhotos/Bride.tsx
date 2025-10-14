@@ -135,12 +135,8 @@ const Bride = () => {
                             >
                                 <span className="inline-flex items-center gap-2">
                                     The Bride
-                                    {features.instagram_link === true && (
-                                        <a
-                                            href="https://instagram.com/sabrinaalvina"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
+                                    {features.instagram_links === true && config.brideInstagramLink && (
+                                        <a href={config.brideInstagramLink} target="_blank" rel="noopener noreferrer">
                                             <InstagramIcon width={'25px'} />
                                         </a>
                                     )}

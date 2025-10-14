@@ -15,7 +15,7 @@ const VALID_FEATURES = [
   'prewedding_videos',
   'faqs',
   'dress_code',
-  'instagram_link',
+  'instagram_links',
   'wishes',
 ]
 
