@@ -99,7 +99,7 @@ export async function createWeddingConfiguration(
     'prewedding_videos',
     'faqs',
     'dress_code',
-    'instagram_link',
+    'instagram_links',
   ] as const
 
   await db.insert(featureToggles).values(
@@ -116,7 +116,9 @@ export async function createWeddingConfiguration(
 /**
  * Get wedding configuration by user ID
  */
-export async function getWeddingConfigByUserId(userId: string): Promise<WeddingConfiguration | null> {
+export async function getWeddingConfigByUserId(
+  userId: string
+): Promise<WeddingConfiguration | null> {
   const [config] = await db
     .select()
     .from(weddingConfigurations)
@@ -129,7 +131,9 @@ export async function getWeddingConfigByUserId(userId: string): Promise<WeddingC
 /**
  * Get wedding configuration by subdomain
  */
-export async function getWeddingConfigBySubdomain(subdomain: string): Promise<WeddingConfiguration | null> {
+export async function getWeddingConfigBySubdomain(
+  subdomain: string
+): Promise<WeddingConfiguration | null> {
   const [config] = await db
     .select()
     .from(weddingConfigurations)
@@ -175,10 +179,7 @@ export async function updateWeddingConfiguration(
  * Get feature toggles for wedding configuration
  */
 export async function getFeatureToggles(weddingConfigId: string): Promise<FeatureToggle[]> {
-  return db
-    .select()
-    .from(featureToggles)
-    .where(eq(featureToggles.weddingConfigId, weddingConfigId))
+  return db.select().from(featureToggles).where(eq(featureToggles.weddingConfigId, weddingConfigId))
 }
 
 /**
