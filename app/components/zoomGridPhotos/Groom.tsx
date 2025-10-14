@@ -14,7 +14,7 @@ import { useWeddingData } from '@/app/utils/useWeddingData';
 
 const Groom = () => {
     // Get wedding data from context
-    const { config } = useWeddingData();
+    const { config, features } = useWeddingData();
 
     // Get scroll container from context (for embedded previews)
     const { containerRef, isEmbedded } = useScrollContainer();
@@ -124,13 +124,15 @@ const Groom = () => {
                             >
                                 <span className="inline-flex items-center gap-2">
                                     The Groom
-                                    <a
-                                        href="https://instagram.com/karelkarunia"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        <InstagramIcon width={'25px'} color="white" />
-                                    </a>
+                                    {features.instagram_link === true && (
+                                        <a
+                                            href="https://instagram.com/karelkarunia"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            <InstagramIcon width={'25px'} color="white" />
+                                        </a>
+                                    )}
                                 </span>
                             </motion.h2>
                             <motion.h2

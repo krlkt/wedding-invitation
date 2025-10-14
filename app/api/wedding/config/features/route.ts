@@ -16,6 +16,7 @@ const VALID_FEATURES = [
   'faqs',
   'dress_code',
   'instagram_link',
+  'wishes',
 ]
 
 export async function PUT(request: NextRequest) {

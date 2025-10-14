@@ -24,6 +24,7 @@ import SaveTheDate from '../save-the-date/SaveTheDate';
 import SaveTheDateOrnament from '../save-the-date/SaveTheDateOrnament';
 import LocationComponent from '../LocationComponent';
 import FadeIn from '../FadeIn';
+import GrowIn from '../GrowIn';
 import EmptyState from './EmptyState';
 import { LocationProvider } from '@/app/utils/useLocation';
 import type { TemplateProps } from './types';
@@ -31,6 +32,8 @@ import LoaderScreen from '../LoaderScreen';
 import { useEffect, useState } from 'react';
 import { ScrollContainerProvider } from '@/app/utils/ScrollContainerContext';
 import { WeddingDataProvider } from '@/app/utils/useWeddingData';
+import Wishes from '../wish/Wishes';
+import Divider from '../wish/Divider';
 
 export default function Template1Preview({ data, mode = 'fullscreen', scrollContainerRef }: TemplateProps) {
     const { config, features, content } = data;
@@ -80,7 +83,7 @@ export default function Template1Preview({ data, mode = 'fullscreen', scrollCont
                     brideName={config.brideName}
                 />
             )}
-            <WeddingDataProvider config={config}>
+            <WeddingDataProvider config={config} features={features}>
                 <ScrollContainerProvider containerRef={scrollContainerRef} isEmbedded={!isFullscreenMode}>
                     <LocationProvider location="bali">
                     <div
@@ -316,6 +319,50 @@ export default function Template1Preview({ data, mode = 'fullscreen', scrollCont
                                 </BorderedDiv>
                                 <div className="section-transition-secondary" />
                             </section>
+
+                            {/* Wishes Section */}
+                            {features.wishes && (
+                                <section className="pt-16 pb-10 px-6 relative flex flex-col gap-4">
+                                    <div className="relative flex flex-col gap-4">
+                                        <GrowIn className="absolute -z-10 left-1/2">
+                                            <Image
+                                                src={'/images/ornaments/frame/gate.png'}
+                                                alt={'Gate'}
+                                                width={300}
+                                                height={300}
+                                                className="scale-[3.4] opacity-15 -translate-x-1/2 translate-y-36"
+                                            />
+                                        </GrowIn>
+                                        <SectionTitle title="Your Wishes" />
+                                        <FadeIn>
+                                            <p>
+                                                Your love and well-wishes mean the world to us. Here are the
+                                                heartfelt messages from our loved ones.
+                                            </p>
+                                        </FadeIn>
+                                    </div>
+                                    <Divider />
+                                    {content.wishes.length > 0 ? (
+                                        <Wishes
+                                            wishes={{
+                                                wishes: content.wishes.map((w) => ({
+                                                    id: 0, // Mock ID for preview
+                                                    name: w.name,
+                                                    wish: w.message,
+                                                    created_at: w.createdAt instanceof Date
+                                                        ? w.createdAt.toISOString()
+                                                        : w.createdAt,
+                                                    created_by_id: 0, // Mock ID for preview
+                                                })),
+                                                wishPage: 1,
+                                                totalPages: 1,
+                                            }}
+                                        />
+                                    ) : (
+                                        <EmptyState message="No wishes yet. They will appear here when guests leave messages." icon="💌" />
+                                    )}
+                                </section>
+                            )}
 
                             {/* Footer */}
                             <footer className="p-6 bg-primary-main text-secondary-main">

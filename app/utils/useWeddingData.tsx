@@ -2,16 +2,18 @@
 
 import { createContext, useContext } from 'react';
 import type { WeddingConfiguration } from '@/app/db/schema';
+import type { FeatureName } from '@/app/components/preview/types';
 
 /**
  * Wedding Data Context
  *
- * Provides wedding configuration data throughout the component tree.
+ * Provides wedding configuration data and feature toggles throughout the component tree.
  * Similar pattern to LocationProvider for consistency.
  */
 
 interface WeddingDataContextValue {
     config: WeddingConfiguration;
+    features: Record<FeatureName, boolean>;
 }
 
 const WeddingDataContext = createContext<WeddingDataContextValue | null>(null);
@@ -19,11 +21,13 @@ const WeddingDataContext = createContext<WeddingDataContextValue | null>(null);
 export function WeddingDataProvider({
     children,
     config,
+    features,
 }: {
     children: React.ReactNode;
     config: WeddingConfiguration;
+    features: Record<FeatureName, boolean>;
 }) {
-    return <WeddingDataContext.Provider value={{ config }}>{children}</WeddingDataContext.Provider>;
+    return <WeddingDataContext.Provider value={{ config, features }}>{children}</WeddingDataContext.Provider>;
 }
 
 export function useWeddingData() {

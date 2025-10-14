@@ -20,10 +20,33 @@ const BubbleText: FC<BubbleTextProps> = ({ name, message, createdAt }) => {
 };
 
 function formatTimeAgo(dateString: string): string {
-    // Convert Singapore Time (SGT, UTC+8) to UTC
-    const singaporeTime = new Date(dateString.replace(' ', 'T') + 'Z'); // Treat as UTC
-    const now = new Date(); // Local system time
-    const diffInSeconds = Math.floor((now.getTime() - singaporeTime.getTime()) / 1000);
+    // Parse date string - handles both ISO format and legacy format
+    let date: Date;
+
+    try {
+        if (dateString.includes('T') || dateString.includes('Z')) {
+            // Already ISO format
+            date = new Date(dateString);
+        } else {
+            // Legacy format with space (e.g., "2024-01-01 12:00:00")
+            date = new Date(dateString.replace(' ', 'T') + 'Z');
+        }
+
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            return 'Recently';
+        }
+    } catch (e) {
+        return 'Recently';
+    }
+
+    const now = new Date();
+    let diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    // If difference is negative (date in future), take absolute value
+    if (diffInSeconds < 0) {
+        diffInSeconds = Math.abs(diffInSeconds);
+    }
 
     if (diffInSeconds < 60) {
         return 'Less than a minute ago';
@@ -50,7 +73,7 @@ function formatTimeAgo(dateString: string): string {
         month: 'long',
         year: 'numeric',
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Convert to user's timezone
-    }).format(singaporeTime);
+    }).format(date);
 }
 
 export default BubbleText;

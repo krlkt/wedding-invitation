@@ -371,6 +371,7 @@ function FeaturesForm({ config, onToggle }: any) {
         { name: 'faqs', label: 'FAQs', description: 'Frequently asked questions' },
         { name: 'dress_code', label: 'Dress Code', description: 'Attire guidelines' },
         { name: 'instagram_link', label: 'Instagram Link', description: 'Social media link' },
+        { name: 'wishes', label: 'Wishes', description: 'Guest wishes and messages' },
     ];
 
     return (

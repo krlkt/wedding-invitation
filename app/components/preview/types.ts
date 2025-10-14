@@ -13,6 +13,7 @@ import {
     DressCode,
     LocationDetails,
     BankDetails,
+    Wish,
 } from '@/app/db/schema'
 
 /**
@@ -26,6 +27,7 @@ export type FeatureName =
     | 'faqs'
     | 'dress_code'
     | 'instagram_link'
+    | 'wishes'
 
 /**
  * Template identifier for future multi-template support
@@ -46,6 +48,7 @@ export interface PreviewData {
         dressCode: DressCode | null
         locations: LocationDetails[]
         bankDetails: BankDetails | null
+        wishes: Wish[]
     }
 }
 

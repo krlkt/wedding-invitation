@@ -22,7 +22,8 @@ export const featureToggles = sqliteTable('feature_toggles', {
       'prewedding_videos',
       'faqs',
       'dress_code',
-      'instagram_link'
+      'instagram_link',
+      'wishes'
     ]
   }).notNull(),
   isEnabled: integer('is_enabled', { mode: 'boolean' }).notNull().default(true),
