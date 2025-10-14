@@ -26,6 +26,7 @@ TypeScript 5.x with Next.js 14.2.4 App Router architecture: Follow standard conv
 
 ## Recent Changes
 
+-   008-split-instagram-links: Split single instagramLink into groomsInstagramLink and brideInstagramLink, reorganized UI (Content tab), renamed feature toggle to instagram_links
 -   002-improve-live-preview: Added TypeScript 5.x with Next.js 14.2.4 + React 18, shadcn/ui (Radix UI primitives), Tailwind CSS, React Hook Form, Framer Motion
 -   001-the-current-state: Added TypeScript 5.x with Next.js 14.2.4 App Router architecture + React 18, Material-UI 7.x, Tailwind CSS, React Hook Form, Framer Motion
 
