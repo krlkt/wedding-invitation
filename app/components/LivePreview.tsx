@@ -49,7 +49,10 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch('/api/wedding/preview');
+                // Add timestamp to bust Next.js cache
+                const response = await fetch(`/api/wedding/preview`, {
+                    cache: 'no-store',
+                });
 
                 if (response.ok) {
                     const { data } = await response.json();
@@ -123,9 +126,13 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
                 <div
                     ref={scrollContainerRef}
                     className="shadow-2xl rounded-lg overflow-y-auto overflow-x-hidden bg-white w-[450px] max-h-full"
-                    style={containerHeight ? {
-                        ['--container-height' as string]: `${containerHeight}px`,
-                    } : undefined}
+                    style={
+                        containerHeight
+                            ? {
+                                  ['--container-height' as string]: `${containerHeight}px`,
+                              }
+                            : undefined
+                    }
                 >
                     <TemplateRenderer
                         templateId="template-1"
