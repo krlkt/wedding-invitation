@@ -3,6 +3,11 @@
 import Head from "next/head";
 import { motion } from "framer-motion";
 import logo from "../public/images/logo/oial.png";
+import hero1 from "@/public/images/hero/hero-1.jpg";
+import hero2 from "@/public/images/hero/hero-2.webp";
+import hero3 from "@/public/images/hero/hero-3.jpeg";
+import heroBackground from "@/public/images/hero/hero-background.webp";
+import Image from "next/image"; 
 import React from "react";
 
 const fadeInUp = {
@@ -52,8 +57,7 @@ const Home: React.FC = () => {
         <section
           className="relative min-h-screen flex items-center justify-center text-center px-6 overflow-hidden"
           style={{
-            backgroundImage:
-              "url('https://thumbs.dreamstime.com/b/pastel-glowing-wedding-blurred-light-bokeh-background-soft-white-pink-lights-elegant-minimalist-design-festive-404021679.jpg')",
+            backgroundImage: `url('${heroBackground.src}')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -61,20 +65,20 @@ const Home: React.FC = () => {
           <div className="absolute inset-0 bg-black/20"></div>
 
           {/* Images on Hero Section */}
-          <img
-            src="https://briannakirkphotography.com/wp-content/uploads/2023/03/Ana-and-Jonah-Forden-Wedding-8.20.21-Cover-Pic-BKIRK-1-1.jpg"
+          <Image
+            src={hero1}
             alt="Decorative left"
-            className="hidden md:block absolute left-0 top-1/4 w-48 lg:w-80 opacity-80 -rotate-6 drop-shadow-lg"
+            className="hidden md:block absolute rounded-2xl left-8 top-1/4 w-48 lg:w-80 opacity-85 -rotate-6 drop-shadow-lg"
           />
-          <img
-            src="https://images.squarespace-cdn.com/content/v1/629514d41b98ed0d3651ae61/86c7fd92-bbc5-4cf4-a44b-bf9c601476f6/8A5A2231+copy.jpg"
+          <Image
+            src={hero3}
             alt="Decorative right"
-            className="hidden md:block absolute right-0 top-1/6 w-48 lg:w-80 opacity-85 rotate-6 drop-shadow-md"
+            className="hidden md:block absolute rounded-2xl right-6 top-8 w-48 lg:w-80 opacity-85 -rotate-2 drop-shadow-md"
           />
-          <img
-            src="https://images.pexels.com/photos/1024068/pexels-photo-1024068.jpeg"
+          <Image
+            src={hero2}
             alt="Decorative right lower"
-            className="hidden md:block absolute right-10 bottom-10 w-56 lg:w-96 opacity-70 rotate-3 drop-shadow-lg"
+            className="hidden md:block absolute rounded-2xl right-10 bottom-10 w-56 lg:w-96 opacity-70 rotate-3 drop-shadow-lg"
           />
 
           {/* Central content */}
@@ -164,8 +168,7 @@ const Home: React.FC = () => {
           <div
             className="absolute inset-0 opacity-40"
             style={{
-              backgroundImage:
-                "url('https://thumbs.dreamstime.com/b/pastel-glowing-wedding-blurred-light-bokeh-background-soft-white-pink-lights-elegant-minimalist-design-festive-404021679.jpg')",
+              backgroundImage: `url('${heroBackground.src}')`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
