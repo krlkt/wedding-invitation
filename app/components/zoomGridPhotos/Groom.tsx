@@ -47,6 +47,7 @@ const Groom = () => {
         target: zoomAnimationContainer,
         offset: ['start start', 'end end'],
         container: containerRef, // Use container if provided, otherwise defaults to window
+        layoutEffect: false, // Use useEffect instead of useLayoutEffect for better SSR compatibility
     });
 
     const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4.15]);
