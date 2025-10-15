@@ -21,21 +21,36 @@ const Groom = () => {
 
     // Measure container height for embedded mode
     const [containerHeight, setContainerHeight] = useState<number | null>(null);
+    const [isMounted, setIsMounted] = useState(false);
+
+    // Track when component is mounted to ensure DOM is ready
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     useEffect(() => {
-        if (isEmbedded && containerRef?.current) {
-            const updateHeight = () => {
-                const height = containerRef.current?.clientHeight;
+        if (!isEmbedded || !isMounted) return;
+
+        const updateHeight = () => {
+            if (containerRef?.current) {
+                const height = containerRef.current.clientHeight;
                 if (height) {
                     setContainerHeight(height);
                 }
-            };
+            }
+        };
 
+        // Use requestAnimationFrame to ensure DOM is ready
+        const rafId = requestAnimationFrame(() => {
             updateHeight();
-            window.addEventListener('resize', updateHeight);
-            return () => window.removeEventListener('resize', updateHeight);
-        }
-    }, [isEmbedded, containerRef]);
+        });
+
+        window.addEventListener('resize', updateHeight);
+        return () => {
+            cancelAnimationFrame(rafId);
+            window.removeEventListener('resize', updateHeight);
+        };
+    }, [isEmbedded, containerRef, isMounted]);
 
     // Zoom animation
     const zoomAnimationContainer = useRef(null);
