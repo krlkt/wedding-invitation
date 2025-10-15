@@ -1,3 +1,5 @@
+'use client';
+
 import './zoomGridPhotos.css';
 import Image from 'next/image';
 import Groom1 from '../../../public/images/groom/groom1.jpg';
@@ -21,15 +23,9 @@ const Groom = () => {
 
     // Measure container height for embedded mode
     const [containerHeight, setContainerHeight] = useState<number | null>(null);
-    const [isMounted, setIsMounted] = useState(false);
-
-    // Track when component is mounted to ensure DOM is ready
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
 
     useEffect(() => {
-        if (!isEmbedded || !isMounted) return;
+        if (!isEmbedded || !containerRef?.current) return;
 
         const updateHeight = () => {
             if (containerRef?.current) {
@@ -40,20 +36,13 @@ const Groom = () => {
             }
         };
 
-        // Use requestAnimationFrame to ensure DOM is ready
-        const rafId = requestAnimationFrame(() => {
-            updateHeight();
-        });
-
+        updateHeight();
         window.addEventListener('resize', updateHeight);
-        return () => {
-            cancelAnimationFrame(rafId);
-            window.removeEventListener('resize', updateHeight);
-        };
-    }, [isEmbedded, containerRef, isMounted]);
+        return () => window.removeEventListener('resize', updateHeight);
+    }, [isEmbedded, containerRef]);
 
     // Zoom animation
-    const zoomAnimationContainer = useRef(null);
+    const zoomAnimationContainer = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: zoomAnimationContainer,
         offset: ['start start', 'end end'],
@@ -101,6 +90,7 @@ const Groom = () => {
             scale: scale9,
         },
     ];
+
     return (
         // Container for zoom scroll animation
         <div

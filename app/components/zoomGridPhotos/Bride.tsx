@@ -1,3 +1,5 @@
+'use client';
+
 import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import { useRef, useState, useEffect } from 'react';
@@ -22,15 +24,9 @@ const Bride = () => {
 
     // Measure container height for embedded mode
     const [containerHeight, setContainerHeight] = useState<number | null>(null);
-    const [isMounted, setIsMounted] = useState(false);
-
-    // Track when component is mounted to ensure DOM is ready
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
 
     useEffect(() => {
-        if (!isEmbedded || !isMounted) return;
+        if (!isEmbedded || !containerRef?.current) return;
 
         const updateHeight = () => {
             if (containerRef?.current) {
@@ -41,20 +37,13 @@ const Bride = () => {
             }
         };
 
-        // Use requestAnimationFrame to ensure DOM is ready
-        const rafId = requestAnimationFrame(() => {
-            updateHeight();
-        });
-
+        updateHeight();
         window.addEventListener('resize', updateHeight);
-        return () => {
-            cancelAnimationFrame(rafId);
-            window.removeEventListener('resize', updateHeight);
-        };
-    }, [isEmbedded, containerRef, isMounted]);
+        return () => window.removeEventListener('resize', updateHeight);
+    }, [isEmbedded, containerRef]);
 
     // Zoom animation
-    const zoomAnimationContainer = useRef(null);
+    const zoomAnimationContainer = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: zoomAnimationContainer,
         offset: ['start start', 'end end'],
@@ -112,6 +101,7 @@ const Bride = () => {
             scale: scale8,
         },
     ];
+
     return (
         // Container for zoom scroll animation
         <div
