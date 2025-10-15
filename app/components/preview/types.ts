@@ -14,7 +14,7 @@ import {
     LocationDetails,
     BankDetails,
     Wish,
-} from '@/app/db/schema'
+} from '@/app/db/schema';
 
 /**
  * Feature names from database schema
@@ -28,42 +28,46 @@ export type FeatureName =
     | 'dress_code'
     | 'instagram_links'
     | 'wishes'
+    | 'groom_and_bride'
+    | 'save_the_date'
+    | 'location'
+    | 'gift';
 
 /**
  * Template identifier for future multi-template support
  */
-export type TemplateId = 'template-1'
+export type TemplateId = 'template-1';
 
 /**
  * Consolidated preview data structure
  * Combines wedding config, feature toggles, and content
  */
 export interface PreviewData {
-    config: WeddingConfiguration
-    features: Record<FeatureName, boolean>
+    config: WeddingConfiguration;
+    features: Record<FeatureName, boolean>;
     content: {
-        loveStory: LoveStorySegment[]
-        gallery: GalleryItem[]
-        faqs: FAQItem[]
-        dressCode: DressCode | null
-        locations: LocationDetails[]
-        bankDetails: BankDetails | null
-        wishes: Wish[]
-    }
+        loveStory: LoveStorySegment[];
+        gallery: GalleryItem[];
+        faqs: FAQItem[];
+        dressCode: DressCode | null;
+        locations: LocationDetails[];
+        bankDetails: BankDetails | null;
+        wishes: Wish[];
+    };
 }
 
 /**
  * Template component props
  */
 export interface TemplateProps {
-    data: PreviewData
-    mode?: 'fullscreen' | 'embedded' // fullscreen shows desktop filler, embedded shows only mobile view
-    scrollContainerRef?: React.RefObject<HTMLElement> // For embedded mode scroll animations
+    data: PreviewData;
+    mode?: 'fullscreen' | 'embedded'; // fullscreen shows desktop filler, embedded shows only mobile view
+    scrollContainerRef?: React.RefObject<HTMLElement>; // For embedded mode scroll animations
 }
 
 /**
  * API response structure
  */
 export interface PreviewResponse {
-    data: PreviewData
+    data: PreviewData;
 }

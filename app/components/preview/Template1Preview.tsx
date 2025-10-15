@@ -193,13 +193,12 @@ export default function Template1Preview({ data, mode = 'fullscreen', scrollCont
                                                 className="-rotate-[220deg]"
                                             />
                                         </FadeIn>
-                                        {features.location && (
-                                            content.locations.length > 0 ? (
+                                        {features.location &&
+                                            (content.locations.length > 0 ? (
                                                 <LocationComponent location="bali" />
                                             ) : (
                                                 <EmptyState message="Add ceremony and reception locations" icon="📍" />
-                                            )
-                                        )}
+                                            ))}
                                         <SaveTheDateOrnament />
                                     </section>
                                 )}
