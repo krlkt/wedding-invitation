@@ -144,8 +144,12 @@ export default function Template1Preview({ data, mode = 'fullscreen', scrollCont
                                     </section>
 
                                     {/* Groom & Bride Photos */}
-                                    <Groom />
-                                    <Bride />
+                                    {features.groom_and_bride && (
+                                        <>
+                                            <Groom />
+                                            <Bride />
+                                        </>
+                                    )}
                                 </div>
 
                                 {/* Love Story Section */}
@@ -166,35 +170,39 @@ export default function Template1Preview({ data, mode = 'fullscreen', scrollCont
                                     </section>
                                 )}
 
-                                {/* When and Where Section - Always visible */}
-                                <section className="relative text-center w-full flex flex-col justify-center items-center py-24 bg-white overflow-hidden">
-                                    <SaveTheDateOrnament downward />
-                                    <SaveTheDate />
-                                    <FadeIn from="left" className="absolute top-[46%] -left-4">
-                                        <Image
-                                            src={'/images/ornaments/baby_orn2.png'}
-                                            alt={'Ornament blue flower'}
-                                            width={120}
-                                            height={120}
-                                            className="-rotate-[45deg]"
-                                        />
-                                    </FadeIn>
-                                    <FadeIn from="right" className="absolute top-[46%] -translate-y-4 -right-4">
-                                        <Image
-                                            src={'/images/ornaments/baby_orn2.png'}
-                                            alt={'Ornament blue flower'}
-                                            width={120}
-                                            height={120}
-                                            className="-rotate-[220deg]"
-                                        />
-                                    </FadeIn>
-                                    {content.locations.length > 0 ? (
-                                        <LocationComponent location="bali" />
-                                    ) : (
-                                        <EmptyState message="Add ceremony and reception locations" icon="📍" />
-                                    )}
-                                    <SaveTheDateOrnament />
-                                </section>
+                                {/* When and Where Section */}
+                                {(features.save_the_date || features.location) && (
+                                    <section className="relative text-center w-full flex flex-col justify-center items-center py-24 bg-white overflow-hidden">
+                                        <SaveTheDateOrnament downward />
+                                        {features.save_the_date && <SaveTheDate />}
+                                        <FadeIn from="left" className="absolute top-[46%] -left-4">
+                                            <Image
+                                                src={'/images/ornaments/baby_orn2.png'}
+                                                alt={'Ornament blue flower'}
+                                                width={120}
+                                                height={120}
+                                                className="-rotate-[45deg]"
+                                            />
+                                        </FadeIn>
+                                        <FadeIn from="right" className="absolute top-[46%] -translate-y-4 -right-4">
+                                            <Image
+                                                src={'/images/ornaments/baby_orn2.png'}
+                                                alt={'Ornament blue flower'}
+                                                width={120}
+                                                height={120}
+                                                className="-rotate-[220deg]"
+                                            />
+                                        </FadeIn>
+                                        {features.location && (
+                                            content.locations.length > 0 ? (
+                                                <LocationComponent location="bali" />
+                                            ) : (
+                                                <EmptyState message="Add ceremony and reception locations" icon="📍" />
+                                            )
+                                        )}
+                                        <SaveTheDateOrnament />
+                                    </section>
+                                )}
 
                                 {/* RSVP Section */}
                                 {features.rsvp && (
@@ -311,14 +319,16 @@ export default function Template1Preview({ data, mode = 'fullscreen', scrollCont
                                     </section>
                                 )}
 
-                                {/* Gift Section - Always visible */}
-                                <section className="py-16 pb-20 px-8 relative bg-primary-main">
-                                    <BorderedDiv>
-                                        <SectionTitle title="Gift" />
-                                        <Gift />
-                                    </BorderedDiv>
-                                    <div className="section-transition-secondary" />
-                                </section>
+                                {/* Gift Section */}
+                                {features.gift && (
+                                    <section className="py-16 pb-20 px-8 relative bg-primary-main">
+                                        <BorderedDiv>
+                                            <SectionTitle title="Gift" />
+                                            <Gift />
+                                        </BorderedDiv>
+                                        <div className="section-transition-secondary" />
+                                    </section>
+                                )}
 
                                 {/* Wishes Section */}
                                 {features.wishes && (

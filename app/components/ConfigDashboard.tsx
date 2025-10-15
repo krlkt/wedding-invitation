@@ -10,14 +10,15 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import LivePreview from './LivePreview';
 
 export default function ConfigDashboard() {
     const [config, setConfig] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState<'basic' | 'features' | 'content'>('basic');
     const [refreshTrigger, setRefreshTrigger] = useState(0);
+    const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined);
 
     //WIP: session check on dashboard load or time interval or user action?
     const checkSession = async () => {
@@ -90,6 +91,27 @@ export default function ConfigDashboard() {
         }
     }
 
+    async function batchUpdateFeatures(features: Record<string, boolean>) {
+        try {
+            setSaving(true);
+            const response = await fetch('/api/wedding/config/features', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ features }),
+            });
+
+            if (response.ok) {
+                fetchConfig();
+                setDraftFeatures(undefined); // Clear draft features after successful save
+                setRefreshTrigger((prev) => prev + 1);
+            }
+        } catch (error) {
+            console.error('Failed to update features:', error);
+        } finally {
+            setSaving(false);
+        }
+    }
+
     async function handlePublish() {
         try {
             setSaving(true);
@@ -155,319 +177,218 @@ export default function ConfigDashboard() {
                         </div>
                         <p className="text-sm text-gray-600">{config.subdomain}.oial-wedding.com</p>
                     </div>
-
-                    {/* Tabs */}
-                    <div className="flex border-t">
-                        <button
-                            onClick={() => setActiveTab('basic')}
-                            className={`flex-1 py-3 text-sm font-medium ${
-                                activeTab === 'basic'
-                                    ? 'border-b-2 border-pink-600 text-pink-600'
-                                    : 'text-gray-500 hover:text-gray-700'
-                            }`}
-                        >
-                            Basic Info
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('features')}
-                            className={`flex-1 py-3 text-sm font-medium ${
-                                activeTab === 'features'
-                                    ? 'border-b-2 border-pink-600 text-pink-600'
-                                    : 'text-gray-500 hover:text-gray-700'
-                            }`}
-                        >
-                            Features
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('content')}
-                            className={`flex-1 py-3 text-sm font-medium ${
-                                activeTab === 'content'
-                                    ? 'border-b-2 border-pink-600 text-pink-600'
-                                    : 'text-gray-500 hover:text-gray-700'
-                            }`}
-                        >
-                            Content
-                        </button>
-                    </div>
                 </div>
 
-                <div className="p-6">
-                    {activeTab === 'basic' && <BasicInfoForm config={config} onUpdate={updateConfig} saving={saving} />}
-                    {activeTab === 'features' && <FeaturesForm config={config} onToggle={toggleFeature} />}
-                    {activeTab === 'content' && <ContentForm config={config} onUpdate={updateConfig} saving={saving} />}
-                </div>
-
-                {/* Publish Section */}
-                <div className="sticky bottom-0 bg-white border-t p-6">
-                    {config.isPublished ? (
-                        <button
-                            onClick={handleUnpublish}
-                            disabled={saving}
-                            className="w-full py-3 px-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50"
-                        >
-                            {saving ? 'Unpublishing...' : 'Unpublish Wedding'}
-                        </button>
-                    ) : (
-                        <button
-                            onClick={handlePublish}
-                            disabled={saving}
-                            className="w-full py-3 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50"
-                        >
-                            {saving ? 'Publishing...' : 'Publish Wedding'}
-                        </button>
-                    )}
+                <div className="flex-1 overflow-hidden flex flex-col">
+                    <FeaturesForm
+                        config={config}
+                        onToggle={toggleFeature}
+                        onBatchSave={batchUpdateFeatures}
+                        saving={saving}
+                        onLocalChange={(features: Record<string, boolean>) => {
+                            // Only update draft state, don't trigger refresh/fetch
+                            setDraftFeatures(features);
+                        }}
+                    />
                 </div>
             </div>
 
             {/* Right Panel - Live Preview */}
             <div className="w-1/2 h-full overflow-hidden">
-                <LivePreview weddingConfigId={config.id} refreshTrigger={refreshTrigger} />
+                <LivePreview
+                    weddingConfigId={config.id}
+                    refreshTrigger={refreshTrigger}
+                    draftFeatures={draftFeatures}
+                />
             </div>
         </div>
     );
 }
 
-function BasicInfoForm({ config, onUpdate, saving }: any) {
-    const [formData, setFormData] = useState({
-        groomName: config.groomName,
-        brideName: config.brideName,
-        weddingDate: config.weddingDate?.split('T')[0] || '',
-        groomFather: config.groomFather || '',
-        groomMother: config.groomMother || '',
-        brideFather: config.brideFather || '',
-        brideMother: config.brideMother || '',
-    });
+// BasicInfoForm and ContentForm removed - features are now managed in accordions below
+// API endpoints remain the same
 
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        onUpdate(formData);
-    }
-
-    return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium mb-1">Groom Name</label>
-                    <input
-                        type="text"
-                        value={formData.groomName}
-                        onChange={(e) => setFormData({ ...formData, groomName: e.target.value })}
-                        className="w-full px-3 py-2 border rounded-lg"
-                        required
-                    />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium mb-1">Bride Name</label>
-                    <input
-                        type="text"
-                        value={formData.brideName}
-                        onChange={(e) => setFormData({ ...formData, brideName: e.target.value })}
-                        className="w-full px-3 py-2 border rounded-lg"
-                        required
-                    />
-                </div>
-            </div>
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Wedding Date</label>
-                <input
-                    type="date"
-                    value={formData.weddingDate}
-                    onChange={(e) => setFormData({ ...formData, weddingDate: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg"
-                    required
-                />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium mb-1">Groom&apos;s Father</label>
-                    <input
-                        type="text"
-                        value={formData.groomFather}
-                        onChange={(e) => setFormData({ ...formData, groomFather: e.target.value })}
-                        className="w-full px-3 py-2 border rounded-lg"
-                    />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium mb-1">Groom&apos;s Mother</label>
-                    <input
-                        type="text"
-                        value={formData.groomMother}
-                        onChange={(e) => setFormData({ ...formData, groomMother: e.target.value })}
-                        className="w-full px-3 py-2 border rounded-lg"
-                    />
-                </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium mb-1">Bride&apos;s Father</label>
-                    <input
-                        type="text"
-                        value={formData.brideFather}
-                        onChange={(e) => setFormData({ ...formData, brideFather: e.target.value })}
-                        className="w-full px-3 py-2 border rounded-lg"
-                    />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium mb-1">Bride&apos;s Mother</label>
-                    <input
-                        type="text"
-                        value={formData.brideMother}
-                        onChange={(e) => setFormData({ ...formData, brideMother: e.target.value })}
-                        className="w-full px-3 py-2 border rounded-lg"
-                    />
-                </div>
-            </div>
-
-            <button
-                type="submit"
-                disabled={saving}
-                className="w-full py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50"
-            >
-                {saving ? 'Saving...' : 'Save Changes'}
-            </button>
-        </form>
-    );
-}
-
-function ContentForm({ config, onUpdate, saving }: any) {
-    const [formData, setFormData] = useState({
-        groomsInstagramLink: config.groomsInstagramLink || '',
-        brideInstagramLink: config.brideInstagramLink || '',
-        footerText: config.footerText || '',
-    });
-    const [errors, setErrors] = useState<Record<string, string>>({});
-
-    function validateUrl(url: string, fieldName: string): boolean {
-        if (!url) return true; // Optional field
-        try {
-            const urlObj = new URL(url);
-            if (!['instagram.com', 'www.instagram.com'].includes(urlObj.hostname)) {
-                setErrors((prev) => ({ ...prev, [fieldName]: 'Must be an Instagram URL' }));
-                return false;
-            }
-            setErrors((prev) => {
-                const newErrors = { ...prev };
-                delete newErrors[fieldName];
-                return newErrors;
-            });
-            return true;
-        } catch {
-            setErrors((prev) => ({ ...prev, [fieldName]: 'Invalid URL format' }));
-            return false;
-        }
-    }
-
-    function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        setErrors({});
-
-        // Validate URLs
-        const groomValid = validateUrl(formData.groomsInstagramLink, 'groomsInstagramLink');
-        const brideValid = validateUrl(formData.brideInstagramLink, 'brideInstagramLink');
-
-        if (groomValid && brideValid) {
-            onUpdate(formData);
-        }
-    }
-
-    return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium mb-1">Groom&apos;s Instagram Link</label>
-                    <input
-                        type="url"
-                        value={formData.groomsInstagramLink}
-                        onChange={(e) => setFormData({ ...formData, groomsInstagramLink: e.target.value })}
-                        className={`w-full px-3 py-2 border rounded-lg ${
-                            errors.groomsInstagramLink ? 'border-red-500' : ''
-                        }`}
-                        placeholder="https://instagram.com/..."
-                    />
-                    {errors.groomsInstagramLink && (
-                        <p className="text-red-500 text-xs mt-1">{errors.groomsInstagramLink}</p>
-                    )}
-                </div>
-                <div>
-                    <label className="block text-sm font-medium mb-1">Bride&apos;s Instagram Link</label>
-                    <input
-                        type="url"
-                        value={formData.brideInstagramLink}
-                        onChange={(e) => setFormData({ ...formData, brideInstagramLink: e.target.value })}
-                        className={`w-full px-3 py-2 border rounded-lg ${
-                            errors.brideInstagramLink ? 'border-red-500' : ''
-                        }`}
-                        placeholder="https://instagram.com/..."
-                    />
-                    {errors.brideInstagramLink && (
-                        <p className="text-red-500 text-xs mt-1">{errors.brideInstagramLink}</p>
-                    )}
-                </div>
-            </div>
-
-            <div>
-                <label className="block text-sm font-medium mb-1">Footer Text</label>
-                <textarea
-                    value={formData.footerText}
-                    onChange={(e) => setFormData({ ...formData, footerText: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg"
-                    rows={3}
-                    placeholder="Thank you for celebrating with us..."
-                />
-            </div>
-
-            <button
-                type="submit"
-                disabled={saving}
-                className="w-full py-2 px-4 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50"
-            >
-                {saving ? 'Saving...' : 'Save Changes'}
-            </button>
-        </form>
-    );
-}
-
-function FeaturesForm({ config, onToggle }: any) {
+function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
     const features = [
-        { name: 'love_story', label: 'Love Story', description: 'Timeline of your relationship' },
-        { name: 'rsvp', label: 'RSVP', description: 'Guest response management' },
-        { name: 'gallery', label: 'Gallery', description: 'Photo gallery' },
-        { name: 'prewedding_videos', label: 'Pre-wedding Videos', description: 'Video embeds' },
-        { name: 'faqs', label: 'FAQs', description: 'Frequently asked questions' },
-        { name: 'dress_code', label: 'Dress Code', description: 'Attire guidelines' },
+        { name: 'groom_and_bride', label: 'Groom and Bride', description: 'Introduction of the groom and bride' },
         {
             name: 'instagram_links',
             label: 'Instagram Links',
             description: 'Show social media links of bride and groom',
         },
+        { name: 'love_story', label: 'Love Story', description: 'Timeline of your relationship' },
+        {
+            name: 'save_the_date',
+            label: 'Save The Date',
+            description: 'Save the date section with add to calendar button',
+        },
+        { name: 'location', label: 'Location', description: 'Event location' },
+        { name: 'rsvp', label: 'RSVP', description: 'Guest response management' },
+        { name: 'gallery', label: 'Gallery', description: 'Photo gallery' },
+        { name: 'prewedding_videos', label: 'Pre-wedding Videos', description: 'Video embeds' },
+        { name: 'faqs', label: 'FAQs', description: 'Frequently asked questions' },
+        { name: 'dress_code', label: 'Dress Code', description: 'Attire guidelines' },
+        { name: 'gift', label: 'Gift', description: 'Information for guests who want to send digital gift(s)' },
         { name: 'wishes', label: 'Wishes', description: 'Guest wishes and messages' },
     ];
 
+    // Track draft state locally (separate from saved state)
+    const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features);
+    const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set());
+
+    // Update draft state when config changes (after save)
+    useEffect(() => {
+        setDraftFeatures(config.features);
+        setChangedFeatures(new Set());
+    }, [config.features]);
+
+    // Check if there are unsaved changes
+    const hasUnsavedChanges = changedFeatures.size > 0;
+
+    function handleToggle(featureName: string) {
+        const newValue = !draftFeatures[featureName];
+
+        // Update local draft state
+        const newDraftFeatures = {
+            ...draftFeatures,
+            [featureName]: newValue,
+        };
+        setDraftFeatures(newDraftFeatures);
+
+        // Track which features have changed
+        if (newValue !== config.features[featureName]) {
+            setChangedFeatures((prev) => new Set(prev).add(featureName));
+        } else {
+            // If toggled back to original value, remove from changed set
+            setChangedFeatures((prev) => {
+                const next = new Set(prev);
+                next.delete(featureName);
+                return next;
+            });
+        }
+
+        // Update preview immediately with local state
+        onLocalChange(newDraftFeatures);
+    }
+
+    function handleSave() {
+        // Only send changed features to the API
+        const featuresToUpdate: Record<string, boolean> = {};
+        changedFeatures.forEach((featureName) => {
+            featuresToUpdate[featureName] = draftFeatures[featureName];
+        });
+
+        onBatchSave(featuresToUpdate);
+    }
+
+    function handleDiscard() {
+        // Reset to saved state
+        setDraftFeatures(config.features);
+        setChangedFeatures(new Set());
+        onLocalChange(config.features);
+    }
+
     return (
-        <div className="space-y-4">
-            {features.map((feature) => (
-                <div key={feature.name} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                        <h3 className="font-medium">{feature.label}</h3>
-                        <p className="text-sm text-gray-500">{feature.description}</p>
+        <>
+            {/* Sticky alert with action buttons - only show when there are changes */}
+            {hasUnsavedChanges && (
+                <div className="sticky top-0 z-10 bg-yellow-50 border-b border-yellow-200 px-6 py-3">
+                    <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-2">
+                            <svg
+                                className="w-5 h-5 text-yellow-600 flex-shrink-0"
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <span className="text-sm font-medium text-yellow-800">
+                                {changedFeatures.size} unsaved change{changedFeatures.size !== 1 ? 's' : ''}
+                            </span>
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={handleDiscard}
+                                disabled={saving}
+                                className="py-1.5 px-3 text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-white disabled:opacity-50"
+                            >
+                                Discard
+                            </button>
+                            <button
+                                onClick={handleSave}
+                                disabled={saving}
+                                className="py-1.5 px-4 text-sm bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:opacity-50 font-medium"
+                            >
+                                {saving ? 'Saving...' : 'Save Changes'}
+                            </button>
+                        </div>
                     </div>
-                    <button
-                        onClick={() => onToggle(feature.name, !config.features[feature.name])}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                            config.features[feature.name] ? 'bg-pink-600' : 'bg-gray-200'
-                        }`}
-                    >
-                        <span
-                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                                config.features[feature.name] ? 'translate-x-6' : 'translate-x-1'
-                            }`}
-                        />
-                    </button>
                 </div>
-            ))}
-        </div>
+            )}
+
+            {/* Scrollable content area */}
+            <div className="flex-1 overflow-y-auto p-6">
+                <Accordion type="multiple" className="space-y-2">
+                    {features.map((feature) => {
+                        const isChanged = changedFeatures.has(feature.name);
+                        return (
+                            <AccordionItem
+                                key={feature.name}
+                                value={feature.name}
+                                className={`border rounded-lg transition-colors ${
+                                    isChanged ? 'border-yellow-300 bg-yellow-50' : ''
+                                }`}
+                            >
+                                <AccordionTrigger className="px-4 hover:no-underline">
+                                    <div className="flex items-center justify-between w-full pr-4">
+                                        <div className="flex items-center gap-3 flex-1">
+                                            {/* Toggle Switch */}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleToggle(feature.name);
+                                                }}
+                                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${
+                                                    draftFeatures[feature.name] ? 'bg-pink-600' : 'bg-gray-200'
+                                                }`}
+                                            >
+                                                <span
+                                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                                        draftFeatures[feature.name] ? 'translate-x-6' : 'translate-x-1'
+                                                    }`}
+                                                />
+                                            </button>
+                                            {/* Label */}
+                                            <div className="text-left">
+                                                <div className="flex items-center gap-2">
+                                                    <h3 className="font-medium">{feature.label}</h3>
+                                                    {isChanged && (
+                                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                            Modified
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <p className="text-sm text-gray-500 font-normal">
+                                                    {feature.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="px-4 pb-4">
+                                    <div className="text-sm text-gray-500 italic">
+                                        Content configuration coming soon...
+                                    </div>
+                                </AccordionContent>
+                            </AccordionItem>
+                        );
+                    })}
+                </Accordion>
+            </div>
+        </>
     );
 }

@@ -16,10 +16,12 @@ import type { PreviewData } from './preview/types';
 interface LivePreviewProps {
     weddingConfigId: string;
     refreshTrigger?: number; // Increment to force refresh
+    draftFeatures?: Record<string, boolean>; // Draft features from local state
 }
 
-export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: LivePreviewProps) {
+export default function LivePreview({ weddingConfigId, refreshTrigger = 0, draftFeatures }: LivePreviewProps) {
     const [previewData, setPreviewData] = useState<PreviewData | null>(null);
+    const [displayData, setDisplayData] = useState<PreviewData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -72,6 +74,21 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
         fetchPreview();
     }, [weddingConfigId, refreshTrigger]);
 
+    // Merge draft features with preview data for immediate feedback
+    useEffect(() => {
+        if (previewData && draftFeatures) {
+            setDisplayData({
+                ...previewData,
+                features: {
+                    ...previewData.features,
+                    ...draftFeatures,
+                },
+            });
+        } else if (previewData) {
+            setDisplayData(previewData);
+        }
+    }, [previewData, draftFeatures]);
+
     if (loading) {
         return (
             <div className="flex items-center justify-center h-full bg-gray-50">
@@ -96,7 +113,7 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
         );
     }
 
-    if (!previewData) {
+    if (!displayData) {
         return (
             <div className="flex items-center justify-center h-full bg-gray-50">
                 <p className="text-gray-500">No preview data available</p>
@@ -114,10 +131,10 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
                     <div className="w-3 h-3 rounded-full bg-green-500" />
                 </div>
                 <div className="text-sm text-gray-600">
-                    Preview: {previewData.config.subdomain}.oial-wedding.com (coming soon)
+                    Preview: {displayData.config.subdomain}.oial-wedding.com (coming soon)
                 </div>
                 <div className="text-xs text-gray-500">
-                    {previewData.config.isPublished ? '🟢 Published' : '🔴 Draft'}
+                    {displayData.config.isPublished ? '🟢 Published' : '🔴 Draft'}
                 </div>
             </div>
 
@@ -136,7 +153,7 @@ export default function LivePreview({ weddingConfigId, refreshTrigger = 0 }: Liv
                 >
                     <TemplateRenderer
                         templateId="template-1"
-                        data={previewData}
+                        data={displayData}
                         mode="embedded"
                         scrollContainerRef={scrollContainerRef}
                     />
