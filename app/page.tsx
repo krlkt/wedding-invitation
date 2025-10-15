@@ -56,7 +56,7 @@ const Home: React.FC = () => {
           {/* Hero Images */}
           <motion.div
             initial={{ opacity: 0, x: -50, rotate: -6 }}
-            animate={{ opacity: 1, x: 0, rotate: -6 }}
+            animate={{ opacity: 0.80, x: 0, rotate: -6 }}
             transition={{ duration: 1 }}
             className="hidden md:block absolute left-8 top-1/4 w-48 lg:w-80 opacity-85 drop-shadow-lg"
           >
@@ -71,7 +71,7 @@ const Home: React.FC = () => {
 
           <motion.div
             initial={{ opacity: 0, x: 50, rotate: -2 }}
-            animate={{ opacity: 1, x: 0, rotate: -2 }}
+            animate={{ opacity: 0.80, x: 0, rotate: -2 }}
             transition={{ duration: 1, delay: 0.3 }}
             className="hidden md:block absolute right-6 top-8 w-48 lg:w-80 opacity-85 drop-shadow-md"
           >
@@ -86,7 +86,7 @@ const Home: React.FC = () => {
 
           <motion.div
             initial={{ opacity: 0, x: 50, rotate: 3 }}
-            animate={{ opacity: 1, x: 0, rotate: 3 }}
+            animate={{ opacity: 0.80, x: 0, rotate: 3 }}
             transition={{ duration: 1, delay: 0.5 }}
             className="hidden md:block absolute right-10 bottom-10 w-56 lg:w-96 opacity-75 drop-shadow-lg"
           >
@@ -168,7 +168,7 @@ const Home: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   whileHover={{ scale: 1.05 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: i * 0.2 }}
+                  transition={{ duration: 1, delay: i * 0.2 }}
                   className="bg-gray-50 p-8 rounded-xl shadow hover:shadow-lg transition"
                 >
                   <h3 className="text-2xl font-semibold mb-4">{feature.title}</h3>
@@ -196,9 +196,7 @@ const Home: React.FC = () => {
               {steps.map((step, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  whileHover={{ scale: 1.05 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: i * 0.2 }}
                   className="bg-white/50 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-white/30 hover:shadow-2xl transition-all"
@@ -212,7 +210,7 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* CALL TO ACTION */}
+        {/* CREATE INVITATION SECTION */}
         <section id="customize" className="py-20 bg-white text-gray-800">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
