@@ -20,8 +20,27 @@ const BubbleText: FC<BubbleTextProps> = ({ name, message, createdAt }) => {
 };
 
 function formatTimeAgo(dateString: string): string {
+  // Handle undefined, null, or empty string
+  if (!dateString) {
+    return 'Recently'
+  }
+
   // Convert Singapore Time (SGT, UTC+8) to UTC
-  const singaporeTime = new Date(dateString.replace(' ', 'T') + 'Z') // Treat as UTC
+  // Handle both ISO format and space-separated format
+  let singaporeTime: Date
+  if (dateString.includes('T')) {
+    // Already ISO format
+    singaporeTime = new Date(dateString)
+  } else {
+    // Convert space to T and add Z
+    singaporeTime = new Date(dateString.replace(' ', 'T') + 'Z')
+  }
+
+  // Check if date is valid
+  if (isNaN(singaporeTime.getTime())) {
+    return 'Recently'
+  }
+
   const now = new Date() // Local system time
   const diffInSeconds = Math.floor((now.getTime() - singaporeTime.getTime()) / 1000)
 
