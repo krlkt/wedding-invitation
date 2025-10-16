@@ -125,23 +125,25 @@ export default function Template1Preview({ data, mode = 'fullscreen', scrollCont
                                     isFullscreenMode ? 'md:max-w-[450px] ml-auto' : 'max-w-[450px] mx-auto'
                                 }`}
                             >
-                                {/* Hero Section - Always visible */}
+                                {/* Hero Section */}
                                 <div className="relative w-full bg-white">
-                                    <section
-                                        className={`${viewportHeightClass} flex flex-col relative overflow-hidden`}
-                                        style={viewportHeightStyle}
-                                    >
-                                        <video
-                                            autoPlay
-                                            loop
-                                            muted
-                                            playsInline
-                                            className="w-full h-full absolute object-cover"
+                                    {features.hero && (
+                                        <section
+                                            className={`${viewportHeightClass} flex flex-col relative overflow-hidden`}
+                                            style={viewportHeightStyle}
                                         >
-                                            <source src="/hero.mp4" type="video/mp4" />
-                                        </video>
-                                        <Hero />
-                                    </section>
+                                            <video
+                                                autoPlay
+                                                loop
+                                                muted
+                                                playsInline
+                                                className="w-full h-full absolute object-cover"
+                                            >
+                                                <source src="/hero.mp4" type="video/mp4" />
+                                            </video>
+                                            <Hero />
+                                        </section>
+                                    )}
 
                                     {/* Groom & Bride Photos */}
                                     {features.groom_and_bride && (
@@ -378,15 +380,17 @@ export default function Template1Preview({ data, mode = 'fullscreen', scrollCont
                                 )}
 
                                 {/* Footer */}
-                                <footer className="p-6 bg-primary-main text-secondary-main">
-                                    <p className="text-md text-center">
-                                        Thank you for being part of our journey and celebrating this special day with
-                                        us.
-                                    </p>
-                                    {config.footerText && (
-                                        <p className="text-sm text-center mt-2 text-gray-300">{config.footerText}</p>
-                                    )}
-                                </footer>
+                                {features.footer && (
+                                    <footer className="p-6 bg-primary-main text-secondary-main">
+                                        <p className="text-md text-center">
+                                            Thank you for being part of our journey and celebrating this special day with
+                                            us.
+                                        </p>
+                                        {config.footerText && (
+                                            <p className="text-sm text-center mt-2 text-gray-300">{config.footerText}</p>
+                                        )}
+                                    </footer>
+                                )}
                             </div>
                         </div>
                     </LocationProvider>

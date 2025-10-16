@@ -179,5 +179,24 @@ export function validateDate(dateString: string): { valid: boolean; error?: stri
     return { valid: false, error: 'Invalid date format' }
   }
 
+  // Check if the date was auto-corrected by JavaScript
+  // For example, '2024-02-30' becomes '2024-03-01'
+  // We want to reject such dates
+  if (dateString.includes('-')) {
+    // For ISO format dates like '2024-02-30'
+    const parts = dateString.split('T')[0].split('-')
+    if (parts.length >= 3) {
+      const year = parseInt(parts[0])
+      const month = parseInt(parts[1])
+      const day = parseInt(parts[2])
+
+      if (date.getFullYear() !== year ||
+          date.getMonth() + 1 !== month ||
+          date.getDate() !== day) {
+        return { valid: false, error: 'Invalid date' }
+      }
+    }
+  }
+
   return { valid: true }
 }

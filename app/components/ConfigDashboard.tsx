@@ -210,6 +210,7 @@ export default function ConfigDashboard() {
 
 function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
     const features = [
+        { name: 'hero', label: 'Hero', description: 'Opening section with couple names and wedding date' },
         { name: 'groom_and_bride', label: 'Groom and Bride', description: 'Introduction of the groom and bride' },
         { name: 'love_story', label: 'Love Story', description: 'Timeline of your relationship' },
         {
@@ -225,6 +226,7 @@ function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
         { name: 'dress_code', label: 'Dress Code', description: 'Attire guidelines' },
         { name: 'gift', label: 'Gift', description: 'Information for guests who want to send digital gift(s)' },
         { name: 'wishes', label: 'Wishes', description: 'Guest wishes and messages' },
+        { name: 'footer', label: 'Footer', description: 'Closing section with thank you message' },
     ];
 
     // Track draft state locally (separate from saved state)

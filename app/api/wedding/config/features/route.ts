@@ -9,6 +9,7 @@ import { requireAuth } from '@/app/lib/session'
 import { toggleFeature } from '@/app/lib/wedding-service'
 
 const VALID_FEATURES = [
+  'hero',
   'groom_and_bride',
   'save_the_date',
   'location',
@@ -20,6 +21,7 @@ const VALID_FEATURES = [
   'faqs',
   'dress_code',
   'wishes',
+  'footer',
 ]
 
 export async function PUT(request: NextRequest) {
