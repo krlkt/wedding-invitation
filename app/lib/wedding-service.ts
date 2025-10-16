@@ -92,18 +92,11 @@ export async function createWeddingConfiguration(
   const [config] = await db.insert(weddingConfigurations).values(newConfig).returning()
 
   // Create default feature toggles (all enabled by default)
-  const defaultFeatures = [
-    'love_story',
-    'rsvp',
-    'gallery',
-    'prewedding_videos',
-    'faqs',
-    'dress_code',
-    'instagram_links',
-  ] as const
+  // Import all features from schema for consistency
+  const { FEATURE_NAMES } = await import('@/app/db/schema/features')
 
   await db.insert(featureToggles).values(
-    defaultFeatures.map((featureName) => ({
+    FEATURE_NAMES.map((featureName) => ({
       weddingConfigId: config.id,
       featureName,
       isEnabled: true,
@@ -190,6 +183,9 @@ export async function toggleFeature(
   featureName: string,
   isEnabled: boolean
 ): Promise<FeatureToggle> {
+  // Import FeatureName type for validation
+  type FeatureName = typeof import('@/app/db/schema/features').FEATURE_NAMES[number]
+
   // Check if feature toggle exists
   const [existing] = await db
     .select()
@@ -197,7 +193,7 @@ export async function toggleFeature(
     .where(
       and(
         eq(featureToggles.weddingConfigId, weddingConfigId),
-        eq(featureToggles.featureName, featureName as any)
+        eq(featureToggles.featureName, featureName as FeatureName)
       )
     )
     .limit(1)
@@ -220,7 +216,7 @@ export async function toggleFeature(
       .insert(featureToggles)
       .values({
         weddingConfigId,
-        featureName: featureName as any,
+        featureName: featureName as FeatureName,
         isEnabled,
       })
       .returning()

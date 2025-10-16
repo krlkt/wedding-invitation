@@ -7,22 +7,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/app/lib/session'
 import { toggleFeature } from '@/app/lib/wedding-service'
+import { FEATURE_NAMES } from '@/app/db/schema/features'
 
-const VALID_FEATURES = [
-  'hero',
-  'groom_and_bride',
-  'save_the_date',
-  'location',
-  'gift',
-  'love_story',
-  'rsvp',
-  'gallery',
-  'prewedding_videos',
-  'faqs',
-  'dress_code',
-  'wishes',
-  'footer',
-]
+// Use the single source of truth from the database schema
+const VALID_FEATURES = FEATURE_NAMES as readonly string[]
 
 export async function PUT(request: NextRequest) {
   try {

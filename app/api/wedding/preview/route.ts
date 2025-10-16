@@ -17,7 +17,8 @@ import {
     getWishes,
 } from '@/app/lib/content-service'
 import { getGalleryPhotos } from '@/app/lib/file-service'
-import type { PreviewData, FeatureName } from '@/app/components/preview/types'
+import type { PreviewData } from '@/app/components/preview/types'
+import type { FeatureName } from '@/app/db/schema/features'
 
 export async function GET(request: NextRequest) {
     try {

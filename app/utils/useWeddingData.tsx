@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from 'react';
 import type { WeddingConfiguration } from '@/app/db/schema';
-import type { FeatureName } from '@/app/components/preview/types';
+import type { FeatureName } from '@/app/db/schema/features';
 
 /**
  * Wedding Data Context

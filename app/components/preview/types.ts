@@ -15,23 +15,7 @@ import {
     BankDetails,
     Wish,
 } from '@/app/db/schema';
-
-/**
- * Feature names from database schema
- */
-export type FeatureName =
-    | 'love_story'
-    | 'rsvp'
-    | 'gallery'
-    | 'prewedding_videos'
-    | 'faqs'
-    | 'dress_code'
-    | 'instagram_links'
-    | 'wishes'
-    | 'groom_and_bride'
-    | 'save_the_date'
-    | 'location'
-    | 'gift';
+import type { FeatureName } from '@/app/db/schema/features';
 
 /**
  * Template identifier for future multi-template support
