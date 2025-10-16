@@ -211,11 +211,6 @@ export default function ConfigDashboard() {
 function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
     const features = [
         { name: 'groom_and_bride', label: 'Groom and Bride', description: 'Introduction of the groom and bride' },
-        {
-            name: 'instagram_links',
-            label: 'Instagram Links',
-            description: 'Show social media links of bride and groom',
-        },
         { name: 'love_story', label: 'Love Story', description: 'Timeline of your relationship' },
         {
             name: 'save_the_date',
@@ -380,9 +375,41 @@ function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
                                     </div>
                                 </AccordionTrigger>
                                 <AccordionContent className="px-4 pb-4">
-                                    <div className="text-sm text-gray-500 italic">
-                                        Content configuration coming soon...
-                                    </div>
+                                    {feature.name === 'groom_and_bride' ? (
+                                        <div className="space-y-4">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium mb-1">
+                                                        Groom&apos;s Instagram Link
+                                                    </label>
+                                                    <input
+                                                        type="url"
+                                                        defaultValue={config.groomsInstagramLink || ''}
+                                                        placeholder="https://instagram.com/..."
+                                                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium mb-1">
+                                                        Bride&apos;s Instagram Link
+                                                    </label>
+                                                    <input
+                                                        type="url"
+                                                        defaultValue={config.brideInstagramLink || ''}
+                                                        placeholder="https://instagram.com/..."
+                                                        className="w-full px-3 py-2 border rounded-lg text-sm"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <p className="text-xs text-gray-500 italic">
+                                                Note: Instagram link updates will be implemented in a future update
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="text-sm text-gray-500 italic">
+                                            Content configuration coming soon...
+                                        </div>
+                                    )}
                                 </AccordionContent>
                             </AccordionItem>
                         );

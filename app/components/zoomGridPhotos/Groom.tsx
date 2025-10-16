@@ -130,7 +130,7 @@ const Groom = () => {
                             >
                                 <span className="inline-flex items-center gap-2">
                                     The Groom
-                                    {features.instagram_links === true && config.groomsInstagramLink && (
+                                    {features.groom_and_bride === true && config.groomsInstagramLink && (
                                         <a href={config.groomsInstagramLink} target="_blank" rel="noopener noreferrer">
                                             <InstagramIcon width={'25px'} color="white" />
                                         </a>
