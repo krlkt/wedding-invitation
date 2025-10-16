@@ -50,7 +50,9 @@ describe('Validation Utilities', () => {
     it('should accept valid URLs', () => {
       expect(validateUrl('https://example.com')).toEqual({ valid: true })
       expect(validateUrl('http://test.co.uk/path')).toEqual({ valid: true })
-      expect(validateUrl('https://subdomain.example.com:8080/path?query=value')).toEqual({ valid: true })
+      expect(validateUrl('https://subdomain.example.com:8080/path?query=value')).toEqual({
+        valid: true,
+      })
     })
 
     it('should reject invalid URLs', () => {

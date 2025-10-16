@@ -51,15 +51,15 @@ const Bride = () => {
         layoutEffect: false, // Use useEffect instead of useLayoutEffect for better SSR compatibility
     });
 
-    const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4.15]);
-    const scale5 = useTransform(scrollYProgress, [0, 0.8], [1, 5]);
-    const scale6 = useTransform(scrollYProgress, [0, 0.8], [1, 6]);
-    const scale8 = useTransform(scrollYProgress, [0, 0.8], [1, 8]);
-    const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9]);
-    const textOpacityBride = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
-    const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1]);
-    const bgOpacity = useTransform(scrollYProgress, [0.3, 0.8], [0, 0.4]);
-    const backgroundColor = useMotionTemplate`rgba(0,0,0, ${bgOpacity})`;
+  const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4.15])
+  const scale5 = useTransform(scrollYProgress, [0, 0.8], [1, 5])
+  const scale6 = useTransform(scrollYProgress, [0, 0.8], [1, 6])
+  const scale8 = useTransform(scrollYProgress, [0, 0.8], [1, 8])
+  const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9])
+  const textOpacityBride = useTransform(scrollYProgress, [0.3, 0.8], [0, 1])
+  const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1])
+  const bgOpacity = useTransform(scrollYProgress, [0.3, 0.8], [0, 0.4])
+  const backgroundColor = useMotionTemplate`rgba(0,0,0, ${bgOpacity})`
 
     // Use measured container height for embedded mode, viewport height for fullscreen
     const stickyHeightValue = isEmbedded && containerHeight ? `${containerHeight}px` : '';
@@ -166,9 +166,11 @@ const Bride = () => {
                     </motion.div>
                 </div>
                 <motion.div style={{ opacity: textOpacityParent }} className="bride-text-overlay" />
-            </div>
-        </div>
-    );
-};
+        
+        <motion.div style={{ opacity: textOpacityParent }} className="bride-text-overlay" />
+      </div>
+    </div>
+  )
+}
 
-export default Bride;
+export default Bride

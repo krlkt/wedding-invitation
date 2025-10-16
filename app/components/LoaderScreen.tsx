@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { FC } from 'react';
+import { AnimatePresence, motion } from 'framer-motion'
+import { FC } from 'react'
 
 interface LoaderScreenProps {
     isVisible: boolean;
@@ -53,4 +53,4 @@ const LoaderScreen: FC<LoaderScreenProps> = ({ isVisible, groomName = 'Groom', b
     );
 };
 
-export default LoaderScreen;
+export default LoaderScreen

@@ -27,10 +27,13 @@ export async function GET(request: NextRequest) {
 
     // Get feature toggles
     const features = await getFeatureToggles(config.id)
-    const featuresMap = features.reduce((acc, f) => {
-      acc[f.featureName] = f.isEnabled
-      return acc
-    }, {} as Record<string, boolean>)
+    const featuresMap = features.reduce(
+      (acc, f) => {
+        acc[f.featureName] = f.isEnabled
+        return acc
+      },
+      {} as Record<string, boolean>
+    )
 
     return NextResponse.json({
       success: true,
@@ -88,10 +91,7 @@ export async function PUT(request: NextRequest) {
     if (weddingDate) {
       const date = new Date(weddingDate)
       if (isNaN(date.getTime())) {
-        return NextResponse.json(
-          { success: false, error: 'Invalid date format' },
-          { status: 400 }
-        )
+        return NextResponse.json({ success: false, error: 'Invalid date format' }, { status: 400 })
       }
     }
 
@@ -131,10 +131,13 @@ export async function PUT(request: NextRequest) {
 
     // Get feature toggles
     const features = await getFeatureToggles(updated.id)
-    const featuresMap = features.reduce((acc, f) => {
-      acc[f.featureName] = f.isEnabled
-      return acc
-    }, {} as Record<string, boolean>)
+    const featuresMap = features.reduce(
+      (acc, f) => {
+        acc[f.featureName] = f.isEnabled
+        return acc
+      },
+      {} as Record<string, boolean>
+    )
 
     return NextResponse.json({
       success: true,

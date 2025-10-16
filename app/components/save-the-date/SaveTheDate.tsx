@@ -61,4 +61,4 @@ const SaveTheDate = () => {
     );
 };
 
-export default SaveTheDate;
+export default SaveTheDate

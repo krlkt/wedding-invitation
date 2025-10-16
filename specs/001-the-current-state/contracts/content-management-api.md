@@ -9,6 +9,7 @@
 **Authorization**: Required (authenticated user)
 
 **Response (Success - 200)**:
+
 ```typescript
 {
   success: true;
@@ -34,29 +35,31 @@
 **Authorization**: Required (authenticated user)
 
 **Request**:
+
 ```typescript
 {
-  title: string;
-  description: string;
-  date: string; // ISO date
-  iconType: string;
-  order: number;
+  title: string
+  description: string
+  date: string // ISO date
+  iconType: string
+  order: number
 }
 ```
 
 **Response (Success - 201)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
-    id: string;
-    title: string;
-    description: string;
-    date: string;
-    iconType: string;
-    order: number;
-    createdAt: string;
-    updatedAt: string;
+    id: string
+    title: string
+    description: string
+    date: string
+    iconType: string
+    order: number
+    createdAt: string
+    updatedAt: string
   }
 }
 ```
@@ -68,6 +71,7 @@
 **Authorization**: Required (authenticated user)
 
 **Request**:
+
 ```typescript
 {
   title?: string;
@@ -79,9 +83,10 @@
 ```
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
     // Updated love story segment
   }
@@ -95,10 +100,11 @@
 **Authorization**: Required (authenticated user)
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
-  message: "Love story segment deleted"
+  success: true
+  message: 'Love story segment deleted'
 }
 ```
 
@@ -113,6 +119,7 @@
 **Authorization**: Required (authenticated user)
 
 **Response (Success - 200)**:
+
 ```typescript
 {
   success: true;
@@ -140,6 +147,7 @@
 **Authorization**: Required (authenticated user)
 
 **Request**:
+
 ```typescript
 {
   locationIdentifier: string; // URL-safe identifier
@@ -153,9 +161,10 @@
 ```
 
 **Response (Success - 201)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
     // Created location object
   }
@@ -173,6 +182,7 @@
 **Authorization**: Required (authenticated user)
 
 **Response (Success - 200)**:
+
 ```typescript
 {
   success: true;
@@ -196,18 +206,20 @@
 **Authorization**: Required (authenticated user)
 
 **Request**:
+
 ```typescript
 {
-  question: string;
-  answer: string;
-  order: number;
+  question: string
+  answer: string
+  order: number
 }
 ```
 
 **Response (Success - 201)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
     // Created FAQ object
   }
@@ -225,6 +237,7 @@
 **Authorization**: Required (authenticated user)
 
 **Response (Success - 200)**:
+
 ```typescript
 {
   success: true;
@@ -248,6 +261,7 @@
 **Authorization**: Required (authenticated user)
 
 **Request**:
+
 ```typescript
 {
   bankName?: string;
@@ -259,9 +273,10 @@
 ```
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
     // Updated bank details object
   }
@@ -279,6 +294,7 @@
 **Authorization**: Required (authenticated user)
 
 **Response (Success - 200)**:
+
 ```typescript
 {
   success: true;
@@ -301,6 +317,7 @@
 **Authorization**: Required (authenticated user)
 
 **Request**:
+
 ```typescript
 {
   title?: string;
@@ -309,9 +326,10 @@
 ```
 
 **Response (Success - 200)**:
+
 ```typescript
 {
-  success: true;
+  success: true
   data: {
     // Updated dress code object
   }

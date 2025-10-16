@@ -13,6 +13,7 @@
 **Content-Type**: `application/json`
 
 **Body**:
+
 ```json
 {
   "email": "john@example.com",
@@ -23,6 +24,7 @@
 ```
 
 **Validation Rules**:
+
 - `email`: Valid email format, not already registered
 - `password`: Minimum 8 characters
 - `groomName`: Non-empty string, trimmed
@@ -31,6 +33,7 @@
 ### Response
 
 **Success (201)**:
+
 ```json
 {
   "success": true,
@@ -43,6 +46,7 @@
 ```
 
 **Email Already Registered (400)**:
+
 ```json
 {
   "success": false,
@@ -51,6 +55,7 @@
 ```
 
 **Invalid Email (400)**:
+
 ```json
 {
   "success": false,
@@ -59,6 +64,7 @@
 ```
 
 **Password Too Short (400)**:
+
 ```json
 {
   "success": false,
@@ -67,6 +73,7 @@
 ```
 
 **Names Required (400)**:
+
 ```json
 {
   "success": false,
@@ -75,6 +82,7 @@
 ```
 
 **NEW: Subdomain Generation Failed (400)**:
+
 ```json
 {
   "success": false,
@@ -85,6 +93,7 @@
 ### Subdomain Generation Logic
 
 **Process**:
+
 1. Generate subdomain from `groomName` and `brideName`:
    - Combine: `"{groomName}-{brideName}"`
    - Lowercase
@@ -97,6 +106,7 @@
 5. If all attempts fail, return error
 
 **Example Subdomains**:
+
 - Input: John & Mary → `john-mary-a8f2`
 - Input: José & María → `jose-maria-x3k9`
 - Input: John Smith & Mary Jones → `john-smith-mary-jones-p2r7`
@@ -106,6 +116,7 @@
 **File**: `app/api/auth/register/route.ts`
 
 **Changes**:
+
 ```typescript
 // Add error handling for subdomain generation
 try {
@@ -125,6 +136,7 @@ try {
 
 **Database Constraint Violation**:
 If retry logic fails to catch collision and database throws unique constraint error:
+
 - Catch LibsqlError
 - Return same user-friendly message
 - Log error for monitoring

@@ -337,7 +337,9 @@ describe('File Upload Service', () => {
 
       ;(db.select as jest.Mock).mockReturnValue(mockSelect)
 
-      await expect(deleteDressCodePhoto('wedding-123')).rejects.toThrow('Dress code photo not found')
+      await expect(deleteDressCodePhoto('wedding-123')).rejects.toThrow(
+        'Dress code photo not found'
+      )
     })
   })
 })

@@ -19,10 +19,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: any) {
     console.error('Get FAQs error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to get FAQs' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to get FAQs' }, { status: 500 })
   }
 }
 
@@ -57,9 +54,6 @@ export async function POST(request: NextRequest) {
     )
   } catch (error: any) {
     console.error('Create FAQ error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to create FAQ' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to create FAQ' }, { status: 500 })
   }
 }

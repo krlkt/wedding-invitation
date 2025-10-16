@@ -154,7 +154,10 @@ export function validateFileUpload(
 /**
  * Validate required string field
  */
-export function validateRequired(value: any, fieldName: string): { valid: boolean; error?: string } {
+export function validateRequired(
+  value: any,
+  fieldName: string
+): { valid: boolean; error?: string } {
   if (!value || (typeof value === 'string' && !value.trim())) {
     return { valid: false, error: `${fieldName} is required` }
   }

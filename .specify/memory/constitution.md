@@ -223,7 +223,7 @@ OIALT-{ticket-number}-{brief-description}
 ### Database Operations
 
 -   Use parameterized queries to prevent SQL injection
--   Define models in `/app/models/` with proper TypeScript types
+-   Define models in `/app/db/schema` with proper Drizzle ORM
 -   Use JSON.parse(JSON.stringify()) pattern for server-to-client serialization
 -   Implement proper error handling for database operations
 

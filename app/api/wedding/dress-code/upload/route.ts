@@ -15,10 +15,7 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File
 
     if (!file) {
-      return NextResponse.json(
-        { success: false, error: 'No file provided' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'No file provided' }, { status: 400 })
     }
 
     const result = await uploadDressCodePhoto(session.weddingConfigId, file)
@@ -39,16 +36,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (error.message === 'Invalid file type') {
-      return NextResponse.json(
-        { success: false, error: 'Invalid file type' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Invalid file type' }, { status: 400 })
     }
 
     console.error('Dress code upload error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Upload failed' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Upload failed' }, { status: 500 })
   }
 }

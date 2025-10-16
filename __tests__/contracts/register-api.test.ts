@@ -21,7 +21,9 @@ import { registerUser } from '../../app/lib/auth'
 import { createWeddingConfiguration } from '../../app/lib/wedding-service'
 
 const mockRegisterUser = registerUser as jest.MockedFunction<typeof registerUser>
-const mockCreateWeddingConfiguration = createWeddingConfiguration as jest.MockedFunction<typeof createWeddingConfiguration>
+const mockCreateWeddingConfiguration = createWeddingConfiguration as jest.MockedFunction<
+  typeof createWeddingConfiguration
+>
 
 describe('POST /api/auth/register - Subdomain Validation Contract', () => {
   beforeEach(() => {
@@ -48,8 +50,8 @@ describe('POST /api/auth/register - Subdomain Validation Contract', () => {
         email: 'john@example.com',
         password: 'password123',
         groomName: 'John',
-        brideName: 'Mary'
-      })
+        brideName: 'Mary',
+      }),
     })
 
     const response = await POST(request)
@@ -73,8 +75,8 @@ describe('POST /api/auth/register - Subdomain Validation Contract', () => {
         email: 'test@example.com',
         password: 'password123',
         groomName: 'John',
-        brideName: 'Mary'
-      })
+        brideName: 'Mary',
+      }),
     })
 
     const response = await POST(request)
@@ -94,8 +96,8 @@ describe('POST /api/auth/register - Subdomain Validation Contract', () => {
         email: 'existing@example.com',
         password: 'password123',
         groomName: 'John',
-        brideName: 'Mary'
-      })
+        brideName: 'Mary',
+      }),
     })
 
     const response = await POST(request)

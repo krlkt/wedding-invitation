@@ -1,11 +1,11 @@
 .visible-scroll::-webkit-scrollbar {
-    width: 2px;
+  width: 2px;
 }
 
 .visible-scroll::-webkit-scrollbar-track {
-    background: #f1f1f1;
+  background: #f1f1f1;
 }
 
 .visible-scroll::-webkit-scrollbar-thumb {
-    background: var(--text-primary);
+  background: var(--text-primary);
 }

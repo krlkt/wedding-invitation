@@ -18,8 +18,8 @@ describe('File Upload API Contract Tests', () => {
         // Don't set Content-Type for FormData - fetch will set it automatically with boundary
         ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
         // TODO: Add authentication headers when session management is implemented
-        ...options.headers
-      }
+        ...options.headers,
+      },
     })
   }
 
@@ -57,7 +57,7 @@ describe('File Upload API Contract Tests', () => {
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: formData
+          body: formData,
         })
 
         if (response.status === 201) {
@@ -74,8 +74,8 @@ describe('File Upload API Contract Tests', () => {
               alt: 'Beautiful wedding moment',
               photoUrl: expect.any(String),
               createdAt: expect.any(String),
-              updatedAt: expect.any(String)
-            }
+              updatedAt: expect.any(String),
+            },
           })
 
           // Validate photoUrl is a valid URL
@@ -94,7 +94,7 @@ describe('File Upload API Contract Tests', () => {
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: formData
+          body: formData,
         })
 
         if (response.status === 201) {
@@ -110,8 +110,8 @@ describe('File Upload API Contract Tests', () => {
               order: expect.any(Number), // Auto-assigned
               photoUrl: expect.any(String),
               createdAt: expect.any(String),
-              updatedAt: expect.any(String)
-            }
+              updatedAt: expect.any(String),
+            },
           })
         }
       })
@@ -122,14 +122,14 @@ describe('File Upload API Contract Tests', () => {
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: formData
+          body: formData,
         })
 
         if (response.status === 400) {
           const data = await response.json()
           expect(data).toMatchObject({
             success: false,
-            error: 'No file provided'
+            error: 'No file provided',
           })
         }
       })
@@ -141,14 +141,14 @@ describe('File Upload API Contract Tests', () => {
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: formData
+          body: formData,
         })
 
         if (response.status === 400) {
           const data = await response.json()
           expect(data).toMatchObject({
             success: false,
-            error: 'Invalid file type'
+            error: 'Invalid file type',
           })
         }
       })
@@ -160,14 +160,14 @@ describe('File Upload API Contract Tests', () => {
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: formData
+          body: formData,
         })
 
         if (response.status === 413) {
           const data = await response.json()
           expect(data).toMatchObject({
             success: false,
-            error: 'File size exceeds 4MB limit'
+            error: 'File size exceeds 4MB limit',
           })
         }
       })
@@ -178,7 +178,7 @@ describe('File Upload API Contract Tests', () => {
 
       it('should return 200 with array of gallery photos', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
-          method: 'GET'
+          method: 'GET',
         })
 
         if (response.status === 200) {
@@ -195,9 +195,9 @@ describe('File Upload API Contract Tests', () => {
                 order: expect.any(Number),
                 photoUrl: expect.any(String),
                 createdAt: expect.any(String),
-                updatedAt: expect.any(String)
-              })
-            ])
+                updatedAt: expect.any(String),
+              }),
+            ]),
           })
 
           // Validate photoUrl format
@@ -214,12 +214,12 @@ describe('File Upload API Contract Tests', () => {
         const endpoint = `/api/wedding/gallery/${photoId}`
         const updateRequest = {
           order: 5,
-          alt: 'Updated alt text'
+          alt: 'Updated alt text',
         }
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'PUT',
-          body: JSON.stringify(updateRequest)
+          body: JSON.stringify(updateRequest),
         })
 
         if (response.status === 200) {
@@ -228,8 +228,8 @@ describe('File Upload API Contract Tests', () => {
             success: true,
             data: expect.objectContaining({
               order: 5,
-              alt: 'Updated alt text'
-            })
+              alt: 'Updated alt text',
+            }),
           })
         }
       })
@@ -241,14 +241,14 @@ describe('File Upload API Contract Tests', () => {
         const endpoint = `/api/wedding/gallery/${photoId}`
 
         const response = await makeAuthenticatedRequest(endpoint, {
-          method: 'DELETE'
+          method: 'DELETE',
         })
 
         if (response.status === 200) {
           const data = await response.json()
           expect(data).toMatchObject({
             success: true,
-            message: 'Photo deleted successfully'
+            message: 'Photo deleted successfully',
           })
         }
       })
@@ -266,7 +266,7 @@ describe('File Upload API Contract Tests', () => {
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: formData
+          body: formData,
         })
 
         if (response.status === 201) {
@@ -278,8 +278,8 @@ describe('File Upload API Contract Tests', () => {
               photoFileSize: expect.any(Number),
               photoMimeType: 'image/jpeg',
               photoUrl: expect.any(String),
-              updatedAt: expect.any(String)
-            }
+              updatedAt: expect.any(String),
+            },
           })
 
           // Validate photoUrl is a valid URL
@@ -296,14 +296,14 @@ describe('File Upload API Contract Tests', () => {
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: formData
+          body: formData,
         })
 
         if (response.status === 400) {
           const data = await response.json()
           expect(data).toMatchObject({
             success: false,
-            error: 'No file provided'
+            error: 'No file provided',
           })
         }
       })
@@ -315,14 +315,14 @@ describe('File Upload API Contract Tests', () => {
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
-          body: formData
+          body: formData,
         })
 
         if (response.status === 400) {
           const data = await response.json()
           expect(data).toMatchObject({
             success: false,
-            error: 'Invalid file type'
+            error: 'Invalid file type',
           })
         }
       })
@@ -333,14 +333,14 @@ describe('File Upload API Contract Tests', () => {
 
       it('should delete dress code photo and return 200', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
-          method: 'DELETE'
+          method: 'DELETE',
         })
 
         if (response.status === 200) {
           const data = await response.json()
           expect(data).toMatchObject({
             success: true,
-            message: 'Dress code photo deleted'
+            message: 'Dress code photo deleted',
           })
         }
       })
@@ -355,7 +355,7 @@ describe('File Upload API Contract Tests', () => {
 
       const response = await makeAuthenticatedRequest('/api/wedding/gallery/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
       })
 
       // Should not return 400 for invalid file type
@@ -371,7 +371,7 @@ describe('File Upload API Contract Tests', () => {
 
       const response = await makeAuthenticatedRequest('/api/wedding/gallery/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
       })
 
       // Should not return 400 for invalid file type
@@ -387,7 +387,7 @@ describe('File Upload API Contract Tests', () => {
 
       const response = await makeAuthenticatedRequest('/api/wedding/gallery/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
       })
 
       // Should not return 400 for invalid file type

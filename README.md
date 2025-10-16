@@ -8,35 +8,35 @@ This platform allows couples to create their own customized wedding invitation w
 
 ## ✨ Key Features
 
--   **Multi-tenant Architecture** - Each wedding has its own subdomain and isolated data
--   **Admin Dashboard** - Authenticated portal at `/admin` for couples to manage their wedding
--   **Guest Management** - Track RSVPs, guest lists, table assignments, and check-ins
--   **Content Management** - Love story timeline, locations, FAQs, dress code, bank details
--   **Photo Gallery** - Upload and display wedding photos with Vercel Blob storage
--   **Real-time Preview** - Live preview of wedding site changes in the dashboard
--   **Feature Toggles** - Enable/disable sections like gallery, RSVP, Instagram integration
--   **Session Authentication** - Secure login system with HTTP-only cookies
--   **File Uploads** - Monogram, gallery photos, dress code images
+- **Multi-tenant Architecture** - Each wedding has its own subdomain and isolated data
+- **Admin Dashboard** - Authenticated portal at `/admin` for couples to manage their wedding
+- **Guest Management** - Track RSVPs, guest lists, table assignments, and check-ins
+- **Content Management** - Love story timeline, locations, FAQs, dress code, bank details
+- **Photo Gallery** - Upload and display wedding photos with Vercel Blob storage
+- **Real-time Preview** - Live preview of wedding site changes in the dashboard
+- **Feature Toggles** - Enable/disable sections like gallery, RSVP, Instagram integration
+- **Session Authentication** - Secure login system with HTTP-only cookies
+- **File Uploads** - Monogram, gallery photos, dress code images
 
 ## 🛠 Tech Stack
 
--   **Framework**: Next.js 14.2.4 (App Router)
--   **Language**: TypeScript 5.x
--   **Database**: Turso (libSQL) with Drizzle ORM
--   **UI**: Material-UI 7.x, Tailwind CSS
--   **Forms**: React Hook Form
--   **Animation**: Framer Motion
--   **Storage**: Vercel Blob (for file uploads)
--   **Testing**: Jest (unit), Playwright (E2E)
--   **Deployment**: Vercel
+- **Framework**: Next.js 14.2.4 (App Router)
+- **Language**: TypeScript 5.x
+- **Database**: Turso (libSQL) with Drizzle ORM
+- **UI**: Material-UI 7.x, Tailwind CSS
+- **Forms**: React Hook Form
+- **Animation**: Framer Motion
+- **Storage**: Vercel Blob (for file uploads)
+- **Testing**: Jest (unit), Playwright (E2E)
+- **Deployment**: Vercel
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
--   Node.js 18+
--   Yarn or npm
--   Turso account (for database)
+- Node.js 18+
+- Yarn or npm
+- Turso account (for database)
 
 ### Environment Variables
 
@@ -73,8 +73,8 @@ Visit [http://localhost:3000/admin/login](http://localhost:3000/admin/login)
 
 **Default credentials:**
 
--   Email: `karel@wedding.com`
--   Password: `changeme123`
+- Email: `karel@wedding.com`
+- Password: `changeme123`
 
 ## 📁 Project Structure
 
@@ -113,8 +113,8 @@ yarn build
 
 Production: `https://oialt.vercel.app`
 
--   **Admin Dashboard**: `https://oialt.vercel.app/admin`
--   **Wedding Sites**: `https://{subdomain}-oialt.vercel.app`
+- **Admin Dashboard**: `https://oialt.vercel.app/admin`
+- **Wedding Sites**: `https://{subdomain}-oialt.vercel.app`
 
 See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
@@ -127,9 +127,9 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
 ## 📖 Documentation
 
--   [Deployment Guide](./DEPLOYMENT.md) - Complete deployment instructions
--   [Migration Strategy](./MIGRATION-STRATEGY.md) - Database migration documentation
--   [Testing Guide](./tests/TESTING.md) - Testing procedures and guidelines
+- [Deployment Guide](./DEPLOYMENT.md) - Complete deployment instructions
+- [Migration Strategy](./MIGRATION-STRATEGY.md) - Database migration documentation
+- [Testing Guide](./tests/TESTING.md) - Testing procedures and guidelines
 
 ## 🏗 Architecture
 
@@ -137,38 +137,38 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
 Each wedding is isolated by `wedding_config_id`:
 
--   Subdomain extraction via middleware
--   Session-based authentication
--   Row-level data isolation
+- Subdomain extraction via middleware
+- Session-based authentication
+- Row-level data isolation
 
 ### API Routes
 
--   `/api/auth/*` - Authentication (login, logout, register, session)
--   `/api/wedding/*` - Wedding configuration and features
--   `/api/wedding/gallery/*` - Photo gallery management
--   `/api/wedding/love-story/*` - Love story timeline
--   `/api/wedding/locations/*` - Wedding locations
--   `/api/wedding/faqs/*` - FAQ management
+- `/api/auth/*` - Authentication (login, logout, register, session)
+- `/api/wedding/*` - Wedding configuration and features
+- `/api/wedding/gallery/*` - Photo gallery management
+- `/api/wedding/love-story/*` - Love story timeline
+- `/api/wedding/locations/*` - Wedding locations
+- `/api/wedding/faqs/*` - FAQ management
 
 ### Database Schema
 
 Using Drizzle ORM with UUID primary keys:
 
--   `user_accounts` - User authentication
--   `wedding_configurations` - Wedding settings
--   `rsvps` → `guests` (1:many relationship)
--   `tables` - Table assignments
--   `wishes` - Guest wishes/messages
--   `groups` - Distribution groups
--   Content tables (love_stories, locations, gallery_photos, etc.)
+- `user_accounts` - User authentication
+- `wedding_configurations` - Wedding settings
+- `rsvps` → `guests` (1:many relationship)
+- `tables` - Table assignments
+- `wishes` - Guest wishes/messages
+- `groups` - Distribution groups
+- Content tables (love_stories, locations, gallery_photos, etc.)
 
 ## 🔒 Security
 
--   HTTP-only session cookies
--   bcrypt password hashing
--   CSRF protection via POST-only mutations
--   Input validation on all forms
--   SQL injection prevention via Drizzle ORM
+- HTTP-only session cookies
+- bcrypt password hashing
+- CSRF protection via POST-only mutations
+- Input validation on all forms
+- SQL injection prevention via Drizzle ORM
 
 ## 📝 License
 

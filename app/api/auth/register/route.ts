@@ -23,10 +23,7 @@ export async function POST(request: NextRequest) {
 
     // Validate names
     if (!groomName.trim() || !brideName.trim()) {
-      return NextResponse.json(
-        { success: false, error: 'Names required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Names required' }, { status: 400 })
     }
 
     // Register user
@@ -56,17 +53,11 @@ export async function POST(request: NextRequest) {
     }
 
     if (error.message === 'Invalid email format') {
-      return NextResponse.json(
-        { success: false, error: 'Invalid email format' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Invalid email format' }, { status: 400 })
     }
 
     if (error.message === 'Password too short') {
-      return NextResponse.json(
-        { success: false, error: 'Password too short' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Password too short' }, { status: 400 })
     }
 
     // Handle subdomain collision errors
@@ -78,9 +69,6 @@ export async function POST(request: NextRequest) {
     }
 
     console.error('Registration error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Registration failed' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Registration failed' }, { status: 500 })
   }
 }

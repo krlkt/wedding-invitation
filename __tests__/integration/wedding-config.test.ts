@@ -14,7 +14,7 @@ describe('Wedding Configuration Flow Integration Test', () => {
     email: `config-test-${Date.now()}@example.com`,
     password: 'configPassword123',
     groomName: 'Config Test Groom',
-    brideName: 'Config Test Bride'
+    brideName: 'Config Test Bride',
   }
 
   beforeAll(async () => {
@@ -22,7 +22,7 @@ describe('Wedding Configuration Flow Integration Test', () => {
     await fetch(`${baseUrl}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(testUser)
+      body: JSON.stringify(testUser),
     })
   })
 
@@ -34,15 +34,15 @@ describe('Wedding Configuration Flow Integration Test', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: testUser.email,
-          password: testUser.password
-        })
+          password: testUser.password,
+        }),
       })
 
       if (loginResponse.status === 200) {
         // Step 2: Get initial configuration
         const initialConfigResponse = await fetch(`${baseUrl}/api/wedding/config`, {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         })
 
         if (initialConfigResponse.status === 200) {
@@ -59,13 +59,13 @@ describe('Wedding Configuration Flow Integration Test', () => {
             brideFather: 'Bride Father',
             brideMother: 'Bride Mother',
             instagramLink: 'https://instagram.com/updatedwedding',
-            footerText: 'Join us for our updated celebration!'
+            footerText: 'Join us for our updated celebration!',
           }
 
           const updateResponse = await fetch(`${baseUrl}/api/wedding/config`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updateData)
+            body: JSON.stringify(updateData),
           })
 
           if (updateResponse.status === 200) {
@@ -78,7 +78,7 @@ describe('Wedding Configuration Flow Integration Test', () => {
             // Step 4: Verify persistence by fetching again
             const verifyResponse = await fetch(`${baseUrl}/api/wedding/config`, {
               method: 'GET',
-              headers: { 'Content-Type': 'application/json' }
+              headers: { 'Content-Type': 'application/json' },
             })
 
             if (verifyResponse.status === 200) {
@@ -96,8 +96,8 @@ describe('Wedding Configuration Flow Integration Test', () => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          weddingDate: 'invalid-date-format'
-        })
+          weddingDate: 'invalid-date-format',
+        }),
       })
 
       if (invalidDateUpdate.status === 400) {
@@ -110,8 +110,8 @@ describe('Wedding Configuration Flow Integration Test', () => {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          instagramLink: 'not-a-valid-url'
-        })
+          instagramLink: 'not-a-valid-url',
+        }),
       })
 
       if (invalidInstagramUpdate.status === 400) {
@@ -129,7 +129,7 @@ describe('Wedding Configuration Flow Integration Test', () => {
       'prewedding_videos',
       'faqs',
       'dress_code',
-      'instagram_link'
+      'instagram_link',
     ]
 
     it('should toggle all features on and off', async () => {
@@ -140,21 +140,21 @@ describe('Wedding Configuration Flow Integration Test', () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             featureName: feature,
-            isEnabled: true
-          })
+            isEnabled: true,
+          }),
         })
 
         if (enableResponse.status === 200) {
           const enableData = await enableResponse.json()
           expect(enableData.data).toMatchObject({
             featureName: feature,
-            isEnabled: true
+            isEnabled: true,
           })
 
           // Step 2: Verify feature is enabled in config
           const configResponse = await fetch(`${baseUrl}/api/wedding/config`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
           })
 
           if (configResponse.status === 200) {
@@ -168,15 +168,15 @@ describe('Wedding Configuration Flow Integration Test', () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               featureName: feature,
-              isEnabled: false
-            })
+              isEnabled: false,
+            }),
           })
 
           if (disableResponse.status === 200) {
             const disableData = await disableResponse.json()
             expect(disableData.data).toMatchObject({
               featureName: feature,
-              isEnabled: false
+              isEnabled: false,
             })
           }
         }
@@ -189,8 +189,8 @@ describe('Wedding Configuration Flow Integration Test', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           featureName: 'invalid_feature_name',
-          isEnabled: true
-        })
+          isEnabled: true,
+        }),
       })
 
       expect(invalidFeatureResponse.status).toBe(400)
@@ -206,14 +206,14 @@ describe('Wedding Configuration Flow Integration Test', () => {
         body: JSON.stringify({
           weddingDate: '2024-09-20T00:00:00.000Z',
           groomName: 'Publish Test Groom',
-          brideName: 'Publish Test Bride'
-        })
+          brideName: 'Publish Test Bride',
+        }),
       })
 
       // Step 2: Publish wedding
       const publishResponse = await fetch(`${baseUrl}/api/wedding/publish`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
 
       if (publishResponse.status === 200) {
@@ -224,8 +224,8 @@ describe('Wedding Configuration Flow Integration Test', () => {
           data: {
             isPublished: true,
             publishedAt: expect.any(String),
-            weddingUrl: expect.any(String)
-          }
+            weddingUrl: expect.any(String),
+          },
         })
 
         // Validate timestamp and URL format
@@ -235,7 +235,7 @@ describe('Wedding Configuration Flow Integration Test', () => {
         // Step 3: Verify configuration shows published status
         const configResponse = await fetch(`${baseUrl}/api/wedding/config`, {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         })
 
         if (configResponse.status === 200) {
@@ -246,7 +246,7 @@ describe('Wedding Configuration Flow Integration Test', () => {
         // Step 4: Unpublish wedding
         const unpublishResponse = await fetch(`${baseUrl}/api/wedding/unpublish`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         })
 
         if (unpublishResponse.status === 200) {
@@ -256,14 +256,14 @@ describe('Wedding Configuration Flow Integration Test', () => {
             success: true,
             data: {
               isPublished: false,
-              unpublishedAt: expect.any(String)
-            }
+              unpublishedAt: expect.any(String),
+            },
           })
 
           // Step 5: Verify configuration shows unpublished status
           const finalConfigResponse = await fetch(`${baseUrl}/api/wedding/config`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
           })
 
           if (finalConfigResponse.status === 200) {

@@ -84,30 +84,30 @@ k6 run tests/load/wedding-site.js
 
 ```javascript
 // tests/load/wedding-site.js
-import http from 'k6/http';
-import { check, sleep } from 'k6';
+import http from 'k6/http'
+import { check, sleep } from 'k6'
 
 export let options = {
   stages: [
-    { duration: '30s', target: 50 },  // Ramp up
-    { duration: '1m', target: 100 },  // Stay at 100 users
-    { duration: '30s', target: 0 },   // Ramp down
+    { duration: '30s', target: 50 }, // Ramp up
+    { duration: '1m', target: 100 }, // Stay at 100 users
+    { duration: '30s', target: 0 }, // Ramp down
   ],
-};
+}
 
 export default function () {
   // Test different subdomains (multi-tenancy)
-  const subdomains = ['wedding1', 'wedding2', 'wedding3'];
-  const subdomain = subdomains[Math.floor(Math.random() * subdomains.length)];
+  const subdomains = ['wedding1', 'wedding2', 'wedding3']
+  const subdomain = subdomains[Math.floor(Math.random() * subdomains.length)]
 
-  const res = http.get(`http://${subdomain}.localhost:3000`);
+  const res = http.get(`http://${subdomain}.localhost:3000`)
 
   check(res, {
     'status is 200': (r) => r.status === 200,
     'response time < 200ms': (r) => r.timings.duration < 200,
-  });
+  })
 
-  sleep(1);
+  sleep(1)
 }
 ```
 
@@ -118,6 +118,7 @@ Execute validation scenarios from quickstart.md.
 ### Manual Validation Steps
 
 1. **User Registration**
+
    ```bash
    curl -X POST http://localhost:3000/api/auth/register \
      -H "Content-Type: application/json" \
@@ -125,6 +126,7 @@ Execute validation scenarios from quickstart.md.
    ```
 
 2. **Login**
+
    ```bash
    curl -X POST http://localhost:3000/api/auth/login \
      -H "Content-Type: application/json" \
@@ -133,6 +135,7 @@ Execute validation scenarios from quickstart.md.
    ```
 
 3. **Update Configuration**
+
    ```bash
    curl -X PUT http://localhost:3000/api/wedding/config \
      -H "Content-Type: application/json" \
@@ -141,6 +144,7 @@ Execute validation scenarios from quickstart.md.
    ```
 
 4. **Upload Photo**
+
    ```bash
    curl -X POST http://localhost:3000/api/wedding/gallery/upload \
      -b cookies.txt \
@@ -149,6 +153,7 @@ Execute validation scenarios from quickstart.md.
    ```
 
 5. **Publish Wedding**
+
    ```bash
    curl -X POST http://localhost:3000/api/wedding/publish \
      -b cookies.txt

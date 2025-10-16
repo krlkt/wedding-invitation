@@ -22,7 +22,9 @@ import { requireAuth } from '../../app/lib/session'
 import { getWeddingConfigById, getFeatureToggles } from '../../app/lib/wedding-service'
 
 const mockRequireAuth = requireAuth as jest.MockedFunction<typeof requireAuth>
-const mockGetWeddingConfigById = getWeddingConfigById as jest.MockedFunction<typeof getWeddingConfigById>
+const mockGetWeddingConfigById = getWeddingConfigById as jest.MockedFunction<
+  typeof getWeddingConfigById
+>
 const mockGetFeatureToggles = getFeatureToggles as jest.MockedFunction<typeof getFeatureToggles>
 
 describe('GET /api/wedding/config - Preview API Contract', () => {

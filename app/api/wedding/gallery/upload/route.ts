@@ -18,10 +18,7 @@ export async function POST(request: NextRequest) {
     const order = orderStr ? parseInt(orderStr, 10) : undefined
 
     if (!file) {
-      return NextResponse.json(
-        { success: false, error: 'No file provided' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'No file provided' }, { status: 400 })
     }
 
     const result = await uploadGalleryPhoto(session.weddingConfigId, file, alt, order)
@@ -42,16 +39,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (error.message === 'Invalid file type') {
-      return NextResponse.json(
-        { success: false, error: 'Invalid file type' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Invalid file type' }, { status: 400 })
     }
 
     console.error('Gallery upload error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Upload failed' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Upload failed' }, { status: 500 })
   }
 }

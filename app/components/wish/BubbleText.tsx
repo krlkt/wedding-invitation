@@ -1,10 +1,10 @@
-import { FC } from 'react';
-import './bubbletext.css';
+import { FC } from 'react'
+import './bubbletext.css'
 
 interface BubbleTextProps {
-    name: string;
-    message: string;
-    createdAt: string;
+  name: string
+  message: string
+  createdAt: string
 }
 
 const BubbleText: FC<BubbleTextProps> = ({ name, message, createdAt }) => {
@@ -20,60 +20,37 @@ const BubbleText: FC<BubbleTextProps> = ({ name, message, createdAt }) => {
 };
 
 function formatTimeAgo(dateString: string): string {
-    // Parse date string - handles both ISO format and legacy format
-    let date: Date;
+  // Convert Singapore Time (SGT, UTC+8) to UTC
+  const singaporeTime = new Date(dateString.replace(' ', 'T') + 'Z') // Treat as UTC
+  const now = new Date() // Local system time
+  const diffInSeconds = Math.floor((now.getTime() - singaporeTime.getTime()) / 1000)
 
-    try {
-        if (dateString.includes('T') || dateString.includes('Z')) {
-            // Already ISO format
-            date = new Date(dateString);
-        } else {
-            // Legacy format with space (e.g., "2024-01-01 12:00:00")
-            date = new Date(dateString.replace(' ', 'T') + 'Z');
-        }
+  if (diffInSeconds < 60) {
+    return 'Less than a minute ago'
+  }
 
-        // Check if date is valid
-        if (isNaN(date.getTime())) {
-            return 'Recently';
-        }
-    } catch (e) {
-        return 'Recently';
-    }
+  const diffInMinutes = Math.floor(diffInSeconds / 60)
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`
+  }
 
-    const now = new Date();
-    let diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const diffInHours = Math.floor(diffInMinutes / 60)
+  if (diffInHours < 24) {
+    return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`
+  }
 
-    // If difference is negative (date in future), take absolute value
-    if (diffInSeconds < 0) {
-        diffInSeconds = Math.abs(diffInSeconds);
-    }
+  const diffInDays = Math.floor(diffInHours / 24)
+  if (diffInDays < 7) {
+    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`
+  }
 
-    if (diffInSeconds < 60) {
-        return 'Less than a minute ago';
-    }
-
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    if (diffInMinutes < 60) {
-        return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
-    }
-
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) {
-        return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-    }
-
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) {
-        return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
-    }
-
-    // More than 7 days → Pretty format with user's local time
-    return new Intl.DateTimeFormat('en-US', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Convert to user's timezone
-    }).format(date);
+  // More than 7 days → Pretty format with user's local time
+  return new Intl.DateTimeFormat('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Convert to user's timezone
+  }).format(singaporeTime)
 }
 
-export default BubbleText;
+export default BubbleText

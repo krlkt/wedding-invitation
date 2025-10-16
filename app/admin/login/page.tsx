@@ -41,16 +41,16 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-blue-50 px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Wedding Admin</h1>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-50 to-blue-50 px-4">
+      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-xl">
+        <div className="mb-8 text-center">
+          <h1 className="mb-2 text-3xl font-bold text-gray-900">Wedding Admin</h1>
           <p className="text-gray-600">Sign in to manage your wedding</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
               Email Address
             </label>
             <input
@@ -59,13 +59,13 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-transparent focus:ring-2 focus:ring-pink-500"
               placeholder="your@email.com"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -74,13 +74,13 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-transparent focus:ring-2 focus:ring-pink-500"
               placeholder="••••••••"
             />
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700">
               {error}
             </div>
           )}
@@ -88,15 +88,15 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-pink-500 to-blue-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-pink-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="w-full rounded-lg bg-gradient-to-r from-pink-500 to-blue-500 px-4 py-3 font-semibold text-white transition-all hover:from-pink-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
           {/* Registration Link */}
-          <div className="text-center text-sm text-gray-600 pt-4">
+          <div className="pt-4 text-center text-sm text-gray-600">
             Don&apos;t have an account?{' '}
-            <Link href="/register" className="text-pink-500 hover:text-pink-600 font-semibold">
+            <Link href="/register" className="font-semibold text-pink-500 hover:text-pink-600">
               Create your wedding website
             </Link>
           </div>
@@ -104,9 +104,7 @@ function LoginForm() {
 
         <div className="mt-6 text-center text-sm text-gray-600">
           <p>Default credentials:</p>
-          <p className="font-mono text-xs mt-1">
-            karel@wedding.com / changeme123
-          </p>
+          <p className="mt-1 font-mono text-xs">karel@wedding.com / changeme123</p>
         </div>
       </div>
     </div>

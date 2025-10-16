@@ -29,7 +29,6 @@ async function migrateSchema() {
     console.log('\nNext steps:')
     console.log('1. Run: yarn db:push')
     console.log('2. Run: yarn tsx scripts/migrate-existing-data.ts')
-
   } catch (error) {
     console.error('Schema migration failed:', error)
     throw error

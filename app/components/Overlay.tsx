@@ -1,3 +1,3 @@
-const Overlay = () => <div className="w-full h-full bg-primary-main bg-opacity-30 -z-10" />;
+const Overlay = () => <div className="-z-10 h-full w-full bg-primary-main bg-opacity-30" />
 
-export default Overlay;
+export default Overlay

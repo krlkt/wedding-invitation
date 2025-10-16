@@ -94,9 +94,6 @@ export async function PUT(request: NextRequest) {
     }
   } catch (error: any) {
     console.error('Toggle feature error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to toggle feature' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to toggle feature' }, { status: 500 })
   }
 }

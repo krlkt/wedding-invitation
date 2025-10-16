@@ -20,10 +20,10 @@ describe('File Upload Flow Integration Test', () => {
       const formData = new FormData()
       formData.append('file', createTestImageFile('wedding1.jpg'))
       formData.append('alt', 'Wedding ceremony photo')
-      
+
       const uploadResponse = await fetch(`${baseUrl}/api/wedding/gallery/upload`, {
         method: 'POST',
-        body: formData
+        body: formData,
       })
 
       if (uploadResponse.status === 201) {
@@ -34,7 +34,7 @@ describe('File Upload Flow Integration Test', () => {
         const updateResponse = await fetch(`${baseUrl}/api/wedding/gallery/${photoId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ order: 2, alt: 'Updated alt text' })
+          body: JSON.stringify({ order: 2, alt: 'Updated alt text' }),
         })
 
         expect(updateResponse.status).toBe(200)
@@ -50,7 +50,7 @@ describe('File Upload Flow Integration Test', () => {
 
         // Delete photo
         const deleteResponse = await fetch(`${baseUrl}/api/wedding/gallery/${photoId}`, {
-          method: 'DELETE'
+          method: 'DELETE',
         })
 
         expect(deleteResponse.status).toBe(200)
@@ -63,10 +63,10 @@ describe('File Upload Flow Integration Test', () => {
       // Upload dress code photo
       const formData = new FormData()
       formData.append('file', createTestImageFile('dress-code.jpg'))
-      
+
       const uploadResponse = await fetch(`${baseUrl}/api/wedding/dress-code/upload`, {
         method: 'POST',
-        body: formData
+        body: formData,
       })
 
       if (uploadResponse.status === 201) {
@@ -80,7 +80,7 @@ describe('File Upload Flow Integration Test', () => {
 
         // Delete dress code photo
         const deleteResponse = await fetch(`${baseUrl}/api/wedding/dress-code/photo`, {
-          method: 'DELETE'
+          method: 'DELETE',
         })
 
         expect(deleteResponse.status).toBe(200)

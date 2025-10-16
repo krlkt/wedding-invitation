@@ -12,13 +12,13 @@ describe('Live Preview Functionality Test', () => {
     const configUpdate = {
       groomName: 'Preview Test Groom',
       brideName: 'Preview Test Bride',
-      weddingDate: '2024-12-25T00:00:00.000Z'
+      weddingDate: '2024-12-25T00:00:00.000Z',
     }
 
     const updateResponse = await fetch(`${baseUrl}/api/wedding/config`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(configUpdate)
+      body: JSON.stringify(configUpdate),
     })
 
     if (updateResponse.status === 200) {
@@ -32,13 +32,13 @@ describe('Live Preview Functionality Test', () => {
     // Toggle a feature
     const featureToggle = {
       featureName: 'love_story',
-      isEnabled: false
+      isEnabled: false,
     }
 
     const toggleResponse = await fetch(`${baseUrl}/api/wedding/config/features`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(featureToggle)
+      body: JSON.stringify(featureToggle),
     })
 
     if (toggleResponse.status === 200) {

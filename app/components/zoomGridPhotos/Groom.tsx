@@ -50,13 +50,13 @@ const Groom = () => {
         layoutEffect: false, // Use useEffect instead of useLayoutEffect for better SSR compatibility
     });
 
-    const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4.15]);
-    const scale5 = useTransform(scrollYProgress, [0, 0.8], [1, 5]);
-    const scale6 = useTransform(scrollYProgress, [0, 0.8], [1, 6]);
-    const scale8 = useTransform(scrollYProgress, [0, 0.8], [1, 8]);
-    const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9]);
-    const textOpacityGroom = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
-    const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1]);
+  const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4.15])
+  const scale5 = useTransform(scrollYProgress, [0, 0.8], [1, 5])
+  const scale6 = useTransform(scrollYProgress, [0, 0.8], [1, 6])
+  const scale8 = useTransform(scrollYProgress, [0, 0.8], [1, 8])
+  const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9])
+  const textOpacityGroom = useTransform(scrollYProgress, [0.3, 0.8], [0, 1])
+  const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1])
 
     // Use measured container height for embedded mode, viewport height for fullscreen
     const stickyHeightValue = isEmbedded && containerHeight ? `${containerHeight}px` : '';
@@ -155,9 +155,10 @@ const Groom = () => {
                     </motion.div>
                 </div>
                 <motion.div style={{ opacity: textOpacityParent }} className="groom-text-overlay" />
-            </div>
-        </div>
-    );
-};
+   
+      </div>
+    </div>
+  )
+}
 
-export default Groom;
+export default Groom

@@ -19,10 +19,7 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: any) {
     console.error('Get locations error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to get locations' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Failed to get locations' }, { status: 500 })
   }
 }
 
@@ -32,7 +29,15 @@ export async function POST(request: NextRequest) {
     if (session instanceof NextResponse) return session
 
     const body = await request.json()
-    const { locationIdentifier, name, address, googleMapsLink, ceremonyTime, receptionTime, order } = body
+    const {
+      locationIdentifier,
+      name,
+      address,
+      googleMapsLink,
+      ceremonyTime,
+      receptionTime,
+      order,
+    } = body
 
     if (!locationIdentifier || !name || !address || order === undefined) {
       return NextResponse.json(

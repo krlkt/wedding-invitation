@@ -48,7 +48,9 @@ describe('Authentication Service', () => {
     })
 
     it('should reject invalid email format', async () => {
-      await expect(registerUser('invalid-email', 'password123')).rejects.toThrow('Invalid email format')
+      await expect(registerUser('invalid-email', 'password123')).rejects.toThrow(
+        'Invalid email format'
+      )
     })
 
     it('should reject short passwords', async () => {

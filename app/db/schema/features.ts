@@ -10,7 +10,9 @@ import { createId } from '@paralleldrive/cuid2'
 import { weddingConfigurations } from './weddings'
 
 export const featureToggles = sqliteTable('feature_toggles', {
-  id: text('id').$defaultFn(() => createId()).primaryKey(),
+  id: text('id')
+    .$defaultFn(() => createId())
+    .primaryKey(),
   weddingConfigId: text('wedding_config_id')
     .notNull()
     .references(() => weddingConfigurations.id, { onDelete: 'cascade' }),
@@ -27,8 +29,12 @@ export const featureToggles = sqliteTable('feature_toggles', {
     ]
   }).notNull(),
   isEnabled: integer('is_enabled', { mode: 'boolean' }).notNull().default(true),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).$onUpdateFn(() => new Date()).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 })
 
 // TypeScript types inferred from schema

@@ -4,6 +4,7 @@
 **Prerequisites**: plan.md, research.md, data-model.md, contracts/
 
 ## Execution Flow (main)
+
 ```
 1. Load plan.md from feature directory ✅
    → Tech stack: TypeScript 5.x, Next.js 14.2.4, React 18, Material-UI 7.x, Tailwind CSS
@@ -33,11 +34,14 @@
 ```
 
 ## Format: `[ID] [P?] Description`
+
 - **[P]**: Can run in parallel (different files, no dependencies)
 - Include exact file paths in descriptions
 
 ## Path Conventions
+
 **Web app structure**: Next.js 14.2.4 App Router with TypeScript
+
 - Models: `app/models/` (TypeScript interfaces)
 - API Routes: `app/api/` (Next.js App Router API routes)
 - Components: `app/components/` (React components)
@@ -45,6 +49,7 @@
 - E2E Tests: `tests/e2e/` (Playwright)
 
 ## Phase 3.1: Setup & Configuration
+
 - [ ] T001 Install ORM and testing dependencies (Drizzle ORM, Jest, React Testing Library, Playwright, MSW)
 - [ ] T002 [P] Configure Drizzle ORM with Turso in `drizzle.config.ts`
 - [ ] T003 [P] Configure Jest with Next.js and TypeScript support in `jest.config.js`
@@ -53,15 +58,18 @@
 - [ ] T006 [P] Configure ESLint rules for testing in `.eslintrc.json`
 
 ## Phase 3.2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE 3.3
+
 **CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
 
 ### Contract Tests (API Endpoints)
+
 - [ ] T007 [P] Auth API contract tests in `__tests__/contracts/auth.test.ts`
 - [ ] T008 [P] Wedding config API contract tests in `__tests__/contracts/wedding-config.test.ts`
 - [ ] T009 [P] Content management API contract tests in `__tests__/contracts/content-management.test.ts`
 - [ ] T010 [P] File upload API contract tests in `__tests__/contracts/file-upload.test.ts`
 
 ### Integration Tests (User Flows)
+
 - [ ] T011 [P] User registration flow integration test in `__tests__/integration/registration.test.ts`
 - [ ] T012 [P] Authentication flow integration test in `__tests__/integration/auth.test.ts`
 - [ ] T013 [P] Wedding configuration flow integration test in `__tests__/integration/wedding-config.test.ts`
@@ -74,6 +82,7 @@
 ## Phase 3.3: Core Implementation (ONLY after tests are failing)
 
 ### Drizzle Schema Definitions
+
 - [ ] T019 [P] UserAccount schema in `app/db/schema/users.ts`
 - [ ] T020 [P] WeddingConfiguration schema in `app/db/schema/weddings.ts`
 - [ ] T021 [P] FeatureToggle schema in `app/db/schema/features.ts`
@@ -89,6 +98,7 @@
 - [ ] T031 [P] Group schema in `app/db/schema/groups.ts`
 
 ### Database Services
+
 - [ ] T032 [P] Database connection service with Drizzle in `app/lib/database.ts`
 - [ ] T033 [P] User authentication service in `app/lib/auth.ts`
 - [ ] T034 [P] Wedding configuration service in `app/lib/wedding-service.ts`
@@ -96,6 +106,7 @@
 - [ ] T036 [P] Content management service in `app/lib/content-service.ts`
 
 ### API Routes Implementation
+
 - [ ] T037 POST /api/auth/register endpoint in `app/api/auth/register/route.ts`
 - [ ] T038 POST /api/auth/login endpoint in `app/api/auth/login/route.ts`
 - [ ] T039 POST /api/auth/logout endpoint in `app/api/auth/logout/route.ts`
@@ -115,6 +126,7 @@
 - [ ] T053 Group management API endpoints in `app/api/wedding/groups/` directory
 
 ## Phase 3.4: Integration & Middleware
+
 - [ ] T054 Authentication middleware in `app/middleware/auth.ts`
 - [ ] T055 Subdomain detection middleware in `app/middleware/subdomain.ts`
 - [ ] T056 Tenant context provider in `app/context/TenantContext.tsx`
@@ -125,12 +137,14 @@
 - [ ] T061 Error handling and logging in `app/lib/errors.ts`
 
 ### UI Components (Existing Enhancement)
+
 - [ ] T062 Extract hardcoded values from existing components in `app/components/`
 - [ ] T063 Create configurable wedding invitation layout in `app/components/WeddingLayout.tsx`
 - [ ] T064 Build live preview interface in `app/components/LivePreview.tsx`
 - [ ] T065 Configuration dashboard interface in `app/components/ConfigDashboard.tsx`
 
 ## Phase 3.5: Polish & Validation
+
 - [ ] T066 [P] Unit tests for validation schemas in `__tests__/unit/validation.test.ts`
 - [ ] T067 [P] Unit tests for authentication service in `__tests__/unit/auth.test.ts`
 - [ ] T068 [P] Unit tests for file upload service in `__tests__/unit/file-service.test.ts`
@@ -142,7 +156,9 @@
 - [ ] T074 Execute quickstart validation scenarios from `quickstart.md`
 
 ## Dependencies
+
 **Critical Dependencies**:
+
 - Setup (T001-T006) before all other phases
 - Tests (T007-T018) before implementation (T019-T065)
 - Schema (T019-T031) before services (T032-T036)
@@ -151,6 +167,7 @@
 - Integration (T054-T065) before polish (T066-T074)
 
 **Specific Blockers**:
+
 - T002 (Drizzle config) blocks T019-T031 (schema definitions)
 - T032 (database service) blocks T033-T036 (other services)
 - T033 (auth service) blocks T037-T040 (auth endpoints)
@@ -160,6 +177,7 @@
 - **CRITICAL**: T057-T058 must complete before any production deployment
 
 ## Parallel Execution Examples
+
 ```bash
 # Phase 3.2: Launch all contract tests together
 Task: "Auth API contract tests in __tests__/contracts/auth.test.ts"
@@ -181,6 +199,7 @@ Task: "Unit tests for file upload service in __tests__/unit/file-service.test.ts
 ```
 
 ## Notes
+
 - [P] tasks = different files, no dependencies between them
 - All tests must fail before implementing corresponding features (TDD)
 - Commit after each task completion
@@ -189,7 +208,8 @@ Task: "Unit tests for file upload service in __tests__/unit/file-service.test.ts
 - Execute quickstart scenarios as final validation step
 
 ## Task Generation Rules Applied
-*Applied during execution flow*
+
+_Applied during execution flow_
 
 1. **From Contracts** ✅:
    - 4 contract files → 4 contract test tasks [P] (T006-T009)
@@ -208,7 +228,8 @@ Task: "Unit tests for file upload service in __tests__/unit/file-service.test.ts
    - Dependencies properly tracked and documented
 
 ## Validation Checklist
-*GATE: Checked before task generation completion*
+
+_GATE: Checked before task generation completion_
 
 - [x] All 20 contract endpoints have corresponding tests (T006-T009)
 - [x] All 12 entities have model tasks (T018-T029)

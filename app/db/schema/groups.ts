@@ -11,14 +11,20 @@ import { createId } from '@paralleldrive/cuid2'
 import { weddingConfigurations } from './weddings'
 
 export const groups = sqliteTable('groups', {
-  id: text('id').$defaultFn(() => createId()).primaryKey(),
+  id: text('id')
+    .$defaultFn(() => createId())
+    .primaryKey(),
   weddingConfigId: text('wedding_config_id')
     .notNull()
     .references(() => weddingConfigurations.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   description: text('description'),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).$onUpdateFn(() => new Date()).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 })
 
 // TypeScript types inferred from schema

@@ -10,6 +10,7 @@
 ## Clarifications
 
 ### Session 2025-09-28
+
 - Q: How should couples create and access their wedding configuration? → A: Account registration with email/password
 - Q: How should guests access different couples' wedding invitations? → A: Subdomain per wedding (john-jane.weddingsite.com) - no extra domain costs
 - Q: What are the size and format limits for uploaded content? → A: Vercel-friendly (images: 4MB, JPEG/PNG/WebP; external storage for videos)
@@ -21,9 +22,11 @@
 ## User Scenarios & Testing
 
 ### Primary User Story
+
 A couple wants to create their own customized wedding invitation website by editing content fields, toggling features on/off, and seeing live preview results. They fill in their personal details (names, dates, locations), customize their love story, upload photos, set up banking details for gifts, and configure which sections appear on their invitation. The system generates a fully functional wedding invitation website that guests can visit, RSVP to, and interact with.
 
 ### Acceptance Scenarios
+
 1. **Given** an empty wedding invitation setup, **When** a user enters groom/bride names and wedding date, **Then** the invitation preview updates to show the personalized names and date
 2. **Given** a wedding invitation in edit mode, **When** a user toggles off the "love story" feature, **Then** the love story section disappears from the preview and will not appear on the live invitation
 3. **Given** a user is editing their invitation, **When** they upload gallery photos, **Then** the photos appear in the gallery section of the preview
@@ -31,6 +34,7 @@ A couple wants to create their own customized wedding invitation website by edit
 5. **Given** a wedding invitation with RSVP enabled, **When** a guest submits an RSVP, **Then** the response is recorded and visible in the couple's dashboard
 
 ### Edge Cases
+
 - What happens when a user uploads an invalid image format or file exceeding 4MB limit?
 - How does the system handle publishing with incomplete or missing content?
 - What occurs when a user tries to access editing features without proper authentication?
@@ -39,6 +43,7 @@ A couple wants to create their own customized wedding invitation website by edit
 ## Requirements
 
 ### Functional Requirements
+
 - **FR-001**: System MUST allow users to customize basic wedding details (groom name, bride name, wedding date, monogram)
 - **FR-002**: System MUST allow users to edit parent information (child of X and Y)
 - **FR-003**: System MUST provide live preview of changes in desktop browser during editing (draft mode)
@@ -64,6 +69,7 @@ A couple wants to create their own customized wedding invitation website by edit
 - **FR-022**: System MUST support future custom domain integration (deferred feature)
 
 ### Key Entities
+
 - **Wedding Configuration**: Core wedding details including couple names, date, monogram, parent information, feature toggles, unique subdomain identifier, and publication status (draft/live)
 - **Love Story Segment**: Individual story entries with icon, date, and description that combine to form the complete love story
 - **Location Details**: Wedding venue information including address, Google Maps link, timing details, and unique location identifier for path-based routing
@@ -81,12 +87,14 @@ A couple wants to create their own customized wedding invitation website by edit
 ## Review & Acceptance Checklist
 
 ### Content Quality
+
 - [x] No implementation details (languages, frameworks, APIs)
 - [x] Focused on user value and business needs
 - [x] Written for non-technical stakeholders
 - [x] All mandatory sections completed
 
 ### Requirement Completeness
+
 - [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable

@@ -17,17 +17,12 @@ const customJestConfig = {
   },
   testEnvironment: 'node',
   // Transform ESM modules for MSW compatibility
-  transformIgnorePatterns: [
-    'node_modules/(?!(msw|@mswjs|@bundled-es-modules|until-async)/)',
-  ],
-  testMatch: [
-    '**/__tests__/**/*.test.(ts|tsx)',
-    '**/?(*.)+(spec|test).(ts|tsx)'
-  ],
+  transformIgnorePatterns: ['node_modules/(?!(msw|@mswjs|@bundled-es-modules|until-async)/)'],
+  testMatch: ['**/__tests__/**/*.test.(ts|tsx)', '**/?(*.)+(spec|test).(ts|tsx)'],
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
     '<rootDir>/node_modules/',
-    '<rootDir>/tests/e2e/' // Exclude Playwright tests
+    '<rootDir>/tests/e2e/', // Exclude Playwright tests
   ],
   collectCoverageFrom: [
     'app/**/*.{js,jsx,ts,tsx}',

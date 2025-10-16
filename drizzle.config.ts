@@ -1,8 +1,8 @@
-import type { Config } from 'drizzle-kit';
-import { config as dotenvConfig } from 'dotenv';
+import type { Config } from 'drizzle-kit'
+import { config as dotenvConfig } from 'dotenv'
 
 // Load environment variables
-dotenvConfig();
+dotenvConfig()
 
 export default {
   schema: './app/db/schema/*',
@@ -14,4 +14,4 @@ export default {
   },
   verbose: true,
   strict: true,
-} satisfies Config;
+} satisfies Config

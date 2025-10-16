@@ -17,10 +17,7 @@ export async function GET(request: NextRequest) {
     const sessionCookie = cookieStore.get('session')
 
     if (!sessionCookie) {
-      return NextResponse.json(
-        { success: false, error: 'Not authenticated' },
-        { status: 401 }
-      )
+      return NextResponse.json({ success: false, error: 'Not authenticated' }, { status: 401 })
     }
 
     // Parse session data
@@ -28,19 +25,13 @@ export async function GET(request: NextRequest) {
     const { userId, weddingConfigId, lastActivity } = session
 
     if (!userId || !weddingConfigId) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid session' },
-        { status: 401 }
-      )
+      return NextResponse.json({ success: false, error: 'Invalid session' }, { status: 401 })
     }
 
     // Check inactivity expiration
     if (!lastActivity || Date.now() - lastActivity > ONE_WEEK_MS) {
-      cookieStore.set('session', '', { maxAge: 0, path: '/' }) 
-      return NextResponse.json(
-        { success: false, error: 'Session expired' },
-        { status: 401 }
-      )
+      cookieStore.set('session', '', { maxAge: 0, path: '/' })
+      return NextResponse.json({ success: false, error: 'Session expired' }, { status: 401 })
     }
 
     // Refresh lastActivity
@@ -77,9 +68,6 @@ export async function GET(request: NextRequest) {
     })
   } catch (error: any) {
     console.error('Session check error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Session check failed' },
-      { status: 500 }
-    )
+    return NextResponse.json({ success: false, error: 'Session check failed' }, { status: 500 })
   }
 }
