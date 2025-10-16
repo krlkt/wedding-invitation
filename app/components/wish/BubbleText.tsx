@@ -8,16 +8,16 @@ interface BubbleTextProps {
 }
 
 const BubbleText: FC<BubbleTextProps> = ({ name, message, createdAt }) => {
-    return (
-        <div className="speech-bubble relative bg-blue-50 rounded-lg p-2 px-4 text-left shadow-md">
-            <div className="leading-none">
-                <span className="text-md font-semibold text-primary-main mr-2">{name}</span>
-                <span className="text-sm text-gray-600">{formatTimeAgo(createdAt)}</span>
-            </div>
-            <p className="text-sm ">{message}</p>
-        </div>
-    );
-};
+  return (
+    <div className="speech-bubble relative rounded-lg bg-blue-50 p-2 px-4 text-left shadow-md">
+      <div className="leading-none">
+        <span className="text-md mr-2 font-semibold text-primary-main">{name}</span>
+        <span className="text-sm text-gray-600">{formatTimeAgo(createdAt)}</span>
+      </div>
+      <p className="text-sm">{message}</p>
+    </div>
+  )
+}
 
 function formatTimeAgo(dateString: string): string {
   // Handle undefined, null, or empty string

@@ -73,32 +73,32 @@ export function validateInstagramLink(link: string): { valid: boolean; error?: s
  */
 export function isValidInstagramUrl(url: string): boolean {
   if (!url || typeof url !== 'string') {
-    return false;
+    return false
   }
 
   try {
-    const urlObj = new URL(url);
+    const urlObj = new URL(url)
 
     // Check protocol (must be HTTPS)
     if (urlObj.protocol !== 'https:') {
-      return false;
+      return false
     }
 
     // Check hostname
-    const validHostnames = ['instagram.com', 'www.instagram.com'];
+    const validHostnames = ['instagram.com', 'www.instagram.com']
     if (!validHostnames.includes(urlObj.hostname)) {
-      return false;
+      return false
     }
 
     // Check that there's a path (username)
     if (!urlObj.pathname || urlObj.pathname === '/') {
-      return false;
+      return false
     }
 
-    return true;
+    return true
   } catch (error) {
     // Invalid URL format
-    return false;
+    return false
   }
 }
 

@@ -13,25 +13,31 @@
 #### Schema Changes
 
 **Added Fields**:
+
 ```typescript
 groomsInstagramLink: text('grooms_instagram_link'),
 brideInstagramLink: text('bride_instagram_link'),
 ```
 
 **Deprecated Fields** (keep for backward compatibility):
+
 ```typescript
 instagramLink: text('instagram_link'),  // DEPRECATED - no longer used
 ```
 
 **Unchanged** Fields:
+
 ```typescript
 footerText: text('footer_text'),  // Remains in schema, moved in UI only
 ```
 
 #### Complete Updated Schema
+
 ```typescript
 export const weddingConfigurations = sqliteTable('wedding_configurations', {
-  id: text('id').$defaultFn(() => createId()).primaryKey(),
+  id: text('id')
+    .$defaultFn(() => createId())
+    .primaryKey(),
   userId: text('user_id')
     .notNull()
     .references(() => userAccounts.id, { onDelete: 'cascade' })
@@ -58,15 +64,20 @@ export const weddingConfigurations = sqliteTable('wedding_configurations', {
   footerText: text('footer_text'),
 
   // Deprecated (keep for compatibility)
-  instagramLink: text('instagram_link'),  // DEPRECATED
+  instagramLink: text('instagram_link'), // DEPRECATED
 
   isPublished: integer('is_published', { mode: 'boolean' }).notNull().default(false),
-  createdAt: integer('created_at', { mode: 'timestamp' }).$defaultFn(() => new Date()).notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' }).$onUpdateFn(() => new Date()).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .$onUpdateFn(() => new Date())
+    .notNull(),
 })
 ```
 
 #### Validation Rules
+
 - **groomsInstagramLink**:
   - Optional (nullable)
   - Must be valid URL format if provided (https://instagram.com/... or https://www.instagram.com/...)
@@ -83,6 +94,7 @@ export const weddingConfigurations = sqliteTable('wedding_configurations', {
   - No HTML allowed (plain text only)
 
 #### Migration Notes
+
 - Existing `instagramLink` values will NOT be migrated (per clarification - testing data only)
 - New fields default to NULL
 - Application will ignore `instagramLink` column (deprecated)
@@ -98,6 +110,7 @@ export const weddingConfigurations = sqliteTable('wedding_configurations', {
 #### Schema Changes
 
 **Renamed Enum Value**:
+
 ```typescript
 featureName: text('feature_name', {
   enum: [
@@ -114,13 +127,16 @@ featureName: text('feature_name', {
 ```
 
 #### Migration Strategy
+
 Since SQLite enums are implemented as text with CHECK constraints:
+
 1. Update CHECK constraint to allow both old and new values temporarily
 2. Update existing rows: `UPDATE feature_toggles SET feature_name = 'instagram_links' WHERE feature_name = 'instagram_link'`
 3. Update schema enum to only include new value
 4. Deploy application code with new value
 
 **Alternatively** (simpler):
+
 - Direct schema change (Drizzle will handle)
 - Existing data updated automatically on first save
 - Feature toggle will default to enabled (existing behavior)
@@ -132,6 +148,7 @@ Since SQLite enums are implemented as text with CHECK constraints:
 ### WeddingConfiguration Type
 
 **Updated Type** (auto-inferred from schema):
+
 ```typescript
 export type WeddingConfiguration = {
   id: string
@@ -150,11 +167,11 @@ export type WeddingConfiguration = {
   brideFather: string | null
   brideMother: string | null
 
-  groomsInstagramLink: string | null      // NEW
-  brideInstagramLink: string | null       // NEW
+  groomsInstagramLink: string | null // NEW
+  brideInstagramLink: string | null // NEW
   footerText: string | null
 
-  instagramLink: string | null            // DEPRECATED
+  instagramLink: string | null // DEPRECATED
 
   isPublished: boolean
   createdAt: Date
@@ -167,6 +184,7 @@ export type WeddingConfiguration = {
 **File**: `app/components/preview/types.ts`
 
 **Current**:
+
 ```typescript
 export interface PreviewData {
     config: WeddingConfiguration  // Already includes new fields via type inference
@@ -176,16 +194,17 @@ export interface PreviewData {
 ```
 
 **Updated FeatureName Type**:
+
 ```typescript
 export type FeatureName =
-    | 'love_story'
-    | 'rsvp'
-    | 'gallery'
-    | 'prewedding_videos'
-    | 'faqs'
-    | 'dress_code'
-    | 'instagram_links'     // RENAMED
-    | 'wishes'
+  | 'love_story'
+  | 'rsvp'
+  | 'gallery'
+  | 'prewedding_videos'
+  | 'faqs'
+  | 'dress_code'
+  | 'instagram_links' // RENAMED
+  | 'wishes'
 ```
 
 ---
@@ -195,6 +214,7 @@ export type FeatureName =
 ### PUT /api/wedding/config
 
 **Request Body** (partial update):
+
 ```typescript
 {
   groomsInstagramLink?: string | null    // NEW - optional URL
@@ -205,6 +225,7 @@ export type FeatureName =
 ```
 
 **Validation Rules**:
+
 ```typescript
 if (groomsInstagramLink !== undefined) {
   // Validate URL format if not null
@@ -222,6 +243,7 @@ if (brideInstagramLink !== undefined) {
 ```
 
 **Response**:
+
 ```typescript
 {
   success: true,
@@ -240,10 +262,11 @@ if (brideInstagramLink !== undefined) {
 ### WeddingDataProvider Context
 
 **Already updated** in prior work - no changes needed:
+
 ```typescript
 interface WeddingDataContextValue {
-    config: WeddingConfiguration;     // Includes new fields automatically
-    features: Record<FeatureName, boolean>;  // Will use renamed 'instagram_links'
+  config: WeddingConfiguration // Includes new fields automatically
+  features: Record<FeatureName, boolean> // Will use renamed 'instagram_links'
 }
 ```
 
@@ -281,6 +304,7 @@ WHERE feature_name = 'instagram_link';
 ## Summary
 
 ### Changes Required
+
 1. **Schema Files**:
    - `app/db/schema/weddings.ts` - Add 2 columns, mark 1 deprecated
    - `app/db/schema/features.ts` - Rename enum value
@@ -297,11 +321,13 @@ WHERE feature_name = 'instagram_link';
    - API accepts optional fields
 
 ### Validation Strategy
+
 - URL validation for Instagram links (optional but recommended)
 - Length constraints (500 chars max)
 - Plain text only for footer text (no HTML injection)
 
 ### Testing Focus
+
 - Schema migration applies cleanly
 - New fields accept null and valid URLs
 - Old `instagramLink` ignored by application

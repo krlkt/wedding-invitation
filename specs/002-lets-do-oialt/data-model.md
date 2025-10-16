@@ -8,10 +8,12 @@
 ## Existing Database Entities (Reference Only)
 
 ### WeddingConfiguration
+
 **Table**: `wedding_configurations`
 **Source**: `app/db/schema/weddings.ts`
 
 Fields used by preview:
+
 - `id`: text (CUID2) - Primary key
 - `subdomain`: text - For preview header display
 - `groomName`: text - Hero section
@@ -27,10 +29,12 @@ Fields used by preview:
 - `isPublished`: boolean - Preview header status
 
 ### FeatureToggle
+
 **Table**: `feature_toggles`
 **Source**: `app/db/schema/features.ts`
 
 Fields:
+
 - `id`: text (CUID2) - Primary key
 - `weddingConfigId`: text - Foreign key to wedding_configurations
 - `featureName`: enum - One of: `love_story`, `rsvp`, `gallery`, `prewedding_videos`, `faqs`, `dress_code`, `instagram_link`
@@ -41,6 +45,7 @@ Fields:
 ## New TypeScript Interfaces (Frontend Only)
 
 ### FeatureName
+
 **File**: `app/models/template.ts`
 **Purpose**: Type-safe feature toggle names
 
@@ -52,185 +57,198 @@ export type FeatureName =
   | 'prewedding_videos'
   | 'faqs'
   | 'dress_code'
-  | 'instagram_link';
+  | 'instagram_link'
 ```
 
 ### TemplateId
+
 **File**: `app/models/template.ts`
 **Purpose**: Template identifier for future multi-template support
 
 ```typescript
-export type TemplateId = 'template-1'; // Future: | 'template-2' | 'template-3'
+export type TemplateId = 'template-1' // Future: | 'template-2' | 'template-3'
 ```
 
 ### PreviewWeddingConfig
+
 **File**: `app/models/preview.ts`
 **Purpose**: Subset of WeddingConfiguration needed for preview
 
 ```typescript
 export interface PreviewWeddingConfig {
-  id: string;
-  subdomain: string;
-  groomName: string;
-  brideName: string;
-  weddingDate: Date;
-  monogramFilename?: string | null;
-  groomFather?: string | null;
-  groomMother?: string | null;
-  brideFather?: string | null;
-  brideMother?: string | null;
-  instagramLink?: string | null;
-  footerText?: string | null;
-  isPublished: boolean;
+  id: string
+  subdomain: string
+  groomName: string
+  brideName: string
+  weddingDate: Date
+  monogramFilename?: string | null
+  groomFather?: string | null
+  groomMother?: string | null
+  brideFather?: string | null
+  brideMother?: string | null
+  instagramLink?: string | null
+  footerText?: string | null
+  isPublished: boolean
 }
 ```
 
 ### PreviewContent
+
 **File**: `app/models/preview.ts`
 **Purpose**: Aggregated content for all preview sections
 
 ```typescript
 export interface PreviewContent {
-  loveStory?: LoveStoryItem[];
-  gallery?: GalleryPhoto[];
-  faqs?: FAQ[];
-  dressCode?: DressCode;
-  locations?: Location[];
-  bankDetails?: BankDetail[];
+  loveStory?: LoveStoryItem[]
+  gallery?: GalleryPhoto[]
+  faqs?: FAQ[]
+  dressCode?: DressCode
+  locations?: Location[]
+  bankDetails?: BankDetail[]
 }
 ```
 
 ### LoveStoryItem
+
 **File**: `app/models/preview.ts` (if not exists elsewhere)
 **Purpose**: Timeline item for love story section
 
 ```typescript
 export interface LoveStoryItem {
-  id: string;
-  weddingConfigId: string;
-  date: string; // e.g., "2018-05-15"
-  title: string;
-  description: string;
-  order: number;
+  id: string
+  weddingConfigId: string
+  date: string // e.g., "2018-05-15"
+  title: string
+  description: string
+  order: number
 }
 ```
 
 ### GalleryPhoto
+
 **File**: `app/models/preview.ts` (if not exists elsewhere)
 **Purpose**: Photo for gallery section
 
 ```typescript
 export interface GalleryPhoto {
-  id: string;
-  weddingConfigId: string;
-  filename: string;
-  url: string;
-  order: number;
-  createdAt: Date;
+  id: string
+  weddingConfigId: string
+  filename: string
+  url: string
+  order: number
+  createdAt: Date
 }
 ```
 
 ### FAQ
+
 **File**: `app/models/preview.ts` (if not exists elsewhere)
 **Purpose**: FAQ item
 
 ```typescript
 export interface FAQ {
-  id: string;
-  weddingConfigId: string;
-  question: string;
-  answer: string;
-  order: number;
+  id: string
+  weddingConfigId: string
+  question: string
+  answer: string
+  order: number
 }
 ```
 
 ### DressCode
+
 **File**: `app/models/preview.ts` (if not exists elsewhere)
 **Purpose**: Dress code information
 
 ```typescript
 export interface DressCode {
-  id: string;
-  weddingConfigId: string;
-  description: string;
-  photoFilename?: string | null;
-  photoUrl?: string | null;
+  id: string
+  weddingConfigId: string
+  description: string
+  photoFilename?: string | null
+  photoUrl?: string | null
 }
 ```
 
 ### Location
+
 **File**: `app/models/preview.ts` (if not exists elsewhere)
 **Purpose**: Wedding location details
 
 ```typescript
 export interface Location {
-  id: string;
-  weddingConfigId: string;
-  type: 'ceremony' | 'reception';
-  name: string;
-  address: string;
-  dateTime: Date;
-  mapsUrl?: string | null;
+  id: string
+  weddingConfigId: string
+  type: 'ceremony' | 'reception'
+  name: string
+  address: string
+  dateTime: Date
+  mapsUrl?: string | null
 }
 ```
 
 ### BankDetail
+
 **File**: `app/models/preview.ts` (if not exists elsewhere)
 **Purpose**: Bank account for gift section
 
 ```typescript
 export interface BankDetail {
-  id: string;
-  weddingConfigId: string;
-  bankName: string;
-  accountName: string;
-  accountNumber: string;
-  order: number;
+  id: string
+  weddingConfigId: string
+  bankName: string
+  accountName: string
+  accountNumber: string
+  order: number
 }
 ```
 
 ### PreviewConfig
+
 **File**: `app/models/preview.ts`
 **Purpose**: Complete preview data structure
 
 ```typescript
 export interface PreviewConfig {
-  config: PreviewWeddingConfig;
-  features: Record<FeatureName, boolean>;
-  content: PreviewContent;
+  config: PreviewWeddingConfig
+  features: Record<FeatureName, boolean>
+  content: PreviewContent
 }
 ```
 
 ### TemplateProps
+
 **File**: `app/models/template.ts`
 **Purpose**: Props for template components
 
 ```typescript
 export interface TemplateProps {
-  config: PreviewConfig;
-  templateId: TemplateId;
+  config: PreviewConfig
+  templateId: TemplateId
 }
 ```
 
 ### TemplateRendererProps
+
 **File**: `app/models/template.ts`
 **Purpose**: Props for TemplateRenderer component
 
 ```typescript
 export interface TemplateRendererProps {
-  templateId?: TemplateId;
-  config: PreviewConfig;
-  containerClassName?: string;
+  templateId?: TemplateId
+  config: PreviewConfig
+  containerClassName?: string
 }
 ```
 
 ### Template1PreviewProps
+
 **File**: `app/models/template.ts`
 **Purpose**: Props for Template1Preview component
 
 ```typescript
 export interface Template1PreviewProps {
-  config: PreviewConfig;
+  config: PreviewConfig
 }
 ```
 
@@ -281,12 +299,14 @@ LivePreview (existing)
 ## Validation Rules
 
 ### PreviewWeddingConfig
+
 - `groomName`: Required, non-empty string
 - `brideName`: Required, non-empty string
 - `weddingDate`: Required, valid date
 - `subdomain`: Required, non-empty string
 
 ### PreviewContent
+
 - All fields optional (graceful handling if missing)
 - `loveStory`: Array, ordered by `order` field
 - `gallery`: Array, ordered by `order` field
@@ -294,6 +314,7 @@ LivePreview (existing)
 - `locations`: Array, grouped by type
 
 ### Feature Toggles
+
 - Must be one of 7 valid FeatureName values
 - Boolean state (enabled/disabled)
 - If feature disabled, corresponding content ignored

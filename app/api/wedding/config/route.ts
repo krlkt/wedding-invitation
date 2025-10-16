@@ -7,7 +7,11 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/app/lib/session'
-import { getWeddingConfigById, updateWeddingConfiguration, getFeatureToggles } from '@/app/lib/wedding-service'
+import {
+  getWeddingConfigById,
+  updateWeddingConfiguration,
+  getFeatureToggles,
+} from '@/app/lib/wedding-service'
 import { isValidInstagramUrl } from '@/app/lib/validation'
 
 export async function GET(request: NextRequest) {

@@ -33,18 +33,18 @@
 
 **Existing Constraints**:
 
--   `subdomain` has UNIQUE constraint (line 18 in schema)
--   `userId` is unique (one wedding per user)
--   Foreign key cascade delete on user
+- `subdomain` has UNIQUE constraint (line 18 in schema)
+- `userId` is unique (one wedding per user)
+- Foreign key cascade delete on user
 
 **Validation Rules** (for this feature):
 
--   Subdomain must be DNS-compliant:
-    -   Length: 1-63 characters
-    -   Characters: `[a-z0-9-]` only
-    -   Cannot start or end with hyphen
-    -   Case-insensitive (stored lowercase)
--   Subdomain must be globally unique across all wedding configurations
+- Subdomain must be DNS-compliant:
+  - Length: 1-63 characters
+  - Characters: `[a-z0-9-]` only
+  - Cannot start or end with hyphen
+  - Case-insensitive (stored lowercase)
+- Subdomain must be globally unique across all wedding configurations
 
 ###
 
@@ -57,9 +57,9 @@ Preview Session (Conceptual)
 ```typescript
 // Session structure (existing)
 {
-    userId: string;
-    weddingConfigId: string;
-    email: string;
+  userId: string
+  weddingConfigId: string
+  email: string
 }
 ```
 
@@ -101,11 +101,11 @@ Success               ↓
 
 **States**:
 
--   `Generating`: Initial subdomain creation from couple names
--   `Checking`: Querying database for existing subdomain
--   `Retrying`: Collision detected, generating new variant
--   `Created`: Unique subdomain assigned and persisted
--   `Failed`: Max retry attempts exceeded
+- `Generating`: Initial subdomain creation from couple names
+- `Checking`: Querying database for existing subdomain
+- `Retrying`: Collision detected, generating new variant
+- `Created`: Unique subdomain assigned and persisted
+- `Failed`: Max retry attempts exceeded
 
 ### Preview Access States
 
@@ -124,16 +124,16 @@ Render preview
 
 ### Database Level
 
--   **Unique constraint** on `subdomain` field (existing)
--   **Foreign key** from `userId` to `user_accounts` with cascade delete
--   **Not null** constraint on subdomain
+- **Unique constraint** on `subdomain` field (existing)
+- **Foreign key** from `userId` to `user_accounts` with cascade delete
+- **Not null** constraint on subdomain
 
 ### Application Level
 
--   **Pre-insertion validation**: Check subdomain availability before INSERT
--   **Retry logic**: Up to 5 attempts to generate unique subdomain
--   **Format validation**: Ensure DNS compliance before storage
--   **Error handling**: Graceful failure with user-friendly messages
+- **Pre-insertion validation**: Check subdomain availability before INSERT
+- **Retry logic**: Up to 5 attempts to generate unique subdomain
+- **Format validation**: Ensure DNS compliance before storage
+- **Error handling**: Graceful failure with user-friendly messages
 
 ## Queries
 
@@ -144,21 +144,21 @@ Render preview
 ```typescript
 // In wedding-service.ts
 async function isSubdomainAvailable(subdomain: string): Promise<boolean> {
-    const existing = await db
-        .select()
-        .from(weddingConfigurations)
-        .where(eq(weddingConfigurations.subdomain, subdomain))
-        .limit(1);
+  const existing = await db
+    .select()
+    .from(weddingConfigurations)
+    .where(eq(weddingConfigurations.subdomain, subdomain))
+    .limit(1)
 
-    return existing.length === 0;
+  return existing.length === 0
 }
 ```
 
 **Performance**:
 
--   Uses existing unique index on subdomain
--   O(log n) lookup time
--   < 5ms expected query time
+- Uses existing unique index on subdomain
+- O(log n) lookup time
+- < 5ms expected query time
 
 ### Modified Query
 
@@ -167,27 +167,27 @@ async function isSubdomainAvailable(subdomain: string): Promise<boolean> {
 ```typescript
 // In wedding-service.ts
 async function createWeddingConfiguration(
-    userId: string,
-    groomName: string,
-    brideName: string
+  userId: string,
+  groomName: string,
+  brideName: string
 ): Promise<WeddingConfiguration> {
-    // NEW: Retry loop for subdomain uniqueness
-    let subdomain: string;
-    let attempts = 0;
-    const maxAttempts = 5;
+  // NEW: Retry loop for subdomain uniqueness
+  let subdomain: string
+  let attempts = 0
+  const maxAttempts = 5
 
-    while (attempts < maxAttempts) {
-        subdomain = generateSubdomain(groomName, brideName);
-        const available = await isSubdomainAvailable(subdomain);
-        if (available) break;
-        attempts++;
-    }
+  while (attempts < maxAttempts) {
+    subdomain = generateSubdomain(groomName, brideName)
+    const available = await isSubdomainAvailable(subdomain)
+    if (available) break
+    attempts++
+  }
 
-    if (attempts >= maxAttempts) {
-        throw new Error('Unable to generate unique subdomain. Please try again.');
-    }
+  if (attempts >= maxAttempts) {
+    throw new Error('Unable to generate unique subdomain. Please try again.')
+  }
 
-    // Existing creation logic...
+  // Existing creation logic...
 }
 ```
 

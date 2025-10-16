@@ -19,11 +19,13 @@
 **Objective**: Verify preview displays actual template instead of placeholder text
 
 ### Steps
+
 1. Navigate to admin dashboard at `/admin`
 2. Locate the live preview panel (right side of dashboard)
 3. Observe the preview content
 
 ### Expected Results
+
 ✅ Preview shows actual wedding invitation layout (not "Feature enabled ✓" text)
 ✅ Hero section displays couple names, date, parent names (if configured)
 ✅ Monogram displays if uploaded
@@ -32,6 +34,7 @@
 ✅ Preview is scrollable
 
 ### Pass Criteria
+
 - All hero content visible and styled correctly
 - Preview matches guest-facing template styling
 - No console errors
@@ -43,6 +46,7 @@
 **Objective**: Verify love story section appears/disappears based on toggle
 
 ### Steps
+
 1. In admin dashboard, locate "Love Story" feature toggle
 2. Ensure Love Story toggle is **ON**
 3. Observe preview for Love Story section
@@ -52,6 +56,7 @@
 7. Observe preview
 
 ### Expected Results
+
 ✅ **When ON**: Love Story section visible with timeline
 ✅ **When ON + empty**: Shows "Add your love story" empty state
 ✅ **When ON + data**: Timeline items display in order
@@ -59,6 +64,7 @@
 ✅ Preview updates within <300ms of toggle change
 
 ### Pass Criteria
+
 - Section visibility matches toggle state
 - Timeline data renders correctly
 - Empty state shown when no data
@@ -71,6 +77,7 @@
 **Objective**: Verify gallery section conditional rendering
 
 ### Steps
+
 1. Locate "Gallery" feature toggle
 2. Ensure Gallery toggle is **ON**
 3. Observe preview for Gallery section
@@ -80,6 +87,7 @@
 7. Observe preview
 
 ### Expected Results
+
 ✅ **When ON**: Gallery section visible with photo grid
 ✅ **When ON + empty**: Shows "Upload photos" empty state
 ✅ **When ON + photos**: Photos display in grid layout
@@ -87,6 +95,7 @@
 ✅ Photos load with proper Next.js Image component optimization
 
 ### Pass Criteria
+
 - Gallery appears/disappears based on toggle
 - Photos render without layout shift
 - Empty state shown when no photos
@@ -99,6 +108,7 @@
 **Objective**: Verify RSVP form conditional rendering
 
 ### Steps
+
 1. Locate "RSVP" feature toggle
 2. Toggle RSVP to **ON**
 3. Observe preview for RSVP section
@@ -106,12 +116,14 @@
 5. Observe preview
 
 ### Expected Results
+
 ✅ **When ON**: RSVP section visible with form
 ✅ **When OFF**: RSVP section completely hidden
 ✅ Form fields display but are preview-only (not functional in admin)
 ✅ Form uses mock data (e.g., "Preview Guest")
 
 ### Pass Criteria
+
 - RSVP form appears/disappears
 - Form styling matches template
 - No console errors about missing props
@@ -123,6 +135,7 @@
 **Objective**: Verify FAQs section conditional rendering
 
 ### Steps
+
 1. Locate "FAQs" feature toggle
 2. Ensure FAQs toggle is **ON**
 3. Observe preview for FAQs section
@@ -131,12 +144,14 @@
 6. Observe preview
 
 ### Expected Results
+
 ✅ **When ON**: FAQs section visible
 ✅ **When ON + empty**: Shows "Add FAQs" empty state
 ✅ **When ON + data**: FAQ accordion displays
 ✅ **When OFF**: FAQs section completely hidden
 
 ### Pass Criteria
+
 - FAQs visibility matches toggle
 - FAQ data renders correctly
 - Empty state when no data
@@ -148,6 +163,7 @@
 **Objective**: Verify dress code section conditional rendering
 
 ### Steps
+
 1. Locate "Dress Code" feature toggle
 2. Ensure Dress Code toggle is **ON**
 3. Observe preview for Dress Code section
@@ -156,12 +172,14 @@
 6. Observe preview
 
 ### Expected Results
+
 ✅ **When ON**: Dress Code section visible
 ✅ **When ON + empty**: Shows "Configure dress code" empty state
 ✅ **When ON + data**: Dress code text and photo display
 ✅ **When OFF**: Dress Code section completely hidden
 
 ### Pass Criteria
+
 - Dress code visibility matches toggle
 - Photo renders correctly if present
 - Empty state when not configured
@@ -173,6 +191,7 @@
 **Objective**: Verify prewedding video section conditional rendering
 
 ### Steps
+
 1. Locate "Prewedding Videos" feature toggle
 2. Toggle Prewedding Videos to **ON**
 3. Observe preview for Prewedding Video section
@@ -181,12 +200,14 @@
 6. Observe preview
 
 ### Expected Results
+
 ✅ **When ON**: Prewedding video section visible
 ✅ **When ON + empty**: Shows "Add video URL" empty state
 ✅ **When ON + URL**: YouTube embed displays
 ✅ **When OFF**: Video section completely hidden
 
 ### Pass Criteria
+
 - Video section visibility matches toggle
 - YouTube embed loads correctly
 - Empty state when no URL
@@ -198,6 +219,7 @@
 **Objective**: Verify Instagram link in footer conditional rendering
 
 ### Steps
+
 1. Locate "Instagram Link" feature toggle
 2. Configure Instagram URL in wedding settings
 3. Toggle Instagram Link to **ON**
@@ -207,12 +229,14 @@
 7. Observe footer
 
 ### Expected Results
+
 ✅ **When ON**: Instagram link visible in footer
 ✅ **When ON + no URL**: No link displayed
 ✅ **When OFF**: Instagram link hidden
 ✅ Footer text still displays regardless of toggle
 
 ### Pass Criteria
+
 - Instagram link visibility matches toggle
 - Link opens in new tab
 - Footer remains styled correctly
@@ -224,6 +248,7 @@
 **Objective**: Verify multiple feature toggles work together
 
 ### Steps
+
 1. Disable ALL feature toggles
 2. Observe preview (should show only Hero + Gift + Wishes + Footer)
 3. Enable Love Story toggle
@@ -234,6 +259,7 @@
 8. Observe Gallery disappears, other sections remain
 
 ### Expected Results
+
 ✅ All disabled: Only non-optional sections visible
 ✅ Progressive enabling: Sections appear in correct order
 ✅ Individual toggle changes don't affect other sections
@@ -241,6 +267,7 @@
 ✅ No layout shifts between toggle changes
 
 ### Pass Criteria
+
 - Sections appear in template order
 - Independent toggle control
 - Smooth transitions
@@ -253,6 +280,7 @@
 **Objective**: Verify preview updates are performant
 
 ### Steps
+
 1. Open browser DevTools Performance tab
 2. Start performance recording
 3. Toggle 5 different features on/off rapidly
@@ -260,6 +288,7 @@
 5. Analyze toggle response time
 
 ### Expected Results
+
 ✅ Each toggle change updates preview in <300ms
 ✅ No layout thrashing (excessive reflows)
 ✅ No memory leaks (check DevTools Memory)
@@ -267,6 +296,7 @@
 ✅ No dropped frames during updates
 
 ### Pass Criteria
+
 - Toggle response < 300ms
 - Smooth scrolling maintained
 - Memory usage stable
@@ -278,12 +308,14 @@
 **Objective**: Verify preview handles missing data gracefully
 
 ### Steps
+
 1. Create new test wedding configuration
 2. Do NOT add any content (love story, gallery, FAQs, etc.)
 3. Navigate to admin dashboard
 4. Observe preview
 
 ### Expected Results
+
 ✅ Preview displays without errors
 ✅ Hero section shows configured names + date
 ✅ Enabled features show empty state messages
@@ -291,6 +323,7 @@
 ✅ Preview remains scrollable and styled
 
 ### Pass Criteria
+
 - No JavaScript errors
 - All empty states display correctly
 - UI remains functional
@@ -302,6 +335,7 @@
 **Objective**: Verify preview header displays correct metadata
 
 ### Steps
+
 1. Navigate to admin dashboard
 2. Observe preview header (browser window controls area)
 3. Note subdomain display
@@ -310,6 +344,7 @@
 6. Observe status indicator change
 
 ### Expected Results
+
 ✅ Browser window controls (red, yellow, green dots) visible
 ✅ Subdomain displays: `{subdomain}.yourdomain.com`
 ✅ Publish status shows 🔴 Draft when unpublished
@@ -317,6 +352,7 @@
 ✅ Header styling matches current LivePreview
 
 ### Pass Criteria
+
 - All header elements visible
 - Status updates correctly
 - Subdomain displays correctly
@@ -328,6 +364,7 @@
 **Objective**: Verify preview fits properly in dashboard
 
 ### Steps
+
 1. Navigate to admin dashboard
 2. Observe preview container
 3. Resize browser window (if applicable)
@@ -335,6 +372,7 @@
 5. Test scroll behavior
 
 ### Expected Results
+
 ✅ Preview is scaled down to fit dashboard container
 ✅ Preview maintains aspect ratio
 ✅ Preview has rounded corners and shadow (like current)
@@ -342,6 +380,7 @@
 ✅ Preview doesn't overflow dashboard container
 
 ### Pass Criteria
+
 - Proper scaling applied
 - Scrollable content
 - No overflow issues
@@ -353,6 +392,7 @@
 **Objective**: Verify preview updates when configuration changes
 
 ### Steps
+
 1. Open admin dashboard with preview visible
 2. In separate tab, modify wedding configuration (change names, date, etc.)
 3. Return to dashboard
@@ -361,12 +401,14 @@
 6. Observe preview updates with new data
 
 ### Expected Results
+
 ✅ Preview does not auto-update (by design)
 ✅ Toggling feature triggers data refresh
 ✅ New data displays after refresh
 ✅ No stale data issues
 
 ### Pass Criteria
+
 - Refresh mechanism works
 - Updated data displays correctly
 
@@ -377,6 +419,7 @@
 **Objective**: Verify preview handles API errors gracefully
 
 ### Steps
+
 1. Open DevTools Network tab
 2. Throttle network to "Slow 3G"
 3. Navigate to admin dashboard
@@ -388,6 +431,7 @@
 9. Observe error handling
 
 ### Expected Results
+
 ✅ Loading spinner shows while fetching
 ✅ "Loading preview..." message displays
 ✅ On error: Graceful error message (not blank screen)
@@ -395,6 +439,7 @@
 ✅ No infinite loading states
 
 ### Pass Criteria
+
 - Loading states work
 - Error states display user-friendly message
 - No console spam
@@ -404,16 +449,19 @@
 ## Accessibility Testing
 
 ### Keyboard Navigation
+
 1. Tab through preview elements
 2. Verify focus indicators
 3. Test interactive elements (links, buttons)
 
 ### Screen Reader
+
 1. Use VoiceOver (Mac) or NVDA (Windows)
 2. Navigate through preview
 3. Verify content is announced correctly
 
 ### Color Contrast
+
 1. Use DevTools Lighthouse
 2. Run accessibility audit
 3. Verify no contrast issues
@@ -423,6 +471,7 @@
 ## Browser Compatibility
 
 Test in:
+
 - ✅ Chrome (latest)
 - ✅ Firefox (latest)
 - ✅ Safari (latest)
@@ -433,6 +482,7 @@ Test in:
 ## Regression Testing
 
 Verify existing functionality still works:
+
 - ✅ Admin dashboard loads
 - ✅ Feature toggle switches work
 - ✅ Wedding configuration forms work
@@ -442,12 +492,12 @@ Verify existing functionality still works:
 
 ## Performance Benchmarks
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Initial preview load | < 1s | DevTools Network |
+| Metric               | Target  | Measurement          |
+| -------------------- | ------- | -------------------- |
+| Initial preview load | < 1s    | DevTools Network     |
 | Toggle response time | < 300ms | DevTools Performance |
-| Memory usage | Stable | DevTools Memory |
-| Preview scroll FPS | 60 fps | DevTools Performance |
+| Memory usage         | Stable  | DevTools Memory      |
+| Preview scroll FPS   | 60 fps  | DevTools Performance |
 
 ---
 
@@ -480,6 +530,6 @@ Verify existing functionality still works:
 - [ ] No regressions in existing features
 - [ ] Documentation updated
 
-**Tested by**: _____________
-**Date**: _____________
-**Approved by**: _____________
+**Tested by**: **\*\***\_**\*\***
+**Date**: **\*\***\_**\*\***
+**Approved by**: **\*\***\_**\*\***

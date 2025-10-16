@@ -8,6 +8,7 @@
 ---
 
 ## ⚡ Quick Guidelines
+
 - ✅ Focus on WHAT users need and WHY
 - ❌ Avoid HOW to implement (no tech stack, APIs, code structure)
 - 👥 Written for business stakeholders, not developers
@@ -17,6 +18,7 @@
 ## Clarifications
 
 ### Session 2025-10-12
+
 - Q: When a user toggles a feature on/off, should the preview update optimistically (immediately) or wait for backend confirmation? → A: Hybrid - Preview updates instantly with optimistic UI, show loading indicator while backend confirms, rollback on error
 - Q: When a feature is enabled but has no content (e.g., Gallery enabled but no photos uploaded), what should the preview display? → A: Sample/demo content - Show example photos/content to illustrate what the section will look like
 - Q: Should the live preview enforce authentication - meaning only authenticated admin users can view it? → A: Yes, require auth - Preview only accessible to logged-in admin users with active session
@@ -24,9 +26,10 @@
 
 ---
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### Primary User Story
+
 As a couple managing their wedding website, I want to see a live preview of my wedding invitation that reflects the actual appearance of my guest-facing website (not just placeholder text), so that I can understand exactly how my configuration changes will look to my guests before publishing.
 
 When I enable or disable feature toggles (Love Story, RSVP, Gallery, Prewedding Videos, FAQs, Dress Code, Instagram Link), the live preview should immediately show or hide those sections with their actual content and styling from the real invitation template.
@@ -52,6 +55,7 @@ When I enable or disable feature toggles (Love Story, RSVP, Gallery, Prewedding 
 9. **Given** I am not logged in as an admin user, **When** I attempt to access the admin dashboard with live preview, **Then** I am redirected to the login page and cannot view the preview
 
 ### Edge Cases
+
 - **All features disabled**: Preview shows hero section (names, date, monogram, parent names) plus non-optional sections (Gift, Wishes, Footer)
 - **Feature enabled with no content**: Preview displays sample/demo content appropriate to that section (e.g., sample photos for Gallery, sample timeline for Love Story)
 - **Initial loading**: Preview displays loading indicator until configuration data is fetched
@@ -61,7 +65,7 @@ When I enable or disable feature toggles (Love Story, RSVP, Gallery, Prewedding 
 - **Session expires during preview**: User is redirected to login page; unsaved toggle changes are lost
 - **Unsupported browser**: Admin users on older/unsupported browsers may experience degraded functionality or visual issues (no explicit browser check required)
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -102,15 +106,18 @@ When I enable or disable feature toggles (Love Story, RSVP, Gallery, Prewedding 
 ---
 
 ## Review & Acceptance Checklist
-*GATE: Automated checks run during main() execution*
+
+_GATE: Automated checks run during main() execution_
 
 ### Content Quality
+
 - [x] No implementation details (languages, frameworks, APIs)
 - [x] Focused on user value and business needs
 - [x] Written for non-technical stakeholders
 - [x] All mandatory sections completed
 
 ### Requirement Completeness
+
 - [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
@@ -120,7 +127,8 @@ When I enable or disable feature toggles (Love Story, RSVP, Gallery, Prewedding 
 ---
 
 ## Execution Status
-*Updated by main() during processing*
+
+_Updated by main() during processing_
 
 - [x] User description parsed
 - [x] Key concepts extracted

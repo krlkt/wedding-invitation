@@ -184,7 +184,7 @@ export async function toggleFeature(
   isEnabled: boolean
 ): Promise<FeatureToggle> {
   // Import FeatureName type for validation
-  type FeatureName = typeof import('@/app/db/schema/features').FEATURE_NAMES[number]
+  type FeatureName = (typeof import('@/app/db/schema/features').FEATURE_NAMES)[number]
 
   // Check if feature toggle exists
   const [existing] = await db

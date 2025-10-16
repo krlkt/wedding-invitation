@@ -23,7 +23,7 @@ paths:
                   maxLength: 500
                   pattern: '^https://(www\.)?instagram\.com/.+'
                   description: Instagram profile URL for the groom
-                  example: "https://instagram.com/groomhandle"
+                  example: 'https://instagram.com/groomhandle'
                 brideInstagramLink:
                   type: string
                   format: uri
@@ -31,13 +31,13 @@ paths:
                   maxLength: 500
                   pattern: '^https://(www\.)?instagram\.com/.+'
                   description: Instagram profile URL for the bride
-                  example: "https://instagram.com/bridehandle"
+                  example: 'https://instagram.com/bridehandle'
                 footerText:
                   type: string
                   nullable: true
                   maxLength: 500
                   description: Custom footer text for the wedding website
-                  example: "Looking forward to celebrating with you!"
+                  example: 'Looking forward to celebrating with you!'
                 groomName:
                   type: string
                   description: Name of the groom
@@ -61,12 +61,12 @@ paths:
                   type: string
                   nullable: true
               example:
-                groomName: "John"
-                brideName: "Jane"
-                weddingDate: "2025-06-15"
-                groomsInstagramLink: "https://instagram.com/john_doe"
-                brideInstagramLink: "https://instagram.com/jane_doe"
-                footerText: "Thank you for being part of our special day!"
+                groomName: 'John'
+                brideName: 'Jane'
+                weddingDate: '2025-06-15'
+                groomsInstagramLink: 'https://instagram.com/john_doe'
+                brideInstagramLink: 'https://instagram.com/jane_doe'
+                footerText: 'Thank you for being part of our special day!'
       responses:
         '200':
           description: Configuration updated successfully
@@ -92,7 +92,7 @@ paths:
                     example: false
                   error:
                     type: string
-                    example: "Invalid Instagram URL for groom"
+                    example: 'Invalid Instagram URL for groom'
         '401':
           description: Unauthorized
           content:
@@ -105,7 +105,7 @@ paths:
                     example: false
                   error:
                     type: string
-                    example: "Unauthorized"
+                    example: 'Unauthorized'
 
     get:
       summary: Get wedding configuration
@@ -135,7 +135,7 @@ paths:
                     example: false
                   error:
                     type: string
-                    example: "Unauthorized"
+                    example: 'Unauthorized'
 
 components:
   schemas:
@@ -199,19 +199,19 @@ components:
           type: integer
           description: Last update timestamp
       example:
-        id: "clxyz123abc"
-        userId: "usr_abc123"
-        subdomain: "john-and-jane"
-        groomName: "John Doe"
-        brideName: "Jane Smith"
+        id: 'clxyz123abc'
+        userId: 'usr_abc123'
+        subdomain: 'john-and-jane'
+        groomName: 'John Doe'
+        brideName: 'Jane Smith'
         weddingDate: 1718409600000
-        groomFather: "Robert Doe"
-        groomMother: "Mary Doe"
-        brideFather: "James Smith"
-        brideMother: "Patricia Smith"
-        groomsInstagramLink: "https://instagram.com/john_doe"
-        brideInstagramLink: "https://instagram.com/jane_smith"
-        footerText: "Thank you for celebrating with us!"
+        groomFather: 'Robert Doe'
+        groomMother: 'Mary Doe'
+        brideFather: 'James Smith'
+        brideMother: 'Patricia Smith'
+        groomsInstagramLink: 'https://instagram.com/john_doe'
+        brideInstagramLink: 'https://instagram.com/jane_smith'
+        footerText: 'Thank you for celebrating with us!'
         isPublished: true
         features:
           love_story: true

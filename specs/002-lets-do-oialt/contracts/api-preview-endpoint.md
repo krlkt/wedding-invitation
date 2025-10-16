@@ -9,19 +9,23 @@
 ## Request
 
 ### Method
+
 ```
 GET /api/wedding/preview
 ```
 
 ### Headers
+
 ```
 Cookie: session=<session-token>
 ```
 
 ### Query Parameters
+
 None
 
 ### Authentication
+
 - Must be authenticated user with active session
 - Wedding config is determined from session user's `weddingConfigId`
 
@@ -133,6 +137,7 @@ None
 ### Field Descriptions
 
 #### config
+
 - **id**: Wedding configuration unique identifier
 - **subdomain**: Wedding subdomain (for preview header)
 - **groomName**: Groom's first name (required)
@@ -148,6 +153,7 @@ None
 - **isPublished**: Publication status for preview header
 
 #### features
+
 - **love_story**: Boolean - Show/hide love story timeline
 - **rsvp**: Boolean - Show/hide RSVP form
 - **gallery**: Boolean - Show/hide photo gallery
@@ -157,6 +163,7 @@ None
 - **instagram_link**: Boolean - Show/hide Instagram link in footer
 
 #### content
+
 All fields are optional and only populated if corresponding feature is enabled:
 
 - **loveStory**: Array of timeline items (ordered by `order`)
@@ -210,6 +217,7 @@ All fields are optional and only populated if corresponding feature is enabled:
 ### Error Responses
 
 #### 401 Unauthorized
+
 ```json
 {
   "error": "Unauthorized",
@@ -218,6 +226,7 @@ All fields are optional and only populated if corresponding feature is enabled:
 ```
 
 #### 404 Not Found
+
 ```json
 {
   "error": "Not Found",
@@ -226,6 +235,7 @@ All fields are optional and only populated if corresponding feature is enabled:
 ```
 
 #### 500 Internal Server Error
+
 ```json
 {
   "error": "Internal Server Error",
@@ -238,6 +248,7 @@ All fields are optional and only populated if corresponding feature is enabled:
 ## Implementation Notes
 
 ### Data Fetching Strategy
+
 1. Query `wedding_configurations` by user's weddingConfigId
 2. Query `feature_toggles` for weddingConfigId
 3. For each enabled feature, query corresponding table:
@@ -251,12 +262,14 @@ All fields are optional and only populated if corresponding feature is enabled:
 5. Return response
 
 ### Performance Considerations
+
 - Use Promise.all for parallel queries
 - Limit gallery to 20 photos for preview (performance)
 - Cache response for 30 seconds (preview doesn't need real-time)
 - Use database indexes on weddingConfigId
 
 ### SQL Query Pattern (Example)
+
 ```sql
 -- 1. Get config
 SELECT * FROM wedding_configurations WHERE id = ?
@@ -278,6 +291,7 @@ SELECT * FROM gallery_photos WHERE wedding_config_id = ? ORDER BY order ASC LIMI
 ## Testing Contract
 
 ### Unit Tests
+
 - Mock database responses
 - Verify response structure matches contract
 - Test with missing content
@@ -287,6 +301,7 @@ SELECT * FROM gallery_photos WHERE wedding_config_id = ? ORDER BY order ASC LIMI
 - Test missing wedding config
 
 ### Integration Tests
+
 - Test end-to-end with real database
 - Verify data consistency
 - Test performance (<500ms response time)
@@ -300,6 +315,7 @@ Current endpoint: `GET /api/wedding/config`
 Returns: `{ data: WeddingConfiguration & { features: Record<string, boolean> } }`
 
 New endpoint adds:
+
 - Consolidated content for all sections
 - Optimized for preview use case
 - Single request vs. multiple requests

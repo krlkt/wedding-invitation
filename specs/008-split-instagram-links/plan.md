@@ -4,6 +4,7 @@
 **Input**: Feature specification from `/specs/008-split-instagram-links/spec.md`
 
 ## Execution Flow (/plan command scope)
+
 ```
 1. Load feature spec from Input path ✓
 2. Fill Technical Context ✓
@@ -17,9 +18,11 @@
 ```
 
 ## Summary
+
 Split the single `instagramLink` field into separate `groomsInstagramLink` and `brideInstagramLink` fields, and reorganize these fields along with `footerText` from the Basic Information tab to the Content tab in the admin dashboard. The existing instagram_link feature toggle will be renamed to be more descriptive while maintaining single control over both links. Existing data will be cleared (testing data only).
 
 ## Technical Context
+
 **Language/Version**: TypeScript 5.x, Next.js 14.2.4
 **Primary Dependencies**: React 18, Drizzle ORM, Turso (libSQL), shadcn/ui, Tailwind CSS
 **Storage**: SQLite database via Turso with Drizzle ORM
@@ -31,9 +34,11 @@ Split the single `instagramLink` field into separate `groomsInstagramLink` and `
 **Scale/Scope**: Single-tenant configuration per user, low-frequency updates
 
 ## Constitution Check
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 ### Technology Stack Compliance
+
 - ✅ Next.js 14.2.4 with App Router architecture (existing)
 - ✅ TypeScript strict mode (existing codebase standard)
 - ✅ Drizzle ORM for database operations (existing)
@@ -41,26 +46,31 @@ Split the single `instagramLink` field into separate `groomsInstagramLink` and `
 - ✅ React Hook Form for form handling (existing in ConfigDashboard)
 
 ### Performance-First Development
+
 - ✅ Server Components used for data fetching (existing pattern in app/preview/page.tsx)
 - ✅ Client Components only where needed (ConfigDashboard is 'use client' for interactivity)
 - ✅ Database operations optimized (simple column additions/renames)
 
 ### Component Architecture Standards
+
 - ✅ Functional components (existing codebase standard)
 - ✅ Feature-based organization (app/components/preview/, app/db/schema/)
 - ✅ Context providers for shared state (useWeddingData already exists and will pass features)
 
 ### Code Quality Requirements
+
 - ✅ ESLint and Prettier configured (existing)
 - ✅ TypeScript strict mode (existing)
 - ✅ File organization follows feature-based structure (existing)
 
 ### Data & State Management
+
 - ✅ Database models defined in app/db/schema/ (existing)
 - ✅ API routes for mutations (existing pattern in app/api/wedding/config/)
 - ✅ Context providers for state (WeddingDataProvider exists)
 
 ### Testing Standards
+
 - ⚠️ **REQUIRES ATTENTION**: TDD workflow must be followed for this feature
   - Unit tests for database migrations
   - Component tests for UI changes
@@ -68,11 +78,13 @@ Split the single `instagramLink` field into separate `groomsInstagramLink` and `
   - E2E tests for admin dashboard flow
 
 ### Next.js 14 Data Fetching Patterns
+
 - ✅ Server Components fetch data (existing in app/preview/page.tsx)
 - ✅ API routes used appropriately (existing /api/wedding/config endpoints)
 - ✅ No useEffect + fetch pattern for initial loads
 
 ### Git Branch Naming Convention
+
 - ✅ Using existing OIALT-8-templating-feature branch (follows OIALT-{number}-{description} pattern)
 
 **Constitution Check Status**: PASS with TDD requirement
@@ -80,6 +92,7 @@ Split the single `instagramLink` field into separate `groomsInstagramLink` and `
 ## Project Structure
 
 ### Documentation (this feature)
+
 ```
 specs/008-split-instagram-links/
 ├── plan.md              # This file
@@ -91,6 +104,7 @@ specs/008-split-instagram-links/
 ```
 
 ### Source Code (repository root)
+
 ```
 app/
 ├── db/
@@ -157,7 +171,8 @@ tests/
 ---
 
 ## Phase 1: Design & Contracts
-*Prerequisites: research.md complete* ✅
+
+_Prerequisites: research.md complete_ ✅
 
 ### Artifacts Generated
 
@@ -186,22 +201,26 @@ tests/
 ### Design Decisions Summary
 
 **Database**:
+
 - Two new nullable columns: `grooms_instagram_link`, `bride_instagram_link`
 - Old `instagram_link` deprecated but retained (no data loss)
 - Feature toggle renamed: `instagram_link` → `instagram_links`
 
 **UI**:
+
 - New `ContentForm` component replaces Content tab placeholder
 - Follows `BasicInfoForm` pattern (React Hook Form)
 - Three fields: Groom's Instagram, Bride's Instagram, Footer Text
 - URL validation with clear error messages
 
 **Template**:
+
 - Footer shows 0, 1, or 2 Instagram links dynamically
 - Personalized text: "Follow {name} on Instagram"
 - Feature toggle `instagram_links` controls visibility
 
 **API**:
+
 - Backward compatible (new fields optional)
 - URL validation on server side
 - Old `instagramLink` ignored by application logic
@@ -209,15 +228,18 @@ tests/
 ### Constitution Re-check
 
 **Technology Stack**: ✅ Pass
+
 - Next.js 14.2.4 App Router (no changes)
 - TypeScript strict mode (maintained)
 - Drizzle ORM for schema changes (constitutional)
 
 **Performance**: ✅ Pass
+
 - Simple column additions (no performance impact)
 - Optimistic UI in dashboard (planned)
 
 **Testing**: ⚠️ Requires Implementation
+
 - TDD workflow must be followed during Phase 4
 - Contract tests, unit tests, integration tests, e2e tests planned
 
@@ -226,46 +248,28 @@ tests/
 ---
 
 ## Phase 2: Task Planning Approach
-*This section describes what the /tasks command will do - DO NOT execute during /plan*
+
+_This section describes what the /tasks command will do - DO NOT execute during /plan_
 
 ### Task Generation Strategy
 
 **From Data Model**:
+
 1. Update database schema files (weddings.ts, features.ts)
 2. Create migration script
 3. Update TypeScript types (auto-inferred but verify)
 4. Write unit tests for schema changes
 
-**From API Contracts**:
-5. Write contract tests for PUT /api/wedding/config (new fields)
-6. Write contract tests for PUT /api/wedding/config/features (renamed toggle)
-7. Update API route handlers to accept new fields
-8. Add URL validation logic
-9. Update service layer (wedding-service.ts)
+**From API Contracts**: 5. Write contract tests for PUT /api/wedding/config (new fields) 6. Write contract tests for PUT /api/wedding/config/features (renamed toggle) 7. Update API route handlers to accept new fields 8. Add URL validation logic 9. Update service layer (wedding-service.ts)
 
-**From UI Requirements**:
-10. Remove fields from BasicInfoForm component
-11. Create ContentForm component
-12. Update ConfigDashboard to render ContentForm in Content tab
-13. Write component tests for BasicInfoForm (fields removed)
-14. Write component tests for ContentForm (new component)
+**From UI Requirements**: 10. Remove fields from BasicInfoForm component 11. Create ContentForm component 12. Update ConfigDashboard to render ContentForm in Content tab 13. Write component tests for BasicInfoForm (fields removed) 14. Write component tests for ContentForm (new component)
 
-**From Template Requirements**:
-15. Update Template1Preview footer rendering logic
-16. Handle 0, 1, or 2 Instagram links display
-17. Update feature toggle check (instagram_link → instagram_links)
-18. Update preview API to include new fields
-19. Write component tests for Template1Preview footer
+**From Template Requirements**: 15. Update Template1Preview footer rendering logic 16. Handle 0, 1, or 2 Instagram links display 17. Update feature toggle check (instagram_link → instagram_links) 18. Update preview API to include new fields 19. Write component tests for Template1Preview footer
 
-**From Quickstart Scenarios**:
-20. Write integration test: Save both Instagram links
-21. Write integration test: Save one Instagram link
-22. Write integration test: URL validation
-23. Write e2e test: Complete dashboard flow
-24. Write e2e test: Template rendering with various link combinations
-25. Write e2e test: Feature toggle behavior
+**From Quickstart Scenarios**: 20. Write integration test: Save both Instagram links 21. Write integration test: Save one Instagram link 22. Write integration test: URL validation 23. Write e2e test: Complete dashboard flow 24. Write e2e test: Template rendering with various link combinations 25. Write e2e test: Feature toggle behavior
 
 **Task Ordering**:
+
 - Phase A: Schema & Migration [P1] (blocking)
 - Phase B: Contract tests [P2, P3, P4] (parallel, need Phase A)
 - Phase C: API implementation [P5, P6, P7] (sequential, need Phase B)
@@ -279,6 +283,7 @@ tests/
 **Estimated Output**: 30-35 numbered tasks in tasks.md
 
 **Dependencies**:
+
 - TDD principle: Tests written before implementation where possible
 - Database changes must be first (blocking)
 - Contract tests before implementation
@@ -290,7 +295,8 @@ tests/
 ---
 
 ## Phase 3+: Future Implementation
-*These phases are beyond the scope of the /plan command*
+
+_These phases are beyond the scope of the /plan command_
 
 **Phase 3**: Task execution (/tasks command creates tasks.md with dependency-ordered list)
 **Phase 4**: Implementation (execute tasks following TDD workflow)
@@ -301,6 +307,7 @@ tests/
 ## Complexity Tracking
 
 No constitutional violations. Feature follows established patterns:
+
 - Standard Drizzle ORM schema changes
 - React Hook Form for UI (existing pattern)
 - Next.js API routes (existing pattern)
@@ -311,6 +318,7 @@ No constitutional violations. Feature follows established patterns:
 ## Progress Tracking
 
 **Phase Status**:
+
 - [x] Phase 0: Research complete
 - [x] Phase 1: Design complete
 - [x] Phase 2: Task planning approach described
@@ -319,12 +327,14 @@ No constitutional violations. Feature follows established patterns:
 - [ ] Phase 5: Validation passed
 
 **Gate Status**:
+
 - [x] Initial Constitution Check: PASS
 - [x] Post-Design Constitution Check: PASS
 - [x] All NEEDS CLARIFICATION resolved
 - [x] Complexity deviations documented (none)
 
 **Artifacts Generated**:
+
 - [x] research.md (Phase 0)
 - [x] data-model.md (Phase 1)
 - [x] contracts/api-wedding-config.yaml (Phase 1)
@@ -340,6 +350,7 @@ No constitutional violations. Feature follows established patterns:
 **Ready for**: Implementation (Phase 4)
 
 All planning and task generation phases are complete:
+
 - ✅ Research findings documented
 - ✅ Data model specified
 - ✅ API contracts defined (OpenAPI specs)
@@ -348,6 +359,7 @@ All planning and task generation phases are complete:
 - ✅ Tasks generated (35 dependency-ordered tasks)
 
 Begin implementation by executing tasks in `tasks.md` following TDD principles:
+
 1. Start with T001-T004 (database schema)
 2. Write failing tests T005-T012 (MUST fail before implementation)
 3. Implement T013-T025 (API, UI, template)
@@ -357,4 +369,4 @@ Begin implementation by executing tasks in `tasks.md` following TDD principles:
 
 ---
 
-*Based on Constitution v1.2.0 - See `.specify/memory/constitution.md`*
+_Based on Constitution v1.2.0 - See `.specify/memory/constitution.md`_

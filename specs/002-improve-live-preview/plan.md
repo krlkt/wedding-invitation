@@ -49,48 +49,48 @@ _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 ### Technology Stack Consistency
 
--   ✅ Using Next.js 14.2.4 App Router
--   ✅ TypeScript strict mode
--   ✅ Tailwind CSS for utility-first styling
--   ⚠️ **UI Library Update**: Using shadcn/ui instead of Material-UI for new components
-    -   Rationale: Better alignment with Tailwind, smaller bundle size, better customization
-    -   Existing Material-UI components remain unchanged for now
--   ✅ Turso (libSQL) with Drizzle ORM
--   ✅ React Hook Form for forms (if needed)
+- ✅ Using Next.js 14.2.4 App Router
+- ✅ TypeScript strict mode
+- ✅ Tailwind CSS for utility-first styling
+- ⚠️ **UI Library Update**: Using shadcn/ui instead of Material-UI for new components
+  - Rationale: Better alignment with Tailwind, smaller bundle size, better customization
+  - Existing Material-UI components remain unchanged for now
+- ✅ Turso (libSQL) with Drizzle ORM
+- ✅ React Hook Form for forms (if needed)
 
 ### Performance-First Development
 
--   ✅ Server components by default, client components only when needed
--   ✅ Database queries optimized (existing unique index on subdomain)
--   ✅ Preview loads via API without heavy computation
--   ✅ shadcn/ui components are tree-shakeable and lightweight
+- ✅ Server components by default, client components only when needed
+- ✅ Database queries optimized (existing unique index on subdomain)
+- ✅ Preview loads via API without heavy computation
+- ✅ shadcn/ui components are tree-shakeable and lightweight
 
 ### Component Architecture Standards
 
--   ✅ Functional components only
--   ✅ Feature-based organization in `/app/components/`
--   ✅ Context providers for shared state (session-based auth)
--   ✅ shadcn/ui components follow same patterns
+- ✅ Functional components only
+- ✅ Feature-based organization in `/app/components/`
+- ✅ Context providers for shared state (session-based auth)
+- ✅ shadcn/ui components follow same patterns
 
 ### Code Quality Requirements
 
--   ✅ ESLint configured (next/core-web-vitals)
--   ✅ TypeScript strict mode
--   ✅ Feature-based file organization
+- ✅ ESLint configured (next/core-web-vitals)
+- ✅ TypeScript strict mode
+- ✅ Feature-based file organization
 
 ### Data & State Management
 
--   ✅ Models in `/app/db/schema/`
--   ✅ API routes for mutations
--   ✅ JSON serialization for server-to-client data
+- ✅ Models in `/app/db/schema/`
+- ✅ API routes for mutations
+- ✅ JSON serialization for server-to-client data
 
 ### Testing Standards
 
--   ✅ Jest + React Testing Library for components
--   ✅ Playwright for E2E critical flows
--   ✅ MSW for API mocking
--   ✅ TDD approach: tests before implementation
--   ⚠️ Target: 80% test coverage for new code
+- ✅ Jest + React Testing Library for components
+- ✅ Playwright for E2E critical flows
+- ✅ MSW for API mocking
+- ✅ TDD approach: tests before implementation
+- ⚠️ Target: 80% test coverage for new code
 
 **Initial Constitution Check**: PASS (with UI library update noted)
 
@@ -153,33 +153,29 @@ __tests__/
 ### Research Tasks
 
 1. **Existing Preview Implementation Analysis**
-
-    - Current LivePreview.tsx rendering approach
-    - How configuration data is fetched and displayed
-    - Current subdomain generation logic (random suffix approach)
+   - Current LivePreview.tsx rendering approach
+   - How configuration data is fetched and displayed
+   - Current subdomain generation logic (random suffix approach)
 
 2. **Next.js Preview Patterns**
-
-    - Best practices for authenticated preview routes in App Router
-    - Session handling across preview context
-    - Data fetching patterns for real-time updates
+   - Best practices for authenticated preview routes in App Router
+   - Session handling across preview context
+   - Data fetching patterns for real-time updates
 
 3. **Subdomain Uniqueness Patterns**
-
-    - Retry strategies for collision resolution
-    - Database-level vs application-level validation
-    - Error handling for unique constraint violations
+   - Retry strategies for collision resolution
+   - Database-level vs application-level validation
+   - Error handling for unique constraint violations
 
 4. **shadcn/ui Integration**
-
-    - Setup process if not already configured
-    - Button and Card components for preview UI
-    - Best practices for shadcn with Next.js App Router
+   - Setup process if not already configured
+   - Button and Card components for preview UI
+   - Best practices for shadcn with Next.js App Router
 
 5. **Testing Strategy**
-    - Contract testing for preview API endpoints
-    - Component testing for new shadcn UI elements
-    - Integration testing for subdomain validation flow
+   - Contract testing for preview API endpoints
+   - Component testing for new shadcn UI elements
+   - Integration testing for subdomain validation flow
 
 **Output**: research.md with consolidated findings
 
@@ -189,52 +185,50 @@ __tests__/
 
 **Wedding Configuration** (existing in `/app/db/schema/weddings.ts`)
 
--   Already has unique constraint on subdomain field (line 18)
--   Fields: id, userId, subdomain, groomName, brideName, weddingDate, etc.
+- Already has unique constraint on subdomain field (line 18)
+- Fields: id, userId, subdomain, groomName, brideName, weddingDate, etc.
 
 **Preview Session** (conceptual - uses existing auth session)
 
--   Leverages existing cookie-based session authentication
--   No new entity needed - uses existing session structure
+- Leverages existing cookie-based session authentication
+- No new entity needed - uses existing session structure
 
 ### API Contracts
 
 1. **GET /api/wedding/config** (existing - no changes needed)
-
-    - Returns current user's wedding configuration
-    - Used by both inline preview and full-screen preview
+   - Returns current user's wedding configuration
+   - Used by both inline preview and full-screen preview
 
 2. **POST /api/auth/register** (modify)
-
-    - Add subdomain uniqueness validation
-    - Return friendly error messages on collision
+   - Add subdomain uniqueness validation
+   - Return friendly error messages on collision
 
 3. **GET /preview** (new page route)
-    - Server-side rendered preview page
-    - Uses existing session authentication
+   - Server-side rendered preview page
+   - Uses existing session authentication
 
 ### Contract Tests
 
--   `__tests__/contracts/preview-api.test.ts`: Test preview data endpoint
--   `__tests__/contracts/register-api.test.ts`: Test subdomain validation errors
+- `__tests__/contracts/preview-api.test.ts`: Test preview data endpoint
+- `__tests__/contracts/register-api.test.ts`: Test subdomain validation errors
 
 ### Integration Tests
 
--   Subdomain collision detection and retry
--   Full-screen preview rendering
--   Preview button navigation
+- Subdomain collision detection and retry
+- Full-screen preview rendering
+- Preview button navigation
 
 ### Component Tests
 
--   FullScreenPreview component rendering (with shadcn components)
--   LivePreview URL display update
--   ConfigDashboard button addition (shadcn Button)
+- FullScreenPreview component rendering (with shadcn components)
+- LivePreview URL display update
+- ConfigDashboard button addition (shadcn Button)
 
 ### Agent File Update
 
--   Update CLAUDE.md with new preview routes and subdomain validation logic
--   Add shadcn/ui to active technologies
--   Add recent changes: Preview improvements and subdomain uniqueness
+- Update CLAUDE.md with new preview routes and subdomain validation logic
+- Add shadcn/ui to active technologies
+- Add recent changes: Preview improvements and subdomain uniqueness
 
 **Output**: data-model.md, contracts/, failing tests, quickstart.md, CLAUDE.md
 
@@ -245,48 +239,43 @@ _This section describes what the /tasks command will do - DO NOT execute during 
 **Task Generation Strategy**:
 
 1. **Setup Tasks** (if needed)
-
-    - Verify shadcn/ui setup or install required components
-    - Add Button and Card components if not present
+   - Verify shadcn/ui setup or install required components
+   - Add Button and Card components if not present
 
 2. **Contract Test Tasks** [P]
-
-    - Write failing contract tests for preview API
-    - Write failing contract tests for registration with subdomain validation
+   - Write failing contract tests for preview API
+   - Write failing contract tests for registration with subdomain validation
 
 3. **Component Test Tasks** [P]
-
-    - Write failing component tests for FullScreenPreview
-    - Write failing component tests for updated LivePreview
-    - Write failing component tests for ConfigDashboard button
+   - Write failing component tests for FullScreenPreview
+   - Write failing component tests for updated LivePreview
+   - Write failing component tests for ConfigDashboard button
 
 4. **Integration Test Tasks**
-
-    - Write failing integration test for subdomain collision retry
-    - Write failing integration test for full-screen preview navigation
+   - Write failing integration test for subdomain collision retry
+   - Write failing integration test for full-screen preview navigation
 
 5. **Implementation Tasks** (ordered by dependency)
-
-    - Update LivePreview.tsx URL display message
-    - Add isSubdomainAvailable() helper function to wedding-service.ts
-    - Add retry logic to createWeddingConfiguration() in wedding-service.ts
-    - Update register route error handling for subdomain collisions
-    - Create /preview page route
-    - Create FullScreenPreview component (using shadcn components)
-    - Add "View Live Site" button to ConfigDashboard (using shadcn Button)
+   - Update LivePreview.tsx URL display message
+   - Add isSubdomainAvailable() helper function to wedding-service.ts
+   - Add retry logic to createWeddingConfiguration() in wedding-service.ts
+   - Update register route error handling for subdomain collisions
+   - Create /preview page route
+   - Create FullScreenPreview component (using shadcn components)
+   - Add "View Live Site" button to ConfigDashboard (using shadcn Button)
 
 6. **Verification Tasks**
-    - Run all contract tests - verify pass
-    - Run all component tests - verify pass
-    - Run all integration tests - verify pass
-    - Manual testing: Verify preview button works
-    - Manual testing: Verify subdomain uniqueness on registration
+   - Run all contract tests - verify pass
+   - Run all component tests - verify pass
+   - Run all integration tests - verify pass
+   - Manual testing: Verify preview button works
+   - Manual testing: Verify subdomain uniqueness on registration
 
 **Ordering Strategy**:
 
--   Tests first (TDD)
--   Service layer before API routes before UI
--   Mark [P] for parallel-executable tasks (independent files)
+- Tests first (TDD)
+- Service layer before API routes before UI
+- Mark [P] for parallel-executable tasks (independent files)
 
 **Estimated Output**: 20-25 numbered tasks in tasks.md
 
@@ -314,19 +303,19 @@ _This checklist is updated during execution flow_
 
 **Phase Status**:
 
--   [x] Phase 0: Research complete (/plan command) - research.md created
--   [x] Phase 1: Design complete (/plan command) - contracts/, data-model.md, quickstart.md, CLAUDE.md created
--   [x] Phase 2: Task planning complete (/plan command - describe approach only)
--   [x] Phase 3: Tasks generated (/tasks command) - tasks.md created with 23 tasks
--   [ ] Phase 4: Implementation complete - Ready for /implement
--   [ ] Phase 5: Validation passed
+- [x] Phase 0: Research complete (/plan command) - research.md created
+- [x] Phase 1: Design complete (/plan command) - contracts/, data-model.md, quickstart.md, CLAUDE.md created
+- [x] Phase 2: Task planning complete (/plan command - describe approach only)
+- [x] Phase 3: Tasks generated (/tasks command) - tasks.md created with 23 tasks
+- [ ] Phase 4: Implementation complete - Ready for /implement
+- [ ] Phase 5: Validation passed
 
 **Gate Status**:
 
--   [x] Initial Constitution Check: PASS
--   [x] Post-Design Constitution Check: PASS (shadcn/ui update documented)
--   [x] All NEEDS CLARIFICATION resolved (custom domain timeline deferred)
--   [x] Complexity deviations documented (UI library update noted)
+- [x] Initial Constitution Check: PASS
+- [x] Post-Design Constitution Check: PASS (shadcn/ui update documented)
+- [x] All NEEDS CLARIFICATION resolved (custom domain timeline deferred)
+- [x] Complexity deviations documented (UI library update noted)
 
 ---
 

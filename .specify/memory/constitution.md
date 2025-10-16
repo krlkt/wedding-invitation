@@ -24,13 +24,13 @@ Follow-up TODOs:
 
 All development must adhere to the established technology foundation:
 
--   **Next.js 14.2.4** with App Router architecture
--   **TypeScript** in strict mode (no `any` types without explicit justification)
--   **Tailwind CSS** for utility-first styling
--   **shadcn/ui** for new component implementations (Radix UI primitives)
--   **Material-UI** for legacy components (avoid for new features)
--   **Turso (libSQL)** for database operations
--   **React Hook Form** for all form implementations
+- **Next.js 14.2.4** with App Router architecture
+- **TypeScript** in strict mode (no `any` types without explicit justification)
+- **Tailwind CSS** for utility-first styling
+- **shadcn/ui** for new component implementations (Radix UI primitives)
+- **Material-UI** for legacy components (avoid for new features)
+- **Turso (libSQL)** for database operations
+- **React Hook Form** for all form implementations
 
 **Rationale**: Consistency ensures maintainability. shadcn/ui is preferred for new work due to better tree-shaking, TypeScript support, and alignment with Tailwind CSS.
 
@@ -38,10 +38,10 @@ All development must adhere to the established technology foundation:
 
 Every feature must prioritize user experience:
 
--   Images must use Next.js `Image` component with `priority` for above-the-fold content
--   Components must be server-side rendered by default; `'use client'` only when necessary
--   Database queries must be optimized and use proper indexing
--   Lazy loading for non-critical components and assets
+- Images must use Next.js `Image` component with `priority` for above-the-fold content
+- Components must be server-side rendered by default; `'use client'` only when necessary
+- Database queries must be optimized and use proper indexing
+- Lazy loading for non-critical components and assets
 
 **Rationale**: Performance directly impacts user experience and SEO. Server-first rendering reduces JavaScript bundle size and improves Time to Interactive.
 
@@ -49,11 +49,11 @@ Every feature must prioritize user experience:
 
 Consistent component design patterns:
 
--   Functional components only (no class components)
--   Props interfaces must be defined in `/app/models` when shared
--   Components organized by feature in `/app/components/[feature-name]/`
--   Context providers for shared state (following LocationProvider pattern)
--   Default exports for primary components
+- Functional components only (no class components)
+- Props interfaces must be defined in `/app/models` when shared
+- Components organized by feature in `/app/components/[feature-name]/`
+- Context providers for shared state (following LocationProvider pattern)
+- Default exports for primary components
 
 **Rationale**: Functional components align with modern React patterns. Feature-based organization improves discoverability and reduces coupling.
 
@@ -61,10 +61,10 @@ Consistent component design patterns:
 
 Non-negotiable quality standards:
 
--   All code must pass ESLint (next/core-web-vitals configuration)
--   Prettier formatting with 4-space tabs, single quotes, 120 character line width
--   TypeScript strict mode with no implicit any
--   File organization follows feature-based structure
+- All code must pass ESLint (next/core-web-vitals configuration)
+- Prettier formatting with 4-space tabs, single quotes, 120 character line width
+- TypeScript strict mode with no implicit any
+- File organization follows feature-based structure
 
 **Rationale**: Automated tooling ensures consistency across contributors. Strict TypeScript prevents runtime type errors.
 
@@ -72,10 +72,10 @@ Non-negotiable quality standards:
 
 Consistent data handling patterns:
 
--   Database models defined as TypeScript interfaces in `/app/models/`
--   Server Actions for mutations following Next.js App Router patterns
--   Context providers for cross-component state sharing
--   JSON serialization for server-to-client data transfer
+- Database models defined as TypeScript interfaces in `/app/models/`
+- Server Actions for mutations following Next.js App Router patterns
+- Context providers for cross-component state sharing
+- JSON serialization for server-to-client data transfer
 
 **Rationale**: Server Actions reduce API boilerplate and provide automatic revalidation. Context prevents prop drilling while maintaining reactivity.
 
@@ -83,12 +83,12 @@ Consistent data handling patterns:
 
 Comprehensive testing must be implemented for all new features:
 
--   **Jest** and **React Testing Library** MUST be used for component testing
--   **Playwright** MUST be used for end-to-end testing of critical user flows
--   **MSW (Mock Service Worker)** MUST be used for API mocking in tests
--   Unit tests MUST be written for all utility functions and custom hooks
--   Test coverage MUST meet minimum 80% threshold for new code
--   All tests MUST follow TDD principles: write failing tests before implementation
+- **Jest** and **React Testing Library** MUST be used for component testing
+- **Playwright** MUST be used for end-to-end testing of critical user flows
+- **MSW (Mock Service Worker)** MUST be used for API mocking in tests
+- Unit tests MUST be written for all utility functions and custom hooks
+- Test coverage MUST meet minimum 80% threshold for new code
+- All tests MUST follow TDD principles: write failing tests before implementation
 
 **Rationale**: TDD prevents regressions, documents behavior, and ensures testability. 80% coverage threshold balances thoroughness with pragmatism.
 
@@ -96,12 +96,12 @@ Comprehensive testing must be implemented for all new features:
 
 Follow Next.js 14 App Router data fetching best practices:
 
--   Server Components MUST fetch data using async/await directly in the component
--   Client Components MUST receive data as props from parent Server Components
--   `useEffect` + `fetch` pattern MUST NOT be used for initial data loading
--   Server Actions MUST be used for mutations initiated from Client Components
--   API routes (`/app/api/*`) should only be used when Server Components/Actions aren't suitable (webhooks, external API integrations, client-side polling)
--   Data fetching errors MUST be handled with proper error boundaries or try/catch
+- Server Components MUST fetch data using async/await directly in the component
+- Client Components MUST receive data as props from parent Server Components
+- `useEffect` + `fetch` pattern MUST NOT be used for initial data loading
+- Server Actions MUST be used for mutations initiated from Client Components
+- API routes (`/app/api/*`) should only be used when Server Components/Actions aren't suitable (webhooks, external API integrations, client-side polling)
+- Data fetching errors MUST be handled with proper error boundaries or try/catch
 
 **Rationale**: Server Components eliminate request waterfalls by fetching data on the server before hydration. The `useEffect` + `fetch` pattern creates unnecessary client-side requests, delays rendering, and increases bundle size. Server Actions provide type-safe mutations with automatic revalidation, reducing API boilerplate and improving performance.
 
@@ -134,12 +134,12 @@ tests/
 
 ### Naming Conventions
 
--   **Components**: PascalCase (e.g., `Hero.tsx`, `RSVPForm.tsx`)
--   **Files**: kebab-case for CSS, camelCase for utilities
--   **Database tables**: snake_case
--   **CSS classes**: Tailwind utilities + kebab-case custom classes
--   **Environment variables**: SCREAMING_SNAKE_CASE
--   **Test files**: `*.test.ts` or `*.test.tsx` for unit/component tests, `*.spec.ts` for e2e tests
+- **Components**: PascalCase (e.g., `Hero.tsx`, `RSVPForm.tsx`)
+- **Files**: kebab-case for CSS, camelCase for utilities
+- **Database tables**: snake_case
+- **CSS classes**: Tailwind utilities + kebab-case custom classes
+- **Environment variables**: SCREAMING_SNAKE_CASE
+- **Test files**: `*.test.ts` or `*.test.tsx` for unit/component tests, `*.spec.ts` for e2e tests
 
 ## Development Workflow
 
@@ -153,25 +153,25 @@ OIALT-{ticket-number}-{brief-description}
 
 **Requirements**:
 
--   Prefix: `OIALT-` (connects branch to JIRA project)
--   Ticket number: JIRA ticket ID (e.g., `8`, `15`, `142`)
--   Brief description: kebab-case summary of the feature
+- Prefix: `OIALT-` (connects branch to JIRA project)
+- Ticket number: JIRA ticket ID (e.g., `8`, `15`, `142`)
+- Brief description: kebab-case summary of the feature
 
 **Examples**:
 
--   `OIALT-8-login-page-redesign`
--   `OIALT-15-rsvp-form-validation`
--   `OIALT-42-gallery-upload-optimization`
+- `OIALT-8-login-page-redesign`
+- `OIALT-15-rsvp-form-validation`
+- `OIALT-42-gallery-upload-optimization`
 
 **Rationale**: This convention enables automatic branch-to-JIRA linking, improving traceability and project management workflow integration.
 
 ### Code Style Requirements
 
--   4-space indentation (enforced by Prettier)
--   Single quotes for strings
--   Trailing commas in ES5-compatible locations
--   120 character line width maximum
--   Semicolons required
+- 4-space indentation (enforced by Prettier)
+- Single quotes for strings
+- Trailing commas in ES5-compatible locations
+- 120 character line width maximum
+- Semicolons required
 
 ### Component Development
 
@@ -187,97 +187,97 @@ OIALT-{ticket-number}-{brief-description}
 
 1. **For Server Components** (default):
 
-    ```typescript
-    // ✅ CORRECT: Async Server Component
-    export default async function Page() {
-        const data = await fetchData();
-        return <ClientComponent data={data} />;
-    }
-    ```
+   ```typescript
+   // ✅ CORRECT: Async Server Component
+   export default async function Page() {
+       const data = await fetchData();
+       return <ClientComponent data={data} />;
+   }
+   ```
 
 2. **For Client Components** (when interactivity needed):
 
-    ```typescript
-    // ✅ CORRECT: Receive data from parent Server Component
-    'use client';
-    export default function ClientComponent({ data }) {
-        return <div>{data.name}</div>;
-    }
-    ```
+   ```typescript
+   // ✅ CORRECT: Receive data from parent Server Component
+   'use client';
+   export default function ClientComponent({ data }) {
+       return <div>{data.name}</div>;
+   }
+   ```
 
 3. **AVOID** (legacy pattern):
-    ```typescript
-    // ❌ WRONG: useEffect + fetch in Client Component
-    'use client';
-    export default function Component() {
-        const [data, setData] = useState(null);
-        useEffect(() => {
-            fetch('/api/data')
-                .then((r) => r.json())
-                .then(setData);
-        }, []);
-        return <div>{data?.name}</div>;
-    }
-    ```
+   ```typescript
+   // ❌ WRONG: useEffect + fetch in Client Component
+   'use client';
+   export default function Component() {
+       const [data, setData] = useState(null);
+       useEffect(() => {
+           fetch('/api/data')
+               .then((r) => r.json())
+               .then(setData);
+       }, []);
+       return <div>{data?.name}</div>;
+   }
+   ```
 
 ### Database Operations
 
--   Use parameterized queries to prevent SQL injection
--   Define models in `/app/db/schema` with proper Drizzle ORM
--   Use JSON.parse(JSON.stringify()) pattern for server-to-client serialization
--   Implement proper error handling for database operations
+- Use parameterized queries to prevent SQL injection
+- Define models in `/app/db/schema` with proper Drizzle ORM
+- Use JSON.parse(JSON.stringify()) pattern for server-to-client serialization
+- Implement proper error handling for database operations
 
 ### Testing Workflow
 
--   ALL new features MUST follow TDD: tests before implementation
--   Component tests MUST use React Testing Library with proper accessibility queries
--   API endpoints MUST have integration tests using MSW for mocking
--   Critical user flows MUST have Playwright e2e tests
--   Utility functions MUST have comprehensive unit tests with Jest
--   Tests MUST be maintainable and readable with descriptive test names
+- ALL new features MUST follow TDD: tests before implementation
+- Component tests MUST use React Testing Library with proper accessibility queries
+- API endpoints MUST have integration tests using MSW for mocking
+- Critical user flows MUST have Playwright e2e tests
+- Utility functions MUST have comprehensive unit tests with Jest
+- Tests MUST be maintainable and readable with descriptive test names
 
 ## Performance Standards
 
 ### Image Optimization
 
--   All images must use Next.js `Image` component
--   WebP format preferred for web assets
--   `priority` attribute for above-the-fold images
--   `fetchPriority="high"` for critical images
--   Proper `alt` attributes for accessibility
+- All images must use Next.js `Image` component
+- WebP format preferred for web assets
+- `priority` attribute for above-the-fold images
+- `fetchPriority="high"` for critical images
+- Proper `alt` attributes for accessibility
 
 ### Bundle Optimization
 
--   Dynamic imports for heavy libraries
--   Framer Motion animations only where necessary
--   Material-UI components imported individually
--   Custom fonts loaded via Google Fonts with `display=swap`
+- Dynamic imports for heavy libraries
+- Framer Motion animations only where necessary
+- Material-UI components imported individually
+- Custom fonts loaded via Google Fonts with `display=swap`
 
 ## Security Requirements
 
 ### Environment Configuration
 
--   Sensitive data in `.env` file (excluded from git)
--   Public environment variables prefixed with `NEXT_PUBLIC_`
--   Secure cookie configuration for authentication
--   HTTPS enforcement in production
+- Sensitive data in `.env` file (excluded from git)
+- Public environment variables prefixed with `NEXT_PUBLIC_`
+- Secure cookie configuration for authentication
+- HTTPS enforcement in production
 
 ### Authentication Patterns
 
--   Simple cookie-based auth for dashboard access
--   Environment-based credential management
--   Secure cookie options (`httpOnly`, `secure`, `sameSite`)
+- Simple cookie-based auth for dashboard access
+- Environment-based credential management
+- Secure cookie options (`httpOnly`, `secure`, `sameSite`)
 
 ## Accessibility Standards
 
 ### Requirements
 
--   Semantic HTML structure
--   Proper heading hierarchy (h1 → h6)
--   Alt text for all images
--   Keyboard navigation support
--   Color contrast compliance
--   Screen reader compatibility
+- Semantic HTML structure
+- Proper heading hierarchy (h1 → h6)
+- Alt text for all images
+- Keyboard navigation support
+- Color contrast compliance
+- Screen reader compatibility
 
 ## Governance
 
@@ -292,11 +292,11 @@ This constitution evolves with the project:
 
 ### Enforcement
 
--   All code reviews must verify compliance with these standards
--   Automated checks via ESLint, Prettier, and test coverage reports
--   Performance monitoring for Core Web Vitals
--   Regular architecture reviews for consistency
--   CI/CD pipelines MUST run all tests and reject failing builds
+- All code reviews must verify compliance with these standards
+- Automated checks via ESLint, Prettier, and test coverage reports
+- Performance monitoring for Core Web Vitals
+- Regular architecture reviews for consistency
+- CI/CD pipelines MUST run all tests and reject failing builds
 
 ### Exception Handling
 

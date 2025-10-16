@@ -4,10 +4,12 @@
 **Prerequisites**: plan.md, research.md, data-model.md, contracts/api-preview-endpoint.md, quickstart.md
 
 ## Format: `[ID] [P?] Description`
+
 - **[P]**: Can run in parallel (different files, no dependencies)
 - Include exact file paths in descriptions
 
 ## Path Conventions
+
 - **Next.js App Router**: `app/`, `tests/` at repository root
 - Paths assume Next.js monolith structure from constitution
 
@@ -26,6 +28,7 @@
 **CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
 
 ### API Tests
+
 - [ ] **T004 [P]** Write contract test for GET /api/wedding/preview in `tests/__mocks__/handlers/preview.ts` and `tests/integration/api-preview.test.ts`
   - Mock MSW handler for /api/wedding/preview endpoint
   - Test success response structure matches contract (config + features + content)
@@ -34,6 +37,7 @@
   - **Expected**: All tests FAIL (endpoint doesn't exist yet)
 
 ### Component Tests
+
 - [ ] **T005 [P]** Write component test for TemplateRenderer in `tests/components/preview/TemplateRenderer.test.tsx`
   - Test renders Template1Preview when templateId='template-1'
   - Test shows "Template not found" for invalid templateId
@@ -58,6 +62,7 @@
   - **Expected**: Some tests FAIL (LivePreview needs updates)
 
 ### Integration Tests
+
 - [ ] **T008 [P]** Write integration test for feature toggle rendering in `tests/integration/preview-feature-toggles.test.tsx`
   - Test enabling love_story shows timeline section
   - Test disabling gallery hides gallery section
@@ -67,6 +72,7 @@
   - **Expected**: All tests FAIL (Template1Preview doesn't exist yet)
 
 ### E2E Tests
+
 - [ ] **T009** Write E2E test for live preview flow in `tests/e2e/live-preview.spec.ts`
   - Test: Navigate to admin dashboard → preview loads
   - Test: Toggle love story on → section appears
@@ -101,10 +107,10 @@
   - Fetch wedding configuration by user's weddingConfigId
   - Fetch feature toggles for weddingConfigId
   - For each enabled feature, fetch corresponding content:
-    * love_story → query love_stories table
-    * gallery → query gallery_photos table (limit 20)
-    * faqs → query faqs table
-    * dress_code → query dress_codes table
+    - love_story → query love_stories table
+    - gallery → query gallery_photos table (limit 20)
+    - faqs → query faqs table
+    - dress_code → query dress_codes table
   - Always fetch: locations, bank_details
   - Return PreviewConfig format per contract
   - Handle errors: 401 (unauthorized), 404 (not found), 500 (server error)
@@ -129,12 +135,12 @@
   - Destructure: weddingConfig, features, content
   - Render Hero section (always visible): groomName, brideName, weddingDate, parent names, monogram
   - Conditionally render sections based on features:
-    * features.love_story → Timeline with content.loveStory (or empty state)
-    * features.rsvp → RSVPForm with mock data
-    * features.gallery → ImageGallery with content.gallery (or empty state)
-    * features.prewedding_videos → YouTubeEmbed (or empty state)
-    * features.faqs → FAQ with content.faqs (or empty state)
-    * features.dress_code → DressCode with content.dressCode (or empty state)
+    - features.love_story → Timeline with content.loveStory (or empty state)
+    - features.rsvp → RSVPForm with mock data
+    - features.gallery → ImageGallery with content.gallery (or empty state)
+    - features.prewedding_videos → YouTubeEmbed (or empty state)
+    - features.faqs → FAQ with content.faqs (or empty state)
+    - features.dress_code → DressCode with content.dressCode (or empty state)
   - Always render: Gift, Wishes, Footer
   - Render footer with instagram_link if features.instagram_link=true
   - Maintain section order matching InvitationPage.tsx
@@ -270,6 +276,7 @@ Setup (T001-T003) → Tests (T004-T009) → Types (T010-T011) → API (T012) →
 ```
 
 **Key Dependencies**:
+
 - T004-T009 MUST fail before T010-T030 (TDD requirement)
 - T010-T011 (types) before T012-T016 (implementation)
 - T012 (API) before T014 (Template1Preview uses API data)
@@ -284,6 +291,7 @@ Setup (T001-T003) → Tests (T004-T009) → Types (T010-T011) → API (T012) →
 ## Parallel Execution Examples
 
 ### Example 1: Write all tests in parallel
+
 ```bash
 # T004, T005, T006, T007, T008 can run in parallel (different files)
 Task 1: "Write contract test for GET /api/wedding/preview in tests/__mocks__/handlers/preview.ts and tests/integration/api-preview.test.ts"
@@ -294,6 +302,7 @@ Task 5: "Write integration test for feature toggle rendering in tests/integratio
 ```
 
 ### Example 2: Create TypeScript interfaces in parallel
+
 ```bash
 # T010, T011 can run in parallel (different files)
 Task 1: "Create template types in app/models/template.ts"
@@ -301,6 +310,7 @@ Task 2: "Create preview types in app/models/preview.ts"
 ```
 
 ### Example 3: Manual testing in parallel
+
 ```bash
 # T023, T024 can run in parallel (independent test scenarios)
 Task 1: "Manual testing: Execute quickstart.md test scenarios 1-8"

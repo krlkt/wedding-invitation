@@ -53,10 +53,10 @@ curl -X POST http://localhost:3000/api/auth/register \
 
 **Success Criteria**:
 
--   ✅ Both registrations succeed
--   ✅ Subdomains are different despite same names
--   ✅ No database constraint errors
--   ✅ Response time < 500ms per registration
+- ✅ Both registrations succeed
+- ✅ Subdomains are different despite same names
+- ✅ No database constraint errors
+- ✅ Response time < 500ms per registration
 
 ---
 
@@ -91,10 +91,10 @@ curl -X GET http://localhost:3000/preview
 
 **Success Criteria**:
 
--   ✅ Authenticated users see full wedding preview
--   ✅ Unauthenticated users redirected to login
--   ✅ Preview reflects current configuration
--   ✅ No admin UI elements visible in preview
+- ✅ Authenticated users see full wedding preview
+- ✅ Unauthenticated users redirected to login
+- ✅ Preview reflects current configuration
+- ✅ No admin UI elements visible in preview
 
 ---
 
@@ -122,9 +122,9 @@ Preview: oialt.vercel.app (shared domain)
 
 **Success Criteria**:
 
--   ✅ No reference to non-existent `{subdomain}-oialt.vercel.app`
--   ✅ Message is clear and non-misleading
--   ✅ Visual preview still renders correctly below
+- ✅ No reference to non-existent `{subdomain}-oialt.vercel.app`
+- ✅ Message is clear and non-misleading
+- ✅ Visual preview still renders correctly below
 
 ---
 
@@ -143,10 +143,10 @@ Preview: oialt.vercel.app (shared domain)
 
 **Success Criteria**:
 
--   ✅ Button is visible and properly styled (shadcn Button component)
--   ✅ Click opens preview route
--   ✅ Preview shows complete wedding layout
--   ✅ Browser back button returns to dashboard
+- ✅ Button is visible and properly styled (shadcn Button component)
+- ✅ Click opens preview route
+- ✅ Preview shows complete wedding layout
+- ✅ Browser back button returns to dashboard
 
 ---
 
@@ -159,9 +159,9 @@ Preview: oialt.vercel.app (shared domain)
 ```typescript
 // Mock isSubdomainAvailable to always return false
 jest.mock('@/app/lib/wedding-service', () => ({
-    ...jest.requireActual('@/app/lib/wedding-service'),
-    isSubdomainAvailable: jest.fn().mockResolvedValue(false),
-}));
+  ...jest.requireActual('@/app/lib/wedding-service'),
+  isSubdomainAvailable: jest.fn().mockResolvedValue(false),
+}))
 
 // Attempt registration
 // Expected: Error after 5 retry attempts
@@ -171,17 +171,17 @@ jest.mock('@/app/lib/wedding-service', () => ({
 
 ```json
 {
-    "success": false,
-    "error": "Unable to generate unique subdomain. Please try again."
+  "success": false,
+  "error": "Unable to generate unique subdomain. Please try again."
 }
 ```
 
 **Success Criteria**:
 
--   ✅ User-friendly error message (no technical jargon)
--   ✅ No database constraint errors exposed
--   ✅ Retry logic attempts exactly 5 times
--   ✅ User can retry registration successfully
+- ✅ User-friendly error message (no technical jargon)
+- ✅ No database constraint errors exposed
+- ✅ Retry logic attempts exactly 5 times
+- ✅ User can retry registration successfully
 
 ---
 
@@ -251,13 +251,13 @@ If issues are detected:
 
 ## Success Checklist
 
--   [ ] Two couples with same names get unique subdomains
--   [ ] Subdomain retry logic executes on collision
--   [ ] Full-screen preview accessible at `/preview`
--   [ ] Unauthenticated users redirected from preview
--   [ ] LivePreview URL display updated (no broken links)
--   [ ] "View Live Site" button added to dashboard
--   [ ] Button navigates to full-screen preview
--   [ ] Error messages are user-friendly
--   [ ] All automated tests pass
--   [ ] Performance targets met (<200ms registration, <300ms preview)
+- [ ] Two couples with same names get unique subdomains
+- [ ] Subdomain retry logic executes on collision
+- [ ] Full-screen preview accessible at `/preview`
+- [ ] Unauthenticated users redirected from preview
+- [ ] LivePreview URL display updated (no broken links)
+- [ ] "View Live Site" button added to dashboard
+- [ ] Button navigates to full-screen preview
+- [ ] Error messages are user-friendly
+- [ ] All automated tests pass
+- [ ] Performance targets met (<200ms registration, <300ms preview)

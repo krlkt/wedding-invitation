@@ -1,10 +1,10 @@
-
 # Implementation Plan: Template-Based Live Preview with Feature Toggle Integration
 
 **Branch**: `OIALT-8-template-preview-integration` | **Date**: 2025-10-12 | **Spec**: [spec.md](./spec.md)
 **Input**: Feature specification from `/Users/karelkarunia/Code/wedding-invitation/specs/002-lets-do-oialt/spec.md`
 
 ## Execution Flow (/plan command scope)
+
 ```
 1. Load feature spec from Input path ✓
 2. Fill Technical Context ✓
@@ -18,13 +18,16 @@
 ```
 
 **IMPORTANT**: The /plan command STOPS at step 8. Phases 2-4 are executed by other commands:
+
 - Phase 2: /tasks command creates tasks.md
 - Phase 3-4: Implementation execution (manual or via tools)
 
 ## Summary
+
 Transform the current LivePreview component from showing placeholder text to rendering the actual wedding invitation template (InvitationPage.tsx) with full feature toggle integration. The preview will conditionally display sections (Love Story, RSVP, Gallery, Prewedding Videos, FAQs, Dress Code, Instagram Link) based on their toggle states, showing real content and styling. This establishes Template 1 architecture to support multiple templates in the future.
 
 ## Technical Context
+
 **Language/Version**: TypeScript 5.x with Next.js 14.2.4 App Router
 **Primary Dependencies**: React 18, Material-UI 7.x, Tailwind CSS, Framer Motion, Lenis (smooth scroll)
 **Storage**: Turso (libSQL) with Drizzle ORM - existing schema (wedding_configurations, feature_toggles)
@@ -36,9 +39,11 @@ Transform the current LivePreview component from showing placeholder text to ren
 **Scale/Scope**: Single template (Template 1), 7 feature toggles, ~10-15 section components from InvitationPage.tsx
 
 ## Constitution Check
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 ### I. Technology Stack Consistency ✓
+
 - Using Next.js 14.2.4 App Router ✓
 - TypeScript strict mode ✓
 - Tailwind CSS + Material-UI ✓
@@ -46,28 +51,33 @@ Transform the current LivePreview component from showing placeholder text to ren
 - React Hook Form (not needed for preview - read-only) ✓
 
 ### II. Performance-First Development ✓
+
 - Client component required ('use client') for interactive preview ✓
 - Images use Next.js Image component (inheriting from template) ✓
 - No new heavy dependencies required ✓
 
 ### III. Component Architecture Standards ✓
+
 - Functional components only ✓
 - Props interfaces defined ✓
 - Component in `/app/components/` (LivePreview.tsx already exists) ✓
 - No new context providers needed ✓
 
 ### IV. Code Quality Requirements ✓
+
 - ESLint compliance required ✓
 - Prettier formatting (4-space, single quotes, 120 char) ✓
 - TypeScript strict mode ✓
 - Feature-based organization ✓
 
 ### V. Data & State Management ✓
+
 - No new database models required (using existing wedding_configurations, feature_toggles) ✓
 - Client-side data fetching via existing API route (/api/wedding/config) ✓
 - JSON serialization already implemented ✓
 
 ### VI. Testing Standards ✓
+
 - Jest + React Testing Library for component tests REQUIRED ✓
 - Playwright for E2E preview flow REQUIRED ✓
 - MSW for API mocking REQUIRED ✓
@@ -79,6 +89,7 @@ Transform the current LivePreview component from showing placeholder text to ren
 ## Project Structure
 
 ### Documentation (this feature)
+
 ```
 specs/002-lets-do-oialt/
 ├── plan.md              # This file (/plan command output)
@@ -90,6 +101,7 @@ specs/002-lets-do-oialt/
 ```
 
 ### Source Code (repository root)
+
 ```
 app/
 ├── [location]/
@@ -171,12 +183,14 @@ tests/
 **Note**: This feature primarily uses existing entities. New types are for frontend TypeScript only.
 
 #### Existing Entities (Referenced)
+
 - **WeddingConfiguration**: From wedding_configurations table
 - **FeatureToggle**: From feature_toggles table
 
 #### New TypeScript Types (No DB Changes)
 
 **PreviewConfig**
+
 ```typescript
 {
   weddingConfig: WeddingConfiguration
@@ -192,6 +206,7 @@ tests/
 ```
 
 **TemplateProps**
+
 ```typescript
 {
   config: PreviewConfig
@@ -201,19 +216,22 @@ tests/
 ```
 
 **FeatureName**
+
 ```typescript
-'love_story' | 'rsvp' | 'gallery' | 'prewedding_videos' | 'faqs' | 'dress_code' | 'instagram_link'
+;'love_story' | 'rsvp' | 'gallery' | 'prewedding_videos' | 'faqs' | 'dress_code' | 'instagram_link'
 ```
 
 ### API Contracts → contracts/
 
 **Existing Endpoint (Reference Only - No Changes)**
+
 ```
 GET /api/wedding/config
 Response: { data: WeddingConfiguration & { features: Record<string, boolean> } }
 ```
 
 **Potential New Endpoint (if research determines need)**
+
 ```
 GET /api/wedding/preview
 Response: {
@@ -234,6 +252,7 @@ Response: {
 ### Component Contracts
 
 **TemplateRenderer Interface**
+
 ```typescript
 interface TemplateRendererProps {
   templateId: 'template-1' | string
@@ -243,6 +262,7 @@ interface TemplateRendererProps {
 ```
 
 **Template1Preview Interface**
+
 ```typescript
 interface Template1PreviewProps {
   config: PreviewConfig
@@ -259,9 +279,11 @@ interface Template1PreviewProps {
 (Will run update script in Phase 1)
 
 ## Phase 2: Task Planning Approach
-*This section describes what the /tasks command will do - DO NOT execute during /plan*
+
+_This section describes what the /tasks command will do - DO NOT execute during /plan_
 
 **Task Generation Strategy**:
+
 1. **Setup Tasks**:
    - Create new directory structure (`app/components/preview/`, `app/models/preview.ts`, etc.)
    - Install any missing dev dependencies (none expected)
@@ -292,6 +314,7 @@ interface Template1PreviewProps {
    - Update documentation
 
 **Ordering Strategy**:
+
 - Setup → Tests → Types → Components (bottom-up: Container → Renderer → Template1 → LivePreview)
 - Tests always before implementation
 - Mark [P] where files are independent
@@ -303,16 +326,19 @@ interface Template1PreviewProps {
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 
 ## Phase 3+: Future Implementation
-*These phases are beyond the scope of the /plan command*
+
+_These phases are beyond the scope of the /plan command_
 
 **Phase 3**: Task execution (/tasks command creates tasks.md)
 **Phase 4**: Implementation (execute tasks.md following constitutional principles)
 **Phase 5**: Validation (run tests, execute quickstart.md, performance validation)
 
 ## Complexity Tracking
-*Fill ONLY if Constitution Check has violations that must be justified*
+
+_Fill ONLY if Constitution Check has violations that must be justified_
 
 No constitutional violations identified. This feature:
+
 - Uses existing tech stack ✓
 - Follows component architecture standards ✓
 - Maintains performance standards ✓
@@ -320,9 +346,11 @@ No constitutional violations identified. This feature:
 - No new database changes ✓
 
 ## Progress Tracking
-*This checklist is updated during execution flow*
+
+_This checklist is updated during execution flow_
 
 **Phase Status**:
+
 - [x] Phase 0: Research complete (/plan command) ✓
 - [x] Phase 1: Design complete (/plan command) ✓
 - [x] Phase 2: Task planning complete (/plan command - describe approach only) ✓
@@ -331,12 +359,14 @@ No constitutional violations identified. This feature:
 - [ ] Phase 5: Validation passed (manual testing via quickstart.md)
 
 **Gate Status**:
+
 - [x] Initial Constitution Check: PASS ✓
 - [x] Post-Design Constitution Check: PASS ✓
 - [x] All NEEDS CLARIFICATION resolved (none in spec) ✓
 - [x] Complexity deviations documented (none) ✓
 
 **Artifacts Generated**:
+
 - ✓ research.md - Research decisions and architecture patterns
 - ✓ data-model.md - TypeScript interfaces and data structures
 - ✓ contracts/api-preview-endpoint.md - API contract for preview endpoint
@@ -345,4 +375,5 @@ No constitutional violations identified. This feature:
 - ✓ tasks.md - 30 ordered, testable tasks with TDD approach
 
 ---
-*Based on Constitution v1.2.0 - See `/memory/constitution.md`*
+
+_Based on Constitution v1.2.0 - See `/memory/constitution.md`_

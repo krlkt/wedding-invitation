@@ -37,7 +37,7 @@ export const featureToggles = sqliteTable('feature_toggles', {
     .notNull()
     .references(() => weddingConfigurations.id, { onDelete: 'cascade' }),
   featureName: text('feature_name', {
-    enum: FEATURE_NAMES
+    enum: FEATURE_NAMES,
   }).notNull(),
   isEnabled: integer('is_enabled', { mode: 'boolean' }).notNull().default(true),
   createdAt: integer('created_at', { mode: 'timestamp' })
