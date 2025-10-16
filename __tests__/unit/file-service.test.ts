@@ -4,23 +4,13 @@
  * Tests for file upload, validation, and management functions.
  */
 
-import {
-  uploadGalleryPhoto,
-  getGalleryPhotos,
-  updateGalleryPhoto,
-  deleteGalleryPhoto,
-  uploadDressCodePhoto,
-  deleteDressCodePhoto,
-} from '@/lib/file-service'
-
-// Mock Vercel Blob
+// Mock Vercel Blob and database BEFORE importing modules that depend on them
 jest.mock('@vercel/blob', () => ({
   put: jest.fn().mockResolvedValue({ url: 'https://blob.vercel-storage.com/test.jpg' }),
   del: jest.fn().mockResolvedValue(undefined),
 }))
 
-// Mock database
-jest.mock('@/lib/database', () => ({
+jest.mock('@/app/lib/database', () => ({
   db: {
     select: jest.fn(),
     insert: jest.fn(),
@@ -29,8 +19,16 @@ jest.mock('@/lib/database', () => ({
   },
 }))
 
+import {
+  uploadGalleryPhoto,
+  getGalleryPhotos,
+  updateGalleryPhoto,
+  deleteGalleryPhoto,
+  uploadDressCodePhoto,
+  deleteDressCodePhoto,
+} from '@/app/lib/file-service'
 import { put, del } from '@vercel/blob'
-import { db } from '@/lib/database'
+import { db } from '@/app/lib/database'
 
 describe('File Upload Service', () => {
   beforeEach(() => {

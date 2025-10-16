@@ -183,16 +183,20 @@ export function validateDate(dateString: string): { valid: boolean; error?: stri
   // For example, '2024-02-30' becomes '2024-03-01'
   // We want to reject such dates
   if (dateString.includes('-')) {
-    // For ISO format dates like '2024-02-30'
-    const parts = dateString.split('T')[0].split('-')
+    // For ISO format dates like '2024-02-30' or '2024-02-30T12:00:00Z'
+    const datePart = dateString.split('T')[0]
+    const parts = datePart.split('-')
     if (parts.length >= 3) {
       const year = parseInt(parts[0])
       const month = parseInt(parts[1])
       const day = parseInt(parts[2])
 
-      if (date.getFullYear() !== year ||
-          date.getMonth() + 1 !== month ||
-          date.getDate() !== day) {
+      // Use UTC methods for ISO dates with time component
+      const actualYear = dateString.includes('T') ? date.getUTCFullYear() : date.getFullYear()
+      const actualMonth = dateString.includes('T') ? date.getUTCMonth() + 1 : date.getMonth() + 1
+      const actualDay = dateString.includes('T') ? date.getUTCDate() : date.getDate()
+
+      if (actualYear !== year || actualMonth !== month || actualDay !== day) {
         return { valid: false, error: 'Invalid date' }
       }
     }
