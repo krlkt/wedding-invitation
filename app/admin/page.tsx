@@ -8,7 +8,7 @@
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { db } from '@/app/lib/database'
-import { userAccounts, weddingConfigurations } from '@/app/db/schema'
+import { weddingConfigurations } from '@/app/db/schema'
 import { eq } from 'drizzle-orm'
 import ConfigDashboard from '@/app/components/ConfigDashboard'
 import LogoutButton from '@/app/components/LogoutButton'
@@ -67,20 +67,22 @@ export default async function AdminDashboard() {
 
   // Render the configuration dashboard
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b border-gray-200 bg-white shadow-sm">
+    <div className="flex h-screen flex-col overflow-hidden bg-gray-50">
+      <header className="flex-shrink-0 border-b border-gray-200 bg-white shadow-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
               {weddingConfig.groomName} & {weddingConfig.brideName}
             </h1>
-            <p className="text-sm text-gray-500">{weddingConfig.subdomain}-oialt.vercel.app</p>
+            <p className="text-sm text-gray-500">
+              {weddingConfig.subdomain}.oial-wedding.com (coming soon)
+            </p>
           </div>
           <LogoutButton />
         </div>
       </header>
 
-      <main>
+      <main className="flex-1 overflow-hidden">
         <ConfigDashboard />
       </main>
     </div>

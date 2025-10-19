@@ -65,6 +65,44 @@ export function validateInstagramLink(link: string): { valid: boolean; error?: s
 }
 
 /**
+ * T013: Validates if a URL is a valid Instagram profile URL (boolean return for API use)
+ *
+ * Valid formats:
+ * - https://instagram.com/username
+ * - https://www.instagram.com/username
+ */
+export function isValidInstagramUrl(url: string): boolean {
+  if (!url || typeof url !== 'string') {
+    return false
+  }
+
+  try {
+    const urlObj = new URL(url)
+
+    // Check protocol (must be HTTPS)
+    if (urlObj.protocol !== 'https:') {
+      return false
+    }
+
+    // Check hostname
+    const validHostnames = ['instagram.com', 'www.instagram.com']
+    if (!validHostnames.includes(urlObj.hostname)) {
+      return false
+    }
+
+    // Check that there's a path (username)
+    if (!urlObj.pathname || urlObj.pathname === '/') {
+      return false
+    }
+
+    return true
+  } catch (error) {
+    // Invalid URL format
+    return false
+  }
+}
+
+/**
  * Validate subdomain format
  */
 export function validateSubdomain(subdomain: string): { valid: boolean; error?: string } {
@@ -139,6 +177,29 @@ export function validateDate(dateString: string): { valid: boolean; error?: stri
 
   if (isNaN(date.getTime())) {
     return { valid: false, error: 'Invalid date format' }
+  }
+
+  // Check if the date was auto-corrected by JavaScript
+  // For example, '2024-02-30' becomes '2024-03-01'
+  // We want to reject such dates
+  if (dateString.includes('-')) {
+    // For ISO format dates like '2024-02-30' or '2024-02-30T12:00:00Z'
+    const datePart = dateString.split('T')[0]
+    const parts = datePart.split('-')
+    if (parts.length >= 3) {
+      const year = parseInt(parts[0])
+      const month = parseInt(parts[1])
+      const day = parseInt(parts[2])
+
+      // Use UTC methods for ISO dates with time component
+      const actualYear = dateString.includes('T') ? date.getUTCFullYear() : date.getFullYear()
+      const actualMonth = dateString.includes('T') ? date.getUTCMonth() + 1 : date.getMonth() + 1
+      const actualDay = dateString.includes('T') ? date.getUTCDate() : date.getDate()
+
+      if (actualYear !== year || actualMonth !== month || actualDay !== day) {
+        return { valid: false, error: 'Invalid date' }
+      }
+    }
   }
 
   return { valid: true }

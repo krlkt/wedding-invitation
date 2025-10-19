@@ -1,18 +1,26 @@
 import Image from 'next/image'
 import './hero.css'
-import { useLocation } from '@/app/utils/useLocation'
+import { useWeddingData } from '@/app/utils/useWeddingData'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
 const Hero = () => {
-  const { location } = useLocation()
+  const { config } = useWeddingData()
+
+  // Format wedding date
+  const formattedDate = new Date(config.weddingDate).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  })
+
   return (
     <div className="hero-background flex h-full w-full grow flex-col items-center justify-center text-center">
       <div className="inner-wrapper relative flex max-w-[600px] flex-col items-center gap-4 px-[25%] py-[15%]">
         <div id="monogram" className="relative h-28 w-24">
           <Image
             src={'/images/monogram/monogram.webp'}
-            alt={'Karel & Sabrina Monogram'}
+            alt={`${config.groomName} & ${config.brideName} Monogram`}
             fill
             priority
             fetchPriority="high"
@@ -21,17 +29,11 @@ const Hero = () => {
         <div id="hero-text" className="z-10 flex flex-col gap-4 font-heading text-black">
           <p className="text-lg">The Wedding of</p>
           <div>
-            <p className="font-cursive2 text-5xl">Karel</p>
+            <p className="font-cursive2 text-5xl">{config.groomName}</p>
             <p className="font-cursive2 text-5xl">&</p>
-            <p className="font-cursive2 text-5xl">Sabrina</p>
+            <p className="font-cursive2 text-5xl">{config.brideName}</p>
           </div>
-          <p className="text-lg">
-            {location === 'bali'
-              ? '09.09.2025'
-              : location === 'malang'
-                ? '13.09.2025'
-                : '20.09.2025'}
-          </p>
+          <p className="text-lg">{formattedDate}</p>
         </div>
       </div>
       <ScrollDownText />

@@ -12,13 +12,15 @@ import {
   faqItems,
   bankDetails,
   dressCodes,
+  wishes,
   type NewLoveStorySegment,
   type NewLocationDetails,
   type NewFAQItem,
   type NewBankDetails,
   type NewDressCode,
+  type NewWish,
 } from '@/app/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm'
 
 // ============================================================================
 // Love Story Management
@@ -223,4 +225,26 @@ export async function updateDressCode(
 
     return created
   }
+}
+
+// ============================================================================
+// Wishes Management
+// ============================================================================
+
+export async function createWish(data: NewWish) {
+  const [wish] = await db.insert(wishes).values(data).returning()
+  return wish
+}
+
+export async function getWishes(weddingConfigId: string, limit: number = 50) {
+  return db
+    .select()
+    .from(wishes)
+    .where(eq(wishes.weddingConfigId, weddingConfigId))
+    .orderBy(desc(wishes.createdAt))
+    .limit(limit)
+}
+
+export async function deleteWish(wishId: string) {
+  await db.delete(wishes).where(eq(wishes.id, wishId))
 }

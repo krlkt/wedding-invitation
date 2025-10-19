@@ -9,6 +9,7 @@
 
 import { useEffect, useState } from 'react'
 import { WeddingConfiguration } from '@/app/db/schema'
+import Image from 'next/image'
 
 interface WeddingLayoutProps {
   subdomain?: string
@@ -96,7 +97,7 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
         <div className="px-4 text-center">
           {wedding.monogramFilename && (
             <div className="mb-8">
-              <img
+              <Image
                 src={`/api/files/${wedding.monogramFilename}`}
                 alt="Wedding Monogram"
                 className="mx-auto h-32 w-32 object-contain"

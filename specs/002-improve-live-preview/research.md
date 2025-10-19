@@ -42,7 +42,7 @@ function generateSubdomain(groomName: string, brideName: string): string {
 
 ### Decision: Server-Side Preview Route
 
-**Chosen Approach**: `/admin/preview` page route
+**Chosen Approach**: `/preview` page route
 
 **Rationale**:
 
@@ -54,13 +54,13 @@ function generateSubdomain(groomName: string, brideName: string): string {
 **Implementation Pattern**:
 
 ```typescript
-// app/admin/preview/page.tsx
+// app/preview/page.tsx
 export default async function PreviewPage() {
-  const session = await getSession()
-  if (!session) redirect('/admin/login')
+    const session = await getSession();
+    if (!session) redirect('/admin/login');
 
-  const config = await getWeddingConfigById(session.weddingConfigId)
-  return <WeddingLayout config={config} />
+    const config = await getWeddingConfigById(session.weddingConfigId);
+    return <WeddingLayout config={config} />;
 }
 ```
 
@@ -202,7 +202,7 @@ async function createWeddingConfiguration(...) {
 1. **Service Layer First**: Add `isSubdomainAvailable()` and retry logic
 2. **API Layer**: Update register endpoint error handling
 3. **UI Components**: Update LivePreview, add button to ConfigDashboard
-4. **New Route**: Create `/admin/preview` page
+4. **New Route**: Create `/preview` page
 5. **Tests**: Write failing tests before each implementation step (TDD)
 
 ### Performance Considerations

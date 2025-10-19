@@ -146,7 +146,7 @@ __tests__/
     └── register-api.test.ts          # MODIFY: Add subdomain validation tests
 ```
 
-**Structure Decision**: Next.js App Router architecture with feature-based components. Preview functionality integrated into existing `/admin` route with new `/admin/preview` subroute for full-screen viewing. Service layer modifications in `/lib/wedding-service.ts` for subdomain validation logic. New UI components use shadcn/ui with Radix UI primitives.
+**Structure Decision**: Next.js App Router architecture with feature-based components. Preview functionality integrated into existing `/admin` route with new `/preview` subroute for full-screen viewing. Service layer modifications in `/lib/wedding-service.ts` for subdomain validation logic. New UI components use shadcn/ui with Radix UI primitives.
 
 ## Phase 0: Outline & Research
 
@@ -203,7 +203,7 @@ __tests__/
    - Add subdomain uniqueness validation
    - Return friendly error messages on collision
 
-3. **GET /admin/preview** (new page route)
+3. **GET /preview** (new page route)
    - Server-side rendered preview page
    - Uses existing session authentication
 
@@ -260,7 +260,7 @@ _This section describes what the /tasks command will do - DO NOT execute during 
    - Add isSubdomainAvailable() helper function to wedding-service.ts
    - Add retry logic to createWeddingConfiguration() in wedding-service.ts
    - Update register route error handling for subdomain collisions
-   - Create /admin/preview page route
+   - Create /preview page route
    - Create FullScreenPreview component (using shadcn components)
    - Add "View Live Site" button to ConfigDashboard (using shadcn Button)
 

@@ -12,6 +12,7 @@ import {
   updateWeddingConfiguration,
   getFeatureToggles,
 } from '@/app/lib/wedding-service'
+import { isValidInstagramUrl } from '@/app/lib/validation'
 
 export async function GET(request: NextRequest) {
   try {
@@ -53,7 +54,8 @@ export async function GET(request: NextRequest) {
         groomMother: config.groomMother,
         brideFather: config.brideFather,
         brideMother: config.brideMother,
-        instagramLink: config.instagramLink,
+        groomsInstagramLink: config.groomsInstagramLink,
+        brideInstagramLink: config.brideInstagramLink,
         footerText: config.footerText,
         isPublished: config.isPublished,
         features: featuresMap,
@@ -84,7 +86,8 @@ export async function PUT(request: NextRequest) {
       groomMother,
       brideFather,
       brideMother,
-      instagramLink,
+      groomsInstagramLink,
+      brideInstagramLink,
       footerText,
     } = body
 
@@ -96,9 +99,24 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    // Validate Instagram link if provided
-    if (instagramLink && !instagramLink.match(/^https?:\/\/.+/)) {
-      return NextResponse.json({ success: false, error: 'Instagram link invalid' }, { status: 400 })
+    // Validate groom's Instagram link if provided
+    if (groomsInstagramLink !== undefined && groomsInstagramLink !== null) {
+      if (!isValidInstagramUrl(groomsInstagramLink)) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid Instagram URL for groom' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Validate bride's Instagram link if provided
+    if (brideInstagramLink !== undefined && brideInstagramLink !== null) {
+      if (!isValidInstagramUrl(brideInstagramLink)) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid Instagram URL for bride' },
+          { status: 400 }
+        )
+      }
     }
 
     // Update configuration
@@ -110,7 +128,8 @@ export async function PUT(request: NextRequest) {
       groomMother,
       brideFather,
       brideMother,
-      instagramLink,
+      groomsInstagramLink,
+      brideInstagramLink,
       footerText,
     })
 

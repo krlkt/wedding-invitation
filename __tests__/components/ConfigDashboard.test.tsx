@@ -14,7 +14,7 @@ describe('ConfigDashboard Component', () => {
     ;(global.fetch as jest.Mock).mockClear()
   })
 
-  it('should render "View Live Site" button that links to /admin/preview', async () => {
+  it('should render "View Live Site" button that links to /preview', async () => {
     const mockConfig = {
       id: 'test-id',
       subdomain: 'test-couple',
@@ -35,7 +35,7 @@ describe('ConfigDashboard Component', () => {
     // Wait for the config to load
     const button = await screen.findByRole('link', { name: /view live site/i })
     expect(button).toBeInTheDocument()
-    expect(button).toHaveAttribute('href', '/admin/preview')
+    expect(button).toHaveAttribute('href', '/preview')
     expect(button).toHaveAttribute('target', '_blank')
   })
 })

@@ -110,7 +110,7 @@ Success               ↓
 ### Preview Access States
 
 ```
-User navigates to /admin/preview
+User navigates to /preview
         ↓
 Session check
    ↓ (valid)        ↓ (invalid)

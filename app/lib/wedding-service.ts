@@ -9,11 +9,23 @@ import { db } from './database'
 import {
   weddingConfigurations,
   featureToggles,
+  loveStorySegments,
+  locationDetails,
+  galleryItems,
+  faqItems,
+  dressCodes,
+  bankDetails,
   type NewWeddingConfiguration,
   type WeddingConfiguration,
   type FeatureToggle,
+  type LoveStorySegment,
+  type LocationDetails,
+  type GalleryItem,
+  type FAQItem,
+  type DressCode,
+  type BankDetails,
 } from '@/app/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, asc } from 'drizzle-orm'
 
 /**
  * Generate URL-safe subdomain from names
@@ -80,18 +92,11 @@ export async function createWeddingConfiguration(
   const [config] = await db.insert(weddingConfigurations).values(newConfig).returning()
 
   // Create default feature toggles (all enabled by default)
-  const defaultFeatures = [
-    'love_story',
-    'rsvp',
-    'gallery',
-    'prewedding_videos',
-    'faqs',
-    'dress_code',
-    'instagram_link',
-  ] as const
+  // Import all features from schema for consistency
+  const { FEATURE_NAMES } = await import('@/app/db/schema/features')
 
   await db.insert(featureToggles).values(
-    defaultFeatures.map((featureName) => ({
+    FEATURE_NAMES.map((featureName) => ({
       weddingConfigId: config.id,
       featureName,
       isEnabled: true,
@@ -178,6 +183,9 @@ export async function toggleFeature(
   featureName: string,
   isEnabled: boolean
 ): Promise<FeatureToggle> {
+  // Import FeatureName type for validation
+  type FeatureName = (typeof import('@/app/db/schema/features').FEATURE_NAMES)[number]
+
   // Check if feature toggle exists
   const [existing] = await db
     .select()
@@ -185,7 +193,7 @@ export async function toggleFeature(
     .where(
       and(
         eq(featureToggles.weddingConfigId, weddingConfigId),
-        eq(featureToggles.featureName, featureName as any)
+        eq(featureToggles.featureName, featureName as FeatureName)
       )
     )
     .limit(1)
@@ -208,7 +216,7 @@ export async function toggleFeature(
       .insert(featureToggles)
       .values({
         weddingConfigId,
-        featureName: featureName as any,
+        featureName: featureName as FeatureName,
         isEnabled,
       })
       .returning()
@@ -229,4 +237,74 @@ export async function publishWeddingConfig(configId: string): Promise<WeddingCon
  */
 export async function unpublishWeddingConfig(configId: string): Promise<WeddingConfiguration> {
   return updateWeddingConfiguration(configId, { isPublished: false })
+}
+
+/**
+ * Get love story segments for a wedding
+ */
+export async function getLoveStorySegments(weddingConfigId: string): Promise<LoveStorySegment[]> {
+  return db
+    .select()
+    .from(loveStorySegments)
+    .where(eq(loveStorySegments.weddingConfigId, weddingConfigId))
+    .orderBy(asc(loveStorySegments.order))
+}
+
+/**
+ * Get location details for a wedding
+ */
+export async function getLocationDetails(weddingConfigId: string): Promise<LocationDetails[]> {
+  return db
+    .select()
+    .from(locationDetails)
+    .where(eq(locationDetails.weddingConfigId, weddingConfigId))
+    .orderBy(asc(locationDetails.order))
+}
+
+/**
+ * Get gallery items for a wedding
+ */
+export async function getGalleryItems(weddingConfigId: string): Promise<GalleryItem[]> {
+  return db
+    .select()
+    .from(galleryItems)
+    .where(eq(galleryItems.weddingConfigId, weddingConfigId))
+    .orderBy(asc(galleryItems.order))
+}
+
+/**
+ * Get FAQ items for a wedding
+ */
+export async function getFAQItems(weddingConfigId: string): Promise<FAQItem[]> {
+  return db
+    .select()
+    .from(faqItems)
+    .where(eq(faqItems.weddingConfigId, weddingConfigId))
+    .orderBy(asc(faqItems.order))
+}
+
+/**
+ * Get dress code for a wedding
+ */
+export async function getDressCode(weddingConfigId: string): Promise<DressCode | null> {
+  const [dressCode] = await db
+    .select()
+    .from(dressCodes)
+    .where(eq(dressCodes.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  return dressCode || null
+}
+
+/**
+ * Get bank details for a wedding
+ */
+export async function getBankDetails(weddingConfigId: string): Promise<BankDetails | null> {
+  const [details] = await db
+    .select()
+    .from(bankDetails)
+    .where(eq(bankDetails.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  return details || null
 }

@@ -77,13 +77,13 @@ Cookie: session={...}
 **Used by**:
 
 1. `LivePreview` component in admin dashboard (inline preview)
-2. `/admin/preview` page route (full-screen preview)
+2. `/preview` page route (full-screen preview)
 
 **Caching**: None - always fetch fresh data for preview accuracy
 
 ---
 
-## GET /admin/preview
+## GET /preview
 
 **Status**: New page route
 
@@ -92,7 +92,7 @@ Cookie: session={...}
 ### Request
 
 **Method**: `GET`
-**URL**: `/admin/preview`
+**URL**: `/preview`
 **Authentication**: Required (session cookie)
 
 **Headers**:
@@ -115,26 +115,26 @@ Redirects to `/admin/login`
 
 ### Implementation
 
-**File**: `app/admin/preview/page.tsx`
+**File**: `app/preview/page.tsx`
 
 **Server Component**:
 
 ```typescript
 export default async function PreviewPage() {
-  const session = await getSession()
-  if (!session) redirect('/admin/login')
+    const session = await getSession();
+    if (!session) redirect('/admin/login');
 
-  const config = await getWeddingConfigById(session.weddingConfigId)
-  if (!config) {
-    return <div>No configuration found</div>
-  }
+    const config = await getWeddingConfigById(session.weddingConfigId);
+    if (!config) {
+        return <div>No configuration found</div>;
+    }
 
-  return <WeddingLayout config={config} />
+    return <WeddingLayout config={config} />;
 }
 ```
 
 ### User Flow
 
 ```
-Admin Dashboard → Click "View Live Site" button → Opens /admin/preview in new tab
+Admin Dashboard → Click "View Live Site" button → Opens /preview in new tab
 ```

@@ -96,7 +96,7 @@ Next.js App Router structure:
 - [x] **T005** [P] Write failing component test for ConfigDashboard "View Live Site" button
   - Test file: `__tests__/components/ConfigDashboard.test.tsx`
   - Verify button renders with correct text
-  - Verify button click triggers navigation/link to `/admin/preview`
+  - Verify button click triggers navigation/link to `/preview`
   - Test button uses shadcn Button component styling
   - **Expected**: Test fails (button doesn't exist yet)
   - **Dependencies**: T001 (needs shadcn Button)
@@ -127,7 +127,7 @@ Next.js App Router structure:
 
 - [x] **T008** Write failing integration test for full-screen preview navigation (skipped - covered by T007)
   - Test file: `__tests__/integration/live-preview.test.ts` (update existing)
-  - Test authenticated user can access `/admin/preview`
+  - Test authenticated user can access `/preview`
   - Test unauthenticated user redirected to login
   - Test preview displays current config
   - **Expected**: Test fails (route doesn't exist)
@@ -198,7 +198,7 @@ Next.js App Router structure:
   - File: `app/components/ConfigDashboard.tsx`
   - Import shadcn Button component
   - Add button with text "View Live Site"
-  - Use Link component to navigate to `/admin/preview`
+  - Use Link component to navigate to `/preview`
   - Add `target="_blank"` to open in new tab
   - Style with shadcn Button variant (e.g., "default" or "outline")
   - Position near preview section or header
@@ -208,9 +208,9 @@ Next.js App Router structure:
 
 ### Page Routes
 
-- [x] **T015** Create /admin/preview page route
-  - File: `app/admin/preview/page.tsx`
-  - Create new directory: `app/admin/preview/`
+- [x] **T015** Create /preview page route
+  - File: `app/preview/page.tsx`
+  - Create new directory: `app/preview/`
   - Implement server component with session authentication
   - Call getSession() and redirect to /admin/login if not authenticated
   - Fetch wedding config with getWeddingConfigById(session.weddingConfigId)
@@ -269,7 +269,7 @@ Next.js App Router structure:
     - `app/components/LivePreview.tsx`
     - `app/components/ConfigDashboard.tsx`
     - `app/components/preview/FullScreenPreview.tsx`
-    - `app/admin/preview/page.tsx`
+    - `app/preview/page.tsx`
   - Add additional unit tests if coverage below 80%
   - **Dependencies**: T019 complete
   - **Estimated**: 15 min

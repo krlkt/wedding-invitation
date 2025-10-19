@@ -31,8 +31,17 @@ export const weddingConfigurations = sqliteTable('wedding_configurations', {
   groomMother: text('groom_mother'),
   brideFather: text('bride_father'),
   brideMother: text('bride_mother'),
-  instagramLink: text('instagram_link'),
+
+  // Social Media Links
+  groomsInstagramLink: text('grooms_instagram_link'),
+  brideInstagramLink: text('bride_instagram_link'),
+
+  // Content Fields
   footerText: text('footer_text'),
+
+  // DEPRECATED: Use groomsInstagramLink and brideInstagramLink instead
+  instagramLink: text('instagram_link'),
+
   isPublished: integer('is_published', { mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .$defaultFn(() => new Date())

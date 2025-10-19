@@ -26,6 +26,7 @@
     "@mui/x-charts": "^8.6.0",
     "@mui/x-data-grid": "^8.4.0",
     "@paralleldrive/cuid2": "^2.2.2",
+    "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-slot": "^1.2.3",
     "@splidejs/react-splide": "^0.7.12",
     "@tanstack/react-virtual": "^3.13.12",

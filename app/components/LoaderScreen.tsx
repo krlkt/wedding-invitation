@@ -3,8 +3,14 @@ import { FC } from 'react'
 
 interface LoaderScreenProps {
   isVisible: boolean
+  groomName?: string
+  brideName?: string
 }
-const LoaderScreen: FC<LoaderScreenProps> = ({ isVisible }) => {
+const LoaderScreen: FC<LoaderScreenProps> = ({
+  isVisible,
+  groomName = 'Groom',
+  brideName = 'Bride',
+}) => {
   return (
     <AnimatePresence>
       {isVisible && (
@@ -16,7 +22,7 @@ const LoaderScreen: FC<LoaderScreenProps> = ({ isVisible }) => {
         >
           <svg viewBox="0 0 400 400">
             <text name="text-body" x="40%" y="40%" textAnchor="middle" className={'animate-loader'}>
-              Karel
+              {groomName}
             </text>
             <text
               name="text-body"
@@ -36,7 +42,7 @@ const LoaderScreen: FC<LoaderScreenProps> = ({ isVisible }) => {
               textAnchor="middle"
               className={'animate-loader'}
             >
-              Sabrina
+              {brideName}
             </text>
           </svg>
         </motion.div>

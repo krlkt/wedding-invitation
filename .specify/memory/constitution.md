@@ -2,15 +2,16 @@
 Sync Impact Report:
 Version change: 1.1.0 → 1.2.0
 Modified principles:
-- Technology Stack Consistency: Added shadcn/ui for new components
+- None
 Added sections:
-- Principle VII: Next.js 14 Data Fetching Patterns (new mandatory data fetching guidelines)
+- Git Branch Naming Convention (under Development Workflow)
 Removed sections:
 - None
 Templates requiring updates:
-- ✅ plan-template.md - reviewed, no structural changes needed
-- ✅ spec-template.md - reviewed, no requirement-specific updates needed
-- ✅ tasks-template.md - reviewed, data fetching pattern aligned with implementation tasks
+- ✅ plan-template.md - updated branch naming format in line 4
+- ✅ spec-template.md - no updates needed (references feature branch generically)
+- ✅ tasks-template.md - no updates needed (references feature directory, not branches)
+- ✅ README.md - reviewed, no branch naming references
 Follow-up TODOs:
 - Refactor existing components using useEffect + fetch to use Server Components (WeddingLayout.tsx is a candidate)
 -->
@@ -142,6 +143,28 @@ tests/
 
 ## Development Workflow
 
+### Git Branch Naming Convention
+
+All feature branches MUST follow this naming pattern:
+
+```
+OIALT-{ticket-number}-{brief-description}
+```
+
+**Requirements**:
+
+- Prefix: `OIALT-` (connects branch to JIRA project)
+- Ticket number: JIRA ticket ID (e.g., `8`, `15`, `142`)
+- Brief description: kebab-case summary of the feature
+
+**Examples**:
+
+- `OIALT-8-login-page-redesign`
+- `OIALT-15-rsvp-form-validation`
+- `OIALT-42-gallery-upload-optimization`
+
+**Rationale**: This convention enables automatic branch-to-JIRA linking, improving traceability and project management workflow integration.
+
 ### Code Style Requirements
 
 - 4-space indentation (enforced by Prettier)
@@ -167,8 +190,8 @@ tests/
    ```typescript
    // ✅ CORRECT: Async Server Component
    export default async function Page() {
-     const data = await fetchData()
-     return <ClientComponent data={data} />
+       const data = await fetchData();
+       return <ClientComponent data={data} />;
    }
    ```
 
@@ -176,29 +199,31 @@ tests/
 
    ```typescript
    // ✅ CORRECT: Receive data from parent Server Component
-   'use client'
+   'use client';
    export default function ClientComponent({ data }) {
-     return <div>{data.name}</div>
+       return <div>{data.name}</div>;
    }
    ```
 
 3. **AVOID** (legacy pattern):
    ```typescript
    // ❌ WRONG: useEffect + fetch in Client Component
-   'use client'
+   'use client';
    export default function Component() {
-     const [data, setData] = useState(null)
-     useEffect(() => {
-       fetch('/api/data').then(r => r.json()).then(setData)
-     }, [])
-     return <div>{data?.name}</div>
+       const [data, setData] = useState(null);
+       useEffect(() => {
+           fetch('/api/data')
+               .then((r) => r.json())
+               .then(setData);
+       }, []);
+       return <div>{data?.name}</div>;
    }
    ```
 
 ### Database Operations
 
 - Use parameterized queries to prevent SQL injection
-- Define models in `/app/models/` with proper TypeScript types
+- Define models in `/app/db/schema` with proper Drizzle ORM
 - Use JSON.parse(JSON.stringify()) pattern for server-to-client serialization
 - Implement proper error handling for database operations
 
@@ -281,4 +306,4 @@ Deviations from this constitution require:
 2. Time-boxed implementation with review date
 3. Plan for eventual compliance or constitution update
 
-**Version**: 1.2.0 | **Ratified**: 2025-09-28 | **Last Amended**: 2025-10-11
+**Version**: 1.2.0 | **Ratified**: 2025-09-28 | **Last Amended**: 2025-10-12

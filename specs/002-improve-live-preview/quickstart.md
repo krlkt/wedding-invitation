@@ -77,14 +77,14 @@ curl -X POST http://localhost:3000/api/auth/login \
   -c cookies.txt
 
 # 2. Access preview page
-curl -X GET http://localhost:3000/admin/preview \
+curl -X GET http://localhost:3000/preview \
   -b cookies.txt
 
 # Expected: HTML page with wedding layout
 # Should include couple names, wedding date, etc.
 
 # 3. Access without authentication
-curl -X GET http://localhost:3000/admin/preview
+curl -X GET http://localhost:3000/preview
 
 # Expected: Redirect to /admin/login (302)
 ```
@@ -137,7 +137,7 @@ Preview: oialt.vercel.app (shared domain)
 1. Login to `/admin`
 2. Locate "View Live Site" button in ConfigDashboard
 3. Click button
-4. Verify opens `/admin/preview` (preferably in new tab)
+4. Verify opens `/preview` (preferably in new tab)
 5. Verify full wedding site is displayed
 6. Verify no admin interface elements
 
@@ -202,7 +202,7 @@ time curl -X POST http://localhost:3000/api/auth/register \
 
 ```bash
 # Measure preview page render time
-time curl -X GET http://localhost:3000/admin/preview -b cookies.txt
+time curl -X GET http://localhost:3000/preview -b cookies.txt
 ```
 
 **Target**: < 300ms server response time
@@ -253,7 +253,7 @@ If issues are detected:
 
 - [ ] Two couples with same names get unique subdomains
 - [ ] Subdomain retry logic executes on collision
-- [ ] Full-screen preview accessible at `/admin/preview`
+- [ ] Full-screen preview accessible at `/preview`
 - [ ] Unauthenticated users redirected from preview
 - [ ] LivePreview URL display updated (no broken links)
 - [ ] "View Live Site" button added to dashboard
