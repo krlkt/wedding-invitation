@@ -43,9 +43,7 @@ export default async function AdminDashboard() {
   // Check authentication
   const session = await getSession()
 
-  if (!session || !session.userId) {
-    redirect('/admin/login')
-  }
+  if (!session?.userId) redirect('/admin/login')
 
   // Get user's wedding configuration
   const weddingConfig = await getWeddingConfig(session.userId)
