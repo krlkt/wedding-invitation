@@ -8,24 +8,26 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+const VALID_ADMIN_ROUTES = ['/admin', '/admin/dashboard', '/admin/settings'] // add all valid admin routes here
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Define public paths that don't require subdomain handling or authentication checks
-  const publicPaths = ['/'] // Add other public paths as needed
+  // Define clearly which areas are "admin"
+  const isAdminRoute = pathname.startsWith('/admin')
 
-  // Skip middleware for public paths, static files, and API routes (handled in route handlers)
+  // Allow all non-admin pages
+  if (!isAdminRoute) return NextResponse.next()
+
+  // Allow admin login page
+  if (pathname === '/admin/login') return NextResponse.next()
+
+  // Allow all static assets and API routes
   if (
-    publicPaths.includes(pathname) ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/static') ||
     pathname.includes('/api/')
   ) {
-    return NextResponse.next()
-  }
-
-  // Allow the login page to be accessed without a session
-  if (pathname.startsWith('/admin/login')) {
     return NextResponse.next()
   }
 
@@ -34,9 +36,15 @@ export function middleware(request: NextRequest) {
   if (!session) {
     const loginUrl = request.nextUrl.clone()
     loginUrl.pathname = '/admin/login'
-    // Optionally, save the original path so user can return after login
     loginUrl.searchParams.set('redirect', pathname)
     return NextResponse.redirect(loginUrl)
+  }
+
+  // Redirect invalid admin routes to /admin
+  if (!VALID_ADMIN_ROUTES.includes(pathname)) {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/admin'
+    return NextResponse.redirect(redirectUrl)
   }
 
   // Extract subdomain from hostname
