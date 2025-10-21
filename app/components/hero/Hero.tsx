@@ -5,7 +5,14 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
 const Hero = () => {
-  const { config } = useWeddingData()
+  const { config, startingSection } = useWeddingData()
+
+  // Use display names from starting section, fallback to basic names from config
+  const groomDisplayName = startingSection?.groomDisplayName || config.groomName
+  const brideDisplayName = startingSection?.brideDisplayName || config.brideName
+
+  // Show wedding date if enabled in starting section (default true)
+  const showWeddingDate = startingSection?.showWeddingDate !== false
 
   // Format wedding date
   const formattedDate = new Date(config.weddingDate).toLocaleDateString('en-GB', {
@@ -14,13 +21,18 @@ const Hero = () => {
     year: 'numeric',
   })
 
+  // Show parent info if enabled
+  const showParentInfo = startingSection?.showParentInfo === true
+  const hasGroomParents = startingSection?.groomFatherName || startingSection?.groomMotherName
+  const hasBrideParents = startingSection?.brideFatherName || startingSection?.brideMotherName
+
   return (
     <div className="hero-background flex h-full w-full grow flex-col items-center justify-center text-center">
       <div className="inner-wrapper relative flex max-w-[600px] flex-col items-center gap-4 px-[25%] py-[15%]">
         <div id="monogram" className="relative h-28 w-24">
           <Image
             src={'/images/monogram/monogram.webp'}
-            alt={`${config.groomName} & ${config.brideName} Monogram`}
+            alt={`${groomDisplayName} & ${brideDisplayName} Monogram`}
             fill
             priority
             fetchPriority="high"
@@ -29,11 +41,25 @@ const Hero = () => {
         <div id="hero-text" className="z-10 flex flex-col gap-4 font-heading text-black">
           <p className="text-lg">The Wedding of</p>
           <div>
-            <p className="font-cursive2 text-5xl">{config.groomName}</p>
+            <p className="font-cursive2 text-5xl">{groomDisplayName}</p>
+            {showParentInfo && hasGroomParents && (
+              <div className="mt-2 text-sm">
+                <p className="text-xs opacity-70">Son of</p>
+                {startingSection?.groomFatherName && <p>{startingSection.groomFatherName}</p>}
+                {startingSection?.groomMotherName && <p>{startingSection.groomMotherName}</p>}
+              </div>
+            )}
             <p className="font-cursive2 text-5xl">&</p>
-            <p className="font-cursive2 text-5xl">{config.brideName}</p>
+            <p className="font-cursive2 text-5xl">{brideDisplayName}</p>
+            {showParentInfo && hasBrideParents && (
+              <div className="mt-2 text-sm">
+                <p className="text-xs opacity-70">Daughter of</p>
+                {startingSection?.brideFatherName && <p>{startingSection.brideFatherName}</p>}
+                {startingSection?.brideMotherName && <p>{startingSection.brideMotherName}</p>}
+              </div>
+            )}
           </div>
-          <p className="text-lg">{formattedDate}</p>
+          {showWeddingDate && <p className="text-lg">{formattedDate}</p>}
         </div>
       </div>
       <ScrollDownText />

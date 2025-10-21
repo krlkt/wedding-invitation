@@ -87,7 +87,7 @@ export default function Template1Preview({
           brideName={config.brideName}
         />
       )}
-      <WeddingDataProvider config={config} features={features}>
+      <WeddingDataProvider config={config} features={features} startingSection={content.startingSection}>
         <ScrollContainerProvider containerRef={scrollContainerRef} isEmbedded={!isFullscreenMode}>
           <LocationProvider location="bali">
             <div
@@ -136,15 +136,37 @@ export default function Template1Preview({
                       className={`${viewportHeightClass} relative flex flex-col overflow-hidden`}
                       style={viewportHeightStyle}
                     >
-                      <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="absolute h-full w-full object-cover"
-                      >
-                        <source src="/hero.mp4" type="video/mp4" />
-                      </video>
+                      {/* Background Media - Use custom media if uploaded, otherwise default */}
+                      {content.startingSection?.backgroundFilename && content.startingSection?.backgroundType === 'video' ? (
+                        <video
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="absolute h-full w-full object-cover"
+                        >
+                          <source src={content.startingSection.backgroundFilename} type={content.startingSection.backgroundMimeType || 'video/mp4'} />
+                        </video>
+                      ) : content.startingSection?.backgroundFilename && content.startingSection?.backgroundType === 'image' ? (
+                        <Image
+                          src={content.startingSection.backgroundFilename}
+                          alt="Wedding background"
+                          fill
+                          className="absolute h-full w-full object-cover"
+                          priority
+                        />
+                      ) : (
+                        // Default video if no custom media
+                        <video
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="absolute h-full w-full object-cover"
+                        >
+                          <source src="/hero.mp4" type="video/mp4" />
+                        </video>
+                      )}
                       <Hero />
                     </section>
                   )}
