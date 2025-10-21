@@ -3,13 +3,14 @@ import InvitationPage from './InvitationPage'
 import UnopenedInvitationPage from './UnopenedInvitationPage'
 import UnidentifiedPersonPage from './UnidentifiedPersonPage'
 import NotInGuestListPage from './NotInGuestListPage'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { Locations } from '../components/LocationComponent'
 import { query } from '../db/client'
 import { Wish } from '../models/wish'
 import { RSVP } from '../models/rsvp'
 import { LocationProvider } from '../utils/useLocation'
 import { GuestIdProvider } from '../utils/useGuestId'
+import { getSession } from '../lib/session'
 
 export const revalidate = 0
 
@@ -24,9 +25,14 @@ export default async function Page({
   params: { location: Locations }
   searchParams: { [key: string]: string | string[] | undefined }
 }) {
-  if (!('to' in searchParams)) {
-    return <UnidentifiedPersonPage />
-  }
+  const session = await getSession()
+  const isAdmin = !!session?.userId
+
+  // Admins visiting any invitation page → redirect to /admin
+  if (isAdmin) return redirect('/admin')
+
+  // Unknown link without 'to' query → show UnidentifiedPersonPage (guest)
+  if (!('to' in searchParams)) return <UnidentifiedPersonPage />
 
   const guestName = searchParams.to as string
   const guestId = searchParams.id ? parseInt(searchParams.id as string) : -1
