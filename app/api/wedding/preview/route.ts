@@ -15,6 +15,7 @@ import {
   getDressCode,
   getBankDetails,
   getWishes,
+  getStartingSectionContent,
 } from '@/app/lib/content-service'
 import { getGalleryPhotos } from '@/app/lib/file-service'
 import type { PreviewData } from '@/app/components/preview/types'
@@ -47,8 +48,9 @@ export async function GET(request: NextRequest) {
     )
 
     // Fetch content based on enabled features (parallel execution)
-    const [loveStory, gallery, faqs, dressCode, locations, bankDetails, wishesRaw] =
+    const [startingSection, loveStory, gallery, faqs, dressCode, locations, bankDetails, wishesRaw] =
       await Promise.all([
+        getStartingSectionContent(config.id), // Always fetch (needed for Starting Section)
         features.love_story ? getLoveStorySegments(config.id) : Promise.resolve([]),
         features.gallery ? getGalleryPhotos(config.id) : Promise.resolve([]),
         features.faqs ? getFAQs(config.id) : Promise.resolve([]),
@@ -71,6 +73,7 @@ export async function GET(request: NextRequest) {
       config,
       features,
       content: {
+        startingSection,
         loveStory,
         gallery: gallery.slice(0, 20), // Limit to 20 for performance
         faqs,
