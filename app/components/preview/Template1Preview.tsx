@@ -87,7 +87,11 @@ export default function Template1Preview({
           brideName={config.brideName}
         />
       )}
-      <WeddingDataProvider config={config} features={features} startingSection={content.startingSection}>
+      <WeddingDataProvider
+        config={config}
+        features={features}
+        startingSection={content.startingSection}
+      >
         <ScrollContainerProvider containerRef={scrollContainerRef} isEmbedded={!isFullscreenMode}>
           <LocationProvider location="bali">
             <div
@@ -137,7 +141,8 @@ export default function Template1Preview({
                       style={viewportHeightStyle}
                     >
                       {/* Background Media - Use custom media if uploaded, otherwise default */}
-                      {content.startingSection?.backgroundFilename && content.startingSection?.backgroundType === 'video' ? (
+                      {content.startingSection?.backgroundFilename &&
+                      content.startingSection?.backgroundType === 'video' ? (
                         <video
                           autoPlay
                           loop
@@ -145,9 +150,13 @@ export default function Template1Preview({
                           playsInline
                           className="absolute h-full w-full object-cover"
                         >
-                          <source src={content.startingSection.backgroundFilename} type={content.startingSection.backgroundMimeType || 'video/mp4'} />
+                          <source
+                            src={content.startingSection.backgroundFilename}
+                            type={content.startingSection.backgroundMimeType || 'video/mp4'}
+                          />
                         </video>
-                      ) : content.startingSection?.backgroundFilename && content.startingSection?.backgroundType === 'image' ? (
+                      ) : content.startingSection?.backgroundFilename &&
+                        content.startingSection?.backgroundType === 'image' ? (
                         <Image
                           src={content.startingSection.backgroundFilename}
                           alt="Wedding background"

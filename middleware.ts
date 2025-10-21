@@ -11,8 +11,12 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Skip middleware for static files and API routes (handled in route handlers)
+  // Define public paths that don't require subdomain handling or authentication checks
+  const publicPaths = ['/'] // Add other public paths as needed
+
+  // Skip middleware for public paths, static files, and API routes (handled in route handlers)
   if (
+    publicPaths.includes(pathname) ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/static') ||
     pathname.includes('/api/')

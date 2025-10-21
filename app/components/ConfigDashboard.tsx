@@ -26,8 +26,11 @@ export default function ConfigDashboard() {
   const [saving, setSaving] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
-  const [startingSectionContent, setStartingSectionContent] = useState<StartingSectionContent | null>(null)
-  const [draftStartingSection, setDraftStartingSection] = useState<Partial<StartingSectionContent> | undefined>(undefined)
+  const [startingSectionContent, setStartingSectionContent] =
+    useState<StartingSectionContent | null>(null)
+  const [draftStartingSection, setDraftStartingSection] = useState<
+    Partial<StartingSectionContent> | undefined
+  >(undefined)
 
   //WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
@@ -212,22 +215,25 @@ export default function ConfigDashboard() {
     setDraftStartingSection(draft)
   }, [])
 
-  const handleBackgroundUpload = useCallback((backgroundData: {
-    backgroundFilename: string
-    backgroundOriginalName: string
-    backgroundType: 'image' | 'video'
-    backgroundMimeType: string
-    backgroundFileSize: number
-  }) => {
-    // Only update draft state - don't update saved state yet
-    // This preserves unsaved changes in the form
-    setDraftStartingSection((prev) => ({
-      ...prev,
-      ...backgroundData,
-    }))
-    // Preview will update automatically via draft merge
-    // Don't trigger refetch to avoid resetting the form
-  }, [])
+  const handleBackgroundUpload = useCallback(
+    (backgroundData: {
+      backgroundFilename: string
+      backgroundOriginalName: string
+      backgroundType: 'image' | 'video'
+      backgroundMimeType: string
+      backgroundFileSize: number
+    }) => {
+      // Only update draft state - don't update saved state yet
+      // This preserves unsaved changes in the form
+      setDraftStartingSection((prev) => ({
+        ...prev,
+        ...backgroundData,
+      }))
+      // Preview will update automatically via draft merge
+      // Don't trigger refetch to avoid resetting the form
+    },
+    []
+  )
 
   if (loading) {
     return (
@@ -298,7 +304,18 @@ export default function ConfigDashboard() {
 // BasicInfoForm and ContentForm removed - features are now managed in accordions below
 // API endpoints remain the same
 
-function FeaturesForm({ config, onBatchSave, saving, onLocalChange, startingSectionContent, draftStartingSectionContent, onUpdateStartingSection, onStartingSectionLocalChange, onRefetchStartingSection, onBackgroundUpload }: any) {
+function FeaturesForm({
+  config,
+  onBatchSave,
+  saving,
+  onLocalChange,
+  startingSectionContent,
+  draftStartingSectionContent,
+  onUpdateStartingSection,
+  onStartingSectionLocalChange,
+  onRefetchStartingSection,
+  onBackgroundUpload,
+}: any) {
   const features = [
     {
       name: 'hero',
@@ -334,8 +351,12 @@ function FeaturesForm({ config, onBatchSave, saving, onLocalChange, startingSect
   // Track draft state locally (separate from saved state)
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
   const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set())
-  const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(new Set())
-  const [localDraftStartingSection, setLocalDraftStartingSection] = useState<Partial<StartingSectionContent>>({})
+  const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(
+    new Set()
+  )
+  const [localDraftStartingSection, setLocalDraftStartingSection] = useState<
+    Partial<StartingSectionContent>
+  >({})
 
   // Update draft state when config changes (after save)
   useEffect(() => {
@@ -416,13 +437,16 @@ function FeaturesForm({ config, onBatchSave, saving, onLocalChange, startingSect
     setChangedStartingSectionFields(fields)
   }, [])
 
-  const handleStartingSectionLocalChange = useCallback((draft: Partial<StartingSectionContent>) => {
-    setLocalDraftStartingSection((prev) => ({
-      ...prev,
-      ...draft,
-    }))
-    onStartingSectionLocalChange(draft)
-  }, [onStartingSectionLocalChange])
+  const handleStartingSectionLocalChange = useCallback(
+    (draft: Partial<StartingSectionContent>) => {
+      setLocalDraftStartingSection((prev) => ({
+        ...prev,
+        ...draft,
+      }))
+      onStartingSectionLocalChange(draft)
+    },
+    [onStartingSectionLocalChange]
+  )
 
   return (
     <>
