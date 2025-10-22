@@ -1,6 +1,6 @@
 # Quickstart: Template-Based Live Preview Testing
 
-**Feature**: OIALT-8 | **Date**: 2025-10-12
+**Feature**: OIAL-8 | **Date**: 2025-10-12
 **Purpose**: Manual testing guide for template-based live preview with feature toggles
 
 ---

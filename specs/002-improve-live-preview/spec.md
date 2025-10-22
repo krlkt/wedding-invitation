@@ -34,7 +34,7 @@
 
 ### Session 2025-10-10
 
-- Q: What is the status of custom domain (oialt.com) availability for this feature release? → A: Custom domain NOT available now - will be purchased/configured later after most features are complete
+- Q: What is the status of custom domain (oial.com) availability for this feature release? → A: Custom domain NOT available now - will be purchased/configured later after most features are complete
 - Q: What should happen when a user clicks "View Live Site" before their wedding configuration is fully saved or is incomplete? → A: Show error message - "Please save your configuration first" and prevent preview
 - Q: When clicking "View Live Site" button, how should the preview page open? → A: New browser tab (target="\_blank") - user can switch between admin and preview
 
@@ -83,7 +83,7 @@ As a couple managing their wedding invitation site, I want to see a full-screen 
 
 - **FR-001**: System MUST provide a full-screen preview option that displays the complete wedding site without admin interface elements
 - **FR-002**: System MUST show couples their wedding site preview using their actual configuration data (names, dates, features, content)
-- **FR-003**: System MUST display message indicating shared domain is current, custom subdomain available after domain purchase (e.g., "Your wedding site - Custom subdomain available after domain setup" or "Currently on shared domain: oialt.vercel.app")
+- **FR-003**: System MUST display message indicating shared domain is current, custom subdomain available after domain purchase (e.g., "Your wedding site - Custom subdomain available after domain setup" or "Currently on shared domain: oial.vercel.app")
 - **FR-004**: Couples MUST be able to access the full-screen preview through a dedicated button in the admin dashboard that opens preview in a new browser tab (target="\_blank")
 - **FR-004a**: System MUST validate configuration is saved before allowing preview access; show error "Please save your configuration first" if unsaved changes exist
 - **FR-005**: Preview MUST reflect the current state of the couple's configuration in real-time

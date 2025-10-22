@@ -1,6 +1,6 @@
 # Research: Template-Based Live Preview with Feature Toggle Integration
 
-**Feature**: OIALT-8 | **Date**: 2025-10-12
+**Feature**: OIAL-8 | **Date**: 2025-10-12
 **Context**: Transform LivePreview from placeholder text to real template rendering with feature toggles
 
 ---

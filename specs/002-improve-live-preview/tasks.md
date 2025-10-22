@@ -177,7 +177,7 @@ Next.js App Router structure:
   - File: `app/components/LivePreview.tsx`
   - Change line 71 from `{config.subdomain}.yourdomain.com`
   - To: `Your wedding site (Available with custom domain)`
-  - Or: `oialt.vercel.app (shared domain)`
+  - Or: `oial.vercel.app (shared domain)`
   - Keep preview rendering logic unchanged
   - **Dependencies**: T002-T008 complete, but no blocking dependency on other implementation
   - **Can run parallel with**: T013-T015 (different files)

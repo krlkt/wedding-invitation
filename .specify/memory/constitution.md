@@ -148,20 +148,20 @@ tests/
 All feature branches MUST follow this naming pattern:
 
 ```
-OIALT-{ticket-number}-{brief-description}
+OIAL-{ticket-number}-{brief-description}
 ```
 
 **Requirements**:
 
-- Prefix: `OIALT-` (connects branch to JIRA project)
+- Prefix: `OIAL-` (connects branch to JIRA project)
 - Ticket number: JIRA ticket ID (e.g., `8`, `15`, `142`)
 - Brief description: kebab-case summary of the feature
 
 **Examples**:
 
-- `OIALT-8-login-page-redesign`
-- `OIALT-15-rsvp-form-validation`
-- `OIALT-42-gallery-upload-optimization`
+- `OIAL-8-login-page-redesign`
+- `OIAL-15-rsvp-form-validation`
+- `OIAL-42-gallery-upload-optimization`
 
 **Rationale**: This convention enables automatic branch-to-JIRA linking, improving traceability and project management workflow integration.
 

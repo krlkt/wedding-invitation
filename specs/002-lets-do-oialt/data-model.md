@@ -1,6 +1,6 @@
 # Data Model: Template-Based Live Preview
 
-**Feature**: OIALT-8 | **Date**: 2025-10-12
+**Feature**: OIAL-8 | **Date**: 2025-10-12
 **Note**: This feature primarily uses existing database entities. New types are TypeScript interfaces only.
 
 ---
