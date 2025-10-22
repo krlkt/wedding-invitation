@@ -216,11 +216,19 @@ export function StartingSectionForm({
       validation = validateVideoFile(file)
     } else {
       setFileError('Invalid file type. Please upload an image or video.')
+      setSelectedFile(null)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
       return
     }
 
     if (!validation.valid) {
       setFileError(validation.error!)
+      setSelectedFile(null)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
       return
     }
 
