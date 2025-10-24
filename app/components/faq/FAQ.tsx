@@ -1,7 +1,4 @@
-import DownIcon from '@/app/icons/DownIcon'
-import Accordion from '@mui/material/Accordion'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import AccordionSummary from '@mui/material/AccordionSummary'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import type { FAQItem } from '@/app/db/schema/content'
 
 interface FAQProps {
@@ -9,16 +6,16 @@ interface FAQProps {
 }
 
 const FAQ = ({ faqs }: FAQProps) => (
-  <>
-    {faqs.map(({ question, answer }, index) => (
-      <Accordion key={index} className="w-full">
-        <AccordionSummary expandIcon={<DownIcon />} className="text-xl font-semibold">
-          {question}
-        </AccordionSummary>
-        <AccordionDetails>{answer}</AccordionDetails>
+  <div className="w-full space-y-2">
+    {faqs.map(({ id, question, answer }) => (
+      <Accordion type="single" key={id} collapsible className="w-full border rounded-lg">
+        <AccordionItem value={id}>
+          <AccordionTrigger className="text-lg font-semibold">{question}</AccordionTrigger>
+          <AccordionContent className="text-sm text-gray-600">{answer}</AccordionContent>
+        </AccordionItem>
       </Accordion>
     ))}
-  </>
+  </div>
 )
 
 export default FAQ
