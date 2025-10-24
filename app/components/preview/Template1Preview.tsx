@@ -325,7 +325,7 @@ export default function Template1Preview({
                     <SectionTitle title="FAQ" color="secondary" />
                     {content.faqs.length > 0 ? (
                       <FadeIn className="w-full px-8">
-                        <FAQ />
+                        <FAQ faqs={content.faqs} />
                       </FadeIn>
                     ) : (
                       <EmptyState message="Add frequently asked questions" icon="❓" />

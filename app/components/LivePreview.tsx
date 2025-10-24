@@ -13,19 +13,22 @@ import { useState, useEffect, useRef } from 'react'
 import TemplateRenderer from './preview/TemplateRenderer'
 import type { PreviewData } from './preview/types'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
+import type { FAQItem } from '../db/schema/content'
 
 interface LivePreviewProps {
   weddingConfigId: string
   refreshTrigger?: number // Increment to force refresh
   draftFeatures?: Record<string, boolean> // Draft features from local state
   draftStartingSection?: Partial<StartingSectionContent> // Draft starting section from local state
+  draftFAQs?: FAQItem[]
 }
 
 export default function LivePreview({
   weddingConfigId,
   refreshTrigger = 0,
-  draftFeatures,
+  draftFeatures,  
   draftStartingSection,
+  draftFAQs,
 }: LivePreviewProps) {
   const [previewData, setPreviewData] = useState<PreviewData | null>(null)
   const [displayData, setDisplayData] = useState<PreviewData | null>(null)
@@ -103,10 +106,11 @@ export default function LivePreview({
         content: {
           ...previewData.content,
           startingSection: mergedStartingSection,
+          faqs: draftFAQs ?? previewData.content.faqs,
         },
       })
     }
-  }, [previewData, draftFeatures, draftStartingSection])
+  }, [previewData, draftFeatures, draftStartingSection, draftFAQs])
 
   if (loading) {
     return (

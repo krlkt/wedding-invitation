@@ -19,6 +19,8 @@ import {
 import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
+import type { FAQItem } from '@/app/db/schema/content'
+import { FAQForm } from './admin/sections/FAQForm'
 
 export default function ConfigDashboard() {
   const [config, setConfig] = useState<any>(null)
@@ -31,6 +33,7 @@ export default function ConfigDashboard() {
   const [draftStartingSection, setDraftStartingSection] = useState<
     Partial<StartingSectionContent> | undefined
   >(undefined)
+  const [faqs, setFaqs] = useState<FAQItem[]>([])
 
   //WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
@@ -49,6 +52,7 @@ export default function ConfigDashboard() {
   useEffect(() => {
     fetchConfig()
     fetchStartingSectionContent()
+    fetchFAQs()
     checkSession()
   }, [])
 
@@ -77,6 +81,20 @@ export default function ConfigDashboard() {
       console.error('Failed to fetch starting section content:', error)
     }
   }
+
+  async function fetchFAQs() {
+  try {
+    const res = await fetch('/api/wedding/faqs')
+    if (res.ok) {
+      const data = await res.json()
+      setFaqs(data.data)
+    } else {
+      console.error('Failed to fetch FAQs')
+    }
+  } catch (err) {
+    console.error('Error fetching FAQs', err)
+  }
+}
 
   async function updateStartingSectionContent(updates: any) {
     try {
@@ -284,6 +302,8 @@ export default function ConfigDashboard() {
             onStartingSectionLocalChange={handleStartingSectionLocalChange}
             onRefetchStartingSection={fetchStartingSectionContent}
             onBackgroundUpload={handleBackgroundUpload}
+            faqs={faqs}
+            setFaqs={setFaqs}
           />
         </div>
       </div>
@@ -295,6 +315,7 @@ export default function ConfigDashboard() {
           refreshTrigger={refreshTrigger}
           draftFeatures={draftFeatures}
           draftStartingSection={draftStartingSection}
+          draftFAQs={faqs}
         />
       </div>
     </div>
@@ -315,6 +336,8 @@ function FeaturesForm({
   onStartingSectionLocalChange,
   onRefetchStartingSection,
   onBackgroundUpload,
+  faqs,
+  setFaqs,
 }: any) {
   const features = [
     {
@@ -498,7 +521,12 @@ function FeaturesForm({
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-4 pb-4">
-                  {feature.name === 'hero' ? (
+                  {feature.name === 'faqs' ? (
+                     <FAQForm
+                      faqs={faqs}
+                      setFaqs={setFaqs}
+                    />
+                  ) : feature.name === 'hero' ? (
                     <StartingSectionForm
                       weddingConfig={config}
                       startingSectionContent={startingSectionContent}
