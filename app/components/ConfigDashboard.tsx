@@ -490,7 +490,7 @@ function FeaturesForm({
                   <div className="flex w-full items-center justify-between pr-4">
                     <div className="flex flex-1 items-center gap-3">
                       {/* Toggle Switch */}
-                      <button
+                      <div
                         onClick={(e) => {
                           e.stopPropagation()
                           handleToggle(feature.name)
@@ -504,7 +504,7 @@ function FeaturesForm({
                             draftFeatures[feature.name] ? 'translate-x-6' : 'translate-x-1'
                           }`}
                         />
-                      </button>
+                      </div>
                       {/* Label */}
                       <div className="text-left">
                         <div className="flex items-center gap-2">
