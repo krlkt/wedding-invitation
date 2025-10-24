@@ -63,7 +63,7 @@ export default function RegisterPage() {
 
       if (data.success) {
         // Registration successful, redirect to login
-        router.push('/admin/login?registered=true')
+        router.push('/login?registered=true')
       } else {
         setError(data.error || 'Registration failed')
       }
@@ -228,7 +228,7 @@ export default function RegisterPage() {
           {/* Login Link */}
           <div className="pt-4 text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <Link href="/admin/login" className="font-semibold text-pink-500 hover:text-pink-600">
+            <Link href="/login" className="font-semibold text-pink-500 hover:text-pink-600">
               Sign in here
             </Link>
           </div>
