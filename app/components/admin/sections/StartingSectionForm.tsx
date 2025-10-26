@@ -50,6 +50,11 @@ interface StartingSectionFormProps {
     backgroundMimeType: string
     backgroundFileSize: number
   }) => void
+  onMonogramUpload?: (monogramData: {
+    monogramFilename: string
+    monogramFileSize: number
+    monogramMimeType: string
+  }) => void
 }
 
 export function StartingSectionForm({
@@ -61,14 +66,25 @@ export function StartingSectionForm({
   onChangeTracking,
   changedFields = new Set(),
   onBackgroundUpload,
+  onMonogramUpload,
 }: StartingSectionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Background media state
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [fileError, setFileError] = useState<string | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Monogram upload state
+  const [selectedMonogramFile, setSelectedMonogramFile] = useState<File | null>(null)
+  const [monogramFileError, setMonogramFileError] = useState<string | null>(null)
+  const [showMonogramConfirmDialog, setShowMonogramConfirmDialog] = useState(false)
+  const [monogramUploadProgress, setMonogramUploadProgress] = useState<number>(0)
+  const [isMonogramUploading, setIsMonogramUploading] = useState(false)
+  const monogramFileInputRef = useRef<HTMLInputElement>(null)
 
   // Default placeholder text from basic info
   const groomFullName = weddingConfig.groomName
@@ -336,6 +352,131 @@ export function StartingSectionForm({
     }
   }
 
+  // Monogram file selection handler
+  const handleMonogramFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file (monogram is image only)
+    const isImage = file.type.startsWith('image/')
+
+    if (!isImage) {
+      setMonogramFileError('Invalid file type. Please upload an image.')
+      setSelectedMonogramFile(null)
+      if (monogramFileInputRef.current) {
+        monogramFileInputRef.current.value = ''
+      }
+      return
+    }
+
+    const validation = validateImageFile(file)
+    if (!validation.valid) {
+      setMonogramFileError(validation.error!)
+      setSelectedMonogramFile(null)
+      if (monogramFileInputRef.current) {
+        monogramFileInputRef.current.value = ''
+      }
+      return
+    }
+
+    setMonogramFileError(null)
+    setSelectedMonogramFile(file)
+  }
+
+  // Monogram upload button clicked - check if we need confirmation
+  const handleUploadMonogram = async () => {
+    try {
+      if (!selectedMonogramFile) return
+
+      // If there's existing monogram, show confirmation dialog
+      if (weddingConfig.monogramFilename) {
+        setShowMonogramConfirmDialog(true)
+      } else {
+        // No existing monogram, upload directly
+        await performMonogramUpload()
+      }
+    } catch (error) {
+      console.error('Monogram upload button error:', error)
+      setMonogramFileError('Failed to initiate upload. Please try again.')
+    }
+  }
+
+  // Cancel monogram replacement
+  const handleCancelMonogramReplacement = () => {
+    setShowMonogramConfirmDialog(false)
+  }
+
+  // Confirm monogram replacement and start upload
+  const handleConfirmMonogramReplacement = async () => {
+    setShowMonogramConfirmDialog(false)
+    await performMonogramUpload()
+  }
+
+  // Perform the actual monogram upload
+  const performMonogramUpload = async () => {
+    if (!selectedMonogramFile) return
+
+    setIsMonogramUploading(true)
+    setMonogramUploadProgress(0)
+
+    // Simulate progress
+    const progressInterval = setInterval(() => {
+      setMonogramUploadProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(progressInterval)
+          return 90
+        }
+        return prev + 10
+      })
+    }, 200)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', selectedMonogramFile)
+
+      const response = await fetch('/api/wedding/config/monogram', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Upload failed')
+      }
+
+      const result = await response.json()
+
+      // Update progress to 100%
+      clearInterval(progressInterval)
+      setMonogramUploadProgress(100)
+
+      // Update local state with monogram data
+      if (onMonogramUpload && result.data) {
+        onMonogramUpload({
+          monogramFilename: result.data.monogramFilename,
+          monogramFileSize: selectedMonogramFile.size,
+          monogramMimeType: selectedMonogramFile.type,
+        })
+      }
+
+      // Clear progress after a short delay
+      setTimeout(() => {
+        setIsMonogramUploading(false)
+        setMonogramUploadProgress(0)
+        setSelectedMonogramFile(null)
+        if (monogramFileInputRef.current) {
+          monogramFileInputRef.current.value = ''
+        }
+      }, 500)
+    } catch (error: any) {
+      clearInterval(progressInterval)
+      setIsMonogramUploading(false)
+      setMonogramUploadProgress(0)
+      setMonogramFileError(error.message || 'Upload failed. Please try again.')
+      console.error('Monogram upload error:', error)
+    }
+  }
+
   // Form submission
   const onSubmit = async (data: StartingSectionContentFormData) => {
     setIsSubmitting(true)
@@ -391,6 +532,77 @@ export function StartingSectionForm({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Monogram Upload Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Monogram</h3>
+
+          {weddingConfig.monogramFilename && (
+            <div className="rounded-md border bg-gray-50 p-4">
+              <p className="mb-1 text-sm font-medium">Current Monogram:</p>
+              <div className="mt-2 flex items-center gap-4">
+                <div className="relative h-20 w-16 overflow-hidden rounded border bg-white">
+                  <img
+                    src={weddingConfig.monogramFilename}
+                    alt="Current monogram"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">
+                    {weddingConfig.monogramFilename.split('/').pop()}
+                  </p>
+                  {weddingConfig.monogramFileSize && (
+                    <p className="text-xs text-gray-600">
+                      {formatFileSize(weddingConfig.monogramFileSize)}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="monogramMedia">Upload Monogram Image</Label>
+            <div className="flex gap-2">
+              <FileInput
+                ref={monogramFileInputRef}
+                id="monogramMedia"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleMonogramFileChange}
+                disabled={isMonogramUploading}
+                selectedFile={selectedMonogramFile}
+                formatFileSize={formatFileSize}
+                placeholder="Choose monogram image..."
+              />
+              <Button
+                type="button"
+                onClick={handleUploadMonogram}
+                disabled={!selectedMonogramFile || isMonogramUploading}
+                className="shrink-0"
+              >
+                {isMonogramUploading ? 'Uploading...' : 'Upload'}
+              </Button>
+            </div>
+            <p className="text-xs text-gray-500">
+              Image only: max 10 MB (JPEG, PNG, WebP, GIF)
+            </p>
+            {monogramFileError && <p className="text-sm text-red-500">{monogramFileError}</p>}
+
+            {/* Upload Progress Bar */}
+            {isMonogramUploading && (
+              <div className="space-y-2">
+                <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-200">
+                  <div
+                    className="h-2.5 rounded-full bg-pink-600 transition-all duration-300 ease-out"
+                    style={{ width: `${monogramUploadProgress}%` }}
+                  />
+                </div>
+                <p className="text-xs text-gray-600">Uploading: {monogramUploadProgress}%</p>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Display Names Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Display Names</h3>
@@ -570,7 +782,7 @@ export function StartingSectionForm({
         </div>
       </form>
 
-      {/* Confirmation Dialog */}
+      {/* Background Media Confirmation Dialog */}
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
         <DialogContent>
           <DialogHeader>
@@ -591,6 +803,25 @@ export function StartingSectionForm({
               Cancel
             </Button>
             <Button onClick={handleConfirmReplacement}>Confirm</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Monogram Confirmation Dialog */}
+      <Dialog open={showMonogramConfirmDialog} onOpenChange={setShowMonogramConfirmDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Replace Existing Monogram?</DialogTitle>
+            <DialogDescription>
+              You are about to replace the existing monogram:{' '}
+              <strong>{weddingConfig.monogramFilename?.split('/').pop() || 'current monogram'}</strong>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCancelMonogramReplacement}>
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmMonogramReplacement}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

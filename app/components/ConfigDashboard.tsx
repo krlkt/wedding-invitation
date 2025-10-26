@@ -242,6 +242,20 @@ export default function ConfigDashboard() {
     []
   )
 
+  const handleMonogramUpload = useCallback(
+    async (monogramData: {
+      monogramFilename: string
+      monogramFileSize: number
+      monogramMimeType: string
+    }) => {
+      // Monogram is saved to config, so refetch config to get updated monogram
+      await fetchConfig()
+      // Trigger preview refresh to show new monogram
+      setRefreshTrigger((prev) => prev + 1)
+    },
+    []
+  )
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -290,6 +304,7 @@ export default function ConfigDashboard() {
           onStartingSectionLocalChange={handleStartingSectionLocalChange}
           onRefetchStartingSection={fetchStartingSectionContent}
           onBackgroundUpload={handleBackgroundUpload}
+          onMonogramUpload={handleMonogramUpload}
           onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
         />
       </div>
@@ -321,6 +336,7 @@ function FeaturesForm({
   onStartingSectionLocalChange,
   onRefetchStartingSection,
   onBackgroundUpload,
+  onMonogramUpload,
   onRefreshPreview,
 }: any) {
   const features = [
@@ -520,6 +536,7 @@ function FeaturesForm({
                       onChangeTracking={handleStartingSectionChange}
                       changedFields={changedStartingSectionFields}
                       onBackgroundUpload={onBackgroundUpload}
+                      onMonogramUpload={onMonogramUpload}
                     />
                   ) : feature.name === 'groom_and_bride' ? (
                     <div className="space-y-4">

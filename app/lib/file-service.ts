@@ -282,11 +282,11 @@ export async function uploadMonogramPhoto(
     }
   }
 
-  // Update wedding configuration
+  // Update wedding configuration with full URL
   await db
     .update(weddingConfigurations)
     .set({
-      monogramFilename: filename,
+      monogramFilename: blob.url, // Store full URL instead of filename
       monogramFileSize: file.size,
       monogramMimeType: file.type,
       updatedAt: new Date(),
@@ -294,7 +294,7 @@ export async function uploadMonogramPhoto(
     .where(eq(weddingConfigurations.id, weddingConfigId))
 
   return {
-    monogramFilename: filename,
+    monogramFilename: blob.url, // Return full URL
     photoUrl: blob.url,
   }
 }
