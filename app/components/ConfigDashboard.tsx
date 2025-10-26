@@ -211,8 +211,15 @@ export default function ConfigDashboard() {
   }
 
   // Memoize callbacks to prevent infinite loops
-  const handleStartingSectionLocalChange = useCallback((draft: Partial<StartingSectionContent>) => {
-    setDraftStartingSection(draft)
+  const handleStartingSectionLocalChange = useCallback((draft: Partial<StartingSectionContent> | undefined) => {
+    if (draft === undefined) {
+      setDraftStartingSection(undefined)
+    } else {
+      setDraftStartingSection((prev) => ({
+        ...prev,
+        ...draft,
+      }))
+    }
   }, [])
 
   const handleBackgroundUpload = useCallback(
@@ -268,24 +275,22 @@ export default function ConfigDashboard() {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col">
-          <FeaturesForm
-            config={config}
-            onToggle={toggleFeature}
-            onBatchSave={batchUpdateFeatures}
-            saving={saving}
-            onLocalChange={(features: Record<string, boolean>) => {
-              // Only update draft state, don't trigger refresh/fetch
-              setDraftFeatures(features)
-            }}
-            startingSectionContent={startingSectionContent}
-            draftStartingSectionContent={draftStartingSection}
-            onUpdateStartingSection={updateStartingSectionContent}
-            onStartingSectionLocalChange={handleStartingSectionLocalChange}
-            onRefetchStartingSection={fetchStartingSectionContent}
-            onBackgroundUpload={handleBackgroundUpload}
-          />
-        </div>
+        <FeaturesForm
+          config={config}
+          onToggle={toggleFeature}
+          onBatchSave={batchUpdateFeatures}
+          saving={saving}
+          onLocalChange={(features: Record<string, boolean>) => {
+            // Only update draft state, don't trigger refresh/fetch
+            setDraftFeatures(features)
+          }}
+          startingSectionContent={startingSectionContent}
+          draftStartingSectionContent={draftStartingSection}
+          onUpdateStartingSection={updateStartingSectionContent}
+          onStartingSectionLocalChange={handleStartingSectionLocalChange}
+          onRefetchStartingSection={fetchStartingSectionContent}
+          onBackgroundUpload={handleBackgroundUpload}
+        />
       </div>
 
       {/* Right Panel - Live Preview */}
