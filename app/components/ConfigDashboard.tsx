@@ -290,6 +290,7 @@ export default function ConfigDashboard() {
           onStartingSectionLocalChange={handleStartingSectionLocalChange}
           onRefetchStartingSection={fetchStartingSectionContent}
           onBackgroundUpload={handleBackgroundUpload}
+          onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
         />
       </div>
 
@@ -320,6 +321,7 @@ function FeaturesForm({
   onStartingSectionLocalChange,
   onRefetchStartingSection,
   onBackgroundUpload,
+  onRefreshPreview,
 }: any) {
   const features = [
     {
@@ -432,9 +434,14 @@ function FeaturesForm({
     setChangedStartingSectionFields(new Set())
     onStartingSectionLocalChange(undefined)
 
-    // Force re-fetch to trigger form reset
+    // Force re-fetch to trigger form reset and preview refresh
     if (onRefetchStartingSection) {
       await onRefetchStartingSection()
+    }
+
+    // Trigger LivePreview refresh to show actual saved state from server
+    if (onRefreshPreview) {
+      onRefreshPreview()
     }
   }
 

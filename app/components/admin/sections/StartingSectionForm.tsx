@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
+import { FileInput } from '@/components/ui/file-input'
 import {
   Dialog,
   DialogContent,
@@ -529,24 +530,16 @@ export function StartingSectionForm({
           <div className="space-y-2">
             <Label htmlFor="backgroundMedia">Upload Background Media</Label>
             <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Input
-                  ref={fileInputRef}
-                  type="file"
-                  id="backgroundMedia"
-                  accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
-                  onChange={handleFileChange}
-                  className="cursor-pointer"
-                  disabled={isUploading}
-                />
-                {selectedFile && !isUploading && (
-                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-                    <span className="bg-white px-2 text-sm text-gray-600">
-                      {formatFileSize(selectedFile.size)}
-                    </span>
-                  </div>
-                )}
-              </div>
+              <FileInput
+                ref={fileInputRef}
+                id="backgroundMedia"
+                accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
+                onChange={handleFileChange}
+                disabled={isUploading}
+                selectedFile={selectedFile}
+                formatFileSize={formatFileSize}
+                placeholder="Choose background image or video..."
+              />
               <Button
                 type="button"
                 onClick={handleUploadBackground}
