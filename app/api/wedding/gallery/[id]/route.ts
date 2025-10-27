@@ -10,7 +10,9 @@ import { requireAuth } from '@/app/lib/session'
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await requireAuth()
-    if (session instanceof NextResponse) {return session}
+    if (session instanceof NextResponse) {
+      return session
+    }
 
     const { id } = await params
     const body = await request.json()
@@ -34,7 +36,9 @@ export async function DELETE(
 ) {
   try {
     const session = await requireAuth()
-    if (session instanceof NextResponse) {return session}
+    if (session instanceof NextResponse) {
+      return session
+    }
 
     const { id } = await params
     await deleteGalleryPhoto(id)

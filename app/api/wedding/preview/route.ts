@@ -25,7 +25,9 @@ export async function GET(request: NextRequest) {
   try {
     // Require authentication
     const session = await requireAuth()
-    if (session instanceof NextResponse) {return session}
+    if (session instanceof NextResponse) {
+      return session
+    }
 
     // Get wedding configuration
     const config = await getWeddingConfigById(session.weddingConfigId)

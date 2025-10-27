@@ -23,8 +23,6 @@ import { TableComponent } from './TableComponent'
 
 import { VirtualizedGuestList } from './VirtualizedGuestList'
 
-
-
 interface TableManagementClientPageProps {
   initialTables: Table[]
   initialUnassignedGuests: Guest[]

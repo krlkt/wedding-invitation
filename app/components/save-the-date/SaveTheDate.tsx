@@ -9,7 +9,6 @@ import Button from '../Button'
 import FadeIn from '../FadeIn'
 import GrowIn from '../GrowIn'
 
-
 const SaveTheDate = () => {
   const { config } = useWeddingData()
 
@@ -24,11 +23,13 @@ const SaveTheDate = () => {
   const calendarTitle = encodeURIComponent(
     `${config.groomName} and ${config.brideName}'s Wedding Day`
   )
-  const calendarDates =
-    `${weddingDate.toISOString().split('T')[0].replace(/-/g, '') 
-    }T070000Z/${ 
-    weddingDate.toISOString().split('T')[0].replace(/-/g, '') 
-    }T160000Z`
+  const calendarDates = `${weddingDate
+    .toISOString()
+    .split('T')[0]
+    .replace(/-/g, '')}T070000Z/${weddingDate
+    .toISOString()
+    .split('T')[0]
+    .replace(/-/g, '')}T160000Z`
   const calendarDetails = encodeURIComponent(
     `The Day ${config.groomName} and ${config.brideName} Say 'I Do'.\n\nA Celebration of Love and A Forever Promise 💍`
   )

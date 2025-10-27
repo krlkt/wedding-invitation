@@ -212,19 +212,18 @@ export async function toggleFeature(
       .returning()
 
     return updated
-  } 
-    // Create new toggle
-    const [created] = await db
-      .insert(featureToggles)
-      .values({
-        weddingConfigId,
-        featureName: featureName as FeatureName,
-        isEnabled,
-      })
-      .returning()
+  }
+  // Create new toggle
+  const [created] = await db
+    .insert(featureToggles)
+    .values({
+      weddingConfigId,
+      featureName: featureName as FeatureName,
+      isEnabled,
+    })
+    .returning()
 
-    return created
-  
+  return created
 }
 
 /**

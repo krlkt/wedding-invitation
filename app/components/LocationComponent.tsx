@@ -61,7 +61,8 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                 : location === 'malang'
                   ? 'https://maps.app.goo.gl/PNwWNcDREkXbNuiR7'
                   : 'https://maps.app.goo.gl/HZzTRkNjrPdh4QLj8'
-            } rel="noreferrer"
+            }
+            rel="noreferrer"
           >
             <span className="flex items-center justify-center gap-2">
               Google maps

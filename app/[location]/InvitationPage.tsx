@@ -304,12 +304,7 @@ export default function InvitationPage({
               style={{ transformOrigin: 'left center' }}
               className="absolute left-0 top-2"
             >
-              <Image
-                src="/images/ornaments/cats/mayo.webp"
-                alt="Mayo"
-                width={100}
-                height={100}
-              />
+              <Image src="/images/ornaments/cats/mayo.webp" alt="Mayo" width={100} height={100} />
             </motion.div>
             <motion.div
               animate={rotateAnimation([5, -5, 5], 0.5)}

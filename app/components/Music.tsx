@@ -37,7 +37,9 @@ const Music = () => {
 
   useEffect(() => {
     const audioElement = audio.current
-    if (!audioElement) {return}
+    if (!audioElement) {
+      return
+    }
 
     const onPlay = () => setPlayMusic(true)
     const onPause = () => setPlayMusic(false)

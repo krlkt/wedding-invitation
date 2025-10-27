@@ -10,7 +10,7 @@ export default async function TableManagementPage({ params }: { params: { locati
   const loggedIn = cookieStore.get('loggedIn')
 
   if (loggedIn?.value !== 'true') {
-    redirect(`/login?redirect=/tables/${  params.location}`)
+    redirect(`/login?redirect=/tables/${params.location}`)
   }
 
   const { tables, unassignedGuests } = await getTablesAndGuests(params.location)

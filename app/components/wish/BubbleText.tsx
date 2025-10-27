@@ -33,7 +33,7 @@ function formatTimeAgo(dateString: string): string {
     singaporeTime = new Date(dateString)
   } else {
     // Convert space to T and add Z
-    singaporeTime = new Date(`${dateString.replace(' ', 'T')  }Z`)
+    singaporeTime = new Date(`${dateString.replace(' ', 'T')}Z`)
   }
 
   // Check if date is valid

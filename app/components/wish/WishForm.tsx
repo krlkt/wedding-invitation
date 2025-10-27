@@ -9,7 +9,6 @@ import SubmitButton from '../SubmitButton'
 
 import { addWish } from './action'
 
-
 type WishFormType = Omit<Wish, 'created_at'>
 
 const WishForm = ({ guestName }: { guestName: string }) => {

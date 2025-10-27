@@ -55,6 +55,7 @@ This project now uses a comprehensive, strict ESLint configuration following ind
 ### 5. Import Organization (ERROR level)
 
 Imports are automatically ordered:
+
 1. React (builtin)
 2. Next.js (builtin)
 3. External packages
@@ -78,18 +79,23 @@ Imports are automatically ordered:
 ## Available Scripts
 
 ### `yarn lint`
+
 Run ESLint on all files (shows errors and warnings)
 
 ### `yarn lint:fix`
+
 Auto-fix all fixable ESLint issues
 
 ### `yarn lint:strict`
+
 Fail if there are ANY warnings (use in CI/CD)
 
 ### `yarn type-check`
+
 Run TypeScript type checking without building
 
 ### `yarn validate`
+
 Run all checks: type-check + lint:strict + format check + tests
 
 ## Usage Examples
@@ -97,84 +103,89 @@ Run all checks: type-check + lint:strict + format check + tests
 ### Fixing Common Issues
 
 #### 1. Unused Variables
+
 ```typescript
 // ❌ Bad - error
 function example(param1: string, param2: string) {
-  return param1;
+  return param1
 }
 
 // ✅ Good - prefix unused with _
 function example(param1: string, _param2: string) {
-  return param1;
+  return param1
 }
 ```
 
 #### 2. Any Types
+
 ```typescript
 // ❌ Bad - error
-const data: any = fetchData();
+const data: any = fetchData()
 
 // ✅ Good - proper typing
 interface UserData {
-  name: string;
-  email: string;
+  name: string
+  email: string
 }
-const data: UserData = fetchData();
+const data: UserData = fetchData()
 
 // ✅ Also good - unknown with type guard
-const data: unknown = fetchData();
+const data: unknown = fetchData()
 if (isUserData(data)) {
   // use data
 }
 ```
 
 #### 3. Floating Promises
+
 ```typescript
 // ❌ Bad - error
 async function example() {
-  fetchData(); // Promise not handled
+  fetchData() // Promise not handled
 }
 
 // ✅ Good - await it
 async function example() {
-  await fetchData();
+  await fetchData()
 }
 
 // ✅ Also good - handle with .catch()
 async function example() {
-  fetchData().catch(console.error);
+  fetchData().catch(console.error)
 }
 
 // ✅ Or explicitly mark as ignored
 async function example() {
-  void fetchData();
+  void fetchData()
 }
 ```
 
 #### 4. Import Order
+
 ```typescript
 // ❌ Bad - error
-import { useState } from 'react';
-import Link from 'next/link';
-import axios from 'axios';
-import { Button } from '@/components/Button';
-import { formatDate } from '../utils/date';
+import { useState } from 'react'
+import Link from 'next/link'
+import axios from 'axios'
+import { Button } from '@/components/Button'
+import { formatDate } from '../utils/date'
 
 // ✅ Good - properly ordered with blank lines
-import { useState } from 'react';
+import { useState } from 'react'
 
-import Link from 'next/link';
+import Link from 'next/link'
 
-import axios from 'axios';
+import axios from 'axios'
 
-import { Button } from '@/components/Button';
+import { Button } from '@/components/Button'
 
-import { formatDate } from '../utils/date';
+import { formatDate } from '../utils/date'
 ```
 
 Use `yarn lint:fix` to auto-fix import order!
 
 #### 5. React Best Practices
+
 ```typescript
 // ❌ Bad
 <Component title={"Hello"} enabled={true} />
@@ -200,20 +211,27 @@ Use `yarn lint:fix` to auto-fix import order!
 ```
 
 #### 6. Strict Boolean Expressions
+
 ```typescript
 // ❌ Bad - error
-if (value) { }          // value could be string, number, etc.
-if (array.length) { }   // implicit number to boolean
+if (value) {
+} // value could be string, number, etc.
+if (array.length) {
+} // implicit number to boolean
 
 // ✅ Good - explicit checks
-if (value !== null && value !== undefined) { }
-if (Boolean(value)) { }
-if (array.length > 0) { }
+if (value !== null && value !== undefined) {
+}
+if (Boolean(value)) {
+}
+if (array.length > 0) {
+}
 ```
 
 ## Test Files Exception
 
 Test files (`*.test.ts`, `*.spec.ts`) have relaxed rules:
+
 - `any` types allowed
 - `console.log` allowed
 - Non-null assertions allowed
@@ -222,6 +240,7 @@ Test files (`*.test.ts`, `*.spec.ts`) have relaxed rules:
 ## Configuration Files Exception
 
 Config files (`*.config.ts`, `*.config.js`) have relaxed rules:
+
 - `console.log` allowed
 - `require()` allowed in .js files
 
@@ -230,10 +249,12 @@ Config files (`*.config.ts`, `*.config.js`) have relaxed rules:
 ESLint configuration includes `eslint-config-prettier` to avoid conflicts with Prettier.
 
 **Workflow:**
+
 1. Prettier handles formatting (spacing, semicolons, etc.)
 2. ESLint handles code quality and best practices
 
 Always run both:
+
 ```bash
 yarn format    # Prettier fix
 yarn lint:fix  # ESLint fix
@@ -249,6 +270,7 @@ Add to your GitHub Actions / CI pipeline:
 ```
 
 This runs:
+
 - TypeScript type checking
 - ESLint (with zero warnings allowed)
 - Prettier format check
@@ -259,11 +281,13 @@ This runs:
 If you have many existing errors:
 
 1. **See all issues:**
+
    ```bash
    yarn lint > eslint-issues.txt
    ```
 
 2. **Auto-fix what you can:**
+
    ```bash
    yarn lint:fix
    ```
@@ -272,7 +296,7 @@ If you have many existing errors:
 
    ```typescript
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   const data: any = legacyCode();
+   const data: any = legacyCode()
    ```
 
 4. **Don't commit disabled rules** - fix the code instead!
@@ -286,12 +310,7 @@ Install ESLint extension and add to `.vscode/settings.json`:
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ]
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
 }
 ```
 

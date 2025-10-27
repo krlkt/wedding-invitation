@@ -13,7 +13,6 @@ import { Table } from '../models/table'
 import { moveGuestToTable } from './actions'
 import { VirtualizedGuestList } from './VirtualizedGuestList'
 
-
 interface TableComponentProps {
   table: Table
   tables: Table[]

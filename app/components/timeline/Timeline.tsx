@@ -10,9 +10,6 @@ import CoupleIcon from '../../icons/CoupleIcon'
 import MeetIcon from '../../icons/MeetIcon'
 import RingIcon from '../../icons/RingIcon'
 
-
-
-
 const timelineData = [
   {
     icon: <MeetIcon />,

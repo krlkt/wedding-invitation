@@ -37,12 +37,9 @@ import GrowIn from '../GrowIn'
 
 import EmptyState from './EmptyState'
 
-
 import type { TemplateProps } from './types'
 
 import LoaderScreen from '../LoaderScreen'
-
-
 
 export default function Template1Preview({
   data,

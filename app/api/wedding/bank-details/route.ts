@@ -10,7 +10,9 @@ import { requireAuth } from '@/app/lib/session'
 export async function GET(request: NextRequest) {
   try {
     const session = await requireAuth()
-    if (session instanceof NextResponse) {return session}
+    if (session instanceof NextResponse) {
+      return session
+    }
 
     const details = await getBankDetails(session.weddingConfigId)
 
@@ -30,7 +32,9 @@ export async function GET(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const session = await requireAuth()
-    if (session instanceof NextResponse) {return session}
+    if (session instanceof NextResponse) {
+      return session
+    }
 
     const body = await request.json()
     const { bankName, accountName, accountNumber, routingNumber, instructions } = body

@@ -12,7 +12,9 @@ import { publishWeddingConfig, getWeddingConfigById } from '@/app/lib/wedding-se
 export async function POST(request: NextRequest) {
   try {
     const session = await requireAuth()
-    if (session instanceof NextResponse) {return session}
+    if (session instanceof NextResponse) {
+      return session
+    }
 
     // Get current config to build wedding URL
     const config = await getWeddingConfigById(session.weddingConfigId)

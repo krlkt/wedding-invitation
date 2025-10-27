@@ -21,7 +21,6 @@ export async function POST(request: Request) {
       status: 200,
       headers: { 'Set-Cookie': cookie },
     })
-  } 
-    return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 })
-  
+  }
+  return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 })
 }

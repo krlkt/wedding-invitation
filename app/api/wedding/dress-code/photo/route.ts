@@ -10,7 +10,9 @@ import { requireAuth } from '@/app/lib/session'
 export async function DELETE(request: NextRequest) {
   try {
     const session = await requireAuth()
-    if (session instanceof NextResponse) {return session}
+    if (session instanceof NextResponse) {
+      return session
+    }
 
     await deleteDressCodePhoto(session.weddingConfigId)
 

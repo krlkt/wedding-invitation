@@ -3,14 +3,14 @@
 import { useRef, useState } from 'react'
 
 import OpenWithIcon from '@mui/icons-material/OpenWith'
-import { IconButton , Switch } from '@mui/material'
+import { IconButton, Switch } from '@mui/material'
 import { useDrag } from 'react-dnd'
 
 import { Locations } from '../components/LocationComponent'
 import { Guest } from '../models/guest'
 import { Table } from '../models/table'
 
-import { updateGuestName , updateGuestCheckinStatus } from './actions'
+import { updateGuestName, updateGuestCheckinStatus } from './actions'
 
 interface GuestComponentProps {
   guest: Guest

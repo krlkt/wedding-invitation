@@ -66,7 +66,9 @@ export default async function Page({
   // This is needed because Next is complaining that "Only plain objects can be passed to Client Components from Server Components"
   const rsvp = JSON.parse(JSON.stringify(rawRsvp))
 
-  if (location !== 'bali' && location !== 'jakarta' && location !== 'malang') {return notFound()}
+  if (location !== 'bali' && location !== 'jakarta' && location !== 'malang') {
+    return notFound()
+  }
 
   return (
     <LocationProvider location={location}>

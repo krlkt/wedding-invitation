@@ -18,7 +18,6 @@ import Groom4 from '../../../public/images/groom/groom4.jpg'
 import Groom5 from '../../../public/images/groom/groom5.jpg'
 import Groom6 from '../../../public/images/groom/groom6.jpg'
 
-
 const Groom = () => {
   // Get wedding data from context
   const { config, features } = useWeddingData()
@@ -30,7 +29,9 @@ const Groom = () => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null)
 
   useEffect(() => {
-    if (!isEmbedded || !containerRef?.current) {return}
+    if (!isEmbedded || !containerRef?.current) {
+      return
+    }
 
     const updateHeight = () => {
       if (containerRef?.current) {

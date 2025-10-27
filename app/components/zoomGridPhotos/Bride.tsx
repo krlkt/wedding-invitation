@@ -30,7 +30,9 @@ const Bride = () => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null)
 
   useEffect(() => {
-    if (!isEmbedded || !containerRef?.current) {return}
+    if (!isEmbedded || !containerRef?.current) {
+      return
+    }
 
     const updateHeight = () => {
       if (containerRef?.current) {

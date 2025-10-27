@@ -168,18 +168,17 @@ export async function updateBankDetails(
       .returning()
 
     return updated
-  } 
-    // Create new
-    const [created] = await db
-      .insert(bankDetails)
-      .values({
-        ...data,
-        weddingConfigId,
-      })
-      .returning()
+  }
+  // Create new
+  const [created] = await db
+    .insert(bankDetails)
+    .values({
+      ...data,
+      weddingConfigId,
+    })
+    .returning()
 
-    return created
-  
+  return created
 }
 
 // ============================================================================
@@ -215,18 +214,17 @@ export async function updateDressCode(
       .returning()
 
     return updated
-  } 
-    // Create new
-    const [created] = await db
-      .insert(dressCodes)
-      .values({
-        ...data,
-        weddingConfigId,
-      })
-      .returning()
+  }
+  // Create new
+  const [created] = await db
+    .insert(dressCodes)
+    .values({
+      ...data,
+      weddingConfigId,
+    })
+    .returning()
 
-    return created
-  
+  return created
 }
 
 // ============================================================================

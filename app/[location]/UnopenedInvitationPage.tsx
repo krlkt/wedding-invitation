@@ -27,9 +27,7 @@ export default function UnopenedInvitationPage({
         <h4 className="text-xl md:text-2xl">Dear Mr./Mrs./Ms.</h4>
         <h2 className="text-shadow-lg font-serif text-3xl md:text-4xl">{guestName}</h2>
       </div>
-      <Link
-        href={`${pathname  }?to=${  guestName  }&id=${  id  }&${  createQueryString('opened', '')}`}
-      >
+      <Link href={`${pathname}?to=${guestName}&id=${id}&${createQueryString('opened', '')}`}>
         <Button>Open invitation</Button>
       </Link>
     </CycleBackground>

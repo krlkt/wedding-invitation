@@ -14,7 +14,7 @@ export default async function LocationDashboardPage({
   const loggedIn = cookieStore.get('loggedIn')
 
   if (loggedIn?.value !== 'true') {
-    redirect(`/login?redirect=/dashboard/${  params.location}`)
+    redirect(`/login?redirect=/dashboard/${params.location}`)
   }
 
   const data = await getParticipants(params.location)
