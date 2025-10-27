@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+
 import { query } from '../db/client'
 import { Guest } from '../models/guest'
 import { RSVP } from '../models/rsvp'

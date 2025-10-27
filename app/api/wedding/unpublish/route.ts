@@ -5,13 +5,14 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+
 import { requireAuth } from '@/app/lib/session'
 import { unpublishWeddingConfig } from '@/app/lib/wedding-service'
 
 export async function POST(request: NextRequest) {
   try {
     const session = await requireAuth()
-    if (session instanceof NextResponse) return session
+    if (session instanceof NextResponse) {return session}
 
     // Unpublish wedding
     const unpublished = await unpublishWeddingConfig(session.weddingConfigId)

@@ -1,9 +1,16 @@
 'use client'
 
-import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
-import Image from 'next/image'
 import { useRef, useState, useEffect } from 'react'
+
+import Image from 'next/image'
+
+import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
+
 import './zoomGridPhotos.css'
+import InstagramIcon from '@/app/icons/InstagramIcon'
+import { useScrollContainer } from '@/app/utils/ScrollContainerContext'
+import { useWeddingData } from '@/app/utils/useWeddingData'
+
 import Bride1 from '../../../public/images/bride/bride1.jpg'
 import Bride2 from '../../../public/images/bride/bride2.jpg'
 import Bride3 from '../../../public/images/bride/bride3.jpg'
@@ -11,9 +18,6 @@ import Bride4 from '../../../public/images/bride/bride4.jpg'
 import Bride5 from '../../../public/images/bride/bride5.jpg'
 import Bride6 from '../../../public/images/bride/bride6.jpg'
 import Ornament from '../../../public/images/ornaments/orn2.png'
-import InstagramIcon from '@/app/icons/InstagramIcon'
-import { useScrollContainer } from '@/app/utils/ScrollContainerContext'
-import { useWeddingData } from '@/app/utils/useWeddingData'
 
 const Bride = () => {
   // Get wedding data from context
@@ -26,7 +30,7 @@ const Bride = () => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null)
 
   useEffect(() => {
-    if (!isEmbedded || !containerRef?.current) return
+    if (!isEmbedded || !containerRef?.current) {return}
 
     const updateHeight = () => {
       if (containerRef?.current) {
@@ -116,12 +120,12 @@ const Bride = () => {
       >
         {pictures.map(({ scale, src }, index) => (
           // Element container div to make sure everything has the same layout
-          <motion.div key={index} style={{ scale }} className={'grid-placement'}>
-            <div className={'imageContainer'}>
+          <motion.div key={index} style={{ scale }} className="grid-placement">
+            <div className="imageContainer">
               <Image
                 src={src}
                 fill
-                alt={'Brides Image'}
+                alt="Brides Image"
                 placeholder="blur"
                 className="grid-image object-cover"
               />
@@ -143,7 +147,7 @@ const Bride = () => {
                   The Bride
                   {features.groom_and_bride === true && config.brideInstagramLink && (
                     <a href={config.brideInstagramLink} target="_blank" rel="noopener noreferrer">
-                      <InstagramIcon width={'25px'} />
+                      <InstagramIcon width="25px" />
                     </a>
                   )}
                 </span>

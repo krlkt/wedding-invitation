@@ -5,7 +5,8 @@
  * Handles CRUD operations for wedding configs, features, and publishing.
  */
 
-import { db } from './database'
+import { eq, and, asc } from 'drizzle-orm'
+
 import {
   weddingConfigurations,
   featureToggles,
@@ -25,7 +26,8 @@ import {
   type DressCode,
   type BankDetails,
 } from '@/app/db/schema'
-import { eq, and, asc } from 'drizzle-orm'
+
+import { db } from './database'
 
 /**
  * Generate URL-safe subdomain from names
@@ -210,7 +212,7 @@ export async function toggleFeature(
       .returning()
 
     return updated
-  } else {
+  } 
     // Create new toggle
     const [created] = await db
       .insert(featureToggles)
@@ -222,7 +224,7 @@ export async function toggleFeature(
       .returning()
 
     return created
-  }
+  
 }
 
 /**

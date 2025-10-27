@@ -4,8 +4,12 @@
  * Full-screen preview of wedding site for authenticated users
  */
 
-import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+
+import TemplateRenderer from '@/app/components/preview/TemplateRenderer'
+import type { PreviewData } from '@/app/components/preview/types'
+import { getWishes } from '@/app/lib/content-service'
 import {
   getWeddingConfigById,
   getFeatureToggles,
@@ -16,9 +20,6 @@ import {
   getDressCode,
   getBankDetails,
 } from '@/app/lib/wedding-service'
-import { getWishes } from '@/app/lib/content-service'
-import TemplateRenderer from '@/app/components/preview/TemplateRenderer'
-import type { PreviewData } from '@/app/components/preview/types'
 
 async function getSession() {
   const cookieStore = await cookies()
@@ -40,7 +41,7 @@ export default async function AdminPreviewPage() {
   // Check authentication
   const session = await getSession()
 
-  if (!session || !session.weddingConfigId) {
+  if (!session?.weddingConfigId) {
     redirect('/admin/login')
   }
 

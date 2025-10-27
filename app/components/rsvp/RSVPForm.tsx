@@ -1,22 +1,25 @@
-import { RSVPForm } from '@/app/models/rsvp'
-import { Controller, useForm } from 'react-hook-form'
-import SubmitButton from '../SubmitButton'
-import { useSnackbar } from 'notistack'
 import { useState } from 'react'
-import Button from '../Button'
-import MenuItem from '@mui/material/MenuItem'
-import TextField from '@mui/material/TextField'
-import { useLocation } from '@/app/utils/useLocation'
-import { addParticipant } from '@/app/dashboard/action'
+
+import Alert from '@mui/material/Alert'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
-import Alert from '@mui/material/Alert'
+import MenuItem from '@mui/material/MenuItem'
+import TextField from '@mui/material/TextField'
+import { useSnackbar } from 'notistack'
+import { Controller, useForm } from 'react-hook-form'
+
+import { addParticipant } from '@/app/dashboard/action'
 import CheckIcon from '@/app/icons/CheckIcon'
 import CrossIcon from '@/app/icons/CrossIcon'
+import { RSVPForm } from '@/app/models/rsvp'
+import { useLocation } from '@/app/utils/useLocation'
+
+import Button from '../Button'
 import FadeIn from '../FadeIn'
+import SubmitButton from '../SubmitButton'
 
 const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
   const { enqueueSnackbar } = useSnackbar()
@@ -134,8 +137,8 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
             {...register('attend', { required: true })}
             defaultValue={rsvp?.attend ?? 'yes'}
           >
-            <MenuItem value={'yes'}>Yes</MenuItem>
-            <MenuItem value={'no'}>No</MenuItem>
+            <MenuItem value="yes">Yes</MenuItem>
+            <MenuItem value="no">No</MenuItem>
           </TextField>
           {location === 'bali' && (
             <>

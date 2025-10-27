@@ -1,15 +1,16 @@
 'use client'
 
-import { useDrag } from 'react-dnd'
-import { updateGuestName } from './actions'
 import { useRef, useState } from 'react'
-import { Locations } from '../components/LocationComponent'
-import { Table } from '../models/table'
-import { Guest } from '../models/guest'
-import { IconButton } from '@mui/material'
+
 import OpenWithIcon from '@mui/icons-material/OpenWith'
-import { Switch } from '@mui/material'
-import { updateGuestCheckinStatus } from './actions'
+import { IconButton , Switch } from '@mui/material'
+import { useDrag } from 'react-dnd'
+
+import { Locations } from '../components/LocationComponent'
+import { Guest } from '../models/guest'
+import { Table } from '../models/table'
+
+import { updateGuestName , updateGuestCheckinStatus } from './actions'
 
 interface GuestComponentProps {
   guest: Guest

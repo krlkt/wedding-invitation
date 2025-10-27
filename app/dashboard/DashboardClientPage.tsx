@@ -1,9 +1,8 @@
 'use client'
 
 import '../globals.css'
-import * as XLSX from 'xlsx'
 import { useEffect, useState } from 'react'
-import { DataGrid, GridColDef, GridRowsProp, GridActionsCellItem } from '@mui/x-data-grid'
+
 import {
   TextField,
   Button,
@@ -24,7 +23,13 @@ import {
   ListItemSecondaryAction,
   Switch,
 } from '@mui/material'
+import { DataGrid, GridColDef, GridRowsProp, GridActionsCellItem } from '@mui/x-data-grid'
+import { useSnackbar } from 'notistack'
+import * as XLSX from 'xlsx'
+
+import { Locations } from '../components/LocationComponent'
 import { RSVP, RSVPForm } from '../models/rsvp'
+
 import {
   addParticipant,
   getParticipants,
@@ -32,8 +37,6 @@ import {
   importDataFromExcel,
   updatePossiblyNotComing,
 } from './action'
-import { useSnackbar } from 'notistack'
-import { Locations } from '../components/LocationComponent'
 
 interface Group {
   id: number
@@ -110,7 +113,7 @@ const DashboardClientPage = ({
 
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (!file) return
+    if (!file) {return}
 
     setIsImporting(true)
 
@@ -312,7 +315,7 @@ const DashboardClientPage = ({
           Import from Excel
           <input type="file" hidden accept=".xlsx,.xls" onChange={handleImport} />
         </Button>
-        <Box textAlign={'right'}>
+        <Box textAlign="right">
           <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
             Total Confirmed Guests:{' '}
             {data.reduce(

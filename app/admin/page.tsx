@@ -5,13 +5,15 @@
  * Requires user to be logged in via session authentication.
  */
 
-import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
-import { db } from '@/app/lib/database'
-import { weddingConfigurations } from '@/app/db/schema'
+import { redirect } from 'next/navigation'
+
 import { eq } from 'drizzle-orm'
+
 import ConfigDashboard from '@/app/components/ConfigDashboard'
 import LogoutButton from '@/app/components/LogoutButton'
+import { weddingConfigurations } from '@/app/db/schema'
+import { db } from '@/app/lib/database'
 
 async function getSession() {
   const cookieStore = await cookies()
@@ -43,7 +45,7 @@ export default async function AdminDashboard() {
   // Check authentication
   const session = await getSession()
 
-  if (!session || !session.userId) {
+  if (!session?.userId) {
     redirect('/admin/login')
   }
 

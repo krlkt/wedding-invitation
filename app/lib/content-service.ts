@@ -5,7 +5,8 @@
  * Handles love story, locations, FAQs, bank details, and dress code content.
  */
 
-import { db } from './database'
+import { eq, desc } from 'drizzle-orm'
+
 import {
   loveStorySegments,
   locationDetails,
@@ -20,7 +21,8 @@ import {
   type NewDressCode,
   type NewWish,
 } from '@/app/db/schema'
-import { eq, desc } from 'drizzle-orm'
+
+import { db } from './database'
 
 // ============================================================================
 // Love Story Management
@@ -166,7 +168,7 @@ export async function updateBankDetails(
       .returning()
 
     return updated
-  } else {
+  } 
     // Create new
     const [created] = await db
       .insert(bankDetails)
@@ -177,7 +179,7 @@ export async function updateBankDetails(
       .returning()
 
     return created
-  }
+  
 }
 
 // ============================================================================
@@ -213,7 +215,7 @@ export async function updateDressCode(
       .returning()
 
     return updated
-  } else {
+  } 
     // Create new
     const [created] = await db
       .insert(dressCodes)
@@ -224,7 +226,7 @@ export async function updateDressCode(
       .returning()
 
     return created
-  }
+  
 }
 
 // ============================================================================

@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext } from 'react'
+
 import type { WeddingConfiguration } from '@/app/db/schema'
 import type { FeatureName } from '@/app/db/schema/features'
 

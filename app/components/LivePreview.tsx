@@ -10,7 +10,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+
 import TemplateRenderer from './preview/TemplateRenderer'
+
 import type { PreviewData } from './preview/types'
 
 interface LivePreviewProps {

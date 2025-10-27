@@ -10,8 +10,9 @@
  * - Bank Details
  */
 
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { createId } from '@paralleldrive/cuid2'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+
 import { weddingConfigurations } from './weddings'
 
 // T022: Love Story Segment Schema

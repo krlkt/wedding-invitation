@@ -8,14 +8,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
+
 import LivePreview from './LivePreview'
 
 export default function ConfigDashboard() {
@@ -25,7 +28,7 @@ export default function ConfigDashboard() {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
 
-  //WIP: session check on dashboard load or time interval or user action?
+  // WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
     try {
       const res = await fetch('/api/auth/session')

@@ -1,8 +1,10 @@
 'use client'
 import { useCallback, useEffect, useRef, useState } from 'react'
+
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+
 import MusicIcon from '../icons/MusicIcon'
 import PauseIcon from '../icons/PauseIcon'
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 
 const Music = () => {
   const audio = useRef<HTMLAudioElement>(null)
@@ -35,7 +37,7 @@ const Music = () => {
 
   useEffect(() => {
     const audioElement = audio.current
-    if (!audioElement) return
+    if (!audioElement) {return}
 
     const onPlay = () => setPlayMusic(true)
     const onPause = () => setPlayMusic(false)

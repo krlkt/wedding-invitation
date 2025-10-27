@@ -1,9 +1,12 @@
+import Image from 'next/image'
+
 import GiftIcon from '../../icons/GiftIcon'
 import Button from '../Button'
 import Modal from '../Modal'
-import Image from 'next/image'
+
 import './gift.css'
 import { useState } from 'react'
+
 import FadeIn from '../FadeIn'
 
 const Gift = () => {
@@ -23,7 +26,7 @@ const Gift = () => {
             <div id="logo" className="relative h-14 w-14">
               <Image
                 src="/images/logos/ocbc.png"
-                alt={'OCBC logo'}
+                alt="OCBC logo"
                 fill
                 className="block h-auto w-full"
               />
@@ -39,7 +42,7 @@ const Gift = () => {
             <div id="logo" className="relative h-16 w-16">
               <Image
                 src="/images/logos/paypal.png"
-                alt={'Paypal logo'}
+                alt="Paypal logo"
                 fill
                 className="block w-full"
               />

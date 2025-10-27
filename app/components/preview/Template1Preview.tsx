@@ -7,33 +7,42 @@
  * Shows/hides sections based on feature flags and displays empty states for missing content.
  */
 
+import { useEffect, useState } from 'react'
+
 import Image from 'next/image'
+
+import { ScrollContainerProvider } from '@/app/utils/ScrollContainerContext'
+import { LocationProvider } from '@/app/utils/useLocation'
+import { WeddingDataProvider } from '@/app/utils/useWeddingData'
+
+import BorderedDiv from '../BorderedDiv'
+import DressCode from '../dresscode/DressCode'
+import FadeIn from '../FadeIn'
+import FAQ from '../faq/FAQ'
+import ImageGallery from '../gallery/ImageGallery'
+import Gift from '../gift/Gift'
 import Hero from '../hero/Hero'
 import Timeline from '../timeline/Timeline'
 import RSVPForm from '../rsvp/RSVPForm'
-import ImageGallery from '../gallery/ImageGallery'
 import YouTubeEmbed from '../prewedding/YoutubeEmbed'
-import FAQ from '../faq/FAQ'
-import DressCode from '../dresscode/DressCode'
-import Gift from '../gift/Gift'
 import SectionTitle from '../SectionTitle'
-import BorderedDiv from '../BorderedDiv'
-import Groom from '../zoomGridPhotos/Groom'
+import Divider from '../wish/Divider'
+import Wishes from '../wish/Wishes'
 import Bride from '../zoomGridPhotos/Bride'
+import Groom from '../zoomGridPhotos/Groom'
 import SaveTheDate from '../save-the-date/SaveTheDate'
 import SaveTheDateOrnament from '../save-the-date/SaveTheDateOrnament'
 import LocationComponent from '../LocationComponent'
-import FadeIn from '../FadeIn'
 import GrowIn from '../GrowIn'
+
 import EmptyState from './EmptyState'
-import { LocationProvider } from '@/app/utils/useLocation'
+
+
 import type { TemplateProps } from './types'
+
 import LoaderScreen from '../LoaderScreen'
-import { useEffect, useState } from 'react'
-import { ScrollContainerProvider } from '@/app/utils/ScrollContainerContext'
-import { WeddingDataProvider } from '@/app/utils/useWeddingData'
-import Wishes from '../wish/Wishes'
-import Divider from '../wish/Divider'
+
+
 
 export default function Template1Preview({
   data,
@@ -113,12 +122,12 @@ export default function Template1Preview({
                   </div>
                   <div id="hero" className="absolute -z-20 h-full w-full">
                     <Image
-                      alt={'Couple photo'}
+                      alt="Couple photo"
                       fill
                       className="h-full w-full object-cover"
                       sizes="100vw"
-                      src={'/images/gallery/gal15.jpg'}
-                      priority={true}
+                      src="/images/gallery/gal15.jpg"
+                      priority
                     />
                   </div>
                 </div>
@@ -183,8 +192,8 @@ export default function Template1Preview({
                     {features.save_the_date && <SaveTheDate />}
                     <FadeIn from="left" className="absolute -left-4 top-[46%]">
                       <Image
-                        src={'/images/ornaments/baby_orn2.png'}
-                        alt={'Ornament blue flower'}
+                        src="/images/ornaments/baby_orn2.png"
+                        alt="Ornament blue flower"
                         width={120}
                         height={120}
                         className="-rotate-[45deg]"
@@ -192,8 +201,8 @@ export default function Template1Preview({
                     </FadeIn>
                     <FadeIn from="right" className="absolute -right-4 top-[46%] -translate-y-4">
                       <Image
-                        src={'/images/ornaments/baby_orn2.png'}
-                        alt={'Ornament blue flower'}
+                        src="/images/ornaments/baby_orn2.png"
+                        alt="Ornament blue flower"
                         width={120}
                         height={120}
                         className="-rotate-[220deg]"
@@ -225,16 +234,16 @@ export default function Template1Preview({
                   <section className="relative w-full overflow-hidden pt-16">
                     <FadeIn from="left" className="absolute -left-8 top-3 -z-10">
                       <Image
-                        src={'/images/ornaments/baby_orn2.png'}
-                        alt={'Ornament blue flower'}
+                        src="/images/ornaments/baby_orn2.png"
+                        alt="Ornament blue flower"
                         width={150}
                         height={150}
                       />
                     </FadeIn>
                     <FadeIn from="right" className="absolute -right-8 top-3 -z-10">
                       <Image
-                        src={'/images/ornaments/baby_orn2.png'}
-                        alt={'Ornament blue flower'}
+                        src="/images/ornaments/baby_orn2.png"
+                        alt="Ornament blue flower"
                         width={150}
                         height={150}
                         className="-rotate-[260deg]"
@@ -260,8 +269,8 @@ export default function Template1Preview({
                     </FadeIn>
                     <FadeIn from="left" className="absolute -left-8 bottom-3 -z-10">
                       <Image
-                        src={'/images/ornaments/baby_orn2.png'}
-                        alt={'Ornament blue flower'}
+                        src="/images/ornaments/baby_orn2.png"
+                        alt="Ornament blue flower"
                         width={150}
                         height={150}
                         className="-rotate-[80deg]"
@@ -269,8 +278,8 @@ export default function Template1Preview({
                     </FadeIn>
                     <FadeIn from="right" className="absolute -right-8 bottom-3 -z-10">
                       <Image
-                        src={'/images/ornaments/baby_orn2.png'}
-                        alt={'Ornament blue flower'}
+                        src="/images/ornaments/baby_orn2.png"
+                        alt="Ornament blue flower"
                         width={150}
                         height={150}
                         className="-rotate-[180deg]"
@@ -284,8 +293,8 @@ export default function Template1Preview({
                   <section className="relative w-full overflow-hidden bg-primary-main py-16 pb-28">
                     <FadeIn from="left" className="absolute -left-16 -top-0">
                       <Image
-                        src={'/images/ornaments/baby_orn.png'}
-                        alt={'Baby breath'}
+                        src="/images/ornaments/baby_orn.png"
+                        alt="Baby breath"
                         width={200}
                         height={100}
                         className="pointer-events-none rotate-90"
@@ -301,8 +310,8 @@ export default function Template1Preview({
                     )}
                     <FadeIn from="right" className="absolute -right-10 bottom-12">
                       <Image
-                        src={'/images/ornaments/baby_orn4.png'}
-                        alt={'Baby breath'}
+                        src="/images/ornaments/baby_orn4.png"
+                        alt="Baby breath"
                         width={200}
                         height={100}
                         className="pointer-events-none -rotate-180"
@@ -341,8 +350,8 @@ export default function Template1Preview({
                     <div className="relative flex flex-col gap-4">
                       <GrowIn className="absolute left-1/2 -z-10">
                         <Image
-                          src={'/images/ornaments/frame/gate.png'}
-                          alt={'Gate'}
+                          src="/images/ornaments/frame/gate.png"
+                          alt="Gate"
                           width={300}
                           height={300}
                           className="-translate-x-1/2 translate-y-36 scale-[3.4] opacity-15"

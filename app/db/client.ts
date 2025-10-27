@@ -4,9 +4,9 @@ let client: Client
 
 const getDatabaseClient = () => {
   const url = process.env.TURSO_DATABASE_URL
-  if (!url) throw new Error('Database URL not found on env variable!')
+  if (!url) {throw new Error('Database URL not found on env variable!')}
   const client = createClient({
-    url: url,
+    url,
     authToken: process.env.TURSO_AUTH_TOKEN,
   })
 

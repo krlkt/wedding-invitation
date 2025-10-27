@@ -5,9 +5,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+
+import { FEATURE_NAMES } from '@/app/db/schema/features'
 import { requireAuth } from '@/app/lib/session'
 import { toggleFeature } from '@/app/lib/wedding-service'
-import { FEATURE_NAMES } from '@/app/db/schema/features'
 
 // Use the single source of truth from the database schema
 const VALID_FEATURES = FEATURE_NAMES as readonly string[]
@@ -15,7 +16,7 @@ const VALID_FEATURES = FEATURE_NAMES as readonly string[]
 export async function PUT(request: NextRequest) {
   try {
     const session = await requireAuth()
-    if (session instanceof NextResponse) return session
+    if (session instanceof NextResponse) {return session}
 
     const body = await request.json()
 
@@ -72,9 +73,9 @@ export async function PUT(request: NextRequest) {
           features,
         },
       })
-    } else {
+    } 
       return NextResponse.json({ success: false, error: 'Invalid request body' }, { status: 400 })
-    }
+    
   } catch (error: any) {
     console.error('Toggle feature error:', error)
     return NextResponse.json({ success: false, error: 'Failed to toggle feature' }, { status: 500 })

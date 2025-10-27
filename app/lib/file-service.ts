@@ -6,14 +6,16 @@
  */
 
 import { put, del } from '@vercel/blob'
-import { db } from './database'
+import { eq } from 'drizzle-orm'
+
 import {
   galleryItems,
   dressCodes,
   weddingConfigurations,
   type NewGalleryItem,
 } from '@/app/db/schema'
-import { eq } from 'drizzle-orm'
+
+import { db } from './database'
 
 // File validation constants
 const MAX_FILE_SIZE = 4 * 1024 * 1024 // 4MB in bytes
@@ -216,7 +218,7 @@ export async function deleteDressCodePhoto(weddingConfigId: string): Promise<voi
     .where(eq(dressCodes.weddingConfigId, weddingConfigId))
     .limit(1)
 
-  if (!dressCode || !dressCode.photoFilename) {
+  if (!dressCode?.photoFilename) {
     throw new Error('Dress code photo not found')
   }
 
@@ -302,7 +304,7 @@ export async function deleteMonogramPhoto(weddingConfigId: string): Promise<void
     .where(eq(weddingConfigurations.id, weddingConfigId))
     .limit(1)
 
-  if (!config || !config.monogramFilename) {
+  if (!config?.monogramFilename) {
     throw new Error('Monogram photo not found')
   }
 

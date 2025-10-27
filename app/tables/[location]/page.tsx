@@ -1,15 +1,16 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+
+import { Locations } from '../../components/LocationComponent'
 import { getTablesAndGuests } from '../actions'
 import TableManagementClientPage from '../TableManagementClientPage'
-import { Locations } from '../../components/LocationComponent'
 
 export default async function TableManagementPage({ params }: { params: { location: Locations } }) {
   const cookieStore = cookies()
   const loggedIn = cookieStore.get('loggedIn')
 
-  if (!loggedIn || loggedIn.value !== 'true') {
-    redirect('/login?redirect=/tables/' + params.location)
+  if (loggedIn?.value !== 'true') {
+    redirect(`/login?redirect=/tables/${  params.location}`)
   }
 
   const { tables, unassignedGuests } = await getTablesAndGuests(params.location)

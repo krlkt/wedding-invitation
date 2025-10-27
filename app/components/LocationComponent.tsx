@@ -1,10 +1,13 @@
 import { FC } from 'react'
-import DinnerIcon from '../icons/DinnerIcon'
-import Button from './Button'
-import NavigationIcon from '../icons/NavigationIcon'
+
 import Image from 'next/image'
-import GrowIn from './GrowIn'
+
+import DinnerIcon from '../icons/DinnerIcon'
+import NavigationIcon from '../icons/NavigationIcon'
+
+import Button from './Button'
 import FadeIn from './FadeIn'
+import GrowIn from './GrowIn'
 
 export const locations = {
   bali: 'bali',
@@ -58,7 +61,7 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
                 : location === 'malang'
                   ? 'https://maps.app.goo.gl/PNwWNcDREkXbNuiR7'
                   : 'https://maps.app.goo.gl/HZzTRkNjrPdh4QLj8'
-            }
+            } rel="noreferrer"
           >
             <span className="flex items-center justify-center gap-2">
               Google maps
@@ -71,7 +74,7 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
       </FadeIn>
     </div>
     <GrowIn className="absolute -z-10 h-full w-full object-contain">
-      <Image src={'/images/ornaments/frame/orn_frame.png'} alt={'Ornament Flower'} fill />
+      <Image src="/images/ornaments/frame/orn_frame.png" alt="Ornament Flower" fill />
     </GrowIn>
   </div>
 )

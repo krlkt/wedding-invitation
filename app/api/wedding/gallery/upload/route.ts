@@ -3,13 +3,14 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/app/lib/session'
+
 import { uploadGalleryPhoto } from '@/app/lib/file-service'
+import { requireAuth } from '@/app/lib/session'
 
 export async function POST(request: NextRequest) {
   try {
     const session = await requireAuth()
-    if (session instanceof NextResponse) return session
+    if (session instanceof NextResponse) {return session}
 
     const formData = await request.formData()
     const file = formData.get('file') as File

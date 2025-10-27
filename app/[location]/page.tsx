@@ -1,15 +1,18 @@
-import { Metadata } from 'next'
-import InvitationPage from './InvitationPage'
-import UnopenedInvitationPage from './UnopenedInvitationPage'
-import UnidentifiedPersonPage from './UnidentifiedPersonPage'
-import NotInGuestListPage from './NotInGuestListPage'
 import { notFound } from 'next/navigation'
+
+import { Metadata } from 'next'
+
 import { Locations } from '../components/LocationComponent'
 import { query } from '../db/client'
-import { Wish } from '../models/wish'
 import { RSVP } from '../models/rsvp'
-import { LocationProvider } from '../utils/useLocation'
+import { Wish } from '../models/wish'
 import { GuestIdProvider } from '../utils/useGuestId'
+import { LocationProvider } from '../utils/useLocation'
+
+import InvitationPage from './InvitationPage'
+import NotInGuestListPage from './NotInGuestListPage'
+import UnidentifiedPersonPage from './UnidentifiedPersonPage'
+import UnopenedInvitationPage from './UnopenedInvitationPage'
 
 export const revalidate = 0
 
@@ -51,7 +54,7 @@ export default async function Page({
     {
       id: guestId,
       name: guestName,
-      location: location,
+      location,
     }
   )
 
@@ -63,7 +66,7 @@ export default async function Page({
   // This is needed because Next is complaining that "Only plain objects can be passed to Client Components from Server Components"
   const rsvp = JSON.parse(JSON.stringify(rawRsvp))
 
-  if (location !== 'bali' && location !== 'jakarta' && location !== 'malang') return notFound()
+  if (location !== 'bali' && location !== 'jakarta' && location !== 'malang') {return notFound()}
 
   return (
     <LocationProvider location={location}>
