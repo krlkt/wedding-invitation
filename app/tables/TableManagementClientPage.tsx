@@ -20,7 +20,6 @@ import { moveGuestToTable, synchronizeGuests } from './actions'
 import { ManageTablesModal } from './ManageTablesModal'
 import { MoveGuestModal } from './MoveGuestModal'
 import { TableComponent } from './TableComponent'
-
 import { VirtualizedGuestList } from './VirtualizedGuestList'
 
 interface TableManagementClientPageProps {

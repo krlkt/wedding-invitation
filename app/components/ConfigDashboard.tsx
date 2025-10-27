@@ -61,27 +61,6 @@ export default function ConfigDashboard() {
     }
   }
 
-  async function updateConfig(updates: any) {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/config', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setConfig(data.data)
-        setRefreshTrigger((prev) => prev + 1)
-      }
-    } catch (error) {
-      console.error('Failed to update config:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
   async function toggleFeature(featureName: string, isEnabled: boolean) {
     try {
       const response = await fetch('/api/wedding/config/features', {
@@ -115,40 +94,6 @@ export default function ConfigDashboard() {
       }
     } catch (error) {
       console.error('Failed to update features:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function handlePublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/publish', {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to publish:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function handleUnpublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/unpublish', {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to unpublish:', error)
     } finally {
       setSaving(false)
     }

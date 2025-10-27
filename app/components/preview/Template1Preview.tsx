@@ -21,25 +21,24 @@ import FadeIn from '../FadeIn'
 import FAQ from '../faq/FAQ'
 import ImageGallery from '../gallery/ImageGallery'
 import Gift from '../gift/Gift'
+import GrowIn from '../GrowIn'
 import Hero from '../hero/Hero'
-import Timeline from '../timeline/Timeline'
-import RSVPForm from '../rsvp/RSVPForm'
+import LoaderScreen from '../LoaderScreen'
+import LocationComponent from '../LocationComponent'
 import YouTubeEmbed from '../prewedding/YoutubeEmbed'
+import RSVPForm from '../rsvp/RSVPForm'
+import SaveTheDate from '../save-the-date/SaveTheDate'
+import SaveTheDateOrnament from '../save-the-date/SaveTheDateOrnament'
 import SectionTitle from '../SectionTitle'
+import Timeline from '../timeline/Timeline'
 import Divider from '../wish/Divider'
 import Wishes from '../wish/Wishes'
 import Bride from '../zoomGridPhotos/Bride'
 import Groom from '../zoomGridPhotos/Groom'
-import SaveTheDate from '../save-the-date/SaveTheDate'
-import SaveTheDateOrnament from '../save-the-date/SaveTheDateOrnament'
-import LocationComponent from '../LocationComponent'
-import GrowIn from '../GrowIn'
 
 import EmptyState from './EmptyState'
 
 import type { TemplateProps } from './types'
-
-import LoaderScreen from '../LoaderScreen'
 
 export default function Template1Preview({
   data,

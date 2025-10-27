@@ -60,7 +60,7 @@ export default async function Page({
 
   const rawRsvp = rows[0]
   if (rows.length === 0 || !rawRsvp || !guestId) {
-    return <NotInGuestListPage guestName={guestName} />
+    return <NotInGuestListPage />
   }
 
   // This is needed because Next is complaining that "Only plain objects can be passed to Client Components from Server Components"

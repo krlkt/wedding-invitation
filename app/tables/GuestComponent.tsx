@@ -22,7 +22,6 @@ interface GuestComponentProps {
 
 export const GuestComponent = ({
   guest,
-  tables,
   location,
   onOpenMoveModal,
   tableSearchTerm,

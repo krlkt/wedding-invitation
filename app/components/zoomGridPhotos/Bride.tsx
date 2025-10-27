@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react'
 
 import Image from 'next/image'
 
-import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 import './zoomGridPhotos.css'
 import InstagramIcon from '@/app/icons/InstagramIcon'
@@ -64,8 +64,6 @@ const Bride = () => {
   const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9])
   const textOpacityBride = useTransform(scrollYProgress, [0.3, 0.8], [0, 1])
   const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1])
-  const bgOpacity = useTransform(scrollYProgress, [0.3, 0.8], [0, 0.4])
-  const backgroundColor = useMotionTemplate`rgba(0,0,0, ${bgOpacity})`
 
   // Use measured container height for embedded mode, viewport height for fullscreen
   const stickyHeightValue = isEmbedded && containerHeight ? `${containerHeight}px` : ''
@@ -120,9 +118,9 @@ const Bride = () => {
         className={`sticky top-0 ${stickyHeightClass} overflow-hidden`}
         style={isEmbedded && stickyHeightValue ? { height: stickyHeightValue } : undefined}
       >
-        {pictures.map(({ scale, src }, index) => (
+        {pictures.map(({ scale, src }) => (
           // Element container div to make sure everything has the same layout
-          <motion.div key={index} style={{ scale }} className="grid-placement">
+          <motion.div key={src.src} style={{ scale }} className="grid-placement">
             <div className="imageContainer">
               <Image
                 src={src}
