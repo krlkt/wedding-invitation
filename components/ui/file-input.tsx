@@ -39,7 +39,8 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
     },
     ref
   ) => {
-    const inputId = id || React.useId()
+    const generatedId = React.useId()
+    const inputId = id || generatedId
 
     return (
       <div className={cn('relative w-full', className)}>

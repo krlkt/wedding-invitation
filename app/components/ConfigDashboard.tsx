@@ -18,9 +18,20 @@ import {
 } from '@/components/ui/accordion'
 import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
+import { DraftProvider, useDraft } from '@/app/context/DraftContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
 
 export default function ConfigDashboard() {
+  return (
+    <DraftProvider>
+      <div className="relative flex h-full overflow-hidden bg-gray-100">
+        <ConfigDashboardContent />
+      </div>
+    </DraftProvider>
+  )
+}
+
+function ConfigDashboardContent() {
   const [config, setConfig] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -28,9 +39,10 @@ export default function ConfigDashboard() {
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
   const [startingSectionContent, setStartingSectionContent] =
     useState<StartingSectionContent | null>(null)
-  const [draftStartingSection, setDraftStartingSection] = useState<
-    Partial<StartingSectionContent> | undefined
-  >(undefined)
+
+  // Use draft context for starting section
+  const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
+    useDraft('startingSection')
 
   //WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
@@ -176,52 +188,6 @@ export default function ConfigDashboard() {
     }
   }
 
-  async function handlePublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/publish', {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to publish:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function handleUnpublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/unpublish', {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to unpublish:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  // Memoize callbacks to prevent infinite loops
-  const handleStartingSectionLocalChange = useCallback((draft: Partial<StartingSectionContent> | undefined) => {
-    if (draft === undefined) {
-      setDraftStartingSection(undefined)
-    } else {
-      setDraftStartingSection((prev) => ({
-        ...prev,
-        ...draft,
-      }))
-    }
-  }, [])
-
   const handleBackgroundUpload = useCallback(
     (backgroundData: {
       backgroundFilename: string
@@ -230,16 +196,15 @@ export default function ConfigDashboard() {
       backgroundMimeType: string
       backgroundFileSize: number
     }) => {
-      // Only update draft state - don't update saved state yet
-      // This preserves unsaved changes in the form
-      setDraftStartingSection((prev) => ({
-        ...prev,
+      // Update draft state with new background
+      setDraftStartingSection({
+        ...(draftStartingSection || {}),
         ...backgroundData,
-      }))
-      // Preview will update automatically via draft merge
-      // Don't trigger refetch to avoid resetting the form
+      })
+      // Trigger preview refresh to show new background immediately
+      setRefreshTrigger((prev) => prev + 1)
     },
-    []
+    [draftStartingSection, setDraftStartingSection]
   )
 
   const handleMonogramUpload = useCallback(
@@ -272,7 +237,7 @@ export default function ConfigDashboard() {
   }
 
   return (
-    <div className="flex h-full overflow-hidden bg-gray-100">
+    <>
       {/* Left Panel - Configuration */}
       <div className="flex w-1/2 flex-col overflow-y-auto border-r bg-white">
         <div className="sticky top-0 z-10 border-b bg-white">
@@ -299,9 +264,7 @@ export default function ConfigDashboard() {
             setDraftFeatures(features)
           }}
           startingSectionContent={startingSectionContent}
-          draftStartingSectionContent={draftStartingSection}
           onUpdateStartingSection={updateStartingSectionContent}
-          onStartingSectionLocalChange={handleStartingSectionLocalChange}
           onRefetchStartingSection={fetchStartingSectionContent}
           onBackgroundUpload={handleBackgroundUpload}
           onMonogramUpload={handleMonogramUpload}
@@ -318,7 +281,7 @@ export default function ConfigDashboard() {
           draftStartingSection={draftStartingSection}
         />
       </div>
-    </div>
+    </>
   )
 }
 
@@ -331,14 +294,16 @@ function FeaturesForm({
   saving,
   onLocalChange,
   startingSectionContent,
-  draftStartingSectionContent,
   onUpdateStartingSection,
-  onStartingSectionLocalChange,
   onRefetchStartingSection,
   onBackgroundUpload,
   onMonogramUpload,
   onRefreshPreview,
 }: any) {
+  // Access draft context in FeaturesForm
+  const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
+    useDraft('startingSection')
+
   const features = [
     {
       name: 'hero',
@@ -377,9 +342,6 @@ function FeaturesForm({
   const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(
     new Set()
   )
-  const [localDraftStartingSection, setLocalDraftStartingSection] = useState<
-    Partial<StartingSectionContent>
-  >({})
 
   // Update draft state when config changes (after save)
   useEffect(() => {
@@ -387,10 +349,9 @@ function FeaturesForm({
     setChangedFeatures(new Set())
   }, [config.features])
 
-  // Update draft starting section when content changes (after save)
+  // Clear changed fields when starting section content changes (after save or discard)
   useEffect(() => {
     setChangedStartingSectionFields(new Set())
-    setLocalDraftStartingSection({})
   }, [startingSectionContent])
 
   // Check if there are unsaved changes
@@ -433,9 +394,11 @@ function FeaturesForm({
       await onBatchSave(featuresToUpdate)
     }
 
-    // Save changed starting section content
-    if (changedStartingSectionFields.size > 0) {
-      await onUpdateStartingSection(localDraftStartingSection)
+    // Save changed starting section content (draft is already in context)
+    if (changedStartingSectionFields.size > 0 && draftStartingSection) {
+      await onUpdateStartingSection(draftStartingSection)
+      // Clear draft after successful save
+      clearStartingSectionDraft()
     }
   }
 
@@ -445,12 +408,12 @@ function FeaturesForm({
     setChangedFeatures(new Set())
     onLocalChange(config.features)
 
-    // Reset starting section to saved state
-    setLocalDraftStartingSection({})
+    // Reset starting section to saved state using context
+    // Clearing the draft triggers the useEffect in StartingSectionForm which resets the form
+    clearStartingSectionDraft()
     setChangedStartingSectionFields(new Set())
-    onStartingSectionLocalChange(undefined)
 
-    // Force re-fetch to trigger form reset and preview refresh
+    // Force re-fetch to ensure we have latest data from server
     if (onRefetchStartingSection) {
       await onRefetchStartingSection()
     }
@@ -464,17 +427,6 @@ function FeaturesForm({
   const handleStartingSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
     setChangedStartingSectionFields(fields)
   }, [])
-
-  const handleStartingSectionLocalChange = useCallback(
-    (draft: Partial<StartingSectionContent>) => {
-      setLocalDraftStartingSection((prev) => ({
-        ...prev,
-        ...draft,
-      }))
-      onStartingSectionLocalChange(draft)
-    },
-    [onStartingSectionLocalChange]
-  )
 
   return (
     <>
@@ -530,9 +482,7 @@ function FeaturesForm({
                     <StartingSectionForm
                       weddingConfig={config}
                       startingSectionContent={startingSectionContent}
-                      draftStartingSectionContent={draftStartingSectionContent}
                       onUpdate={onUpdateStartingSection}
-                      onLocalChange={handleStartingSectionLocalChange}
                       onChangeTracking={handleStartingSectionChange}
                       changedFields={changedStartingSectionFields}
                       onBackgroundUpload={onBackgroundUpload}
