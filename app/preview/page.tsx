@@ -41,7 +41,7 @@ export default async function AdminPreviewPage() {
   const session = await getSession()
 
   if (!session || !session.weddingConfigId) {
-    redirect('/admin/login')
+    redirect('/login')
   }
 
   // Fetch wedding configuration

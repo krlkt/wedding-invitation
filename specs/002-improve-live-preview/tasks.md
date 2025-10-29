@@ -212,7 +212,7 @@ Next.js App Router structure:
   - File: `app/preview/page.tsx`
   - Create new directory: `app/preview/`
   - Implement server component with session authentication
-  - Call getSession() and redirect to /admin/login if not authenticated
+  - Call getSession() and redirect to /login if not authenticated
   - Fetch wedding config with getWeddingConfigById(session.weddingConfigId)
   - Import and render FullScreenPreview component with config
   - Handle case where config not found

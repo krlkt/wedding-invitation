@@ -86,7 +86,7 @@ curl -X GET http://localhost:3000/preview \
 # 3. Access without authentication
 curl -X GET http://localhost:3000/preview
 
-# Expected: Redirect to /admin/login (302)
+# Expected: Redirect to /login (302)
 ```
 
 **Success Criteria**:

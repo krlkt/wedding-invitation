@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
-import RegisterForm from './RegisterForm'
+import LoginForm from './LoginForm'
 
 async function getSession() {
   const cookieStore = await cookies()
@@ -18,7 +18,7 @@ async function getSession() {
   }
 }
 
-export default async function RegisterPage() {
+export default async function AdminLoginPage() {
   // Check if user is already authenticated
   const session = await getSession()
 
@@ -27,5 +27,5 @@ export default async function RegisterPage() {
     redirect('/admin')
   }
 
-  return <RegisterForm />
+  return <LoginForm />
 }

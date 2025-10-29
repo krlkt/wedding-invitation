@@ -111,7 +111,7 @@ Returns HTML page with:
 - No admin UI elements (clean preview)
 
 **Unauthorized (302)**:
-Redirects to `/admin/login`
+Redirects to `/login`
 
 ### Implementation
 
@@ -122,7 +122,7 @@ Redirects to `/admin/login`
 ```typescript
 export default async function PreviewPage() {
     const session = await getSession();
-    if (!session) redirect('/admin/login');
+    if (!session) redirect('/login');
 
     const config = await getWeddingConfigById(session.weddingConfigId);
     if (!config) {
