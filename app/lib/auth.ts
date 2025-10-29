@@ -5,10 +5,12 @@
  * Handles user registration, login, and session management.
  */
 
-import { db } from './database'
-import { userAccounts, type NewUserAccount } from '@/app/db/schema'
-import { eq } from 'drizzle-orm'
 import bcrypt from 'bcryptjs'
+import { eq } from 'drizzle-orm'
+
+import { userAccounts, type NewUserAccount } from '@/app/db/schema'
+
+import { db } from './database'
 
 /**
  * Register a new user account

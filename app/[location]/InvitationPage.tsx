@@ -1,35 +1,40 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import LoaderScreen from '../components/LoaderScreen'
-import Music from '../components/Music'
-import LocationComponent, { Locations } from '../components/LocationComponent'
-import 'photoswipe/style.css'
-import Gift from '../components/gift/Gift'
-import Wishes from '../components/wish/Wishes'
-import RSVPFORM from '../components/rsvp/RSVPForm'
-import { Wish } from '../models/wish'
-import WishForm from '../components/wish/WishForm'
-import { RSVP } from '../models/rsvp'
+
 import Lenis from 'lenis'
-import Groom from '../components/zoomGridPhotos/Groom'
-import Hero from '../components/hero/Hero'
-import Bride from '../components/zoomGridPhotos/Bride'
-import Timeline from '../components/timeline/Timeline'
-import SaveTheDate from '../components/save-the-date/SaveTheDate'
-import SectionTitle from '../components/SectionTitle'
-import Divider from '../components/wish/Divider'
-import Image from 'next/image'
-import SaveTheDateOrnament from '../components/save-the-date/SaveTheDateOrnament'
+
 import BorderedDiv from '../components/BorderedDiv'
-import DressCode from '../components/dresscode/DressCode'
-import { motion } from 'framer-motion'
-import FAQ from '../components/faq/FAQ'
 import Button from '../components/Button'
-import YouTubeEmbed from '../components/prewedding/YoutubeEmbed'
-import ImageGallery from '../components/gallery/ImageGallery'
-import { rotateAnimation } from '../utils/animation'
+import DressCode from '../components/dresscode/DressCode'
 import FadeIn from '../components/FadeIn'
+import FAQ from '../components/faq/FAQ'
+import ImageGallery from '../components/gallery/ImageGallery'
+import Gift from '../components/gift/Gift'
+import Hero from '../components/hero/Hero'
+import LoaderScreen from '../components/LoaderScreen'
+import LocationComponent, { Locations } from '../components/LocationComponent'
+import Music from '../components/Music'
+import 'photoswipe/style.css'
+import YouTubeEmbed from '../components/prewedding/YoutubeEmbed'
+import RSVPFORM from '../components/rsvp/RSVPForm'
+import SaveTheDate from '../components/save-the-date/SaveTheDate'
+import SaveTheDateOrnament from '../components/save-the-date/SaveTheDateOrnament'
+import SectionTitle from '../components/SectionTitle'
+import Timeline from '../components/timeline/Timeline'
+import Divider from '../components/wish/Divider'
+import Wishes from '../components/wish/Wishes'
+import WishForm from '../components/wish/WishForm'
+import Bride from '../components/zoomGridPhotos/Bride'
+import Groom from '../components/zoomGridPhotos/Groom'
+import { RSVP } from '../models/rsvp'
+import { Wish } from '../models/wish'
+
+import Image from 'next/image'
+
+import { motion } from 'framer-motion'
+
+import { rotateAnimation } from '../utils/animation'
 import GrowIn from '../components/GrowIn'
 
 export default function InvitationPage({
@@ -101,12 +106,12 @@ export default function InvitationPage({
           </div>
           <div id="hero" className="absolute -z-20 h-full w-full">
             <Image
-              alt={'Couple photo'}
+              alt="Couple photo"
               fill
               className="h-full w-full object-cover"
               sizes="100vw"
-              src={'/images/gallery/gal15.jpg'}
-              priority={true}
+              src="/images/gallery/gal15.jpg"
+              priority
             />
           </div>
         </div>
@@ -147,8 +152,8 @@ export default function InvitationPage({
             <SaveTheDate />
             <FadeIn from="left" className="absolute -left-4 top-[46%]">
               <Image
-                src={'/images/ornaments/baby_orn2.png'}
-                alt={'Ornament blue flower'}
+                src="/images/ornaments/baby_orn2.png"
+                alt="Ornament blue flower"
                 width={120}
                 height={120}
                 className="-rotate-[45deg]"
@@ -156,8 +161,8 @@ export default function InvitationPage({
             </FadeIn>
             <FadeIn from="right" className="absolute -right-4 top-[46%] -translate-y-4">
               <Image
-                src={'/images/ornaments/baby_orn2.png'}
-                alt={'Ornament blue flower'}
+                src="/images/ornaments/baby_orn2.png"
+                alt="Ornament blue flower"
                 width={120}
                 height={120}
                 className="-rotate-[220deg]"
@@ -192,16 +197,16 @@ export default function InvitationPage({
           <section className="relative w-full pt-16">
             <FadeIn from="left" className="absolute -left-8 top-3 -z-10">
               <Image
-                src={'/images/ornaments/baby_orn2.png'}
-                alt={'Ornament blue flower'}
+                src="/images/ornaments/baby_orn2.png"
+                alt="Ornament blue flower"
                 width={150}
                 height={150}
               />
             </FadeIn>
             <FadeIn from="right" className="absolute -right-8 top-3 -z-10">
               <Image
-                src={'/images/ornaments/baby_orn2.png'}
-                alt={'Ornament blue flower'}
+                src="/images/ornaments/baby_orn2.png"
+                alt="Ornament blue flower"
                 width={150}
                 height={150}
                 className="-rotate-[260deg]"
@@ -226,8 +231,8 @@ export default function InvitationPage({
             </FadeIn>
             <FadeIn from="left" className="absolute -left-8 bottom-3 -z-10">
               <Image
-                src={'/images/ornaments/baby_orn2.png'}
-                alt={'Ornament blue flower'}
+                src="/images/ornaments/baby_orn2.png"
+                alt="Ornament blue flower"
                 width={150}
                 height={150}
                 className="-rotate-[80deg]"
@@ -235,8 +240,8 @@ export default function InvitationPage({
             </FadeIn>
             <FadeIn from="right" className="absolute -right-8 bottom-3 -z-10">
               <Image
-                src={'/images/ornaments/baby_orn2.png'}
-                alt={'Ornament blue flower'}
+                src="/images/ornaments/baby_orn2.png"
+                alt="Ornament blue flower"
                 width={150}
                 height={150}
                 className="-rotate-[180deg]"
@@ -248,8 +253,8 @@ export default function InvitationPage({
             <section className="relative w-full bg-primary-main py-16 pb-28">
               <FadeIn from="left" className="absolute -left-16 -top-0">
                 <Image
-                  src={'/images/ornaments/baby_orn.png'}
-                  alt={'Baby breath'}
+                  src="/images/ornaments/baby_orn.png"
+                  alt="Baby breath"
                   width={200}
                   height={100}
                   className="pointer-events-none rotate-90"
@@ -261,8 +266,8 @@ export default function InvitationPage({
               </FadeIn>
               <FadeIn from="right" className="absolute -right-10 bottom-12">
                 <Image
-                  src={'/images/ornaments/baby_orn4.png'}
-                  alt={'Baby breath'}
+                  src="/images/ornaments/baby_orn4.png"
+                  alt="Baby breath"
                   width={200}
                   height={100}
                   className="pointer-events-none -rotate-180"
@@ -280,8 +285,8 @@ export default function InvitationPage({
                 style={{ transformOrigin: 'center right' }}
               >
                 <Image
-                  src={'/images/ornaments/orn6.png'}
-                  alt={'Ornament blue flower'}
+                  src="/images/ornaments/orn6.png"
+                  alt="Ornament blue flower"
                   width={400}
                   height={100}
                 />
@@ -298,12 +303,7 @@ export default function InvitationPage({
               style={{ transformOrigin: 'left center' }}
               className="absolute left-0 top-2"
             >
-              <Image
-                src={'/images/ornaments/cats/mayo.webp'}
-                alt={'Mayo'}
-                width={100}
-                height={100}
-              />
+              <Image src="/images/ornaments/cats/mayo.webp" alt="Mayo" width={100} height={100} />
             </motion.div>
             <motion.div
               animate={rotateAnimation([5, -5, 5], 0.5)}
@@ -311,8 +311,8 @@ export default function InvitationPage({
               className="absolute bottom-5 right-0 z-10"
             >
               <Image
-                src={'/images/ornaments/cats/kyupie.webp'}
-                alt={'Kyupie'}
+                src="/images/ornaments/cats/kyupie.webp"
+                alt="Kyupie"
                 width={100}
                 height={100}
               />
@@ -328,8 +328,8 @@ export default function InvitationPage({
             <div className="relative flex flex-col gap-4">
               <GrowIn className="absolute left-1/2 -z-10">
                 <Image
-                  src={'/images/ornaments/frame/gate.png'}
-                  alt={'Gate'}
+                  src="/images/ornaments/frame/gate.png"
+                  alt="Gate"
                   width={300}
                   height={300}
                   className="-translate-x-1/2 translate-y-36 scale-[3.4] opacity-15"

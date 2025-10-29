@@ -1,6 +1,8 @@
 import { FC, PropsWithChildren } from 'react'
-import CloseIcon from '../icons/CloseIcon'
+
 import { AnimatePresence, motion } from 'framer-motion'
+
+import CloseIcon from '../icons/CloseIcon'
 import './modal.css'
 
 interface ModalProps {
@@ -33,7 +35,7 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({ children, open, onClose }) =
             className="absolute right-0 top-0 h-full w-[80%] max-w-[25rem] bg-white"
             variants={modalSlide}
             animate="enter"
-            exit={'exit'}
+            exit="exit"
             initial="initial"
           >
             {/* Close Button */}
@@ -74,8 +76,8 @@ const Curve = () => {
   }
 
   return (
-    <svg className={'svgCurve'}>
-      <motion.path variants={curve} initial="initial" animate="enter" exit="exit"></motion.path>
+    <svg className="svgCurve">
+      <motion.path variants={curve} initial="initial" animate="enter" exit="exit" />
     </svg>
   )
 }

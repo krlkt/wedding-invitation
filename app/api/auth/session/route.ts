@@ -4,8 +4,9 @@
  * Check current authentication status.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { NextRequest, NextResponse } from 'next/server'
+
 import { getWeddingConfigById } from '@/app/lib/wedding-service'
 
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000 // change to 5 * 1000 for 5 seconds (testing)

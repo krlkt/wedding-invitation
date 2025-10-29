@@ -1,18 +1,22 @@
 'use client'
 
 import './zoomGridPhotos.css'
+import { useRef, useState, useEffect } from 'react'
+
 import Image from 'next/image'
+
+import { motion, useScroll, useTransform } from 'framer-motion'
+
+import InstagramIcon from '@/app/icons/InstagramIcon'
+import { useScrollContainer } from '@/app/utils/ScrollContainerContext'
+import { useWeddingData } from '@/app/utils/useWeddingData'
+
 import Groom1 from '../../../public/images/groom/groom1.jpg'
 import Groom2 from '../../../public/images/groom/groom2.jpg'
 import Groom3 from '../../../public/images/groom/groom3.jpg'
 import Groom4 from '../../../public/images/groom/groom4.jpg'
 import Groom5 from '../../../public/images/groom/groom5.jpg'
 import Groom6 from '../../../public/images/groom/groom6.jpg'
-import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import InstagramIcon from '@/app/icons/InstagramIcon'
-import { useScrollContainer } from '@/app/utils/ScrollContainerContext'
-import { useWeddingData } from '@/app/utils/useWeddingData'
 
 const Groom = () => {
   // Get wedding data from context
@@ -25,7 +29,9 @@ const Groom = () => {
   const [containerHeight, setContainerHeight] = useState<number | null>(null)
 
   useEffect(() => {
-    if (!isEmbedded || !containerRef?.current) return
+    if (!isEmbedded || !containerRef?.current) {
+      return
+    }
 
     const updateHeight = () => {
       if (containerRef?.current) {
@@ -105,12 +111,12 @@ const Groom = () => {
       >
         {pictures.map(({ scale, src }, index) => (
           // Element container div to make sure everything has the same layout
-          <motion.div key={index} style={{ scale }} className={'grid-placement'}>
-            <div className={'imageContainer'}>
+          <motion.div key={index} style={{ scale }} className="grid-placement">
+            <div className="imageContainer">
               <Image
                 src={src}
                 fill
-                alt={'Grooms Image'}
+                alt="Grooms Image"
                 placeholder="blur"
                 className="grid-image object-cover"
               />
@@ -132,7 +138,7 @@ const Groom = () => {
                   The Groom
                   {features.groom_and_bride === true && config.groomsInstagramLink && (
                     <a href={config.groomsInstagramLink} target="_blank" rel="noopener noreferrer">
-                      <InstagramIcon width={'25px'} color="white" />
+                      <InstagramIcon width="25px" color="white" />
                     </a>
                   )}
                 </span>

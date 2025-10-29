@@ -1,9 +1,14 @@
 import { useRouter, useSearchParams } from 'next/navigation'
+
 import { Wish } from '../../models/wish'
+
 import BubbleText from './BubbleText'
+
 import './wishes.css'
 import Button from '../Button'
+
 import { useTransition } from 'react'
+
 import FadeIn from '../FadeIn'
 
 const Wishes = ({

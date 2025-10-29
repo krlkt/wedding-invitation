@@ -5,8 +5,9 @@
  * Provides singleton database instance for use throughout the application.
  */
 
-import { drizzle } from 'drizzle-orm/libsql'
 import { createClient } from '@libsql/client'
+import { drizzle } from 'drizzle-orm/libsql'
+
 import * as schema from '@/app/db/schema'
 
 // Validate required environment variables

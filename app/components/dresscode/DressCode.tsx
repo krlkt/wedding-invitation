@@ -1,4 +1,5 @@
 import Image from 'next/image'
+
 import FadeIn from '../FadeIn'
 
 const DressCode = () => (
@@ -27,8 +28,8 @@ const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
     </div>
     <div className="relative h-full w-1/2 rounded-lg border border-blue-800 p-2">
       <Image
-        src={'/images/ornaments/orn7.png'}
-        alt={'Blue ornament'}
+        src="/images/ornaments/orn7.png"
+        alt="Blue ornament"
         className={`absolute -top-8 ${sex === 'men' ? '-left-6' : '-right-6'}`}
         width={80}
         height={200}
@@ -37,14 +38,14 @@ const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
       <div className="relative aspect-[1/1] h-full w-full overflow-hidden">
         <Image
           src={sex === 'women' ? '/images/dresscode/women.jpg' : '/images/dresscode/men.jpg'}
-          alt={'Women example dresscode'}
+          alt="Women example dresscode"
           fill
           className="rounded-lg object-bottom"
         />
       </div>
       <Image
-        src={'/images/ornaments/baby_orn.png'}
-        alt={'Blue ornament'}
+        src="/images/ornaments/baby_orn.png"
+        alt="Blue ornament"
         className={`absolute bottom-0 ${sex === 'men' ? '-left-12' : '-right-12'}`}
         width={100}
         height={200}

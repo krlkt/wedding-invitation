@@ -5,8 +5,9 @@
  * Enhanced from existing database schema with UUID primary keys and proper relationships.
  */
 
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { createId } from '@paralleldrive/cuid2'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+
 import { weddingConfigurations } from './weddings'
 
 // T029: RSVP Schema (Enhanced)

@@ -5,8 +5,9 @@
  * Allows users to enable/disable optional features like love story, gallery, etc.
  */
 
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { createId } from '@paralleldrive/cuid2'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+
 import { weddingConfigurations } from './weddings'
 
 // Feature names enum - single source of truth

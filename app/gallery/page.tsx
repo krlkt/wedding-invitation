@@ -1,4 +1,5 @@
 import { Metadata } from 'next/types'
+
 import PublicGallery from './PublicGallery'
 
 export const metadata: Metadata = {

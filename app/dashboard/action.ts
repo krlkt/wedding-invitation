@@ -1,8 +1,10 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import { query } from '@/app/db/client'
 import { RSVP, RSVPForm } from '@/app/models/rsvp'
-import { revalidatePath } from 'next/cache'
+
 import { Guest } from '../models/guest'
 
 const VALID_LOCATIONS = ['jakarta', 'bali', 'malang']
@@ -26,7 +28,7 @@ export const updateLink = async (data: RSVPForm) => {
         WHERE id = $id
     `,
     {
-      link: link,
+      link,
       id: participantId,
     }
   )
@@ -216,8 +218,8 @@ export const updatePossiblyNotComing = async (id: number, possibly_not_coming: b
         WHERE id = $id
     `,
     {
-      possibly_not_coming: possibly_not_coming,
-      id: id,
+      possibly_not_coming,
+      id,
     }
   )
   revalidatePath('/')

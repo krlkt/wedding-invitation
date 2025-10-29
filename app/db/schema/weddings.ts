@@ -5,8 +5,9 @@
  * Core multi-tenant entity with one-to-one relationship to UserAccount.
  */
 
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { createId } from '@paralleldrive/cuid2'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+
 import { userAccounts } from './users'
 
 export const weddingConfigurations = sqliteTable('wedding_configurations', {

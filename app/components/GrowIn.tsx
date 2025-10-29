@@ -1,5 +1,7 @@
-import { motion } from 'framer-motion'
 import { FC, HTMLAttributes, PropsWithChildren } from 'react'
+
+import { motion } from 'framer-motion'
+
 import { growInVariants } from '../utils/animation'
 
 const GrowIn: FC<
@@ -8,7 +10,7 @@ const GrowIn: FC<
   <motion.div
     variants={growInVariants}
     initial="initial"
-    whileInView={'animate'}
+    whileInView="animate"
     viewport={{ once: true }}
     {...props}
   >

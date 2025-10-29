@@ -1,5 +1,6 @@
-import { query } from '@/app/db/client'
 import { NextResponse } from 'next/server'
+
+import { query } from '@/app/db/client'
 
 export async function GET() {
   const { rows } = await query<{ id: number; name: string }>('SELECT * FROM groups')

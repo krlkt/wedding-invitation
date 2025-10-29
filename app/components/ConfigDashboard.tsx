@@ -8,14 +8,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
+
 import LivePreview from './LivePreview'
 
 export default function ConfigDashboard() {
@@ -25,7 +28,7 @@ export default function ConfigDashboard() {
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
 
-  //WIP: session check on dashboard load or time interval or user action?
+  // WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
     try {
       const res = await fetch('/api/auth/session')
@@ -55,27 +58,6 @@ export default function ConfigDashboard() {
       console.error('Failed to fetch config:', error)
     } finally {
       setLoading(false)
-    }
-  }
-
-  async function updateConfig(updates: any) {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/config', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setConfig(data.data)
-        setRefreshTrigger((prev) => prev + 1)
-      }
-    } catch (error) {
-      console.error('Failed to update config:', error)
-    } finally {
-      setSaving(false)
     }
   }
 
@@ -112,40 +94,6 @@ export default function ConfigDashboard() {
       }
     } catch (error) {
       console.error('Failed to update features:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function handlePublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/publish', {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to publish:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function handleUnpublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/unpublish', {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to unpublish:', error)
     } finally {
       setSaving(false)
     }

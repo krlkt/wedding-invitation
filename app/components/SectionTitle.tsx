@@ -1,5 +1,7 @@
-import { motion } from 'framer-motion'
 import { FC } from 'react'
+
+import { motion } from 'framer-motion'
+
 import { fadeInVariants } from '../utils/animation'
 
 interface SectionTitleProps {
@@ -12,7 +14,7 @@ const SectionTitle: FC<SectionTitleProps> = ({ title, color = 'primary', size = 
   <motion.h2
     variants={fadeInVariants}
     initial="initial"
-    whileInView={'animate'}
+    whileInView="animate"
     viewport={{ once: true }}
     className={`${size === 'medium' ? 'text-3xl' : 'text-5xl'} mb-6 text-center font-heading ${
       color === 'secondary' ? 'text-secondary-main' : 'text-primary-main'

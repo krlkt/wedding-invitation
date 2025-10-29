@@ -4,10 +4,11 @@
  * Authenticate user and establish session.
  */
 
+import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
+
 import { authenticateUser } from '@/app/lib/auth'
 import { getWeddingConfigByUserId } from '@/app/lib/wedding-service'
-import { cookies } from 'next/headers'
 
 export async function POST(request: NextRequest) {
   try {

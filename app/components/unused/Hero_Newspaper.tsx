@@ -1,11 +1,12 @@
 import Image from 'next/image'
+
 import KnotIcon from '../../icons/KnotIcon'
 
 const Hero = () => (
   <div className="relative h-dvh w-full">
     <Image
-      src={'/images/newspaper.png'}
-      alt={'Newspaper Background Image'}
+      src="/images/newspaper.png"
+      alt="Newspaper Background Image"
       className="-z-10 object-cover"
       fill
     />
@@ -16,8 +17,8 @@ const Hero = () => (
     </h3>
     <div className="relative mx-4 mt-4 h-[420px] border border-gray-600 shadow-lg drop-shadow-xl">
       <Image
-        src={'/images/hero.png'}
-        alt={'Hero Image'}
+        src="/images/hero.png"
+        alt="Hero Image"
         className="object-cover object-[50%_20%]"
         fill
       />
