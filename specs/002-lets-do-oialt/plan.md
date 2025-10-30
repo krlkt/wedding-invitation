@@ -1,7 +1,7 @@
 # Implementation Plan: Template-Based Live Preview with Feature Toggle Integration
 
-**Branch**: `OIALT-8-template-preview-integration` | **Date**: 2025-10-12 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/Users/karelkarunia/Code/wedding-invitation/specs/002-lets-do-oialt/spec.md`
+**Branch**: `OIAL-8-template-preview-integration` | **Date**: 2025-10-12 | **Spec**: [spec.md](./spec.md)
+**Input**: Feature specification from `/Users/karelkarunia/Code/wedding-invitation/specs/002-lets-do-oial/spec.md`
 
 ## Execution Flow (/plan command scope)
 
@@ -91,7 +91,7 @@ _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 ### Documentation (this feature)
 
 ```
-specs/002-lets-do-oialt/
+specs/002-lets-do-oial/
 ├── plan.md              # This file (/plan command output)
 ├── research.md          # Phase 0 output (/plan command)
 ├── data-model.md        # Phase 1 output (/plan command)

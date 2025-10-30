@@ -14,6 +14,7 @@ export * from './features'
 
 // Content Management
 export * from './content'
+export * from './starting-section'
 
 // Guest Management
 export * from './guests'

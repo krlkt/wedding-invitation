@@ -7,7 +7,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,13 +17,32 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import LivePreview from './LivePreview'
+import { StartingSectionForm } from './admin/sections/StartingSectionForm'
+import { DraftProvider, useDraft } from '@/app/context/DraftContext'
+import type { StartingSectionContent } from '@/app/db/schema/starting-section'
 
 export default function ConfigDashboard() {
+  return (
+    <DraftProvider>
+      <div className="relative flex h-full overflow-hidden bg-gray-100">
+        <ConfigDashboardContent />
+      </div>
+    </DraftProvider>
+  )
+}
+
+function ConfigDashboardContent() {
   const [config, setConfig] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
+  const [startingSectionContent, setStartingSectionContent] =
+    useState<StartingSectionContent | null>(null)
+
+  // Use draft context for starting section
+  const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
+    useDraft('startingSection')
 
   //WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
@@ -41,6 +60,7 @@ export default function ConfigDashboard() {
 
   useEffect(() => {
     fetchConfig()
+    fetchStartingSectionContent()
     checkSession()
   }, [])
 
@@ -55,6 +75,57 @@ export default function ConfigDashboard() {
       console.error('Failed to fetch config:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function fetchStartingSectionContent() {
+    try {
+      const response = await fetch('/api/wedding/starting-section')
+      if (response.ok) {
+        const data = await response.json()
+        setStartingSectionContent(data.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch starting section content:', error)
+    }
+  }
+
+  async function updateStartingSectionContent(updates: any) {
+    try {
+      setSaving(true)
+
+      // Handle file upload separately if present
+      if (updates.file) {
+        const formData = new FormData()
+        formData.append('file', updates.file)
+
+        const uploadResponse = await fetch('/api/wedding/starting-section/upload', {
+          method: 'POST',
+          body: formData,
+        })
+
+        if (!uploadResponse.ok) {
+          throw new Error('File upload failed')
+        }
+      }
+
+      // Update text content
+      const { file, ...contentUpdates } = updates
+      const response = await fetch('/api/wedding/starting-section', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contentUpdates),
+      })
+
+      if (response.ok) {
+        await fetchStartingSectionContent()
+        setRefreshTrigger((prev) => prev + 1)
+      }
+    } catch (error) {
+      console.error('Failed to update starting section:', error)
+      alert('Failed to update starting section. Please try again.')
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -117,39 +188,38 @@ export default function ConfigDashboard() {
     }
   }
 
-  async function handlePublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/publish', {
-        method: 'POST',
+  const handleBackgroundUpload = useCallback(
+    (backgroundData: {
+      backgroundFilename: string
+      backgroundOriginalName: string
+      backgroundType: 'image' | 'video'
+      backgroundMimeType: string
+      backgroundFileSize: number
+    }) => {
+      // Update draft state with new background
+      setDraftStartingSection({
+        ...(draftStartingSection || {}),
+        ...backgroundData,
       })
+      // Trigger preview refresh to show new background immediately
+      setRefreshTrigger((prev) => prev + 1)
+    },
+    [draftStartingSection, setDraftStartingSection]
+  )
 
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to publish:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function handleUnpublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/unpublish', {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to unpublish:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
+  const handleMonogramUpload = useCallback(
+    async (monogramData: {
+      monogramFilename: string
+      monogramFileSize: number
+      monogramMimeType: string
+    }) => {
+      // Monogram is saved to config, so refetch config to get updated monogram
+      await fetchConfig()
+      // Trigger preview refresh to show new monogram
+      setRefreshTrigger((prev) => prev + 1)
+    },
+    []
+  )
 
   if (loading) {
     return (
@@ -167,7 +237,7 @@ export default function ConfigDashboard() {
   }
 
   return (
-    <div className="flex h-full overflow-hidden bg-gray-100">
+    <>
       {/* Left Panel - Configuration */}
       <div className="flex w-1/2 flex-col overflow-y-auto border-r bg-white">
         <div className="sticky top-0 z-10 border-b bg-white">
@@ -184,18 +254,22 @@ export default function ConfigDashboard() {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col overflow-hidden">
-          <FeaturesForm
-            config={config}
-            onToggle={toggleFeature}
-            onBatchSave={batchUpdateFeatures}
-            saving={saving}
-            onLocalChange={(features: Record<string, boolean>) => {
-              // Only update draft state, don't trigger refresh/fetch
-              setDraftFeatures(features)
-            }}
-          />
-        </div>
+        <FeaturesForm
+          config={config}
+          onToggle={toggleFeature}
+          onBatchSave={batchUpdateFeatures}
+          saving={saving}
+          onLocalChange={(features: Record<string, boolean>) => {
+            // Only update draft state, don't trigger refresh/fetch
+            setDraftFeatures(features)
+          }}
+          startingSectionContent={startingSectionContent}
+          onUpdateStartingSection={updateStartingSectionContent}
+          onRefetchStartingSection={fetchStartingSectionContent}
+          onBackgroundUpload={handleBackgroundUpload}
+          onMonogramUpload={handleMonogramUpload}
+          onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
+        />
       </div>
 
       {/* Right Panel - Live Preview */}
@@ -204,20 +278,36 @@ export default function ConfigDashboard() {
           weddingConfigId={config.id}
           refreshTrigger={refreshTrigger}
           draftFeatures={draftFeatures}
+          draftStartingSection={draftStartingSection}
         />
       </div>
-    </div>
+    </>
   )
 }
 
 // BasicInfoForm and ContentForm removed - features are now managed in accordions below
 // API endpoints remain the same
 
-function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
+function FeaturesForm({
+  config,
+  onBatchSave,
+  saving,
+  onLocalChange,
+  startingSectionContent,
+  onUpdateStartingSection,
+  onRefetchStartingSection,
+  onBackgroundUpload,
+  onMonogramUpload,
+  onRefreshPreview,
+}: any) {
+  // Access draft context in FeaturesForm
+  const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
+    useDraft('startingSection')
+
   const features = [
     {
       name: 'hero',
-      label: 'Hero',
+      label: 'Starting Section',
       description: 'Opening section with couple names and wedding date',
     },
     {
@@ -249,6 +339,9 @@ function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
   // Track draft state locally (separate from saved state)
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
   const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set())
+  const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(
+    new Set()
+  )
 
   // Update draft state when config changes (after save)
   useEffect(() => {
@@ -256,8 +349,14 @@ function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
     setChangedFeatures(new Set())
   }, [config.features])
 
+  // Clear changed fields when starting section content changes (after save or discard)
+  useEffect(() => {
+    setChangedStartingSectionFields(new Set())
+  }, [startingSectionContent])
+
   // Check if there are unsaved changes
-  const hasUnsavedChanges = changedFeatures.size > 0
+  const hasUnsavedChanges = changedFeatures.size > 0 || changedStartingSectionFields.size > 0
+  const totalChanges = changedFeatures.size + changedStartingSectionFields.size
 
   function handleToggle(featureName: string) {
     const newValue = !draftFeatures[featureName]
@@ -285,65 +384,52 @@ function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
     onLocalChange(newDraftFeatures)
   }
 
-  function handleSave() {
-    // Only send changed features to the API
-    const featuresToUpdate: Record<string, boolean> = {}
-    changedFeatures.forEach((featureName) => {
-      featuresToUpdate[featureName] = draftFeatures[featureName]
-    })
+  async function handleSave() {
+    // Save changed features
+    if (changedFeatures.size > 0) {
+      const featuresToUpdate: Record<string, boolean> = {}
+      changedFeatures.forEach((featureName) => {
+        featuresToUpdate[featureName] = draftFeatures[featureName]
+      })
+      await onBatchSave(featuresToUpdate)
+    }
 
-    onBatchSave(featuresToUpdate)
+    // Save changed starting section content (draft is already in context)
+    if (changedStartingSectionFields.size > 0 && draftStartingSection) {
+      await onUpdateStartingSection(draftStartingSection)
+      // Clear draft after successful save
+      clearStartingSectionDraft()
+    }
   }
 
-  function handleDiscard() {
-    // Reset to saved state
+  async function handleDiscard() {
+    // Reset features to saved state
     setDraftFeatures(config.features)
     setChangedFeatures(new Set())
     onLocalChange(config.features)
+
+    // Reset starting section to saved state using context
+    // Clearing the draft triggers the useEffect in StartingSectionForm which resets the form
+    clearStartingSectionDraft()
+    setChangedStartingSectionFields(new Set())
+
+    // Force re-fetch to ensure we have latest data from server
+    if (onRefetchStartingSection) {
+      await onRefetchStartingSection()
+    }
+
+    // Trigger LivePreview refresh to show actual saved state from server
+    if (onRefreshPreview) {
+      onRefreshPreview()
+    }
   }
+
+  const handleStartingSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
+    setChangedStartingSectionFields(fields)
+  }, [])
 
   return (
     <>
-      {/* Sticky alert with action buttons - only show when there are changes */}
-      {hasUnsavedChanges && (
-        <div className="sticky top-0 z-10 border-b border-yellow-200 bg-yellow-50 px-6 py-3">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <svg
-                className="h-5 w-5 flex-shrink-0 text-yellow-600"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <span className="text-sm font-medium text-yellow-800">
-                {changedFeatures.size} unsaved change{changedFeatures.size !== 1 ? 's' : ''}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={handleDiscard}
-                disabled={saving}
-                className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-white disabled:opacity-50"
-              >
-                Discard
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="rounded-lg bg-pink-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-pink-700 disabled:opacity-50"
-              >
-                {saving ? 'Saving...' : 'Save Changes'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Scrollable content area */}
       <div className="flex-1 overflow-y-auto p-6">
         <Accordion type="multiple" className="space-y-2">
@@ -392,7 +478,17 @@ function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-4 pb-4">
-                  {feature.name === 'groom_and_bride' ? (
+                  {feature.name === 'hero' ? (
+                    <StartingSectionForm
+                      weddingConfig={config}
+                      startingSectionContent={startingSectionContent}
+                      onUpdate={onUpdateStartingSection}
+                      onChangeTracking={handleStartingSectionChange}
+                      changedFields={changedStartingSectionFields}
+                      onBackgroundUpload={onBackgroundUpload}
+                      onMonogramUpload={onMonogramUpload}
+                    />
+                  ) : feature.name === 'groom_and_bride' ? (
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
@@ -433,6 +529,46 @@ function FeaturesForm({ config, onBatchSave, saving, onLocalChange }: any) {
           })}
         </Accordion>
       </div>
+
+      {/* Sticky alert at bottom - only show when there are changes */}
+      {hasUnsavedChanges && (
+        <div className="sticky bottom-0 z-10 border-t border-yellow-200 bg-yellow-50 px-6 py-3">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <svg
+                className="h-5 w-5 flex-shrink-0 text-yellow-600"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span className="text-sm font-medium text-yellow-800">
+                {totalChanges} unsaved change{totalChanges !== 1 ? 's' : ''}
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleDiscard}
+                disabled={saving}
+                className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-white disabled:opacity-50"
+              >
+                Discard
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="rounded-lg bg-pink-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-pink-700 disabled:opacity-50"
+              >
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

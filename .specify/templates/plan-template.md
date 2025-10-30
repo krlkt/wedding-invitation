@@ -1,6 +1,6 @@
 # Implementation Plan: [FEATURE]
 
-**Branch**: `OIALT-[ticket-number]-[feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Branch**: `OIAL-[ticket-number]-[feature-name]` | **Date**: [DATE] | **Spec**: [link]
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
 ## Execution Flow (/plan command scope)

@@ -1,6 +1,6 @@
 # Tasks: Template-Based Live Preview with Feature Toggle Integration
 
-**Input**: Design documents from `/Users/karelkarunia/Code/wedding-invitation/specs/002-lets-do-oialt/`
+**Input**: Design documents from `/Users/karelkarunia/Code/wedding-invitation/specs/002-lets-do-oial/`
 **Prerequisites**: plan.md, research.md, data-model.md, contracts/api-preview-endpoint.md, quickstart.md
 
 ## Format: `[ID] [P?] Description`

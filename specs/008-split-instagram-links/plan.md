@@ -1,6 +1,6 @@
 # Implementation Plan: Reorganize Instagram Links and Footer Text
 
-**Branch**: `OIALT-8-templating-feature` | **Date**: 2025-10-14 | **Spec**: [spec.md](./spec.md)
+**Branch**: `OIAL-8-templating-feature` | **Date**: 2025-10-14 | **Spec**: [spec.md](./spec.md)
 **Input**: Feature specification from `/specs/008-split-instagram-links/spec.md`
 
 ## Execution Flow (/plan command scope)
@@ -85,7 +85,7 @@ _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 ### Git Branch Naming Convention
 
-- ✅ Using existing OIALT-8-templating-feature branch (follows OIALT-{number}-{description} pattern)
+- ✅ Using existing OIAL-8-templating-feature branch (follows OIAL-{number}-{description} pattern)
 
 **Constitution Check Status**: PASS with TDD requirement
 

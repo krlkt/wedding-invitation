@@ -4,7 +4,7 @@ A multi-tenant SaaS platform for creating and managing personalized wedding invi
 
 ## 🎉 Overview
 
-This platform allows couples to create their own customized wedding invitation website with features like RSVP management, guest lists, photo galleries, and real-time updates. Each wedding gets its own subdomain (e.g., `karelsabrina-oialt.vercel.app`).
+This platform allows couples to create their own customized wedding invitation website with features like RSVP management, guest lists, photo galleries, and real-time updates. Each wedding gets its own subdomain (e.g., `karelsabrina-oial.vercel.app`).
 
 ## ✨ Key Features
 
@@ -48,8 +48,8 @@ TURSO_DATABASE_URL=libsql://your-database.turso.io
 TURSO_AUTH_TOKEN=your_auth_token
 
 # Production Domain
-NEXT_PUBLIC_BASE_URL=https://oialt.vercel.app
-NEXT_PUBLIC_PRODUCTION_DOMAIN=oialt.vercel.app
+NEXT_PUBLIC_BASE_URL=https://oial.vercel.app
+NEXT_PUBLIC_PRODUCTION_DOMAIN=oial.vercel.app
 
 # File Storage (Optional)
 BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
@@ -111,10 +111,10 @@ yarn build
 
 ## 🌐 Deployment
 
-Production: `https://oialt.vercel.app`
+Production: `https://oial.vercel.app`
 
-- **Admin Dashboard**: `https://oialt.vercel.app/admin`
-- **Wedding Sites**: `https://{subdomain}-oialt.vercel.app`
+- **Admin Dashboard**: `https://oial.vercel.app/admin`
+- **Wedding Sites**: `https://{subdomain}-oial.vercel.app`
 
 See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 

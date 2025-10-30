@@ -1,7 +1,7 @@
 # Tasks: Reorganize Instagram Links and Footer Text
 
 **Feature**: 008-split-instagram-links
-**Branch**: OIALT-8-templating-feature
+**Branch**: OIAL-8-templating-feature
 **Input**: Design documents from `/specs/008-split-instagram-links/`
 **Prerequisites**: plan.md ✓, research.md ✓, data-model.md ✓, contracts/ ✓, quickstart.md ✓
 
