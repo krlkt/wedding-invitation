@@ -57,7 +57,7 @@ function generateSubdomain(groomName: string, brideName: string): string {
 // app/preview/page.tsx
 export default async function PreviewPage() {
     const session = await getSession();
-    if (!session) redirect('/admin/login');
+    if (!session) redirect('/login');
 
     const config = await getWeddingConfigById(session.weddingConfigId);
     return <WeddingLayout config={config} />;

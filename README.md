@@ -69,7 +69,7 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 
 ### Admin Dashboard
 
-Visit [http://localhost:3000/admin/login](http://localhost:3000/admin/login)
+Visit [http://localhost:3000/login](http://localhost:3000/login)
 
 **Default credentials:**
 
