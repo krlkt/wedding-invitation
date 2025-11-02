@@ -5,7 +5,7 @@ import { useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-function LoginForm() {
+function LoginFormContent() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -112,10 +112,10 @@ function LoginForm() {
   )
 }
 
-export default function AdminLoginPage() {
+export default function LoginForm() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <LoginForm />
+      <LoginFormContent />
     </Suspense>
   )
 }

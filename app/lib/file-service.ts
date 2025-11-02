@@ -12,10 +12,17 @@ import {
   galleryItems,
   dressCodes,
   weddingConfigurations,
+  startingSectionContent,
   type NewGalleryItem,
 } from '@/app/db/schema'
 
 import { db } from './database'
+import {
+  MAX_IMAGE_SIZE,
+  MAX_VIDEO_SIZE,
+  ACCEPTED_IMAGE_TYPES,
+  ACCEPTED_VIDEO_TYPES,
+} from '@/app/lib/validations/starting-section'
 
 // File validation constants
 const MAX_FILE_SIZE = 4 * 1024 * 1024 // 4MB in bytes
@@ -277,11 +284,11 @@ export async function uploadMonogramPhoto(
     }
   }
 
-  // Update wedding configuration
+  // Update wedding configuration with full URL
   await db
     .update(weddingConfigurations)
     .set({
-      monogramFilename: filename,
+      monogramFilename: blob.url, // Store full URL instead of filename
       monogramFileSize: file.size,
       monogramMimeType: file.type,
       updatedAt: new Date(),
@@ -289,7 +296,7 @@ export async function uploadMonogramPhoto(
     .where(eq(weddingConfigurations.id, weddingConfigId))
 
   return {
-    monogramFilename: filename,
+    monogramFilename: blob.url, // Return full URL
     photoUrl: blob.url,
   }
 }
@@ -325,4 +332,131 @@ export async function deleteMonogramPhoto(weddingConfigId: string): Promise<void
       updatedAt: new Date(),
     })
     .where(eq(weddingConfigurations.id, weddingConfigId))
+}
+
+/**
+ * Validate starting section media file (image or video)
+ */
+function validateStartingSectionMedia(file: File): void {
+  if (!file) {
+    throw new Error('No file provided')
+  }
+
+  const allAcceptedTypes = [...ACCEPTED_IMAGE_TYPES, ...ACCEPTED_VIDEO_TYPES]
+  if (!allAcceptedTypes.includes(file.type as any)) {
+    throw new Error('Invalid file type')
+  }
+
+  // Check size based on type
+  if (ACCEPTED_IMAGE_TYPES.includes(file.type as any)) {
+    if (file.size > MAX_IMAGE_SIZE) {
+      throw new Error('Image file size exceeds 10MB limit')
+    }
+  } else if (ACCEPTED_VIDEO_TYPES.includes(file.type as any)) {
+    if (file.size > MAX_VIDEO_SIZE) {
+      throw new Error('Video file size exceeds 50MB limit')
+    }
+  }
+}
+
+/**
+ * Upload starting section background media (image or video)
+ */
+export async function uploadStartingSectionMedia(
+  weddingConfigId: string,
+  file: File
+): Promise<{ backgroundFilename: string; mediaUrl: string; mediaType: 'image' | 'video' }> {
+  validateStartingSectionMedia(file)
+
+  // Determine media type
+  const mediaType = ACCEPTED_IMAGE_TYPES.includes(file.type as any) ? 'image' : 'video'
+
+  // Upload to Vercel Blob
+  const filename = generateFilename(file.name, `starting-section-${mediaType}`)
+  const blob = await put(filename, file, {
+    access: 'public',
+    addRandomSuffix: false,
+  })
+
+  // Get existing starting section content
+  const [existing] = await db
+    .select()
+    .from(startingSectionContent)
+    .where(eq(startingSectionContent.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  if (existing) {
+    // Delete old media if exists
+    if (existing.backgroundFilename) {
+      try {
+        // Vercel Blob del() accepts both URLs and filenames
+        await del(existing.backgroundFilename)
+      } catch (error) {
+        console.error('Failed to delete old blob:', error)
+      }
+    }
+
+    // Update existing record with full URL
+    await db
+      .update(startingSectionContent)
+      .set({
+        backgroundType: mediaType,
+        backgroundFilename: blob.url, // Store full URL instead of filename
+        backgroundOriginalName: file.name, // Store original filename
+        backgroundFileSize: file.size,
+        backgroundMimeType: file.type,
+        updatedAt: new Date(),
+      })
+      .where(eq(startingSectionContent.id, existing.id))
+  } else {
+    // Create new record with full URL
+    await db.insert(startingSectionContent).values({
+      weddingConfigId,
+      backgroundType: mediaType,
+      backgroundFilename: blob.url, // Store full URL instead of filename
+      backgroundOriginalName: file.name, // Store original filename
+      backgroundFileSize: file.size,
+      backgroundMimeType: file.type,
+    })
+  }
+
+  return {
+    backgroundFilename: blob.url, // Return full URL
+    mediaUrl: blob.url,
+    mediaType,
+  }
+}
+
+/**
+ * Delete starting section background media
+ */
+export async function deleteStartingSectionMedia(weddingConfigId: string): Promise<void> {
+  const [content] = await db
+    .select()
+    .from(startingSectionContent)
+    .where(eq(startingSectionContent.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  if (!content?.backgroundFilename) {
+    throw new Error('Starting section media not found')
+  }
+
+  // Delete from Vercel Blob
+  try {
+    await del(content.backgroundFilename)
+  } catch (error) {
+    console.error('Failed to delete blob:', error)
+  }
+
+  // Update database record
+  await db
+    .update(startingSectionContent)
+    .set({
+      backgroundType: null,
+      backgroundFilename: null,
+      backgroundFileSize: null,
+      backgroundMimeType: null,
+      updatedAt: new Date(),
+    })
+    .where(eq(startingSectionContent.id, content.id))
 }

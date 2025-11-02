@@ -86,7 +86,7 @@ curl -X GET http://localhost:3000/preview \
 # 3. Access without authentication
 curl -X GET http://localhost:3000/preview
 
-# Expected: Redirect to /admin/login (302)
+# Expected: Redirect to /login (302)
 ```
 
 **Success Criteria**:
@@ -117,12 +117,12 @@ Preview: Your wedding site (Available with custom domain)
 Or:
 
 ```
-Preview: oialt.vercel.app (shared domain)
+Preview: oial.vercel.app (shared domain)
 ```
 
 **Success Criteria**:
 
-- ✅ No reference to non-existent `{subdomain}-oialt.vercel.app`
+- ✅ No reference to non-existent `{subdomain}-oial.vercel.app`
 - ✅ Message is clear and non-misleading
 - ✅ Visual preview still renders correctly below
 

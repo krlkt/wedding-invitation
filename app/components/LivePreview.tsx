@@ -14,17 +14,20 @@ import { useState, useEffect, useRef } from 'react'
 import TemplateRenderer from './preview/TemplateRenderer'
 
 import type { PreviewData } from './preview/types'
+import type { StartingSectionContent } from '@/app/db/schema/starting-section'
 
 interface LivePreviewProps {
   weddingConfigId: string
   refreshTrigger?: number // Increment to force refresh
   draftFeatures?: Record<string, boolean> // Draft features from local state
+  draftStartingSection?: Partial<StartingSectionContent> // Draft starting section from local state
 }
 
 export default function LivePreview({
   weddingConfigId,
   refreshTrigger = 0,
   draftFeatures,
+  draftStartingSection,
 }: LivePreviewProps) {
   const [previewData, setPreviewData] = useState<PreviewData | null>(null)
   const [displayData, setDisplayData] = useState<PreviewData | null>(null)
@@ -80,20 +83,32 @@ export default function LivePreview({
     fetchPreview()
   }, [weddingConfigId, refreshTrigger])
 
-  // Merge draft features with preview data for immediate feedback
+  // Merge draft features and starting section with preview data for immediate feedback
   useEffect(() => {
-    if (previewData && draftFeatures) {
+    if (previewData) {
+      const mergedStartingSection =
+        draftStartingSection && previewData.content.startingSection
+          ? ({
+              ...previewData.content.startingSection,
+              ...draftStartingSection,
+            } as StartingSectionContent)
+          : previewData.content.startingSection
+
       setDisplayData({
         ...previewData,
-        features: {
-          ...previewData.features,
-          ...draftFeatures,
+        features: draftFeatures
+          ? {
+              ...previewData.features,
+              ...draftFeatures,
+            }
+          : previewData.features,
+        content: {
+          ...previewData.content,
+          startingSection: mergedStartingSection,
         },
       })
-    } else if (previewData) {
-      setDisplayData(previewData)
     }
-  }, [previewData, draftFeatures])
+  }, [previewData, draftFeatures, draftStartingSection])
 
   if (loading) {
     return (

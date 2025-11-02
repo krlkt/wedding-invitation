@@ -177,7 +177,7 @@ Next.js App Router structure:
   - File: `app/components/LivePreview.tsx`
   - Change line 71 from `{config.subdomain}.yourdomain.com`
   - To: `Your wedding site (Available with custom domain)`
-  - Or: `oialt.vercel.app (shared domain)`
+  - Or: `oial.vercel.app (shared domain)`
   - Keep preview rendering logic unchanged
   - **Dependencies**: T002-T008 complete, but no blocking dependency on other implementation
   - **Can run parallel with**: T013-T015 (different files)
@@ -212,7 +212,7 @@ Next.js App Router structure:
   - File: `app/preview/page.tsx`
   - Create new directory: `app/preview/`
   - Implement server component with session authentication
-  - Call getSession() and redirect to /admin/login if not authenticated
+  - Call getSession() and redirect to /login if not authenticated
   - Fetch wedding config with getWeddingConfigById(session.weddingConfigId)
   - Import and render FullScreenPreview component with config
   - Handle case where config not found
