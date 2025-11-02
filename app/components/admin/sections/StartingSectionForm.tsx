@@ -69,7 +69,6 @@ export function StartingSectionForm({
   // Use draft context
   const { draft: draftStartingSectionContent, setDraft: setDraftStartingSection } =
     useDraft('startingSection')
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Background media upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -222,7 +221,8 @@ export function StartingSectionForm({
 
     fields.forEach((field) => {
       const savedValue =
-        startingSectionContent?.[field] ?? (field === 'showWeddingDate' ? true : field === 'showParentInfo' ? false : null)
+        startingSectionContent?.[field] ??
+        (field === 'showWeddingDate' ? true : field === 'showParentInfo' ? false : null)
       if (draft[field] !== savedValue) {
         changedFields.add(field)
       }
@@ -319,11 +319,10 @@ export function StartingSectionForm({
 
   // Form submission (media uploads are handled separately)
   const onSubmit = async (data: StartingSectionContentFormData) => {
-    setIsSubmitting(true)
     try {
       await onUpdate(data)
-    } finally {
-      setIsSubmitting(false)
+    } catch (error) {
+      console.error('failed submitting form', error)
     }
   }
 
@@ -381,9 +380,7 @@ export function StartingSectionForm({
                 {monogramUpload.isUploading ? 'Uploading...' : 'Upload'}
               </Button>
             </div>
-            <p className="text-xs text-gray-500">
-              Image only: max 10 MB (JPEG, PNG, WebP, GIF)
-            </p>
+            <p className="text-xs text-gray-500">Image only: max 10 MB (JPEG, PNG, WebP, GIF)</p>
             {monogramUpload.error && <p className="text-sm text-red-500">{monogramUpload.error}</p>}
 
             {/* Upload Progress Bar */}
@@ -562,7 +559,9 @@ export function StartingSectionForm({
             <p className="text-xs text-gray-500">
               Images: max 10 MB (JPEG, PNG, WebP, GIF) | Videos: max 50 MB (MP4, WebM)
             </p>
-            {backgroundUpload.error && <p className="text-sm text-red-500">{backgroundUpload.error}</p>}
+            {backgroundUpload.error && (
+              <p className="text-sm text-red-500">{backgroundUpload.error}</p>
+            )}
 
             {/* Upload Progress Bar */}
             {backgroundUpload.isUploading && (
@@ -612,7 +611,9 @@ export function StartingSectionForm({
             <DialogTitle>Replace Existing Monogram?</DialogTitle>
             <DialogDescription>
               You are about to replace the existing monogram:{' '}
-              <strong>{weddingConfig.monogramFilename?.split('/').pop() || 'current monogram'}</strong>
+              <strong>
+                {weddingConfig.monogramFilename?.split('/').pop() || 'current monogram'}
+              </strong>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
