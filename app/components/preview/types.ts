@@ -14,6 +14,7 @@ import {
   LocationDetails,
   BankDetails,
   Wish,
+  StartingSectionContent,
 } from '@/app/db/schema'
 import type { FeatureName } from '@/app/db/schema/features'
 
@@ -30,6 +31,7 @@ export interface PreviewData {
   config: WeddingConfiguration
   features: Record<FeatureName, boolean>
   content: {
+    startingSection: StartingSectionContent | null
     loveStory: LoveStorySegment[]
     gallery: GalleryItem[]
     faqs: FAQItem[]

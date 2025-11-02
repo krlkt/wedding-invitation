@@ -1,10 +1,10 @@
-# Deployment Guide for oialt.vercel.app
+# Deployment Guide for oial.vercel.app
 
 ## Prerequisites
 
 - Vercel account
 - Turso database (already configured)
-- Domain: oialt.vercel.app
+- Domain: oial.vercel.app
 
 ## Vercel Environment Variables
 
@@ -16,8 +16,8 @@ TURSO_DATABASE_URL=libsql://wedding-invitation-karelkarunia.turso.io
 TURSO_AUTH_TOKEN=your_turso_auth_token
 
 # Production Domain
-NEXT_PUBLIC_BASE_URL=https://oialt.vercel.app
-NEXT_PUBLIC_PRODUCTION_DOMAIN=oialt.vercel.app
+NEXT_PUBLIC_BASE_URL=https://oial.vercel.app
+NEXT_PUBLIC_PRODUCTION_DOMAIN=oial.vercel.app
 
 # Legacy Dashboard Auth (Old Dashboard)
 NEXT_PUBLIC_DASHBOARD_USERNAME=karelkarunia
@@ -33,8 +33,8 @@ BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 
 Vercel automatically supports branch-based subdomains:
 
-- Main site: `oialt.vercel.app`
-- Subdomain format: `karelsabrina-oialt.vercel.app`
+- Main site: `oial.vercel.app`
+- Subdomain format: `karelsabrina-oial.vercel.app`
 
 The middleware will automatically extract "karelsabrina" as the subdomain.
 
@@ -66,12 +66,12 @@ If you want to use a custom domain (e.g., `yourwedding.com`):
 
 ### Wedding Sites (With Subdomain)
 
-- Karel & Sabrina: `https://karelsabrina-oialt.vercel.app`
-- Format: `https://{subdomain}-oialt.vercel.app`
+- Karel & Sabrina: `https://karelsabrina-oial.vercel.app`
+- Format: `https://{subdomain}-oial.vercel.app`
 
 ### Legacy Dashboard (Old)
 
-- URL: `https://oialt.vercel.app/dashboard`
+- URL: `https://oial.vercel.app/dashboard`
 - Note: Uses old database schema, may have errors
 
 ## Deploy to Vercel
@@ -130,8 +130,8 @@ vercel env add NEXT_PUBLIC_PRODUCTION_DOMAIN
 ### Subdomain not working
 
 - Ensure middleware is deployed
-- Check browser URL format: `subdomain-oialt.vercel.app`
-- Verify `NEXT_PUBLIC_PRODUCTION_DOMAIN=oialt.vercel.app`
+- Check browser URL format: `subdomain-oial.vercel.app`
+- Verify `NEXT_PUBLIC_PRODUCTION_DOMAIN=oial.vercel.app`
 
 ### File uploads failing
 

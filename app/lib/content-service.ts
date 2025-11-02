@@ -13,12 +13,14 @@ import {
   bankDetails,
   dressCodes,
   wishes,
+  startingSectionContent,
   type NewLoveStorySegment,
   type NewLocationDetails,
   type NewFAQItem,
   type NewBankDetails,
   type NewDressCode,
   type NewWish,
+  type NewStartingSectionContent,
 } from '@/app/db/schema'
 import { eq, desc } from 'drizzle-orm'
 
@@ -247,4 +249,51 @@ export async function getWishes(weddingConfigId: string, limit: number = 50) {
 
 export async function deleteWish(wishId: string) {
   await db.delete(wishes).where(eq(wishes.id, wishId))
+}
+
+// ============================================================================
+// Starting Section Content Management
+// ============================================================================
+
+export async function getStartingSectionContent(weddingConfigId: string) {
+  const [content] = await db
+    .select()
+    .from(startingSectionContent)
+    .where(eq(startingSectionContent.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  return content || null
+}
+
+export async function updateStartingSectionContent(
+  weddingConfigId: string,
+  data: Partial<Omit<NewStartingSectionContent, 'weddingConfigId'>>
+) {
+  // Check if starting section content exists
+  const existing = await getStartingSectionContent(weddingConfigId)
+
+  if (existing) {
+    // Update existing
+    const [updated] = await db
+      .update(startingSectionContent)
+      .set({
+        ...data,
+        updatedAt: new Date(),
+      })
+      .where(eq(startingSectionContent.id, existing.id))
+      .returning()
+
+    return updated
+  } else {
+    // Create new
+    const [created] = await db
+      .insert(startingSectionContent)
+      .values({
+        ...data,
+        weddingConfigId,
+      })
+      .returning()
+
+    return created
+  }
 }
