@@ -16,7 +16,7 @@ import {
   getDressCode,
   getBankDetails,
 } from '@/app/lib/wedding-service'
-import { getWishes } from '@/app/lib/content-service'
+import { getWishes, getStartingSectionContent } from '@/app/lib/content-service'
 import TemplateRenderer from '@/app/components/preview/TemplateRenderer'
 import type { PreviewData } from '@/app/components/preview/types'
 
@@ -59,17 +59,27 @@ export default async function AdminPreviewPage() {
   }
 
   // Fetch all data in parallel
-  const [features, loveStory, locations, gallery, faqs, dressCode, bankDetailsData, wishesRaw] =
-    await Promise.all([
-      getFeatureToggles(config.id),
-      getLoveStorySegments(config.id),
-      getLocationDetails(config.id),
-      getGalleryItems(config.id),
-      getFAQItems(config.id),
-      getDressCode(config.id),
-      getBankDetails(config.id),
-      getWishes(config.id, 20),
-    ])
+  const [
+    features,
+    startingSection,
+    loveStory,
+    locations,
+    gallery,
+    faqs,
+    dressCode,
+    bankDetailsData,
+    wishesRaw,
+  ] = await Promise.all([
+    getFeatureToggles(config.id),
+    getStartingSectionContent(config.id),
+    getLoveStorySegments(config.id),
+    getLocationDetails(config.id),
+    getGalleryItems(config.id),
+    getFAQItems(config.id),
+    getDressCode(config.id),
+    getBankDetails(config.id),
+    getWishes(config.id, 20),
+  ])
 
   // Fix Drizzle's timestamp multiplication for wishes
   // Database stores milliseconds (13 digits), but Drizzle multiplies by 1000
@@ -93,6 +103,7 @@ export default async function AdminPreviewPage() {
     config,
     features: featuresMap as any,
     content: {
+      startingSection,
       loveStory,
       locations,
       gallery,

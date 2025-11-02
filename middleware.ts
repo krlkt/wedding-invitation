@@ -73,13 +73,13 @@ function extractSubdomain(hostname: string): string | null {
     return null
   }
 
-  // For Vercel preview/production domains like subdomain-oialt.vercel.app
+  // For Vercel preview/production domains like subdomain-oial.vercel.app
   // Check if this is a Vercel domain with dash-separated subdomain
   if (host.includes('vercel.app')) {
-    // Extract base domain (e.g., "oialt" from "subdomain-oialt.vercel.app")
-    const baseDomain = process.env.NEXT_PUBLIC_PRODUCTION_DOMAIN?.split('.')[0] || 'oialt'
+    // Extract base domain (e.g., "oial" from "subdomain-oial.vercel.app")
+    const baseDomain = process.env.NEXT_PUBLIC_PRODUCTION_DOMAIN?.split('.')[0] || 'oial'
 
-    // Check if there's a subdomain prefix (e.g., "karelsabrina-oialt")
+    // Check if there's a subdomain prefix (e.g., "karelsabrina-oial")
     const firstPart = parts[0]
     if (firstPart.includes('-' + baseDomain)) {
       // Extract subdomain from "subdomain-basedomain" format

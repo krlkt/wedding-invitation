@@ -1,6 +1,6 @@
 # Feature Specification: Reorganize Instagram Links and Footer Text
 
-**Feature Branch**: `OIALT-8-templating-feature`
+**Feature Branch**: `OIAL-8-templating-feature`
 **Created**: 2025-10-14
 **Status**: Draft
 **Input**: User description: "please move instagramLink and footerText out of Basic Information. instagramLink should be split into groomsInstagramLink and brideInstagramLink. Both of these information should fit more into Content section, not basic information."

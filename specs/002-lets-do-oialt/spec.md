@@ -1,9 +1,9 @@
 # Feature Specification: Template-Based Live Preview with Feature Toggle Integration
 
-**Feature Branch**: `OIALT-8-template-preview-integration`
+**Feature Branch**: `OIAL-8-template-preview-integration`
 **Created**: 2025-10-12
 **Status**: Draft
-**Input**: User description: "Lets do OIALT-8 Feature ticket. We want to connect the currently existing feature toggle that we show in LivePreview.tsx with the previous wedding invitation (see /app/[location]/InvitationPage.tsx). lets try to connect these LivePreview and create a real wedding invitation instead of only text. Each feature toggle represents the old "section" and should be able to update their content. Keep in mind there will be multiple template in the future and this is our first template"
+**Input**: User description: "Lets do OIAL-8 Feature ticket. We want to connect the currently existing feature toggle that we show in LivePreview.tsx with the previous wedding invitation (see /app/[location]/InvitationPage.tsx). lets try to connect these LivePreview and create a real wedding invitation instead of only text. Each feature toggle represents the old "section" and should be able to update their content. Keep in mind there will be multiple template in the future and this is our first template"
 
 ---
 
