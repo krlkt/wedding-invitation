@@ -132,7 +132,6 @@
     "prefer-arrow-callback": "error",
     "no-nested-ternary": "warn",
     "no-unneeded-ternary": "error",
-    "curly": ["error", "all"],
     "no-else-return": "error",
     "no-lonely-if": "error",
     "prefer-template": "error",
