@@ -284,16 +284,16 @@ export async function updateStartingSectionContent(
       .returning()
 
     return updated
-  } else {
-    // Create new
-    const [created] = await db
-      .insert(startingSectionContent)
-      .values({
-        ...data,
-        weddingConfigId,
-      })
-      .returning()
-
-    return created
   }
+
+  // Create new
+  const [created] = await db
+    .insert(startingSectionContent)
+    .values({
+      ...data,
+      weddingConfigId,
+    })
+    .returning()
+
+  return created
 }
