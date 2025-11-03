@@ -1,6 +1,7 @@
 'use client'
-import { motion } from 'framer-motion'
 import { FC, PropsWithChildren } from 'react'
+
+import { motion } from 'framer-motion'
 
 interface ButtonProps {
   onClick?: () => void

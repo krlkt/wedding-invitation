@@ -1,8 +1,10 @@
 'use client'
 
-import { SnackbarProvider } from 'notistack'
-import { useViewportHeight } from '../utils/useViewportHeight'
 import { ReactNode } from 'react'
+
+import { SnackbarProvider } from 'notistack'
+
+import { useViewportHeight } from '../utils/useViewportHeight'
 
 const Providers = ({ children }: { children: ReactNode }) => {
   useViewportHeight()

@@ -4,7 +4,6 @@ import { getConfig } from '@/app/lib/env-config'
 let client: Client
 
 const getDatabaseClient = () => {
-  // Use environment-aware configuration (T016)
   const config = getConfig()
 
   const client = createClient({

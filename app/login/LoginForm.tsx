@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 function LoginFormContent() {
   const [email, setEmail] = useState('')
@@ -33,7 +34,7 @@ function LoginFormContent() {
       } else {
         setError(data.error || 'Login failed')
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Network error. Please try again.')
     } finally {
       setLoading(false)

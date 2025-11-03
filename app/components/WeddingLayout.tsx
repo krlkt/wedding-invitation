@@ -8,8 +8,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { WeddingConfiguration } from '@/app/db/schema'
+
 import Image from 'next/image'
+
+import { WeddingConfiguration } from '@/app/db/schema'
 
 interface WeddingLayoutProps {
   subdomain?: string

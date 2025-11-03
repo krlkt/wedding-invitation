@@ -1,6 +1,8 @@
-import { motion } from 'framer-motion'
-import Image from 'next/image'
 import { FC, PropsWithChildren } from 'react'
+
+import Image from 'next/image'
+
+import { motion } from 'framer-motion'
 
 const variants = {
   wiggle: {
@@ -28,8 +30,8 @@ const SaveTheDateOrnament = ({ downward = false }: { downward?: boolean }) => (
       downward={downward}
     >
       <Image
-        src={'/images/ornaments/baby_orn.png'}
-        alt={'baby breath flower'}
+        src="/images/ornaments/baby_orn.png"
+        alt="baby breath flower"
         width={500}
         height={500}
       />
@@ -39,8 +41,8 @@ const SaveTheDateOrnament = ({ downward = false }: { downward?: boolean }) => (
       downward={downward}
     >
       <Image
-        src={'/images/ornaments/baby_orn.png'}
-        alt={'baby breath flower'}
+        src="/images/ornaments/baby_orn.png"
+        alt="baby breath flower"
         width={500}
         height={500}
       />
@@ -50,22 +52,22 @@ const SaveTheDateOrnament = ({ downward = false }: { downward?: boolean }) => (
       downward={downward}
     >
       <Image
-        src={'/images/ornaments/baby_orn.png'}
-        alt={'baby breath flower'}
+        src="/images/ornaments/baby_orn.png"
+        alt="baby breath flower"
         width={500}
         height={500}
       />
     </Wiggle>
     <Image
-      src={'/images/ornaments/orn4.png'}
-      alt={'blue flowers'}
+      src="/images/ornaments/orn4.png"
+      alt="blue flowers"
       width={500}
       height={500}
       className={`absolute -right-2 ${downward ? '-top-4' : '-bottom-4'} w-[55%] ${downward && 'rotate-180'}`}
     />
     <Image
-      src={'/images/ornaments/orn4.png'}
-      alt={'blue flowers'}
+      src="/images/ornaments/orn4.png"
+      alt="blue flowers"
       width={500}
       height={500}
       className={`absolute -left-4 w-[55%] ${downward ? '-top-4' : '-bottom-4'} ${downward && 'rotate-180'}`}

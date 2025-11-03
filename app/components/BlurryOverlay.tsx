@@ -1,5 +1,6 @@
-import Image from 'next/image'
 import { FC, PropsWithChildren } from 'react'
+
+import Image from 'next/image'
 
 const BlurryOverlay: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -14,7 +15,7 @@ const BlurryOverlay: FC<PropsWithChildren> = ({ children }) => {
       />
 
       {/* Dark Blur Overlay */}
-      <div className="absolute left-0 top-0 -z-10 h-full w-full bg-gray-800 bg-opacity-20 backdrop-blur-sm"></div>
+      <div className="absolute left-0 top-0 -z-10 h-full w-full bg-gray-800 bg-opacity-20 backdrop-blur-sm" />
 
       {/* Content */}
       {children}

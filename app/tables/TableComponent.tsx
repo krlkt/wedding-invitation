@@ -1,14 +1,17 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import { useDrop } from 'react-dnd'
-import { moveGuestToTable } from './actions'
-import { Locations } from '../components/LocationComponent'
-import { VirtualizedGuestList } from './VirtualizedGuestList'
-import { Table } from '../models/table'
-import { Guest } from '../models/guest'
-import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
+
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
+import { useDrop } from 'react-dnd'
+
+import { Locations } from '../components/LocationComponent'
+import { Guest } from '../models/guest'
+import { Table } from '../models/table'
+
+import { moveGuestToTable } from './actions'
+import { VirtualizedGuestList } from './VirtualizedGuestList'
 
 interface TableComponentProps {
   table: Table

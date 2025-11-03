@@ -1,11 +1,13 @@
 'use client'
 
 import { FC, useState } from 'react'
-import Modal from '../components/Modal'
-import { moveGuestToTable } from './actions'
+
 import { Locations } from '../components/LocationComponent'
+import Modal from '../components/Modal'
 import { Guest } from '../models/guest'
 import { Table } from '../models/table'
+
+import { moveGuestToTable } from './actions'
 
 interface MoveGuestModalProps {
   guest: Guest
@@ -28,7 +30,7 @@ export const MoveGuestModal: FC<MoveGuestModalProps> = ({ guest, tables, locatio
   )
 
   return (
-    <Modal open={true} onClose={onClose}>
+    <Modal open onClose={onClose}>
       <div className="flex h-full flex-col p-4">
         <h2 className="mb-4 text-xl font-bold">Move {guest.name}</h2>
         <input

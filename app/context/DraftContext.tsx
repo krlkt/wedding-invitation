@@ -54,19 +54,22 @@ export function DraftProvider({ children }: DraftProviderProps) {
   const [drafts, setDrafts] = useState<DraftState>({})
 
   // Set draft for a specific section (supports functional updates)
-  const setDraft = useCallback(<K extends keyof DraftState>(
-    section: K,
-    data: DraftState[K] | ((prev: DraftState[K]) => DraftState[K])
-  ) => {
-    setDrafts((prev) => {
-      const currentValue = prev[section]
-      const newValue = typeof data === 'function' ? (data as Function)(currentValue) : data
-      return {
-        ...prev,
-        [section]: newValue,
-      }
-    })
-  }, [])
+  const setDraft = useCallback(
+    <K extends keyof DraftState>(
+      section: K,
+      data: DraftState[K] | ((prev: DraftState[K]) => DraftState[K])
+    ) => {
+      setDrafts((prev) => {
+        const currentValue = prev[section]
+        const newValue = typeof data === 'function' ? data(currentValue) : data
+        return {
+          ...prev,
+          [section]: newValue,
+        }
+      })
+    },
+    []
+  )
 
   // Clear draft for a specific section
   const clearDraft = useCallback((section: keyof DraftState) => {
@@ -124,12 +127,18 @@ export function useDraft<K extends keyof DraftState>(section: K) {
     throw new Error('useDraft must be used within a DraftProvider')
   }
 
-  const { drafts, setDraft: setDraftGlobal, clearDraft: clearDraftGlobal, hasDraft: hasDraftGlobal } = context
+  const {
+    drafts,
+    setDraft: setDraftGlobal,
+    clearDraft: clearDraftGlobal,
+    hasDraft: hasDraftGlobal,
+  } = context
 
   return {
     draft: drafts[section],
     setDraft: useCallback(
-      (data: DraftState[K] | ((prev: DraftState[K]) => DraftState[K])) => setDraftGlobal(section, data),
+      (data: DraftState[K] | ((prev: DraftState[K]) => DraftState[K])) =>
+        setDraftGlobal(section, data),
       [section, setDraftGlobal]
     ),
     clearDraft: useCallback(() => clearDraftGlobal(section), [section, clearDraftGlobal]),

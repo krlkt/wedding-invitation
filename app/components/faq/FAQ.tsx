@@ -1,7 +1,8 @@
-import DownIcon from '@/app/icons/DownIcon'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
+
+import DownIcon from '@/app/icons/DownIcon'
 
 const faq = [
   {

@@ -1,8 +1,9 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import { query } from '@/app/db/client'
 import { Wish } from '@/app/models/wish'
-import { revalidatePath } from 'next/cache'
 
 export const addWish = async (data: Wish) => {
   await query(

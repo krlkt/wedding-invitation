@@ -1,7 +1,8 @@
 'use client'
 
-import { Locations } from '../components/LocationComponent'
 import { createContext, ReactNode, useContext, useState } from 'react'
+
+import { Locations } from '../components/LocationComponent'
 
 type LocationContextType = {
   location?: Locations
