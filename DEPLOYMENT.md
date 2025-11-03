@@ -61,7 +61,7 @@ If you want to use a custom domain (e.g., `yourwedding.com`):
 
 ### Admin Dashboard (No Subdomain)
 
-- Production: `https://oial.vercel.app/admin/login`
+- Production: `https://oialt.vercel.app/login`
 - Login with: `karel@wedding.com` / `changeme123`
 
 ### Wedding Sites (With Subdomain)
@@ -105,7 +105,7 @@ vercel env add NEXT_PUBLIC_PRODUCTION_DOMAIN
 ## Post-Deployment Checklist
 
 1. ✅ Verify environment variables are set
-2. ✅ Test admin login: `/admin/login`
+2. ✅ Test admin login: `/login`
 3. ✅ Test wedding site with subdomain
 4. ✅ Verify database connection (check admin dashboard loads data)
 5. ✅ Test authentication flow
