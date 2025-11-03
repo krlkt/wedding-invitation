@@ -13,11 +13,13 @@ This document contains research findings for implementing a three-environment ar
 ## 1. Turso Multi-Database Setup
 
 ### Decision
+
 Use Turso CLI to create three separate database instances under the same organization/account.
 
 ### Research Findings
 
 **Turso Database Creation**:
+
 ```bash
 # Create three databases
 turso db create wedding-dev
@@ -32,6 +34,7 @@ turso db tokens create wedding-dev
 ```
 
 **Key Capabilities**:
+
 - Turso supports multiple databases per organization
 - Each database has its own unique URL and auth token
 - Databases are completely isolated (no data sharing)
@@ -39,6 +42,7 @@ turso db tokens create wedding-dev
 - Can be created/destroyed via CLI or API
 
 ### Rationale
+
 - **True Isolation**: Each environment has a physically separate database
 - **Independent Scaling**: Can tune each environment separately
 - **Cost-Effective**: Only pay for actual usage per environment
@@ -47,11 +51,13 @@ turso db tokens create wedding-dev
 ### Alternatives Considered
 
 **Option A: Single database with schema prefixes** (e.g., `dev_users`, `test_users`)
+
 - ❌ Rejected: Not true isolation - schema changes affect all environments
 - ❌ Risk of cross-environment queries (human error)
 - ❌ Migration rollback affects all environments
 
 **Option B: Different Turso organizations per environment**
+
 - ❌ Rejected: Unnecessary complexity in billing and access management
 - ❌ Harder to manage authentication tokens across organizations
 
@@ -60,39 +66,43 @@ turso db tokens create wedding-dev
 ## 2. Vercel Environment Configuration
 
 ### Decision
+
 Use Vercel's built-in environment variable system with automatic environment detection via `VERCEL_ENV`.
 
 ### Research Findings
 
 **Vercel Environment Types**:
+
 - `production`: Deployments from the default branch (main)
 - `preview`: Deployments from pull requests and other branches
 - `development`: Local development (via `vercel dev`)
 
 **Environment Variable Scopes**:
+
 - Production: Only available in production deployments
 - Preview: Only available in preview deployments
 - Development: Available in local development
 
 **Automatic Environment Detection**:
+
 ```typescript
 // Vercel automatically sets VERCEL_ENV
 const environment = process.env.VERCEL_ENV || 'development'
 
 // Map Vercel envs to our environment names
 const appEnv =
-  environment === 'production' ? 'production' :
-  environment === 'preview' ? 'test' :
-  'development'
+  environment === 'production' ? 'production' : environment === 'preview' ? 'test' : 'development'
 ```
 
 **Configuration in Vercel Dashboard**:
+
 1. Project Settings → Environment Variables
 2. Add variable (e.g., `DATABASE_URL`)
 3. Select scope: Production, Preview, or Development
 4. Vercel automatically injects the correct value per deployment
 
 ### Rationale
+
 - **Zero Configuration**: Vercel handles environment detection automatically
 - **Secure**: Environment variables not exposed to client-side code
 - **Deployment-Aware**: Each deployment gets correct environment automatically
@@ -101,11 +111,13 @@ const appEnv =
 ### Alternatives Considered
 
 **Option A: Custom environment switching logic based on URL**
+
 - ❌ Rejected: Fragile - URL patterns can change
 - ❌ Doesn't work for local development
 - ❌ Requires custom code for something Vercel provides
 
 **Option B: Environment config files committed to Git**
+
 - ❌ Rejected: Security risk - secrets in version control
 - ❌ Manual sync when rotating credentials
 
@@ -114,11 +126,13 @@ const appEnv =
 ## 3. Drizzle ORM Migration Strategy
 
 ### Decision
+
 Maintain a single set of migration files in version control, applied sequentially to each environment (dev → test → prod).
 
 ### Research Findings
 
 **Drizzle Kit Migration Workflow**:
+
 ```bash
 # 1. Developer makes schema changes locally
 # 2. Generate migration file
@@ -140,12 +154,14 @@ git push origin feature-branch
 ```
 
 **Migration File Tracking**:
+
 - Drizzle creates sequential numbered migration files
 - Each file contains both UP (apply) and metadata
 - `drizzle-kit push` applies pending migrations to target database
 - Idempotent: Safe to run multiple times (tracks applied migrations)
 
 **Environment-Specific Migration Execution**:
+
 ```typescript
 // drizzle.config.ts
 import { defineConfig } from 'drizzle-kit'
@@ -162,6 +178,7 @@ export default defineConfig({
 ```
 
 ### Rationale
+
 - **Schema Consistency**: Same migrations = same schema across all environments
 - **Version Controlled**: Migration history in Git provides audit trail
 - **Testable**: Migrations validated in dev/test before production
@@ -170,11 +187,13 @@ export default defineConfig({
 ### Alternatives Considered
 
 **Option A: Environment-specific migration files** (e.g., `migrations/dev/`, `migrations/prod/`)
+
 - ❌ Rejected: Leads to schema drift between environments
 - ❌ Hard to keep in sync as features evolve
 - ❌ Cannot verify production migrations in test environment
 
 **Option B: Manual SQL execution per environment**
+
 - ❌ Rejected: Error-prone, no version control
 - ❌ Doesn't track which migrations have been applied
 - ❌ Cannot automate in CI/CD pipeline
@@ -184,11 +203,13 @@ export default defineConfig({
 ## 4. Environment Detection Pattern
 
 ### Decision
+
 Use `process.env.VERCEL_ENV` as primary source with `APP_ENV` fallback for local development.
 
 ### Research Findings
 
 **Implementation Pattern**:
+
 ```typescript
 // app/lib/env-config.ts
 export type AppEnvironment = 'development' | 'test' | 'production'
@@ -221,25 +242,29 @@ export function getConfig() {
 ```
 
 **Environment Variable Naming**:
+
 - `VERCEL_ENV`: Set automatically by Vercel (production/preview/development)
 - `APP_ENV`: Manual override for local testing (development/test/production)
 - `DATABASE_URL`: Environment-specific database connection string
 - `DATABASE_AUTH_TOKEN`: Environment-specific Turso auth token
 
 ### Rationale
+
 - **Automatic in Production**: Zero configuration when deployed to Vercel
 - **Flexible Locally**: Can override with `APP_ENV=test npm run dev` for testing
 - **Type-Safe**: TypeScript ensures only valid environment names
-- **Server-Only**: Never exposed to client (no NEXT_PUBLIC_ prefix)
+- **Server-Only**: Never exposed to client (no NEXT*PUBLIC* prefix)
 
 ### Alternatives Considered
 
 **Option A: URL-based detection** (e.g., if domain contains "dev")
+
 - ❌ Rejected: Fragile - breaks if URLs change
 - ❌ Doesn't work for localhost
 - ❌ Security risk if URL manipulation possible
 
 **Option B: Hardcoded by file** (e.g., `config.development.ts`)
+
 - ❌ Rejected: Requires code changes per environment
 - ❌ Risk of committing wrong config
 - ❌ Doesn't leverage Vercel's automatic detection
@@ -249,11 +274,13 @@ export function getConfig() {
 ## 5. Database Connection Pooling
 
 ### Decision
+
 Use Turso's server-side connection pooling; application maintains single connection per environment.
 
 ### Research Findings
 
 **Turso Connection Architecture**:
+
 ```typescript
 // app/db/index.ts
 import { drizzle } from 'drizzle-orm/libsql'
@@ -272,18 +299,21 @@ export const db = drizzle(client)
 ```
 
 **Turso Connection Pooling**:
+
 - Turso automatically pools connections on their edge servers
 - Application connections are HTTP-based (stateless)
 - No need for application-level pooling (like pg-pool)
 - Concurrent requests automatically multiplexed by Turso
 
 **Next.js App Router Considerations**:
+
 - Server Components: Connection per request (Next.js handles)
 - API Routes: Connection per request (Next.js handles)
 - Server Actions: Connection per invocation (Next.js handles)
 - No persistent connection needed (HTTP protocol)
 
 ### Rationale
+
 - **Simplicity**: Turso handles complexity of connection pooling
 - **Serverless-Friendly**: No persistent connections needed (edge-compatible)
 - **Cost-Effective**: Only billed for actual queries (not connection time)
@@ -292,11 +322,13 @@ export const db = drizzle(client)
 ### Alternatives Considered
 
 **Option A: Application-level connection pooling** (e.g., connection pool library)
+
 - ❌ Rejected: Unnecessary with Turso's HTTP-based protocol
 - ❌ Adds complexity without performance benefit
 - ❌ Not needed for serverless/edge deployments
 
 **Option B: Singleton pattern for database client**
+
 - ✅ Acceptable for development (faster hot-reload)
 - ⚠️ Not necessary for production (Vercel handles caching)
 - ✅ Implemented via module-level export (standard pattern)
@@ -308,6 +340,7 @@ export const db = drizzle(client)
 ### Immediate Actions
 
 1. **Create Turso Databases**:
+
    ```bash
    turso db create wedding-dev
    turso db create wedding-test
@@ -315,6 +348,7 @@ export const db = drizzle(client)
    ```
 
 2. **Configure Local Environment**:
+
    ```bash
    # .env.local
    DATABASE_URL=libsql://wedding-dev-[org].turso.io
@@ -343,6 +377,7 @@ export const db = drizzle(client)
 ### Rollback Plan
 
 If environment separation causes issues:
+
 1. All databases exist independently - can rollback application code
 2. Migrations are versioned - can revert Git commits
 3. Vercel deployments are immutable - can redeploy previous version
@@ -352,15 +387,15 @@ If environment separation causes issues:
 
 ## Appendix: Environment Comparison Matrix
 
-| Aspect | Development | Test | Production |
-|--------|------------|------|------------|
-| **Database** | wedding-dev | wedding-test | wedding-prod |
-| **Data Persistence** | Volatile (can reset) | Volatile (can reset) | Persistent (backups) |
-| **Access** | All developers | All developers | All developers (but careful!) |
-| **Deployment** | Manual (`npm run dev`) | Automatic (PR deploy) | Automatic (main merge) |
-| **Migrations** | Manual (`npm run db:push`) | Automatic (build script) | Automatic (build script) |
-| **Vercel ENV** | development | preview | production |
-| **Purpose** | Feature development | QA testing, E2E tests | Live users |
+| Aspect               | Development                | Test                     | Production                    |
+| -------------------- | -------------------------- | ------------------------ | ----------------------------- |
+| **Database**         | wedding-dev                | wedding-test             | wedding-prod                  |
+| **Data Persistence** | Volatile (can reset)       | Volatile (can reset)     | Persistent (backups)          |
+| **Access**           | All developers             | All developers           | All developers (but careful!) |
+| **Deployment**       | Manual (`npm run dev`)     | Automatic (PR deploy)    | Automatic (main merge)        |
+| **Migrations**       | Manual (`npm run db:push`) | Automatic (build script) | Automatic (build script)      |
+| **Vercel ENV**       | development                | preview                  | production                    |
+| **Purpose**          | Feature development        | QA testing, E2E tests    | Live users                    |
 
 ---
 

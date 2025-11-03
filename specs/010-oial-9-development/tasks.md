@@ -63,7 +63,7 @@
 - [ ] T013 Create `app/lib/env-config.ts` with AppEnvironment type, EnvironmentConfig interface, getEnvironment function, and getConfig function (per data-model.md specification)
 - [ ] T014 Add environment detection logic in `app/lib/env-config.ts` using VERCEL_ENV and APP_ENV with proper fallbacks (development default)
 - [ ] T015 Add config validation function in `app/lib/env-config.ts` to validate DATABASE_URL format, auth token presence, and production safety checks
-- [ ] T015.5 Add security validation in `app/lib/env-config.ts` to ensure DATABASE_URL and DATABASE_AUTH_TOKEN are server-only (verify no NEXT_PUBLIC_ prefix, add runtime check)
+- [ ] T015.5 Add security validation in `app/lib/env-config.ts` to ensure DATABASE*URL and DATABASE_AUTH_TOKEN are server-only (verify no NEXT_PUBLIC* prefix, add runtime check)
 - [ ] T016 Update `app/db/index.ts` to use environment-aware configuration from getConfig() instead of hardcoded env vars
 - [ ] T017 Create or update `app/api/health/route.ts` to return environment information (status, environment name, database status, timestamp) with error handling (try/catch for DB connection, return 500 on failure)
 
@@ -90,6 +90,7 @@
 ## Dependencies
 
 **Critical Path**:
+
 1. **T001-T003** (database creation) must complete before **T004** (local env config)
 2. **T004-T006** (setup) must complete before **T007-T012** (tests)
 3. **T007-T012** (tests must FAIL) before **T013-T017** (implementation)
@@ -102,6 +103,7 @@
 10. **T025-T027** (polish) depend on **all previous tasks**
 
 **Parallel Opportunities**:
+
 - T001, T002, T003 can run in parallel (different databases)
 - T007, T009, T010, T011, T012 can run in parallel (different test files) - NOTE: T008 depends on T007
 - T025, T026 can run in parallel (different documentation files)
@@ -109,6 +111,7 @@
 ## Parallel Execution Examples
 
 ### Example 1: Create all three databases simultaneously
+
 ```bash
 # Launch T001-T003 together (3 terminal windows or background jobs):
 turso db create wedding-dev &
@@ -118,6 +121,7 @@ wait
 ```
 
 ### Example 2: Write test files (respecting dependencies)
+
 ```bash
 # Launch T007, T009-T012 together using Task tool (T008 runs after T007):
 Task: "Write unit test for environment detection in __tests__/unit/env-config.test.ts"
@@ -131,6 +135,7 @@ Task: "Write unit test for config validation in __tests__/unit/env-config.test.t
 ```
 
 ### Example 3: Write documentation in parallel
+
 ```bash
 # Launch T025-T026 together:
 Task: "Update README.md with environment setup section"
@@ -140,162 +145,198 @@ Task: "Create troubleshooting guide in docs/TROUBLESHOOTING.md"
 ## Task Details
 
 ### T001: Create Turso Development Database
+
 **Files**: None (CLI command)
 **Command**: `turso db create wedding-dev`
 **Output**: Save database URL and auth token for T004
 **Verification**: `turso db list` shows `wedding-dev`
 
 ### T002: Create Turso Test Database
+
 **Files**: None (CLI command)
 **Command**: `turso db create wedding-test`
 **Output**: Save database URL and auth token for T022
 **Verification**: `turso db list` shows `wedding-test`
 
 ### T003: Create Turso Production Database
+
 **Files**: None (CLI command)
 **Command**: `turso db create wedding-prod`
 **Output**: Save database URL and auth token for T023
 **Verification**: `turso db list` shows `wedding-prod`
 
 ### T004: Create Local Environment File
+
 **Files**: `.env.local` (create)
 **Content**:
+
 ```bash
 DATABASE_URL=libsql://wedding-dev-[org].turso.io
 DATABASE_AUTH_TOKEN=eyJhbGc...
 APP_ENV=development
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
+
 **Verification**: File exists, not tracked by Git
 
 ### T005: Create Environment Example File
+
 **Files**: `.env.example` (create)
 **Content**:
+
 ```bash
 DATABASE_URL=libsql://wedding-dev-YOUR-ORG.turso.io
 DATABASE_AUTH_TOKEN=YOUR-DEV-TOKEN-HERE
 APP_ENV=development
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
+
 **Verification**: File committed to Git for team reference
 
 ### T006: Update .gitignore
+
 **Files**: `.gitignore` (update)
 **Add lines**:
+
 ```
 .env.local
 .env.test
 .env.production
 ```
+
 **Verification**: `.env.local` not shown in `git status`
 
 ### T007: Write Environment Detection Unit Test
+
 **Files**: `__tests__/unit/env-config.test.ts` (create)
 **Test cases**:
+
 - `getEnvironment()` returns 'development' when APP_ENV=development
 - `getEnvironment()` returns 'test' when VERCEL_ENV=preview
 - `getEnvironment()` returns 'production' when VERCEL_ENV=production
 - `getEnvironment()` defaults to 'development' when no env vars set
-**Status**: Must FAIL initially (getEnvironment doesn't exist yet)
+  **Status**: Must FAIL initially (getEnvironment doesn't exist yet)
 
 ### T008: Write Config Validation Unit Test
+
 **Files**: `__tests__/unit/env-config.test.ts` (append)
 **Test cases**:
+
 - `validateConfig()` throws error for invalid DATABASE_URL format
 - `validateConfig()` throws error for missing auth token on remote DB
 - `validateConfig()` throws error if production DB marked as destroyable
 - `validateConfig()` passes for valid configuration
-**Status**: Must FAIL initially (validateConfig doesn't exist yet)
+  **Status**: Must FAIL initially (validateConfig doesn't exist yet)
 
 ### T009: Write Database Connection Integration Test
+
 **Files**: `__tests__/integration/database-connection.test.ts` (create)
 **Test cases**:
+
 - Can connect to development database with valid credentials
 - Can execute simple query (SELECT 1)
 - Connection uses correct database URL per environment
 - Connection fails gracefully with invalid credentials
-**Status**: Must FAIL initially (env-aware connection doesn't exist yet)
+  **Status**: Must FAIL initially (env-aware connection doesn't exist yet)
 
 ### T010: Write Environment Isolation Integration Test
+
 **Files**: `__tests__/integration/environment-isolation.test.ts` (create)
 **Test cases**:
+
 - Data inserted in dev database doesn't appear in test database
 - Schema changes in dev don't affect test or production
 - Each environment has independent migration tracking
-**Status**: Must FAIL initially (environment separation not implemented)
+  **Status**: Must FAIL initially (environment separation not implemented)
 
 ### T011: Write Health Endpoint Contract Test
+
 **Files**: `__tests__/contracts/health-endpoint.test.ts` (create)
 **Test cases**:
+
 - GET /api/health returns 200 status
 - Response includes `status: 'ok'`
 - Response includes `environment` field matching current env
 - Response includes `database: 'connected'` when DB working
 - Response includes ISO timestamp
-**Status**: Must FAIL initially (enhanced endpoint doesn't exist yet)
+  **Status**: Must FAIL initially (enhanced endpoint doesn't exist yet)
 
 ### T012: Write Environment Switching E2E Test
+
 **Files**: `tests/e2e/environment-switching.spec.ts` (create)
 **Test cases** (Playwright):
+
 - Local dev server shows "development" environment
 - Vercel preview deployment shows "test" environment
 - Health endpoint returns correct environment name
-**Status**: Must FAIL initially (environment detection not implemented)
+  **Status**: Must FAIL initially (environment detection not implemented)
 
 ### T013: Create Environment Configuration Module
+
 **Files**: `app/lib/env-config.ts` (create)
 **Exports**:
+
 - `AppEnvironment` type (literal: 'development' | 'test' | 'production')
 - `EnvironmentConfig` interface (per data-model.md spec)
 - `getEnvironment()` function (returns AppEnvironment)
 - `getConfig()` function (returns EnvironmentConfig)
-**Implementation**: Base structure only, no logic yet
-**Verification**: File compiles without TypeScript errors
+  **Implementation**: Base structure only, no logic yet
+  **Verification**: File compiles without TypeScript errors
 
 ### T014: Implement Environment Detection Logic
+
 **Files**: `app/lib/env-config.ts` (update)
 **Logic**:
+
 1. Check `process.env.APP_ENV` first (explicit override)
 2. Check `process.env.VERCEL_ENV` second (Vercel automatic)
    - 'production' → return 'production'
    - 'preview' → return 'test'
 3. Default to 'development'
-**Verification**: T007 tests should pass
+   **Verification**: T007 tests should pass
 
 ### T015: Implement Config Validation
+
 **Files**: `app/lib/env-config.ts` (update)
 **Add**:
+
 - `validateConfig(config: EnvironmentConfig): void` function
 - Validate DATABASE_URL starts with `libsql://` or `http://`
 - Validate DATABASE_AUTH_TOKEN present for remote databases
 - Validate `canDestroyDatabase` is false when `isProduction` is true
 - Throw descriptive errors for violations
-**Verification**: T008 tests should pass
+  **Verification**: T008 tests should pass
 
 ### T015.5: Implement Security Validation
+
 **Files**: `app/lib/env-config.ts` (update)
 **Add**:
+
 - Security check in `validateConfig` or `getConfig` to prevent client-side exposure
 - Verify environment variable names don't use `NEXT_PUBLIC_` prefix for sensitive data
 - Add runtime warning if `NEXT_PUBLIC_DATABASE_URL` or similar detected
 - Document security requirement: DATABASE_URL and DATABASE_AUTH_TOKEN must be server-only
-**Verification**:
+  **Verification**:
 - Sensitive env vars not exposed in browser bundle
 - Build succeeds with proper server-side-only configuration
-**Rationale**: Constitution principle #6 (Security) requires explicit validation
+  **Rationale**: Constitution principle #6 (Security) requires explicit validation
 
 ### T016: Update Database Connection
+
 **Files**: `app/db/index.ts` (update)
 **Changes**:
+
 - Import `getConfig` from `@/app/lib/env-config`
 - Call `getConfig()` to get environment-aware configuration
 - Use `config.databaseUrl` and `config.databaseAuthToken` instead of `process.env` directly
 - Remove hardcoded environment variable reads
-**Verification**: T009 tests should pass, existing app still works
+  **Verification**: T009 tests should pass, existing app still works
 
 ### T017: Enhance Health Endpoint
+
 **Files**: `app/api/health/route.ts` (create or update)
 **Implementation**:
+
 ```typescript
 import { NextResponse } from 'next/server'
 import { getConfig } from '@/app/lib/env-config'
@@ -311,18 +352,23 @@ export async function GET() {
   })
 }
 ```
+
 **Verification**: T011 tests should pass
 
 ### T018: Update Drizzle Configuration
+
 **Files**: `drizzle.config.ts` (update)
 **Changes**:
+
 - Ensure `dbCredentials.url` uses `process.env.DATABASE_URL!`
 - Ensure `dbCredentials.authToken` uses `process.env.DATABASE_AUTH_TOKEN!`
 - No hardcoded database URLs
-**Verification**: `npm run db:generate` still works
+  **Verification**: `npm run db:generate` still works
 
 ### T019-T021: Apply Migrations to All Databases
+
 **Commands**:
+
 ```bash
 # T019: Development (uses .env.local)
 npm run db:push
@@ -339,61 +385,77 @@ export DATABASE_AUTH_TOKEN="[prod-token]"
 npm run db:push
 unset DATABASE_URL DATABASE_AUTH_TOKEN
 ```
+
 **Verification**: `turso db shell wedding-{env}` then `.tables` shows all tables in each database
 
 ### T022-T023: Configure Vercel Environment Variables
+
 **Method**: Vercel Dashboard or CLI
 **T022 (Preview/Test)**:
+
 ```bash
 vercel env add DATABASE_URL preview
 # Paste test database URL
 vercel env add DATABASE_AUTH_TOKEN preview
 # Paste test database token
 ```
+
 **T023 (Production)**:
+
 ```bash
 vercel env add DATABASE_URL production
 # Paste production database URL
 vercel env add DATABASE_AUTH_TOKEN production
 # Paste production database token
 ```
+
 **Verification**: `vercel env ls` shows variables in correct scopes
 
 ### T024: Update Build Command
+
 **Files**: `vercel.json` (create or update) OR Vercel dashboard settings
 **Option A (vercel.json)**:
+
 ```json
 {
   "buildCommand": "npm run db:push && npm run build"
 }
 ```
+
 **Option B (Vercel Dashboard)**:
+
 - Go to Project Settings → Build & Development Settings
 - Set Build Command: `npm run db:push && npm run build`
-**Verification**: Next deployment runs migrations automatically
+  **Verification**: Next deployment runs migrations automatically
 
 ### T025: Update README Documentation
+
 **Files**: `README.md` (update)
 **Add section**: "Environment Setup"
 **Content**:
+
 - Explain three-environment architecture
 - Link to quickstart.md for detailed setup
 - Document environment variable requirements
 - Explain migration workflow
-**Verification**: Team members can follow README to set up locally
+  **Verification**: Team members can follow README to set up locally
 
 ### T026: Create Troubleshooting Guide
+
 **Files**: `docs/TROUBLESHOOTING.md` (create)
 **Sections**:
+
 - "Database connection failed" → check .env.local
 - "Wrong environment detected" → check VERCEL_ENV vs APP_ENV
 - "Migrations not applying on Vercel" → check build command
 - "Production data in development" → verify environment variables
-**Verification**: Common issues have documented solutions
+  **Verification**: Common issues have documented solutions
 
 ### T027: Run Complete Verification
+
 **Procedure**: Follow `specs/010-oial-9-development/quickstart.md` Steps 1-9
 **Checklist**:
+
 - [x] All 3 databases created and accessible
 - [x] Local development uses wedding-dev database
 - [x] Health endpoint returns "development" locally
@@ -401,7 +463,7 @@ vercel env add DATABASE_AUTH_TOKEN production
 - [x] Production shows "production" environment
 - [x] Data isolated between environments
 - [x] Migrations work in all environments
-**Verification**: All 13 functional requirements (FR-001 through FR-013) verified
+      **Verification**: All 13 functional requirements (FR-001 through FR-013) verified
 
 ## Notes
 

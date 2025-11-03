@@ -178,6 +178,7 @@ npm run dev
 ```
 
 **Test Database Connection**:
+
 ```bash
 # In another terminal, check health endpoint
 curl http://localhost:3000/api/health
@@ -402,6 +403,7 @@ Verify all requirements are met:
 ### Issue: "Database connection failed" locally
 
 **Solution**:
+
 ```bash
 # Check .env.local has correct values
 cat .env.local
@@ -418,6 +420,7 @@ turso db tokens create wedding-dev
 ### Issue: Migrations not applying on Vercel deployment
 
 **Solution**:
+
 ```bash
 # Check Vercel build logs for errors
 vercel logs [deployment-url]
@@ -432,6 +435,7 @@ vercel --prod
 ### Issue: Wrong environment detected in deployment
 
 **Solution**:
+
 ```bash
 # Check VERCEL_ENV is set correctly (automatic)
 # If overriding with APP_ENV, verify it's set correctly in Vercel
@@ -444,6 +448,7 @@ vercel env rm APP_ENV preview
 ### Issue: Production database accidentally modified in development
 
 **Solution**:
+
 ```bash
 # This should be impossible if environment variables are correct
 # Verify .env.local points to wedding-dev, not wedding-prod
@@ -461,6 +466,7 @@ cat .env.local | grep DATABASE_URL
 If you need to revert this environment setup:
 
 ### Rollback Application Code
+
 ```bash
 # Revert to previous commit before environment changes
 git revert [commit-hash]
@@ -468,6 +474,7 @@ git push origin main
 ```
 
 ### Rollback Vercel Configuration
+
 ```bash
 # Remove environment variables
 vercel env rm DATABASE_URL production
@@ -481,6 +488,7 @@ vercel env add DATABASE_URL production
 ```
 
 ### Keep Databases (Recommended)
+
 ```bash
 # Do NOT destroy databases immediately
 # Keep them as backups for 30 days
@@ -497,6 +505,7 @@ vercel env add DATABASE_URL production
 After completing this quickstart:
 
 1. ✅ **Commit Environment Configuration**:
+
    ```bash
    # Update .env.example with placeholders
    cat > .env.example << EOF
@@ -529,6 +538,7 @@ After completing this quickstart:
 ## Verification Complete ✅
 
 If you've completed all steps successfully:
+
 - ✅ Development environment running locally with isolated database
 - ✅ Test environment deployed on Vercel preview with isolated database
 - ✅ Production environment deployed on Vercel with isolated database
@@ -542,6 +552,7 @@ If you've completed all steps successfully:
 ---
 
 **Need Help?** Check the troubleshooting section above or refer to:
+
 - [Turso Documentation](https://docs.turso.tech/)
 - [Vercel Environment Variables](https://vercel.com/docs/concepts/projects/environment-variables)
 - [Drizzle ORM Migrations](https://orm.drizzle.team/kit-docs/overview)

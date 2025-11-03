@@ -9,11 +9,13 @@ This guide covers common issues with the three-environment setup (development, t
 ### Problem: "Database URL not found on env variable"
 
 **Symptoms:**
+
 ```
 Error: Database URL not found on env variable!
 ```
 
 **Solution:**
+
 1. Check that `.env.local` (or `.env`) exists in your project root
 2. Verify it contains either:
    - `DATABASE_URL` and `DATABASE_AUTH_TOKEN` (new naming), OR
@@ -21,6 +23,7 @@ Error: Database URL not found on env variable!
 3. Restart your development server (`npm run dev`)
 
 **Quick fix:**
+
 ```bash
 # Copy from example
 cp .env.example .env.local
@@ -34,22 +37,27 @@ cp .env.example .env.local
 ### Problem: "LibsqlError: SERVER_ERROR: Server returned HTTP status 404"
 
 **Symptoms:**
+
 ```
 LibsqlError: SERVER_ERROR: Server returned HTTP status 404
 ```
 
 **Causes:**
+
 - Database doesn't exist
 - Wrong database URL
 - Database was deleted
 
 **Solution:**
+
 1. Verify database exists:
+
    ```bash
    turso db list
    ```
 
 2. If missing, recreate it:
+
    ```bash
    turso db create wedding-invitation-dev
    ```
@@ -66,12 +74,15 @@ LibsqlError: SERVER_ERROR: Server returned HTTP status 404
 ### Problem: "Invalid auth token" or 401/403 errors
 
 **Symptoms:**
+
 ```
 LibsqlError: UNAUTHORIZED: Invalid auth token
 ```
 
 **Solution:**
+
 1. Generate a fresh token:
+
    ```bash
    turso db tokens create wedding-invitation-dev
    ```
@@ -89,6 +100,7 @@ LibsqlError: UNAUTHORIZED: Invalid auth token
 ### Problem: Wrong environment detected
 
 **Symptoms:**
+
 - `/api/health` shows wrong environment
 - Connecting to wrong database
 - Changes appearing in wrong environment
@@ -99,6 +111,7 @@ LibsqlError: UNAUTHORIZED: Invalid auth token
    - `APP_ENV` (highest priority) > `VERCEL_ENV` > default (`development`)
 
 2. **For local development:**
+
    ```bash
    # In .env.local, set explicitly:
    APP_ENV=development
@@ -120,24 +133,29 @@ LibsqlError: UNAUTHORIZED: Invalid auth token
 ### Problem: Production data appearing in development
 
 **Symptoms:**
+
 - Seeing production data locally
 - Changes in dev affecting production
 
 **Root cause:** Using production database credentials in `.env.local`
 
 **Solution:**
+
 1. Check your `.env.local`:
+
    ```bash
    cat .env.local | grep DATABASE_URL
    ```
 
 2. Verify it points to dev database:
+
    ```
    DATABASE_URL=libsql://wedding-invitation-dev-...
    # NOT wedding-invitation-prod!
    ```
 
 3. If wrong, update to dev credentials:
+
    ```bash
    turso db show wedding-invitation-dev --url
    turso db tokens create wedding-invitation-dev
@@ -154,6 +172,7 @@ LibsqlError: UNAUTHORIZED: Invalid auth token
 ### Problem: Migrations not applying on Vercel
 
 **Symptoms:**
+
 - Vercel build succeeds but tables missing
 - "Table does not exist" errors in production
 - Schema out of sync
@@ -161,6 +180,7 @@ LibsqlError: UNAUTHORIZED: Invalid auth token
 **Solution:**
 
 1. **Verify `vercel.json` build command:**
+
    ```json
    {
      "buildCommand": "npm run db:push && npm run build"
@@ -173,6 +193,7 @@ LibsqlError: UNAUTHORIZED: Invalid auth token
    - Verify no errors during migration
 
 3. **Manually apply migrations** (if needed):
+
    ```bash
    # For test environment
    export $(cat .env.test.tmp | xargs) && npm run db:push
@@ -194,6 +215,7 @@ LibsqlError: UNAUTHORIZED: Invalid auth token
 ### Problem: "You are about to execute..." prompt on Vercel
 
 **Symptoms:**
+
 - Vercel build hangs waiting for confirmation
 - Build timeout
 
@@ -201,6 +223,7 @@ LibsqlError: UNAUTHORIZED: Invalid auth token
 This shouldn't happen in CI/CD. If it does:
 
 1. Check if `drizzle-kit` version supports `--yes` flag:
+
    ```bash
    npm run db:push -- --yes
    ```
@@ -219,12 +242,14 @@ This shouldn't happen in CI/CD. If it does:
 ### Problem: Dev and production schemas out of sync
 
 **Symptoms:**
+
 - Code works locally but fails in production
 - Missing columns/tables in production
 
 **Solution:**
 
 1. **Check current schema in each environment:**
+
    ```bash
    # Dev
    turso db shell wedding-invitation-dev
@@ -240,6 +265,7 @@ This shouldn't happen in CI/CD. If it does:
    ```
 
 2. **Apply migrations in sequence** (dev → test → prod):
+
    ```bash
    # 1. Dev (from .env.local automatically)
    npm run db:push
@@ -268,6 +294,7 @@ This shouldn't happen in CI/CD. If it does:
 ### Problem: Database credentials exposed to client
 
 **Symptoms:**
+
 ```
 ⚠️ SECURITY WARNING: NEXT_PUBLIC_DATABASE_URL detected!
 ```
@@ -277,6 +304,7 @@ This shouldn't happen in CI/CD. If it does:
 **Solution:**
 
 1. **Remove `NEXT_PUBLIC_` prefix:**
+
    ```bash
    # WRONG - exposes to client
    NEXT_PUBLIC_DATABASE_URL=...
@@ -286,12 +314,14 @@ This shouldn't happen in CI/CD. If it does:
    ```
 
 2. **Check your `.env` files:**
+
    ```bash
    grep "NEXT_PUBLIC_DATABASE" .env* .env.local
    # Should return nothing
    ```
 
 3. **Verify in browser console:**
+
    ```javascript
    console.log(process.env.NEXT_PUBLIC_DATABASE_URL)
    // Should be: undefined
@@ -312,6 +342,7 @@ This shouldn't happen in CI/CD. If it does:
 ### Problem: Tests failing with "Cannot find module '@/app/lib/env-config'"
 
 **Solution:**
+
 1. Ensure file exists: `app/lib/env-config.ts`
 2. Check TypeScript compilation: `npm run build`
 3. Clear Jest cache: `npx jest --clearCache`
@@ -321,6 +352,7 @@ This shouldn't happen in CI/CD. If it does:
 ### Problem: Integration tests using wrong database
 
 **Solution:**
+
 1. Check `jest.setup.js` - it should NOT override `DATABASE_URL` if already set
 2. Ensure `.env` points to dev database (not test/prod)
 3. Run tests:
@@ -333,11 +365,13 @@ This shouldn't happen in CI/CD. If it does:
 ## Quick Diagnostics
 
 ### Health Check
+
 ```bash
 curl http://localhost:3000/api/health | jq
 ```
 
 **Expected output:**
+
 ```json
 {
   "status": "ok",
@@ -348,6 +382,7 @@ curl http://localhost:3000/api/health | jq
 ```
 
 ### Environment Variables Check
+
 ```bash
 node -e "require('dotenv').config(); console.log({
   DATABASE_URL: process.env.DATABASE_URL?.substring(0, 40) + '...',
@@ -357,6 +392,7 @@ node -e "require('dotenv').config(); console.log({
 ```
 
 ### Database Connection Test
+
 ```bash
 turso db shell wedding-invitation-dev "SELECT 1 as test"
 ```
@@ -368,6 +404,7 @@ turso db shell wedding-invitation-dev "SELECT 1 as test"
 If you're still experiencing issues:
 
 1. **Check environment status:**
+
    ```bash
    npm run dev
    # Visit http://localhost:3000/api/health

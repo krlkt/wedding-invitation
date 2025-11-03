@@ -221,11 +221,13 @@ See [data-model.md](./data-model.md) for complete schema documentation.
 ### API Contracts
 
 **No new API endpoints required**. This is an infrastructure feature that works through:
+
 - Environment variables (configured in Vercel/local)
 - Database configuration (app/db/index.ts)
 - Migration scripts (Drizzle CLI)
 
 **Health Check Enhancement** (existing endpoint):
+
 ```
 GET /api/health
 Response: {
@@ -241,6 +243,7 @@ See [contracts/README.md](./contracts/README.md) for details.
 ### Quickstart Validation
 
 **Environment Setup Verification**:
+
 1. Create all three Turso databases
 2. Configure environment variables locally and in Vercel
 3. Run migrations against dev database
@@ -254,6 +257,7 @@ See [quickstart.md](./quickstart.md) for step-by-step guide.
 ### Agent Context Update
 
 Updated `CLAUDE.md` with:
+
 - Three-environment architecture pattern
 - Turso multi-database configuration
 - Migration-based schema sync strategy
@@ -327,6 +331,7 @@ _These phases are beyond the scope of the /plan command_
 _No Constitution violations to document_
 
 This implementation aligns fully with the Wedding Invitation Constitution:
+
 - Uses existing tech stack (Next.js, TypeScript, Turso, Drizzle)
 - Follows TDD testing standards
 - No new architectural patterns introduced

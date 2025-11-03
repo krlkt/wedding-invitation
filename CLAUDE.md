@@ -3,12 +3,14 @@
 Auto-generated from all feature plans. Last updated: 2025-11-03
 
 ## Active Technologies
+
 - TypeScript 5.x with Next.js 14.2.4 App Router + React 18, shadcn/ui (Radix UI primitives), Tailwind CSS, React Hook Form, Drizzle ORM (009-i-want-to)
 - TypeScript 5.x with Next.js 14.2.4 App Router architecture + React 18, Material-UI 7.x, Tailwind CSS, React Hook Form, Framer Motion (001-the-current-state)
 - TypeScript 5.x with Next.js 14.2.4 + React 18, shadcn/ui (Radix UI primitives), Tailwind CSS, React Hook Form, Framer Motion (002-improve-live-preview)
 - Turso (libSQL) with Drizzle ORM, Three-environment architecture (development, test, production) (OIAL-9-Development-and-testing-environment)
 
 ## Environment Architecture
+
 - **Development**: Local development with shared `wedding-dev` Turso database
 - **Test**: Vercel preview deployments with `wedding-test` Turso database (for QA and automated tests)
 - **Production**: Vercel production deployments with `wedding-prod` Turso database (live users)
@@ -50,6 +52,7 @@ tests/
 TypeScript 5.x with Next.js 14.2.4 App Router architecture: Follow standard conventions
 
 ## Recent Changes
+
 - OIAL-9-Development-and-testing-environment: Implemented three-environment architecture (development, test, production) with isolated Turso databases, migration-based schema sync, and Vercel environment configuration
 - 009-i-want-to: Added TypeScript 5.x with Next.js 14.2.4 App Router + React 18, shadcn/ui (Radix UI primitives), Tailwind CSS, React Hook Form, Drizzle ORM
 - 008-split-instagram-links: Split single instagramLink into groomsInstagramLink and brideInstagramLink, reorganized UI (Content tab), renamed feature toggle to instagram_links

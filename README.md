@@ -73,6 +73,7 @@ BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 #### Database Setup
 
 1. **Create Turso databases** (one-time setup):
+
    ```bash
    turso db create wedding-invitation-dev
    turso db create wedding-invitation-test
@@ -80,12 +81,14 @@ BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
    ```
 
 2. **Get credentials**:
+
    ```bash
    turso db show wedding-invitation-dev --url
    turso db tokens create wedding-invitation-dev
    ```
 
 3. **Apply migrations** to development database:
+
    ```bash
    npm run db:push
    ```
@@ -95,6 +98,7 @@ BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 #### Environment Detection
 
 The application automatically detects the environment:
+
 - **Local development**: Uses `APP_ENV` or defaults to `development`
 - **Vercel preview**: Automatically uses `test` environment (`VERCEL_ENV=preview`)
 - **Vercel production**: Automatically uses `production` environment (`VERCEL_ENV=production`)

@@ -17,8 +17,13 @@ The starting section content extends the existing `WeddingConfiguration` entity 
 
 ```typescript
 export const weddingConfigurations = sqliteTable('wedding_configurations', {
-  id: text('id').$defaultFn(() => createId()).primaryKey(),
-  userId: text('user_id').notNull().references(() => userAccounts.id, { onDelete: 'cascade' }).unique(),
+  id: text('id')
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => userAccounts.id, { onDelete: 'cascade' })
+    .unique(),
   subdomain: text('subdomain').notNull().unique(),
   groomName: text('groom_name').notNull(),
   brideName: text('bride_name').notNull(),
@@ -102,20 +107,20 @@ export interface WeddingConfiguration {
 
 ### Field Constraints
 
-| Field | Type | Max Length | Required | Default | Validation |
-|-------|------|------------|----------|---------|------------|
-| startingSectionGroomName | string | 100 chars | No | null | Non-empty if provided |
-| startingSectionBrideName | string | 100 chars | No | null | Non-empty if provided |
-| startingSectionShowParentInfo | boolean | N/A | No | false | Must be boolean |
-| startingSectionGroomFatherName | string | 100 chars | No | null | Non-empty if provided |
-| startingSectionGroomMotherName | string | 100 chars | No | null | Non-empty if provided |
-| startingSectionBrideFatherName | string | 100 chars | No | null | Non-empty if provided |
-| startingSectionBrideMotherName | string | 100 chars | No | null | Non-empty if provided |
-| startingSectionShowWeddingDate | boolean | N/A | No | true | Must be boolean |
-| startingSectionBackgroundType | enum | N/A | No | null | Must be 'image' or 'video' if set |
-| startingSectionBackgroundFilename | string | 255 chars | No | null | Valid filename format |
-| startingSectionBackgroundFileSize | integer | N/A | No | null | Positive integer (bytes) |
-| startingSectionBackgroundMimeType | string | 50 chars | No | null | Valid MIME type |
+| Field                             | Type    | Max Length | Required | Default | Validation                        |
+| --------------------------------- | ------- | ---------- | -------- | ------- | --------------------------------- |
+| startingSectionGroomName          | string  | 100 chars  | No       | null    | Non-empty if provided             |
+| startingSectionBrideName          | string  | 100 chars  | No       | null    | Non-empty if provided             |
+| startingSectionShowParentInfo     | boolean | N/A        | No       | false   | Must be boolean                   |
+| startingSectionGroomFatherName    | string  | 100 chars  | No       | null    | Non-empty if provided             |
+| startingSectionGroomMotherName    | string  | 100 chars  | No       | null    | Non-empty if provided             |
+| startingSectionBrideFatherName    | string  | 100 chars  | No       | null    | Non-empty if provided             |
+| startingSectionBrideMotherName    | string  | 100 chars  | No       | null    | Non-empty if provided             |
+| startingSectionShowWeddingDate    | boolean | N/A        | No       | true    | Must be boolean                   |
+| startingSectionBackgroundType     | enum    | N/A        | No       | null    | Must be 'image' or 'video' if set |
+| startingSectionBackgroundFilename | string  | 255 chars  | No       | null    | Valid filename format             |
+| startingSectionBackgroundFileSize | integer | N/A        | No       | null    | Positive integer (bytes)          |
+| startingSectionBackgroundMimeType | string  | 50 chars   | No       | null    | Valid MIME type                   |
 
 ### Business Rules
 
@@ -280,23 +285,26 @@ export const startingSectionContentSchema = z.object({
   showWeddingDate: z.boolean().optional(),
 })
 
-const MAX_IMAGE_SIZE = 10 * 1024 * 1024  // 10 MB
-const MAX_VIDEO_SIZE = 50 * 1024 * 1024  // 50 MB
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10 MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024 // 50 MB
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 const ACCEPTED_VIDEO_TYPES = ['video/mp4', 'video/webm']
 
 export const startingSectionMediaSchema = z.object({
-  file: z.instanceof(File).refine((file) => {
-    if (ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-      return file.size <= MAX_IMAGE_SIZE
+  file: z.instanceof(File).refine(
+    (file) => {
+      if (ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+        return file.size <= MAX_IMAGE_SIZE
+      }
+      if (ACCEPTED_VIDEO_TYPES.includes(file.type)) {
+        return file.size <= MAX_VIDEO_SIZE
+      }
+      return false
+    },
+    {
+      message: 'Invalid file type or size exceeded (10MB for images, 50MB for videos)',
     }
-    if (ACCEPTED_VIDEO_TYPES.includes(file.type)) {
-      return file.size <= MAX_VIDEO_SIZE
-    }
-    return false
-  }, {
-    message: 'Invalid file type or size exceeded (10MB for images, 50MB for videos)',
-  }),
+  ),
   replaceExisting: z.boolean().optional(),
 })
 ```
@@ -304,9 +312,11 @@ export const startingSectionMediaSchema = z.object({
 ## Relationships
 
 ### Existing Relationships
+
 - `weddingConfigurations.userId` → `userAccounts.id` (1:1, cascade delete)
 
 ### Data Dependencies
+
 - Starting section groom/bride names fall back to `groomName`/`brideName` if not set
 - Wedding date display uses `weddingDate` field (existing)
 - Parent names in starting section are independent from existing `groomFather`/`groomMother`/`brideFather`/`brideMother` fields
@@ -314,6 +324,7 @@ export const startingSectionMediaSchema = z.object({
 ## Indexes
 
 No new indexes required:
+
 - All queries filter by `userId` (existing unique index)
 - No queries on starting section fields individually
 - No JOIN operations (1:1 relationship in same table)
@@ -332,11 +343,13 @@ public/
 ```
 
 ### File Naming Convention
+
 - Pattern: `background-{type}-{timestamp}.{extension}`
 - Timestamp: Unix timestamp (seconds since epoch)
 - Extension: Derived from MIME type (jpg, png, webp, gif, mp4, webm)
 
 ### Cleanup Strategy
+
 - On file replacement: Delete old file after successful new upload
 - On wedding config deletion: Cascade delete handled by database, files cleaned via cron job or manual cleanup
 - Orphaned file prevention: Always update DB before deleting old file

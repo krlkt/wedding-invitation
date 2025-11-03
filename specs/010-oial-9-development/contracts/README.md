@@ -40,12 +40,14 @@ export async function GET() {
 ```
 
 **Request**:
+
 ```http
 GET /api/health HTTP/1.1
 Host: localhost:3000
 ```
 
 **Response** (Development):
+
 ```json
 {
   "status": "ok",
@@ -56,6 +58,7 @@ Host: localhost:3000
 ```
 
 **Response** (Test):
+
 ```json
 {
   "status": "ok",
@@ -66,6 +69,7 @@ Host: localhost:3000
 ```
 
 **Response** (Production):
+
 ```json
 {
   "status": "ok",
@@ -76,6 +80,7 @@ Host: localhost:3000
 ```
 
 **Status Codes**:
+
 - `200 OK`: Service is healthy
 - `500 Internal Server Error`: Database connection failed
 
@@ -86,6 +91,7 @@ Host: localhost:3000
 ## No New Authentication/Authorization
 
 This feature does not change authentication or authorization mechanisms:
+
 - Existing authentication remains unchanged (cookie-based sessions)
 - No new protected routes
 - No changes to existing API route protection
@@ -95,6 +101,7 @@ This feature does not change authentication or authorization mechanisms:
 ## No New Data Validation Schemas
 
 Since this is an infrastructure feature:
+
 - No new request/response schemas
 - No new validation rules for API payloads
 - No changes to existing API contracts
@@ -131,6 +138,7 @@ export const db = getDatabaseClient()
 ```
 
 **Usage** (Server Components, API Routes, Server Actions):
+
 ```typescript
 import { db } from '@/app/db'
 
@@ -139,6 +147,7 @@ const users = await db.select().from(usersTable)
 ```
 
 **Environment Resolution**:
+
 - Development: Connects to `wedding-dev` database
 - Test: Connects to `wedding-test` database
 - Production: Connects to `wedding-prod` database
@@ -238,6 +247,7 @@ describe('Health Endpoint Contract', () => {
 ## No OpenAPI/GraphQL Schemas
 
 This feature does not require:
+
 - OpenAPI (Swagger) specifications (no REST API changes)
 - GraphQL schema definitions (not using GraphQL)
 - Protocol Buffers (not using gRPC)
@@ -253,12 +263,14 @@ While not traditional API contracts, this feature affects how the application in
 ### Turso Database Service
 
 **"Contract"** (expected behavior from Turso):
+
 - Accepts libSQL protocol connections
 - Authenticates via bearer token in HTTP header
 - Applies migrations idempotently via hash tracking
 - Supports concurrent connections (pooling on Turso side)
 
 **SLA Expectations** (from Turso documentation):
+
 - 99.9% uptime
 - <100ms query latency (p50)
 - Automatic backups (production database)
@@ -266,12 +278,14 @@ While not traditional API contracts, this feature affects how the application in
 ### Vercel Deployment Service
 
 **"Contract"** (expected behavior from Vercel):
+
 - Injects `VERCEL_ENV` variable automatically
 - Provides isolated preview deployments per PR
 - Runs build command before deployment
 - Serves environment-specific variables securely
 
 **SLA Expectations** (from Vercel documentation):
+
 - 99.99% uptime (Enterprise)
 - Global edge network (<100ms CDN)
 - Automatic HTTPS certificates
@@ -281,11 +295,13 @@ While not traditional API contracts, this feature affects how the application in
 ## Backward Compatibility
 
 **No Breaking Changes**: This feature is fully backward compatible with existing code:
+
 - Existing API endpoints continue to work unchanged
 - Database queries use same ORM interface (Drizzle)
 - Environment detection is additive (existing code works without changes)
 
 **Migration Path**:
+
 1. ✅ New environment configuration is opt-in (via env vars)
 2. ✅ If env vars not set, defaults to original behavior (single database)
 3. ✅ Gradual migration possible (can add environments one at a time)
@@ -300,6 +316,7 @@ While not traditional API contracts, this feature affects how the application in
 **Breaking Changes**: 0
 
 **Contract Testing Required**:
+
 - ✅ Environment detection contracts
 - ✅ Database connection contracts
 - ✅ Health endpoint contracts

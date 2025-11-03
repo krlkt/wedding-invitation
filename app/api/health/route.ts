@@ -23,26 +23,32 @@ export async function GET() {
     }
 
     // Return health information
-    return NextResponse.json({
-      status: databaseStatus === 'connected' ? 'ok' : 'error',
-      environment: config.environment,
-      database: databaseStatus,
-      timestamp: new Date().toISOString(),
-    }, {
-      status: databaseStatus === 'connected' ? 200 : 500,
-    })
+    return NextResponse.json(
+      {
+        status: databaseStatus === 'connected' ? 'ok' : 'error',
+        environment: config.environment,
+        database: databaseStatus,
+        timestamp: new Date().toISOString(),
+      },
+      {
+        status: databaseStatus === 'connected' ? 200 : 500,
+      }
+    )
   } catch (error) {
     // Handle any unexpected errors
     console.error('Health endpoint error:', error)
 
-    return NextResponse.json({
-      status: 'error',
-      environment: 'unknown',
-      database: 'error',
-      timestamp: new Date().toISOString(),
-      error: error instanceof Error ? error.message : 'Unknown error',
-    }, {
-      status: 500,
-    })
+    return NextResponse.json(
+      {
+        status: 'error',
+        environment: 'unknown',
+        database: 'error',
+        timestamp: new Date().toISOString(),
+        error: error instanceof Error ? error.message : 'Unknown error',
+      },
+      {
+        status: 500,
+      }
+    )
   }
 }
