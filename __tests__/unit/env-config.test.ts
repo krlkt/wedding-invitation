@@ -26,7 +26,6 @@ describe('Environment Detection (T007)', () => {
   it('should return "development" when APP_ENV=development', async () => {
     process.env.APP_ENV = 'development'
 
-    // This will fail until we implement app/lib/env-config.ts
     const { getEnvironment } = await import('@/app/lib/env-config')
 
     expect(getEnvironment()).toBe('development')
@@ -179,9 +178,7 @@ describe('Config Validation (T008)', () => {
     getConfig()
 
     // Expect warning about client-side exposure
-    expect(consoleSpy).toHaveBeenCalledWith(
-      expect.stringMatching(/NEXT_PUBLIC.*DATABASE/i)
-    )
+    expect(consoleSpy).toHaveBeenCalledWith(expect.stringMatching(/NEXT_PUBLIC.*DATABASE/i))
 
     consoleSpy.mockRestore()
   })
