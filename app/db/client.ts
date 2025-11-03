@@ -1,13 +1,15 @@
 import { Client, createClient, InArgs } from '@libsql/client'
+import { getConfig } from '@/app/lib/env-config'
 
 let client: Client
 
 const getDatabaseClient = () => {
-  const url = process.env.TURSO_DATABASE_URL
-  if (!url) throw new Error('Database URL not found on env variable!')
+  // Use environment-aware configuration (T016)
+  const config = getConfig()
+
   const client = createClient({
-    url: url,
-    authToken: process.env.TURSO_AUTH_TOKEN,
+    url: config.databaseUrl,
+    authToken: config.databaseAuthToken,
   })
 
   return client

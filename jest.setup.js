@@ -14,10 +14,16 @@ global.TextDecoder = TextDecoder
 // afterAll(() => server.close())
 
 // Mock environment variables
-process.env.TURSO_DATABASE_URL = 'libsql://test-db.turso.io'
-process.env.TURSO_AUTH_TOKEN = 'test-token'
+// Use actual dev database from .env.local for integration tests
+// Unit tests can override these as needed
+if (!process.env.DATABASE_URL && !process.env.TURSO_DATABASE_URL) {
+  // Fallback for tests without real database
+  process.env.TURSO_DATABASE_URL = 'libsql://test-db.turso.io'
+  process.env.TURSO_AUTH_TOKEN = 'test-token'
+}
 process.env.NEXT_PUBLIC_DASHBOARD_USERNAME = 'test-user'
 process.env.NEXT_PUBLIC_DASHBOARD_PASSWORD = 'test-pass'
+process.env.APP_ENV = 'development' // Ensure tests run in development mode
 
 // Mock Next.js router
 jest.mock('next/router', () => ({
