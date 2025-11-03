@@ -1,7 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import { useState, useEffect } from 'react'
+
+import Image from 'next/image'
+
 import { Gallery, Item } from 'react-photoswipe-gallery'
 import 'photoswipe/dist/photoswipe.css'
 

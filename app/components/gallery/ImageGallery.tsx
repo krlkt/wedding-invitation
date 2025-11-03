@@ -1,9 +1,12 @@
 'use client'
 
 import { useRef } from 'react'
+
 // @ts-ignore splide problem
 import { Splide, SplideSlide } from '@splidejs/react-splide'
+
 import type { Splide as SplideInstance } from '@splidejs/splide'
+
 import { Gallery, Item } from 'react-photoswipe-gallery'
 
 import '@splidejs/react-splide/css'

@@ -6,8 +6,9 @@
  * (e.g., "Mama" group for mother's friends, "Karel" for groom's contacts).
  */
 
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { createId } from '@paralleldrive/cuid2'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+
 import { weddingConfigurations } from './weddings'
 
 export const groups = sqliteTable('groups', {

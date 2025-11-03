@@ -1,10 +1,13 @@
-import { motion } from 'framer-motion'
-import Button from '../Button'
-import CalendarIcon from '../../icons/CalendarIcon'
 import Image from 'next/image'
-import GrowIn from '../GrowIn'
-import FadeIn from '../FadeIn'
+
+import { motion } from 'framer-motion'
+
 import { useWeddingData } from '@/app/utils/useWeddingData'
+
+import CalendarIcon from '../../icons/CalendarIcon'
+import Button from '../Button'
+import FadeIn from '../FadeIn'
+import GrowIn from '../GrowIn'
 
 const SaveTheDate = () => {
   const { config } = useWeddingData()
@@ -20,11 +23,13 @@ const SaveTheDate = () => {
   const calendarTitle = encodeURIComponent(
     `${config.groomName} and ${config.brideName}'s Wedding Day`
   )
-  const calendarDates =
-    weddingDate.toISOString().split('T')[0].replace(/-/g, '') +
-    'T070000Z/' +
-    weddingDate.toISOString().split('T')[0].replace(/-/g, '') +
-    'T160000Z'
+  const calendarDates = `${weddingDate
+    .toISOString()
+    .split('T')[0]
+    .replace(/-/g, '')}T070000Z/${weddingDate
+    .toISOString()
+    .split('T')[0]
+    .replace(/-/g, '')}T160000Z`
   const calendarDetails = encodeURIComponent(
     `The Day ${config.groomName} and ${config.brideName} Say 'I Do'.\n\nA Celebration of Love and A Forever Promise 💍`
   )
@@ -46,7 +51,7 @@ const SaveTheDate = () => {
       </FadeIn>
       <FadeIn className="mt-2">
         <Button>
-          <a target="_blank" href={calendarUrl}>
+          <a target="_blank" href={calendarUrl} rel="noreferrer">
             <span className="flex items-center justify-center gap-2">
               Add to calendar
               <div className="h-4 w-4">
@@ -57,7 +62,7 @@ const SaveTheDate = () => {
         </Button>
       </FadeIn>
       <GrowIn className="absolute -z-10 h-full w-full object-contain">
-        <Image src={'/images/ornaments/frame/orn_frame.png'} alt={'Ornament Flower'} fill />
+        <Image src="/images/ornaments/frame/orn_frame.png" alt="Ornament Flower" fill />
       </GrowIn>
     </div>
   )

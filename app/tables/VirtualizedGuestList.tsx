@@ -1,11 +1,14 @@
 'use client'
 
-import { useVirtualizer } from '@tanstack/react-virtual'
-import { GuestComponent } from './GuestComponent'
-import { Locations } from '../components/LocationComponent'
 import { useRef } from 'react'
+
+import { useVirtualizer } from '@tanstack/react-virtual'
+
+import { Locations } from '../components/LocationComponent'
 import { Guest } from '../models/guest'
 import { Table } from '../models/table'
+
+import { GuestComponent } from './GuestComponent'
 
 interface VirtualizedGuestListProps {
   guests: Guest[]

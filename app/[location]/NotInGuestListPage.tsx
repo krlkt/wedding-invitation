@@ -1,4 +1,4 @@
-export default function UnidentifiedPerson({ guestName }: { guestName: string }) {
+export default function UnidentifiedPerson() {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-4 text-center">
       <h2 className="text-2xl font-bold">

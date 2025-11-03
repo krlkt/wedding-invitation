@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+
 import { registerUser } from '@/app/lib/auth'
 import { createWeddingConfiguration } from '@/app/lib/wedding-service'
 
@@ -61,7 +62,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Handle subdomain collision errors
-    if (error.message && error.message.includes('unique subdomain')) {
+    if (error.message?.includes('unique subdomain')) {
       return NextResponse.json(
         { success: false, error: 'Unable to generate unique subdomain. Please try again.' },
         { status: 400 }

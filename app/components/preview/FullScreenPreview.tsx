@@ -7,8 +7,9 @@
 
 'use client'
 
-import WeddingLayout from '../WeddingLayout'
 import type { WeddingConfiguration } from '@/app/db/schema'
+
+import WeddingLayout from '../WeddingLayout'
 
 interface FullScreenPreviewProps {
   config: WeddingConfiguration & { features: Record<string, boolean> }

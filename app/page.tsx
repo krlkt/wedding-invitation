@@ -1,14 +1,18 @@
 'use client'
 
+import React from 'react'
+
 import Head from 'next/head'
+import Image from 'next/image'
+
 import { motion } from 'framer-motion'
-import logo from '../public/images/logo/oial.png'
+
 import hero1 from '@/public/images/hero/hero-1.jpg'
 import hero2 from '@/public/images/hero/hero-2.webp'
 import hero3 from '@/public/images/hero/hero-3.jpeg'
 import heroBackground from '@/public/images/hero/hero-background.webp'
-import React from 'react'
-import Image from 'next/image'
+
+import logo from '../public/images/logo/oial.png'
 
 const features = [
   {
@@ -64,7 +68,7 @@ const Home: React.FC = () => {
             backgroundPosition: 'center',
           }}
         >
-          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="absolute inset-0 bg-black/20" />
 
           {/* Hero Images */}
           <motion.div

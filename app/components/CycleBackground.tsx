@@ -1,5 +1,6 @@
-import Image from 'next/image'
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
+
+import Image from 'next/image'
 
 const backgroundImagesSrc = [
   '/images/unopened/cycle1.jpg',

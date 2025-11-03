@@ -1,22 +1,26 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { FC, useRef, useState } from 'react'
-import { DndProvider, useDrop } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { moveGuestToTable, synchronizeGuests } from './actions'
-import { TableComponent } from './TableComponent'
-import { Locations } from '../components/LocationComponent'
-import { Button, TextField, IconButton } from '@mui/material'
+
+import { useRouter } from 'next/navigation'
+
 import CloseIcon from '@mui/icons-material/Close'
-import { VirtualizedGuestList } from './VirtualizedGuestList'
-import { MoveGuestModal } from './MoveGuestModal'
-import { ManageTablesModal } from './ManageTablesModal'
-import { naturalSort } from '../utils/sort'
-import { Table } from '../models/table'
-import { Guest } from '../models/guest'
+import { Button, TextField, IconButton } from '@mui/material'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import { DndProvider, useDrop } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+
+import { Locations } from '../components/LocationComponent'
+import { Guest } from '../models/guest'
+import { Table } from '../models/table'
+import { naturalSort } from '../utils/sort'
+
+import { moveGuestToTable, synchronizeGuests } from './actions'
+import { ManageTablesModal } from './ManageTablesModal'
+import { MoveGuestModal } from './MoveGuestModal'
+import { TableComponent } from './TableComponent'
+import { VirtualizedGuestList } from './VirtualizedGuestList'
 
 interface TableManagementClientPageProps {
   initialTables: Table[]

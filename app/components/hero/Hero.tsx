@@ -1,8 +1,11 @@
 import Image from 'next/image'
+
 import './hero.css'
-import { useWeddingData } from '@/app/utils/useWeddingData'
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+
+import { useWeddingData } from '@/app/utils/useWeddingData'
+
+import { useEffect, useState } from 'react'
 
 const Hero = () => {
   const { config, startingSection } = useWeddingData()
@@ -55,7 +58,7 @@ const Hero = () => {
       <div className="inner-wrapper relative flex max-w-[600px] flex-col items-center gap-4 px-[25%] py-[15%]">
         <div id="monogram" className="relative h-28 w-28">
           <Image
-            src={config.monogramFilename || '/images/monogram/monogram.webp'}
+            src={config.monogramFilename ?? '/images/monogram/monogram.webp'}
             alt={`${groomDisplayName} & ${brideDisplayName} Monogram`}
             fill
             className="object-contain"

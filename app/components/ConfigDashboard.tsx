@@ -9,13 +9,15 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
+
 import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
 import { DraftProvider, useDraft } from '@/app/context/DraftContext'
@@ -44,7 +46,7 @@ function ConfigDashboardContent() {
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
     useDraft('startingSection')
 
-  //WIP: session check on dashboard load or time interval or user action?
+  // WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
     try {
       const res = await fetch('/api/auth/session')
@@ -59,9 +61,13 @@ function ConfigDashboardContent() {
   }
 
   useEffect(() => {
-    fetchConfig()
-    fetchStartingSectionContent()
-    checkSession()
+    ;(async () => {
+      await fetchConfig()
+      await fetchStartingSectionContent()
+      await checkSession()
+    })().catch((error) => {
+      console.error('Initialization error:', error)
+    })
   }, [])
 
   async function fetchConfig() {
@@ -110,7 +116,7 @@ function ConfigDashboardContent() {
       }
 
       // Update text content
-      const { file, ...contentUpdates } = updates
+      const { _file, ...contentUpdates } = updates
       const response = await fetch('/api/wedding/starting-section', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -129,27 +135,6 @@ function ConfigDashboardContent() {
     }
   }
 
-  async function updateConfig(updates: any) {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/config', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setConfig(data.data)
-        setRefreshTrigger((prev) => prev + 1)
-      }
-    } catch (error) {
-      console.error('Failed to update config:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
   async function toggleFeature(featureName: string, isEnabled: boolean) {
     try {
       const response = await fetch('/api/wedding/config/features', {
@@ -159,7 +144,7 @@ function ConfigDashboardContent() {
       })
 
       if (response.ok) {
-        fetchConfig()
+        await fetchConfig()
         setRefreshTrigger((prev) => prev + 1)
       }
     } catch (error) {
@@ -177,7 +162,7 @@ function ConfigDashboardContent() {
       })
 
       if (response.ok) {
-        fetchConfig()
+        await fetchConfig()
         setDraftFeatures(undefined) // Clear draft features after successful save
         setRefreshTrigger((prev) => prev + 1)
       }
@@ -207,19 +192,12 @@ function ConfigDashboardContent() {
     [draftStartingSection, setDraftStartingSection]
   )
 
-  const handleMonogramUpload = useCallback(
-    async (monogramData: {
-      monogramFilename: string
-      monogramFileSize: number
-      monogramMimeType: string
-    }) => {
-      // Monogram is saved to config, so refetch config to get updated monogram
-      await fetchConfig()
-      // Trigger preview refresh to show new monogram
-      setRefreshTrigger((prev) => prev + 1)
-    },
-    []
-  )
+  const handleMonogramUpload = useCallback(async () => {
+    // Monogram is saved to config, so refetch config to get updated monogram
+    await fetchConfig()
+    // Trigger preview refresh to show new monogram
+    setRefreshTrigger((prev) => prev + 1)
+  }, [])
 
   if (loading) {
     return (
@@ -428,6 +406,72 @@ function FeaturesForm({
     setChangedStartingSectionFields(fields)
   }, [])
 
+  const renderFeatureContent = useCallback(
+    (featureName: string) => {
+      switch (featureName) {
+        case 'hero':
+          return (
+            <StartingSectionForm
+              weddingConfig={config}
+              startingSectionContent={startingSectionContent}
+              onUpdate={onUpdateStartingSection}
+              onChangeTracking={handleStartingSectionChange}
+              changedFields={changedStartingSectionFields}
+              onBackgroundUpload={onBackgroundUpload}
+              onMonogramUpload={onMonogramUpload}
+            />
+          )
+
+        case 'groom_and_bride':
+          return (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-1 block text-sm font-medium">
+                    Groom&apos;s Instagram Link
+                  </label>
+                  <input
+                    type="url"
+                    defaultValue={config.groomsInstagramLink || ''}
+                    placeholder="https://instagram.com/..."
+                    className="w-full rounded-lg border px-3 py-2 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium">
+                    Bride&apos;s Instagram Link
+                  </label>
+                  <input
+                    type="url"
+                    defaultValue={config.brideInstagramLink || ''}
+                    placeholder="https://instagram.com/..."
+                    className="w-full rounded-lg border px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
+              <p className="text-xs italic text-gray-500">
+                Note: Instagram link updates will be implemented in a future update
+              </p>
+            </div>
+          )
+
+        default:
+          return (
+            <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
+          )
+      }
+    },
+    [
+      changedStartingSectionFields,
+      config,
+      handleStartingSectionChange,
+      onBackgroundUpload,
+      onMonogramUpload,
+      onUpdateStartingSection,
+      startingSectionContent,
+    ]
+  )
+
   return (
     <>
       {/* Scrollable content area */}
@@ -478,51 +522,7 @@ function FeaturesForm({
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-4 pb-4">
-                  {feature.name === 'hero' ? (
-                    <StartingSectionForm
-                      weddingConfig={config}
-                      startingSectionContent={startingSectionContent}
-                      onUpdate={onUpdateStartingSection}
-                      onChangeTracking={handleStartingSectionChange}
-                      changedFields={changedStartingSectionFields}
-                      onBackgroundUpload={onBackgroundUpload}
-                      onMonogramUpload={onMonogramUpload}
-                    />
-                  ) : feature.name === 'groom_and_bride' ? (
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="mb-1 block text-sm font-medium">
-                            Groom&apos;s Instagram Link
-                          </label>
-                          <input
-                            type="url"
-                            defaultValue={config.groomsInstagramLink || ''}
-                            placeholder="https://instagram.com/..."
-                            className="w-full rounded-lg border px-3 py-2 text-sm"
-                          />
-                        </div>
-                        <div>
-                          <label className="mb-1 block text-sm font-medium">
-                            Bride&apos;s Instagram Link
-                          </label>
-                          <input
-                            type="url"
-                            defaultValue={config.brideInstagramLink || ''}
-                            placeholder="https://instagram.com/..."
-                            className="w-full rounded-lg border px-3 py-2 text-sm"
-                          />
-                        </div>
-                      </div>
-                      <p className="text-xs italic text-gray-500">
-                        Note: Instagram link updates will be implemented in a future update
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="text-sm italic text-gray-500">
-                      Content configuration coming soon...
-                    </div>
-                  )}
+                  {renderFeatureContent(feature.name)}
                 </AccordionContent>
               </AccordionItem>
             )
