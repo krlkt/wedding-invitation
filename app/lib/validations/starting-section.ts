@@ -65,24 +65,30 @@ export const startingSectionMediaSchema = z.object({
       const allAcceptedTypes = [...ACCEPTED_IMAGE_TYPES, ...ACCEPTED_VIDEO_TYPES]
       return allAcceptedTypes.includes(file.type as any)
     }, 'File type not supported. Please upload a JPEG, PNG, WebP, GIF image or MP4, WebM video.')
+    // Separate size validation for images
     .refine(
       (file) => {
-        // Check file size based on type
         const isImage = ACCEPTED_IMAGE_TYPES.includes(file.type as any)
-        const isVideo = ACCEPTED_VIDEO_TYPES.includes(file.type as any)
-
         if (isImage) {
           return file.size <= MAX_IMAGE_SIZE
         }
-
+        return true
+      },
+      {
+        message: `Image size must not exceed ${MAX_IMAGE_SIZE / (1024 * 1024)} MB`,
+      }
+    )
+    // Separate size validation for videos
+    .refine(
+      (file) => {
+        const isVideo = ACCEPTED_VIDEO_TYPES.includes(file.type as any)
         if (isVideo) {
           return file.size <= MAX_VIDEO_SIZE
         }
-
-        return true // If neither image nor video, let the type check above handle it
+        return true
       },
       {
-        message: 'File size exceeds the maximum limit',
+        message: `Video size must not exceed ${MAX_VIDEO_SIZE / (1024 * 1024)} MB`,
       }
     ),
 

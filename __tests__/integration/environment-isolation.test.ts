@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * Integration Tests: Environment Isolation
  * T010: Test that data doesn't leak between environments
  */
@@ -15,9 +17,9 @@ describe('Environment Isolation (T010)', () => {
     // Verify we're not accidentally pointing to wrong database
     // Map environment names to database suffixes
     const envToDbSuffix: Record<string, string> = {
-      'development': 'dev',
-      'test': 'test',
-      'production': 'prod'
+      development: 'dev',
+      test: 'test',
+      production: 'prod',
     }
     const urlPattern = new RegExp(`wedding-invitation-(${envToDbSuffix[config.environment]})`)
     expect(config.databaseUrl).toMatch(urlPattern)
@@ -53,9 +55,9 @@ describe('Environment Isolation (T010)', () => {
     // Each environment should have its own database instance
     // Map environment names to database suffixes (dev instead of development)
     const envToDbSuffix: Record<string, string> = {
-      'development': 'dev',
-      'test': 'test',
-      'production': 'prod'
+      development: 'dev',
+      test: 'test',
+      production: 'prod',
     }
     const expectedSubstring = `wedding-invitation-${envToDbSuffix[currentEnv]}`
     expect(config.databaseUrl).toContain(expectedSubstring)

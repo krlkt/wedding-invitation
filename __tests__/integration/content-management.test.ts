@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T014: Content Management Flow Integration Test
  *
  * Tests complete content management workflows for love story, locations,

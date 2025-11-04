@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * Integration Tests: Database Connection
  * T009: Test environment-aware database connections
  */

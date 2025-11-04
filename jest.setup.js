@@ -1,9 +1,33 @@
-// Basic Jest setup for Node.js environment
-import { TextEncoder, TextDecoder } from 'util'
-import '@testing-library/jest-dom'
+// Assign global polyfills FIRST, before requiring undici
+// This is critical because undici's dependencies check for these at import time
+const { TextEncoder, TextDecoder } = require('util')
 
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
+
+// Now that globals are set, we can safely require undici
+const { fetch, Headers, Request, Response } = require('undici')
+
+// Polyfill fetch for jsdom environment (Node 18+ fetch via undici)
+global.fetch = fetch
+global.Headers = Headers
+global.Request = Request
+global.Response = Response
+
+// Mock ResizeObserver for jsdom (used by Radix UI components)
+if (typeof global.ResizeObserver === 'undefined') {
+  global.ResizeObserver = class ResizeObserver {
+    constructor(callback) {
+      this.callback = callback
+    }
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+}
+
+// Import testing library after polyfills are set up
+require('@testing-library/jest-dom')
 
 // Note: MSW setup requires additional ESM configuration
 // For now, API mocking is disabled but handlers are available for manual testing

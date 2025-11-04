@@ -13,14 +13,14 @@ test.describe('Environment Switching (T012)', () => {
     await page.goto(`${baseUrl}/api/health`)
 
     const response = await page.textContent('body')
-    const data = JSON.parse(response || '{}')
+    const data = JSON.parse(response ?? '{}')
 
     expect(data.environment).toBe('development')
     expect(data.status).toBe('ok')
   })
 
   test('should detect environment from health endpoint', async ({ page }) => {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
     // Navigate to health endpoint
     const response = await page.goto(`${baseUrl}/api/health`)
@@ -28,7 +28,7 @@ test.describe('Environment Switching (T012)', () => {
     expect(response?.status()).toBe(200)
 
     const body = await response?.text()
-    const data = JSON.parse(body || '{}')
+    const data = JSON.parse(body ?? '{}')
 
     expect(data).toHaveProperty('environment')
     expect(data).toHaveProperty('database')
@@ -41,7 +41,7 @@ test.describe('Environment Switching (T012)', () => {
     await page.goto(`${baseUrl}/api/health`)
 
     const response = await page.textContent('body')
-    const data = JSON.parse(response || '{}')
+    const data = JSON.parse(response ?? '{}')
 
     // Database should be connected in all environments
     expect(data.database).toBe('connected')
@@ -57,7 +57,7 @@ test.describe('Environment Switching (T012)', () => {
       await page.goto(`${baseUrl}/api/health`)
 
       const response = await page.textContent('body')
-      const data = JSON.parse(response || '{}')
+      const data = JSON.parse(response ?? '{}')
 
       expect(data.environment).toBe('test')
     } else {

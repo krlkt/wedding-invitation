@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * Contract Test: GET /api/wedding/config
  *
  * Verifies the preview API contract for wedding configuration retrieval

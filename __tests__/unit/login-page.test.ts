@@ -176,7 +176,7 @@ describe('Login Page Server Component', () => {
     })
 
     it('should handle edge case of session without userId', () => {
-      const session = {
+      const session: { weddingConfigId: string; userId?: string } = {
         weddingConfigId: 'wedding-456',
         // Missing userId
       }
@@ -206,7 +206,7 @@ describe('Login Page Server Component', () => {
       const cookieStore = await cookies()
       const sessionCookie = cookieStore.get('session')
 
-      if (sessionCookie && sessionCookie.value) {
+      if (sessionCookie?.value) {
         try {
           JSON.parse(sessionCookie.value)
           fail('Should have thrown error for empty string')

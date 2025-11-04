@@ -73,6 +73,7 @@ export function StartingSectionForm({
   // Background media upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [validationError, setValidationError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const backgroundUpload = useMediaUpload({
@@ -239,36 +240,42 @@ export function StartingSectionForm({
     onChangeTracking?.(changedFields.size > 0, changedFields)
   }, [formValues, startingSectionContent, setDraftStartingSection, onChangeTracking])
 
-  // Background file selection with validation
+  // Background file selection - validate file type and size
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
 
-    // Validate file type and size
+    // Validate file type
     const isImage = file.type.startsWith('image/')
     const isVideo = file.type.startsWith('video/')
 
     if (!isImage && !isVideo) {
-      backgroundUpload.reset()
+      setValidationError('Please select an image or video file')
       setSelectedFile(null)
       if (fileInputRef.current) fileInputRef.current.value = ''
       return
     }
 
+    // Validate file size
     const validation = isImage ? validateImageFile(file) : validateVideoFile(file)
     if (!validation.valid) {
-      backgroundUpload.reset()
-      setSelectedFile(null)
-      if (fileInputRef.current) fileInputRef.current.value = ''
+      setValidationError(validation.error || 'File validation failed')
+      setSelectedFile(file) // Keep the file selected so user can see it
       return
     }
 
+    // Clear any previous errors and set the selected file
+    setValidationError(null)
+    backgroundUpload.reset()
     setSelectedFile(file)
   }
 
   // Upload button - check if replacement confirmation needed
   const handleUploadBackground = async () => {
     if (!selectedFile) return
+
+    // Don't upload if there's a validation error
+    if (validationError) return
 
     // Show confirmation if replacing existing media
     if (
@@ -284,7 +291,7 @@ export function StartingSectionForm({
   // Confirm replacement and upload
   const handleConfirmReplacement = async () => {
     setShowConfirmDialog(false)
-    if (selectedFile) {
+    if (selectedFile && !validationError) {
       await backgroundUpload.uploadMedia(selectedFile)
     }
   }
@@ -559,8 +566,8 @@ export function StartingSectionForm({
             <p className="text-xs text-gray-500">
               Images: max 10 MB (JPEG, PNG, WebP, GIF) | Videos: max 50 MB (MP4, WebM)
             </p>
-            {backgroundUpload.error && (
-              <p className="text-sm text-red-500">{backgroundUpload.error}</p>
+            {(validationError || backgroundUpload.error) && (
+              <p className="text-sm text-red-500">{validationError || backgroundUpload.error}</p>
             )}
 
             {/* Upload Progress Bar */}

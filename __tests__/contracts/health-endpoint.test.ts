@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * Contract Tests: Health Endpoint
  * T011: Test enhanced /api/health endpoint returns environment info
  */
@@ -83,13 +85,13 @@ describe('Health Endpoint Contract (T011)', () => {
     // Verify response matches contract from contracts/README.md
     const requiredFields = ['status', 'environment', 'database', 'timestamp']
 
-    requiredFields.forEach(field => {
+    requiredFields.forEach((field) => {
       expect(data).toHaveProperty(field)
     })
 
     // Verify no unexpected fields
     const actualFields = Object.keys(data)
-    actualFields.forEach(field => {
+    actualFields.forEach((field) => {
       expect(requiredFields).toContain(field)
     })
   })
