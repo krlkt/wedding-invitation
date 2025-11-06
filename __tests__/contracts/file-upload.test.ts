@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T010: File Upload API Contract Tests
  *
  * These tests validate that the file upload API endpoints conform to their contracts.

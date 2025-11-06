@@ -18,16 +18,19 @@
 **User Story**: Admin edits groom's and bride's names in starting section
 
 **Given**:
+
 - User logged into admin dashboard
 - Starting section accordion is expanded
 
 **When**:
+
 1. User clicks on "Starting section" (renamed from "Hero") accordion item
 2. User enters "Alexander Johnson" in "Groom's Name" field
 3. User enters "Sophia Martinez" in "Bride's Name" field
 4. User clicks "Save" button
 
 **Then**:
+
 - API PUT request to `/api/wedding/config/starting-section` with names
 - Response status 200 with success: true
 - Database updated with new names
@@ -43,10 +46,12 @@
 **User Story**: Admin toggles parent information to show input fields
 
 **Given**:
+
 - User on starting section configuration
 - "Show parent information" toggle is OFF
 
 **When**:
+
 1. User clicks "Show parent information" toggle to ON
 2. Four input fields appear:
    - Groom's Father Name
@@ -55,14 +60,17 @@
    - Bride's Mother Name
 
 **Then**:
+
 - Input fields are visible and enabled
 - Preview pane shows placeholder parent information section
 - Toggle state reflects ON position
 
 **When** (toggle OFF):
+
 1. User clicks toggle to OFF
 
 **Then**:
+
 - Input fields remain visible but grayed out
 - Preview pane hides parent information
 - Previously entered names remain saved in database (FR-005)
@@ -76,10 +84,12 @@
 **User Story**: Admin fills only groom's parent names, leaving bride's parents empty
 
 **Given**:
+
 - "Show parent information" toggle is ON
 - All four parent name fields are empty
 
 **When**:
+
 1. User enters "Robert Johnson" in Groom's Father Name
 2. User enters "Mary Johnson" in Groom's Mother Name
 3. User leaves Bride's Father Name empty
@@ -87,6 +97,7 @@
 5. User clicks "Save"
 
 **Then**:
+
 - API request includes:
   ```json
   {
@@ -111,15 +122,18 @@
 **User Story**: Admin uploads a background image under 10MB
 
 **Given**:
+
 - User on starting section configuration
 - No existing background media
 
 **When**:
+
 1. User clicks "Upload Background Media" button
 2. User selects image file: `wedding-background.jpg` (5 MB, image/jpeg)
 3. File picker closes
 
 **Then**:
+
 - Client validates file size < 10MB (passes)
 - Client validates MIME type in [image/jpeg, image/png, image/webp, image/gif] (passes)
 - Upload progress indicator appears
@@ -150,14 +164,17 @@
 **User Story**: Admin attempts to upload a video exceeding 50MB
 
 **Given**:
+
 - User on starting section configuration
 - No existing background media
 
 **When**:
+
 1. User clicks "Upload Background Media" button
 2. User selects video file: `wedding-video.mp4` (65 MB, video/mp4)
 
 **Then**:
+
 - Client validates file size (65MB > 50MB limit)
 - Upload is prevented before API call
 - Error message appears: "Video file size exceeds maximum of 50 MB"
@@ -166,6 +183,7 @@
 - Preview remains unchanged
 
 **Alternative** (server-side validation):
+
 - If client validation bypassed, API returns 400 with error
 - Same error message displayed to user
 
@@ -178,26 +196,31 @@
 **User Story**: Admin replaces existing background image with a video
 
 **Given**:
+
 - User on starting section configuration
 - Existing background image: `background-image-1697654321.jpg`
 
 **When**:
+
 1. User clicks "Upload Background Media" button
 2. User selects video file: `new-video.mp4` (30 MB, video/mp4)
 3. Client detects existing media
 
 **Then**:
+
 - Confirmation dialog appears:
   - Title: "Replace existing background media?"
   - Message: "This will delete the current background image. This action cannot be undone."
   - Buttons: [Cancel] [Replace]
 
 **When** (user clicks Cancel):
+
 - Dialog closes
 - No upload occurs
 - Existing image remains
 
 **When** (user clicks Replace):
+
 - API POST to `/api/wedding/media/starting-section` with `replaceExisting: true`
 - Response status 200 with new file data
 - Old file `background-image-1697654321.jpg` deleted from filesystem
@@ -215,25 +238,31 @@
 **User Story**: Admin toggles wedding date display with fallback placeholder
 
 **Given**:
+
 - User on starting section configuration
 - Wedding date exists in basic info: June 15, 2025
 - "Show wedding date" toggle is ON
 
 **When** (date exists):
+
 - Preview displays formatted date: "June 15, 2025"
 
 **When** (toggle OFF):
+
 1. User clicks "Show wedding date" toggle to OFF
 
 **Then**:
+
 - Preview hides wedding date section entirely
 - Database saves `showWeddingDate: false`
 
 **When** (toggle ON, no date):
+
 1. Wedding date in basic info is null
 2. User toggles "Show wedding date" to ON
 
 **Then**:
+
 - Preview displays placeholder: "1 January 2050"
 - Placeholder styled differently (e.g., italic, lighter color)
 - No error or crash
@@ -247,20 +276,25 @@
 **User Story**: Admin sees updated terminology throughout admin interface
 
 **Given**:
+
 - User on admin dashboard
 
 **When**:
+
 - User views feature toggles accordion
 
 **Then**:
+
 - Accordion item labeled "Starting section" (not "Hero" or "Hero Content")
 - Description reads: "Opening section with couple names, parent info, and wedding date"
 - No references to "Hero" remain in UI
 
 **When**:
+
 - User expands "Starting section" accordion
 
 **Then**:
+
 - Form fields clearly labeled
 - Section header: "Starting Section Configuration"
 
@@ -273,22 +307,27 @@
 **User Story**: Admin sees real-time preview while editing without saving
 
 **Given**:
+
 - User on starting section configuration
 - Preview pane visible on right side
 
 **When**:
+
 1. User types "John" in Groom's Name field
 2. User types "Doe" continuing the name
 
 **Then**:
+
 - After each keystroke, preview updates within <100ms
 - No API calls made (draft state only)
 - "Save" button shows "unsaved changes" indicator
 
 **When**:
+
 1. User clicks "Save"
 
 **Then**:
+
 - API call persists changes
 - "Unsaved changes" indicator disappears
 - Preview remains showing same content (no flicker)
@@ -302,22 +341,27 @@
 **User Story**: Starting section uses basic info names when custom names not set
 
 **Given**:
+
 - Basic info has groomName: "Alexander", brideName: "Sophia"
 - Starting section groomName: null, brideName: null
 
 **When**:
+
 - User expands starting section configuration
 
 **Then**:
+
 - Groom's Name input shows placeholder: "Alexander (from basic info)"
 - Bride's Name input shows placeholder: "Sophia (from basic info)"
 - Preview displays: "Alexander & Sophia"
 
 **When**:
+
 1. User enters custom name "Alex" in Groom's Name
 2. User leaves Bride's Name empty
 
 **Then**:
+
 - Preview displays: "Alex & Sophia"
 - Database saves: `groomName: "Alex"`, `brideName: null`
 
@@ -359,6 +403,7 @@ Run through all scenarios sequentially to validate:
 ## Browser Compatibility
 
 Test in:
+
 - Chrome/Edge (latest)
 - Firefox (latest)
 - Safari (latest)
@@ -366,6 +411,7 @@ Test in:
 ## Automated Test Coverage
 
 These scenarios map to:
+
 - **Unit tests**: Validation logic, media size checks
 - **Component tests**: Form rendering, toggle behavior, file input
 - **Integration tests**: API contracts, database persistence

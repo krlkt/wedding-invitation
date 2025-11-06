@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T007: Auth API Contract Tests
  *
  * These tests validate that the authentication API endpoints conform to their contracts.
@@ -6,8 +8,6 @@
  *
  * Following TDD approach - these tests MUST FAIL initially until implementation is complete.
  */
-
-import { NextRequest, NextResponse } from 'next/server'
 
 describe('Authentication API Contract Tests', () => {
   const baseUrl = 'http://localhost:3000'

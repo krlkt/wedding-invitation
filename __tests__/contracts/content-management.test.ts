@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T009: Content Management API Contract Tests
  *
  * These tests validate that the content management API endpoints conform to their contracts.

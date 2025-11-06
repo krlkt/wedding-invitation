@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T013: Wedding Configuration Flow Integration Test
  *
  * Tests complete wedding configuration workflows including creation,

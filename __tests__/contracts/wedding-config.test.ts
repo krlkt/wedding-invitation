@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T008: Wedding Config API Contract Tests
  *
  * These tests validate that the wedding configuration API endpoints conform to their contracts.
