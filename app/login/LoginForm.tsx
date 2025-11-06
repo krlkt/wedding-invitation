@@ -31,12 +31,13 @@ function LoginFormContent() {
         const redirect = searchParams.get('redirect') || '/admin'
         router.push(redirect)
         router.refresh()
+        // Keep loading state true during redirect
       } else {
         setError(data.error || 'Login failed')
+        setLoading(false)
       }
     } catch (_err) {
       setError('Network error. Please try again.')
-    } finally {
       setLoading(false)
     }
   }
