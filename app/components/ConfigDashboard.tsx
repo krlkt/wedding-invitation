@@ -20,8 +20,13 @@ import { Button } from '@/components/ui/button'
 
 import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
+import { GroomSectionForm } from './admin/sections/GroomSectionForm'
+import { BrideSectionForm } from './admin/sections/BrideSectionForm'
 import { DraftProvider, useDraft } from '@/app/context/DraftContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
+import type { GroomSectionContent, SectionPhoto } from '@/app/db/schema/groom-section'
+import type { BrideSectionContent } from '@/app/db/schema/bride-section'
+import { parsePhotos, stringifyPhotos, upsertPhoto } from '@/app/lib/section-photos'
 
 export default function ConfigDashboard() {
   return (
@@ -41,10 +46,14 @@ function ConfigDashboardContent() {
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
   const [startingSectionContent, setStartingSectionContent] =
     useState<StartingSectionContent | null>(null)
+  const [groomSectionContent, setGroomSectionContent] = useState<GroomSectionContent | null>(null)
+  const [brideSectionContent, setBrideSectionContent] = useState<BrideSectionContent | null>(null)
 
-  // Use draft context for starting section
+  // Use draft context for sections
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
     useDraft('startingSection')
+  const { draft: draftGroomSection, setDraft: setDraftGroomSection } = useDraft('groomSection')
+  const { draft: draftBrideSection, setDraft: setDraftBrideSection } = useDraft('brideSection')
 
   // WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
@@ -60,17 +69,7 @@ function ConfigDashboardContent() {
     }
   }
 
-  useEffect(() => {
-    ;(async () => {
-      await fetchConfig()
-      await fetchStartingSectionContent()
-      await checkSession()
-    })().catch((error) => {
-      console.error('Initialization error:', error)
-    })
-  }, [])
-
-  async function fetchConfig() {
+  const fetchConfig = useCallback(async () => {
     try {
       const response = await fetch('/api/wedding/config')
       if (response.ok) {
@@ -82,7 +81,19 @@ function ConfigDashboardContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      await fetchConfig()
+      await fetchStartingSectionContent()
+      await fetchGroomSectionContent()
+      await fetchBrideSectionContent()
+      await checkSession()
+    })().catch((error) => {
+      console.error('Initialization error:', error)
+    })
+  }, [fetchConfig])
 
   async function fetchStartingSectionContent() {
     try {
@@ -93,6 +104,30 @@ function ConfigDashboardContent() {
       }
     } catch (error) {
       console.error('Failed to fetch starting section content:', error)
+    }
+  }
+
+  async function fetchGroomSectionContent() {
+    try {
+      const response = await fetch('/api/wedding/groom-section')
+      if (response.ok) {
+        const data = await response.json()
+        setGroomSectionContent(data.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch groom section content:', error)
+    }
+  }
+
+  async function fetchBrideSectionContent() {
+    try {
+      const response = await fetch('/api/wedding/bride-section')
+      if (response.ok) {
+        const data = await response.json()
+        setBrideSectionContent(data.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch bride section content:', error)
     }
   }
 
@@ -129,7 +164,82 @@ function ConfigDashboardContent() {
       }
     } catch (error) {
       console.error('Failed to update starting section:', error)
+      // FIXME: Remove alert and use snack for error messages
       alert('Failed to update starting section. Please try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function updateGroomSectionContent(updates: any) {
+    try {
+      setSaving(true)
+
+      // Parse photos if it's a string (from draft/saved state)
+      const dataToSend = { ...updates }
+      if (dataToSend.photos && typeof dataToSend.photos === 'string') {
+        dataToSend.photos = parsePhotos(dataToSend.photos)
+      }
+
+      const response = await fetch('/api/wedding/groom-section', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend),
+      })
+
+      if (response.ok) {
+        await fetchGroomSectionContent()
+        setRefreshTrigger((prev) => prev + 1)
+      } else {
+        // Show detailed error from API
+        const errorData = await response.json()
+        console.error('API error:', errorData)
+        // FIXME: Remove alert and use snack for error messages
+        alert(
+          `Failed to update groom section: ${errorData.error || 'Unknown error'}\n${errorData.details ? JSON.stringify(errorData.details) : ''}`
+        )
+      }
+    } catch (error) {
+      console.error('Failed to update groom section:', error)
+      // FIXME: Remove alert and use snack for error messages
+      alert('Failed to update groom section. Please try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function updateBrideSectionContent(updates: any) {
+    try {
+      setSaving(true)
+
+      // Parse photos if it's a string (from draft/saved state)
+      const dataToSend = { ...updates }
+      if (dataToSend.photos && typeof dataToSend.photos === 'string') {
+        dataToSend.photos = parsePhotos(dataToSend.photos)
+      }
+
+      const response = await fetch('/api/wedding/bride-section', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend),
+      })
+
+      if (response.ok) {
+        await fetchBrideSectionContent()
+        setRefreshTrigger((prev) => prev + 1)
+      } else {
+        // Show detailed error from API
+        const errorData = await response.json()
+        console.error('API error:', errorData)
+        // FIXME: Remove alert and use snack for error messages
+        alert(
+          `Failed to update bride section: ${errorData.error || 'Unknown error'}\n${errorData.details ? JSON.stringify(errorData.details) : ''}`
+        )
+      }
+    } catch (error) {
+      console.error('Failed to update bride section:', error)
+      // FIXME: Remove alert and use snack for error messages
+      alert('Failed to update bride section. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -183,7 +293,7 @@ function ConfigDashboardContent() {
     }) => {
       // Update draft state with new background
       setDraftStartingSection({
-        ...(draftStartingSection || {}),
+        ...(draftStartingSection ?? {}),
         ...backgroundData,
       })
       // Trigger preview refresh to show new background immediately
@@ -197,11 +307,71 @@ function ConfigDashboardContent() {
     await fetchConfig()
     // Trigger preview refresh to show new monogram
     setRefreshTrigger((prev) => prev + 1)
-  }, [])
+  }, [fetchConfig, setRefreshTrigger])
+
+  const handleGroomPhotoUpload = useCallback(
+    (photoSlot: number, photoData: { filename: string; fileSize: number; mimeType: string }) => {
+      // Get existing photos from draft or saved content
+      const existingPhotosJson = draftGroomSection?.photos ?? groomSectionContent?.photos ?? '[]'
+      const existingPhotos = parsePhotos(existingPhotosJson)
+
+      // Create new photo object
+      const newPhoto: SectionPhoto = {
+        filename: photoData.filename,
+        fileSize: photoData.fileSize,
+        mimeType: photoData.mimeType as any,
+        slot: photoSlot,
+        uploadedAt: new Date().toISOString(),
+      }
+
+      // Upsert photo into array
+      const updatedPhotos = upsertPhoto(existingPhotos, newPhoto)
+
+      // Update draft state with new photos
+      setDraftGroomSection({
+        ...(draftGroomSection ?? {}),
+        photos: stringifyPhotos(updatedPhotos),
+      })
+
+      // Trigger preview refresh to show new photo immediately
+      setRefreshTrigger((prev) => prev + 1)
+    },
+    [draftGroomSection, groomSectionContent, setDraftGroomSection, setRefreshTrigger]
+  )
+
+  const handleBridePhotoUpload = useCallback(
+    (photoSlot: number, photoData: { filename: string; fileSize: number; mimeType: string }) => {
+      // Get existing photos from draft or saved content
+      const existingPhotosJson = draftBrideSection?.photos ?? brideSectionContent?.photos ?? '[]'
+      const existingPhotos = parsePhotos(existingPhotosJson)
+
+      // Create new photo object
+      const newPhoto: SectionPhoto = {
+        filename: photoData.filename,
+        fileSize: photoData.fileSize,
+        mimeType: photoData.mimeType as any,
+        slot: photoSlot,
+        uploadedAt: new Date().toISOString(),
+      }
+
+      // Upsert photo into array
+      const updatedPhotos = upsertPhoto(existingPhotos, newPhoto)
+
+      // Update draft state with new photos
+      setDraftBrideSection({
+        ...(draftBrideSection ?? {}),
+        photos: stringifyPhotos(updatedPhotos),
+      })
+
+      // Trigger preview refresh to show new photo immediately
+      setRefreshTrigger((prev) => prev + 1)
+    },
+    [draftBrideSection, brideSectionContent, setDraftBrideSection, setRefreshTrigger]
+  )
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex h-full min-h-screen w-full items-center justify-center">
         <div className="text-center">
           <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-pink-600" />
           <p className="mt-4 text-gray-600">Loading dashboard...</p>
@@ -246,6 +416,14 @@ function ConfigDashboardContent() {
           onRefetchStartingSection={fetchStartingSectionContent}
           onBackgroundUpload={handleBackgroundUpload}
           onMonogramUpload={handleMonogramUpload}
+          groomSectionContent={groomSectionContent}
+          onUpdateGroomSection={updateGroomSectionContent}
+          onRefetchGroomSection={fetchGroomSectionContent}
+          onGroomPhotoUpload={handleGroomPhotoUpload}
+          brideSectionContent={brideSectionContent}
+          onUpdateBrideSection={updateBrideSectionContent}
+          onRefetchBrideSection={fetchBrideSectionContent}
+          onBridePhotoUpload={handleBridePhotoUpload}
           onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
         />
       </div>
@@ -257,6 +435,8 @@ function ConfigDashboardContent() {
           refreshTrigger={refreshTrigger}
           draftFeatures={draftFeatures}
           draftStartingSection={draftStartingSection}
+          draftGroomSection={draftGroomSection}
+          draftBrideSection={draftBrideSection}
         />
       </div>
     </>
@@ -276,11 +456,21 @@ function FeaturesForm({
   onRefetchStartingSection,
   onBackgroundUpload,
   onMonogramUpload,
+  groomSectionContent,
+  onUpdateGroomSection,
+  onRefetchGroomSection,
+  onGroomPhotoUpload,
+  brideSectionContent,
+  onUpdateBrideSection,
+  onRefetchBrideSection,
+  onBridePhotoUpload,
   onRefreshPreview,
 }: any) {
   // Access draft context in FeaturesForm
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
     useDraft('startingSection')
+  const { draft: draftGroomSection, clearDraft: clearGroomSectionDraft } = useDraft('groomSection')
+  const { draft: draftBrideSection, clearDraft: clearBrideSectionDraft } = useDraft('brideSection')
 
   const features = [
     {
@@ -320,6 +510,8 @@ function FeaturesForm({
   const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(
     new Set()
   )
+  const [changedGroomSectionFields, setChangedGroomSectionFields] = useState<Set<string>>(new Set())
+  const [changedBrideSectionFields, setChangedBrideSectionFields] = useState<Set<string>>(new Set())
 
   // Update draft state when config changes (after save)
   useEffect(() => {
@@ -327,14 +519,30 @@ function FeaturesForm({
     setChangedFeatures(new Set())
   }, [config.features])
 
-  // Clear changed fields when starting section content changes (after save or discard)
+  // Clear changed fields when section content changes (after save or discard)
   useEffect(() => {
     setChangedStartingSectionFields(new Set())
   }, [startingSectionContent])
 
+  useEffect(() => {
+    setChangedGroomSectionFields(new Set())
+  }, [groomSectionContent])
+
+  useEffect(() => {
+    setChangedBrideSectionFields(new Set())
+  }, [brideSectionContent])
+
   // Check if there are unsaved changes
-  const hasUnsavedChanges = changedFeatures.size > 0 || changedStartingSectionFields.size > 0
-  const totalChanges = changedFeatures.size + changedStartingSectionFields.size
+  const hasUnsavedChanges =
+    changedFeatures.size > 0 ||
+    changedStartingSectionFields.size > 0 ||
+    changedGroomSectionFields.size > 0 ||
+    changedBrideSectionFields.size > 0
+  const totalChanges =
+    changedFeatures.size +
+    changedStartingSectionFields.size +
+    changedGroomSectionFields.size +
+    changedBrideSectionFields.size
 
   function handleToggle(featureName: string) {
     const newValue = !draftFeatures[featureName]
@@ -375,8 +583,19 @@ function FeaturesForm({
     // Save changed starting section content (draft is already in context)
     if (changedStartingSectionFields.size > 0 && draftStartingSection) {
       await onUpdateStartingSection(draftStartingSection)
-      // Clear draft after successful save
       clearStartingSectionDraft()
+    }
+
+    // Save changed groom section content
+    if (changedGroomSectionFields.size > 0 && draftGroomSection) {
+      await onUpdateGroomSection(draftGroomSection)
+      clearGroomSectionDraft()
+    }
+
+    // Save changed bride section content
+    if (changedBrideSectionFields.size > 0 && draftBrideSection) {
+      await onUpdateBrideSection(draftBrideSection)
+      clearBrideSectionDraft()
     }
   }
 
@@ -386,14 +605,25 @@ function FeaturesForm({
     setChangedFeatures(new Set())
     onLocalChange(config.features)
 
-    // Reset starting section to saved state using context
-    // Clearing the draft triggers the useEffect in StartingSectionForm which resets the form
+    // Reset all sections to saved state using context
     clearStartingSectionDraft()
     setChangedStartingSectionFields(new Set())
+
+    clearGroomSectionDraft()
+    setChangedGroomSectionFields(new Set())
+
+    clearBrideSectionDraft()
+    setChangedBrideSectionFields(new Set())
 
     // Force re-fetch to ensure we have latest data from server
     if (onRefetchStartingSection) {
       await onRefetchStartingSection()
+    }
+    if (onRefetchGroomSection) {
+      await onRefetchGroomSection()
+    }
+    if (onRefetchBrideSection) {
+      await onRefetchBrideSection()
     }
 
     // Trigger LivePreview refresh to show actual saved state from server
@@ -404,6 +634,14 @@ function FeaturesForm({
 
   const handleStartingSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
     setChangedStartingSectionFields(fields)
+  }, [])
+
+  const handleGroomSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
+    setChangedGroomSectionFields(fields)
+  }, [])
+
+  const handleBrideSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
+    setChangedBrideSectionFields(fields)
   }, [])
 
   const renderFeatureContent = useCallback(
@@ -424,34 +662,29 @@ function FeaturesForm({
 
         case 'groom_and_bride':
           return (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    Groom&apos;s Instagram Link
-                  </label>
-                  <input
-                    type="url"
-                    defaultValue={config.groomsInstagramLink || ''}
-                    placeholder="https://instagram.com/..."
-                    className="w-full rounded-lg border px-3 py-2 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    Bride&apos;s Instagram Link
-                  </label>
-                  <input
-                    type="url"
-                    defaultValue={config.brideInstagramLink || ''}
-                    placeholder="https://instagram.com/..."
-                    className="w-full rounded-lg border px-3 py-2 text-sm"
-                  />
-                </div>
+            <div className="space-y-6">
+              <div>
+                <h4 className="mb-3 font-semibold text-gray-800">Groom Section</h4>
+                <GroomSectionForm
+                  weddingConfig={config}
+                  groomSectionContent={groomSectionContent}
+                  onUpdate={onUpdateGroomSection}
+                  onChangeTracking={handleGroomSectionChange}
+                  changedFields={changedGroomSectionFields}
+                  onPhotoUpload={onGroomPhotoUpload}
+                />
               </div>
-              <p className="text-xs italic text-gray-500">
-                Note: Instagram link updates will be implemented in a future update
-              </p>
+              <div className="border-t pt-6">
+                <h4 className="mb-3 font-semibold text-gray-800">Bride Section</h4>
+                <BrideSectionForm
+                  weddingConfig={config}
+                  brideSectionContent={brideSectionContent}
+                  onUpdate={onUpdateBrideSection}
+                  onChangeTracking={handleBrideSectionChange}
+                  changedFields={changedBrideSectionFields}
+                  onPhotoUpload={onBridePhotoUpload}
+                />
+              </div>
             </div>
           )
 
@@ -463,12 +696,22 @@ function FeaturesForm({
     },
     [
       changedStartingSectionFields,
+      changedGroomSectionFields,
+      changedBrideSectionFields,
       config,
       handleStartingSectionChange,
+      handleGroomSectionChange,
+      handleBrideSectionChange,
       onBackgroundUpload,
       onMonogramUpload,
       onUpdateStartingSection,
+      onUpdateGroomSection,
+      onUpdateBrideSection,
       startingSectionContent,
+      groomSectionContent,
+      brideSectionContent,
+      onGroomPhotoUpload,
+      onBridePhotoUpload,
     ]
   )
 

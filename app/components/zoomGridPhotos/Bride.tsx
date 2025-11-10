@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 
 import Image from 'next/image'
 
@@ -10,6 +10,7 @@ import './zoomGridPhotos.css'
 import InstagramIcon from '@/app/icons/InstagramIcon'
 import { useScrollContainer } from '@/app/utils/ScrollContainerContext'
 import { useWeddingData } from '@/app/utils/useWeddingData'
+import { parsePhotos } from '@/app/lib/section-photos'
 
 import Bride1 from '../../../public/images/bride/bride1.jpg'
 import Bride2 from '../../../public/images/bride/bride2.jpg'
@@ -19,9 +20,12 @@ import Bride5 from '../../../public/images/bride/bride5.jpg'
 import Bride6 from '../../../public/images/bride/bride6.jpg'
 import Ornament from '../../../public/images/ornaments/orn2.png'
 
+// Default photos (fallback) - defined outside component to avoid re-creation
+const defaultPhotos = [Bride1, Bride2, Bride3, Bride4, Bride5, Bride6]
+
 const Bride = () => {
   // Get wedding data from context
-  const { config, features } = useWeddingData()
+  const { config, features, brideSection } = useWeddingData()
 
   // Get scroll container from context (for embedded previews)
   const { containerRef, isEmbedded } = useScrollContainer()
@@ -72,29 +76,49 @@ const Bride = () => {
   const stickyHeightClass = isEmbedded ? '' : 'h-dvh'
   const containerHeightClass = isEmbedded ? '' : 'h-[calc(var(--vh)*300)]'
 
+  // Build ordered photos from brideSection or use defaults
+  const orderedPhotos = useMemo(() => {
+    if (!brideSection?.photos) return defaultPhotos
+
+    // Parse JSON photos array
+    const uploadedPhotos = parsePhotos(brideSection.photos)
+
+    // If no photos uploaded, use defaults
+    if (uploadedPhotos.length === 0) return defaultPhotos
+
+    // Map uploaded photos to slots, fill missing with defaults
+    const photos = Array.from({ length: 6 }, (_, i) => {
+      const slot = i + 1
+      const uploadedPhoto = uploadedPhotos.find((p) => p.slot === slot)
+      return uploadedPhoto?.filename ?? defaultPhotos[i]
+    })
+
+    return photos
+  }, [brideSection])
+
   const pictures = [
     {
-      src: Bride1,
+      src: orderedPhotos[0],
       scale: scale6,
     },
     {
-      src: Bride2,
+      src: orderedPhotos[1],
       scale: scale5,
     },
     {
-      src: Bride3,
+      src: orderedPhotos[2],
       scale: scale4,
     },
     {
-      src: Bride4,
+      src: orderedPhotos[3],
       scale: scale5,
     },
     {
-      src: Bride5,
+      src: orderedPhotos[4],
       scale: scale8,
     },
     {
-      src: Bride6,
+      src: orderedPhotos[5],
       scale: scale9,
     },
     {
@@ -118,20 +142,25 @@ const Bride = () => {
         className={`sticky top-0 ${stickyHeightClass} overflow-hidden`}
         style={isEmbedded && stickyHeightValue ? { height: stickyHeightValue } : undefined}
       >
-        {pictures.map(({ scale, src }) => (
-          // Element container div to make sure everything has the same layout
-          <motion.div key={src.src} style={{ scale }} className="grid-placement">
-            <div className="imageContainer">
-              <Image
-                src={src}
-                fill
-                alt="Brides Image"
-                placeholder="blur"
-                className="grid-image object-cover"
-              />
-            </div>
-          </motion.div>
-        ))}
+        {pictures.map(({ scale, src }, index) => {
+          // Check if src is a static import (has blurDataURL) or a URL string
+          const isStaticImport = typeof src === 'object' && 'src' in src
+
+          return (
+            // Element container div to make sure everything has the same layout
+            <motion.div key={index} style={{ scale }} className="grid-placement">
+              <div className="imageContainer">
+                <Image
+                  src={src}
+                  fill
+                  alt="Brides Image"
+                  placeholder={isStaticImport ? 'blur' : undefined}
+                  className="grid-image object-cover"
+                />
+              </div>
+            </motion.div>
+          )
+        })}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
           <motion.div style={{ opacity: textOpacityBride }} className="h-[220px] w-[340px]">
             {/* Background box */}
@@ -156,16 +185,20 @@ const Bride = () => {
                 style={{ opacity: textOpacityBride }}
                 className="font-cursive2 text-4xl drop-shadow-lg"
               >
-                {config.brideName}
+                {brideSection?.brideDisplayName ?? config.brideName}
               </motion.h2>
-              <motion.h4
-                style={{ opacity: textOpacityParent }}
-                className="text-center text-lg leading-5 drop-shadow-lg"
-              >
-                Daughter of <br />
-                {config.brideFather} &<br />
-                {config.brideMother}
-              </motion.h4>
+              {brideSection?.showParentInfo &&
+                brideSection.fatherName &&
+                brideSection.motherName && (
+                  <motion.h4
+                    style={{ opacity: textOpacityParent }}
+                    className="text-center text-lg leading-5 drop-shadow-lg"
+                  >
+                    Daughter of <br />
+                    {brideSection.fatherName} &<br />
+                    {brideSection.motherName}
+                  </motion.h4>
+                )}
             </div>
           </motion.div>
         </div>

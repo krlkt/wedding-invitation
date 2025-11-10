@@ -11,6 +11,7 @@
  */
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { startingSectionContentSchema } from '@/app/lib/validations/starting-section'
@@ -220,9 +221,14 @@ export function StartingSectionForm({
     ] as const
 
     fields.forEach((field) => {
-      const savedValue =
-        startingSectionContent?.[field] ??
-        (field === 'showWeddingDate' ? true : field === 'showParentInfo' ? false : null)
+      let defaultValue = null
+      if (field === 'showWeddingDate') {
+        defaultValue = true
+      } else if (field === 'showParentInfo') {
+        defaultValue = false
+      }
+
+      const savedValue = startingSectionContent?.[field] ?? defaultValue
       if (draft[field] !== savedValue) {
         changedFields.add(field)
       }
@@ -231,7 +237,7 @@ export function StartingSectionForm({
     // Update draft only if there are changes
     if (changedFields.size > 0) {
       // Merge: preserve media fields from prev, update form fields from draft
-      setDraftStartingSection((prev) => ({ ...(prev || {}), ...draft }))
+      setDraftStartingSection((prev) => ({ ...(prev ?? {}), ...draft }))
     } else {
       setDraftStartingSection(undefined)
     }
@@ -338,10 +344,11 @@ export function StartingSectionForm({
               <p className="mb-1 text-sm font-medium">Current Monogram:</p>
               <div className="mt-2 flex items-center gap-4">
                 <div className="relative h-20 w-16 overflow-hidden rounded border bg-white">
-                  <img
+                  <Image
                     src={weddingConfig.monogramFilename}
                     alt="Current monogram"
-                    className="h-full w-full object-contain"
+                    fill
+                    className="object-contain"
                   />
                 </div>
                 <div>
@@ -364,7 +371,7 @@ export function StartingSectionForm({
               <FileInput
                 ref={monogramFileInputRef}
                 id="monogramMedia"
-                accept="image/jpeg,image/png,image/webp,image/gif"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
                 onChange={handleMonogramFileChange}
                 disabled={monogramUpload.isUploading}
                 selectedFile={selectedMonogramFile}
@@ -441,11 +448,11 @@ export function StartingSectionForm({
             className={`flex items-center space-x-2 rounded-lg transition-all ${changedFields.has('showParentInfo') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
           >
             <Checkbox
-              id="showParentInfo"
+              id="starting-showParentInfo"
               checked={showParentInfo}
               onCheckedChange={(checked) => setValue('showParentInfo', checked as boolean)}
             />
-            <Label htmlFor="showParentInfo" className="cursor-pointer">
+            <Label htmlFor="starting-showParentInfo" className="cursor-pointer">
               Show Parent Information
             </Label>
           </div>
@@ -511,22 +518,22 @@ export function StartingSectionForm({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Background Media</h3>
 
-          {(draftStartingSectionContent?.backgroundFilename ||
+          {(draftStartingSectionContent?.backgroundFilename ??
             startingSectionContent?.backgroundFilename) && (
             <div className="rounded-md border bg-gray-50 p-4">
               <p className="mb-1 text-sm font-medium">Current Media:</p>
               <p className="text-sm text-gray-600">
-                {draftStartingSectionContent?.backgroundOriginalName ||
-                  startingSectionContent?.backgroundOriginalName ||
-                  draftStartingSectionContent?.backgroundFilename?.split('/').pop() ||
+                {draftStartingSectionContent?.backgroundOriginalName ??
+                  startingSectionContent?.backgroundOriginalName ??
+                  draftStartingSectionContent?.backgroundFilename?.split('/').pop() ??
                   startingSectionContent?.backgroundFilename?.split('/').pop()}
               </p>
-              {(draftStartingSectionContent?.backgroundFileSize ||
+              {(draftStartingSectionContent?.backgroundFileSize ??
                 startingSectionContent?.backgroundFileSize) && (
                 <p className="text-sm text-gray-600">
                   {formatFileSize(
-                    draftStartingSectionContent?.backgroundFileSize ||
-                      startingSectionContent?.backgroundFileSize ||
+                    draftStartingSectionContent?.backgroundFileSize ??
+                      startingSectionContent?.backgroundFileSize ??
                       0
                   )}
                 </p>
@@ -540,7 +547,7 @@ export function StartingSectionForm({
               <FileInput
                 ref={fileInputRef}
                 id="backgroundMedia"
-                accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,video/mp4,video/webm"
                 onChange={handleFileChange}
                 disabled={backgroundUpload.isUploading}
                 selectedFile={selectedFile}
@@ -587,10 +594,10 @@ export function StartingSectionForm({
             <DialogDescription>
               You are about to replace the existing background media:{' '}
               <strong>
-                {draftStartingSectionContent?.backgroundOriginalName ||
-                  startingSectionContent?.backgroundOriginalName ||
-                  draftStartingSectionContent?.backgroundFilename?.split('/').pop() ||
-                  startingSectionContent?.backgroundFilename?.split('/').pop() ||
+                {draftStartingSectionContent?.backgroundOriginalName ??
+                  startingSectionContent?.backgroundOriginalName ??
+                  draftStartingSectionContent?.backgroundFilename?.split('/').pop() ??
+                  startingSectionContent?.backgroundFilename?.split('/').pop() ??
                   'current media'}
               </strong>
             </DialogDescription>
@@ -612,7 +619,7 @@ export function StartingSectionForm({
             <DialogDescription>
               You are about to replace the existing monogram:{' '}
               <strong>
-                {weddingConfig.monogramFilename?.split('/').pop() || 'current monogram'}
+                {weddingConfig.monogramFilename?.split('/').pop() ?? 'current monogram'}
               </strong>
             </DialogDescription>
           </DialogHeader>

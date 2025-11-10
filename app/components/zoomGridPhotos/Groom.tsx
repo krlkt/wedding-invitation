@@ -1,7 +1,7 @@
 'use client'
 
 import './zoomGridPhotos.css'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 
 import Image from 'next/image'
 
@@ -10,6 +10,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import InstagramIcon from '@/app/icons/InstagramIcon'
 import { useScrollContainer } from '@/app/utils/ScrollContainerContext'
 import { useWeddingData } from '@/app/utils/useWeddingData'
+import { parsePhotos } from '@/app/lib/section-photos'
 
 import Groom1 from '../../../public/images/groom/groom1.jpg'
 import Groom2 from '../../../public/images/groom/groom2.jpg'
@@ -18,9 +19,12 @@ import Groom4 from '../../../public/images/groom/groom4.jpg'
 import Groom5 from '../../../public/images/groom/groom5.jpg'
 import Groom6 from '../../../public/images/groom/groom6.jpg'
 
+// Default photos (fallback) - defined outside component to avoid re-creation
+const defaultPhotos = [Groom1, Groom2, Groom3, Groom4, Groom5, Groom6]
+
 const Groom = () => {
   // Get wedding data from context
-  const { config, features } = useWeddingData()
+  const { config, features, groomSection } = useWeddingData()
 
   // Get scroll container from context (for embedded previews)
   const { containerRef, isEmbedded } = useScrollContainer()
@@ -71,29 +75,49 @@ const Groom = () => {
   const stickyHeightClass = isEmbedded ? '' : 'h-dvh'
   const containerHeightClass = isEmbedded ? '' : 'h-[calc(var(--vh)*300)]'
 
+  // Build ordered photos from groomSection or use defaults
+  const orderedPhotos = useMemo(() => {
+    if (!groomSection?.photos) return defaultPhotos
+
+    // Parse JSON photos array
+    const uploadedPhotos = parsePhotos(groomSection.photos)
+
+    // If no photos uploaded, use defaults
+    if (uploadedPhotos.length === 0) return defaultPhotos
+
+    // Map uploaded photos to slots, fill missing with defaults
+    const photos = Array.from({ length: 6 }, (_, i) => {
+      const slot = i + 1
+      const uploadedPhoto = uploadedPhotos.find((p) => p.slot === slot)
+      return uploadedPhoto?.filename ?? defaultPhotos[i]
+    })
+
+    return photos
+  }, [groomSection])
+
   const pictures = [
     {
-      src: Groom1,
+      src: orderedPhotos[0],
       scale: scale6,
     },
     {
-      src: Groom2,
+      src: orderedPhotos[1],
       scale: scale5,
     },
     {
-      src: Groom3,
+      src: orderedPhotos[2],
       scale: scale4,
     },
     {
-      src: Groom4,
+      src: orderedPhotos[3],
       scale: scale5,
     },
     {
-      src: Groom5,
+      src: orderedPhotos[4],
       scale: scale8,
     },
     {
-      src: Groom6,
+      src: orderedPhotos[5],
       scale: scale9,
     },
   ]
@@ -109,20 +133,25 @@ const Groom = () => {
         className={`sticky top-0 ${stickyHeightClass} overflow-hidden bg-primary-main`}
         style={isEmbedded && stickyHeightValue ? { height: stickyHeightValue } : undefined}
       >
-        {pictures.map(({ scale, src }, index) => (
-          // Element container div to make sure everything has the same layout
-          <motion.div key={index} style={{ scale }} className="grid-placement">
-            <div className="imageContainer">
-              <Image
-                src={src}
-                fill
-                alt="Grooms Image"
-                placeholder="blur"
-                className="grid-image object-cover"
-              />
-            </div>
-          </motion.div>
-        ))}
+        {pictures.map(({ scale, src }, index) => {
+          // Check if src is a static import (has blurDataURL) or a URL string
+          const isStaticImport = typeof src === 'object' && 'src' in src
+
+          return (
+            // Element container div to make sure everything has the same layout
+            <motion.div key={index} style={{ scale }} className="grid-placement">
+              <div className="imageContainer">
+                <Image
+                  src={src}
+                  fill
+                  alt="Grooms Image"
+                  placeholder={isStaticImport ? 'blur' : undefined}
+                  className="grid-image object-cover"
+                />
+              </div>
+            </motion.div>
+          )
+        })}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
           <motion.div style={{ opacity: textOpacityGroom }} className="h-[230px] w-[340px]">
             {/* Background box */}
@@ -147,16 +176,20 @@ const Groom = () => {
                 style={{ opacity: textOpacityGroom }}
                 className="font-cursive2 text-4xl drop-shadow-lg"
               >
-                {config.groomName}
+                {groomSection?.groomDisplayName ?? config.groomName}
               </motion.h2>
-              <motion.h4
-                style={{ opacity: textOpacityParent }}
-                className="text-center text-lg leading-5 drop-shadow-lg"
-              >
-                Son of <br />
-                {config.groomFather} &<br />
-                {config.groomMother}
-              </motion.h4>
+              {groomSection?.showParentInfo &&
+                groomSection.fatherName &&
+                groomSection.motherName && (
+                  <motion.h4
+                    style={{ opacity: textOpacityParent }}
+                    className="text-center text-lg leading-5 drop-shadow-lg"
+                  >
+                    Son of <br />
+                    {groomSection.fatherName} &<br />
+                    {groomSection.motherName}
+                  </motion.h4>
+                )}
             </div>
           </motion.div>
         </div>
