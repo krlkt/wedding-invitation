@@ -74,6 +74,7 @@ export function StartingSectionForm({
   // Background media upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [validationError, setValidationError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const backgroundUpload = useMediaUpload({
@@ -258,6 +259,9 @@ export function StartingSectionForm({
   const handleUploadBackground = async () => {
     if (!selectedFile) return
 
+    // Don't upload if there's a validation error
+    if (validationError) return
+
     // Show confirmation if replacing existing media
     if (
       draftStartingSectionContent?.backgroundFilename ||
@@ -272,7 +276,7 @@ export function StartingSectionForm({
   // Confirm replacement and upload
   const handleConfirmReplacement = async () => {
     setShowConfirmDialog(false)
-    if (selectedFile) {
+    if (selectedFile && !validationError) {
       await backgroundUpload.uploadMedia(selectedFile)
     }
   }
@@ -548,8 +552,8 @@ export function StartingSectionForm({
             <p className="text-xs text-gray-500">
               Images: max 10 MB (JPEG, PNG, WebP, GIF) | Videos: max 50 MB (MP4, WebM)
             </p>
-            {backgroundUpload.error && (
-              <p className="text-sm text-red-500">{backgroundUpload.error}</p>
+            {(validationError || backgroundUpload.error) && (
+              <p className="text-sm text-red-500">{validationError || backgroundUpload.error}</p>
             )}
 
             {/* Upload Progress Bar */}

@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T016: Multi-tenant Subdomain Routing Test
  *
  * Tests subdomain-based multi-tenancy routing and tenant isolation.

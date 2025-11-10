@@ -176,8 +176,7 @@ describe('Login Page Server Component', () => {
     })
 
     it('should handle edge case of session without userId', () => {
-      const session = {
-        userId: 'user-123',
+      const session: { weddingConfigId: string; userId?: string } = {
         weddingConfigId: 'wedding-456',
       }
 

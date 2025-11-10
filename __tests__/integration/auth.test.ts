@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T012: Authentication Flow Integration Test
  *
  * Tests complete authentication workflows including login, logout,

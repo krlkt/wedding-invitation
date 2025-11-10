@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T015: File Upload Flow Integration Test
  *
  * Tests complete file upload workflows including gallery photo uploads,

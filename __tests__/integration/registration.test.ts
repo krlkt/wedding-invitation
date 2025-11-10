@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T011: User Registration Flow Integration Test
  *
  * Tests the complete user registration workflow from account creation

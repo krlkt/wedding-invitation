@@ -31,12 +31,13 @@ function LoginFormContent() {
         const redirect = searchParams.get('redirect') || '/admin'
         router.push(redirect)
         router.refresh()
+        // Keep loading state true during redirect
       } else {
         setError(data.error || 'Login failed')
+        setLoading(false)
       }
     } catch (_err) {
       setError('Network error. Please try again.')
-    } finally {
       setLoading(false)
     }
   }
@@ -95,18 +96,13 @@ function LoginFormContent() {
           </button>
 
           {/* Registration Link */}
-          <div className="pt-4 text-center text-sm text-gray-600">
+          <div className="text-center text-sm text-gray-600">
             Don&apos;t have an account?{' '}
             <Link href="/register" className="font-semibold text-pink-500 hover:text-pink-600">
               Create your wedding website
             </Link>
           </div>
         </form>
-
-        <div className="mt-6 text-center text-sm text-gray-600">
-          <p>Default credentials:</p>
-          <p className="mt-1 font-mono text-xs">karel@wedding.com / changeme123</p>
-        </div>
       </div>
     </div>
   )

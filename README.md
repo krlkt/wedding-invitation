@@ -38,14 +38,29 @@ This platform allows couples to create their own customized wedding invitation w
 - Yarn or npm
 - Turso account (for database)
 
-### Environment Variables
+### Environment Setup
 
-Copy `.env.example` to `.env` and configure:
+This project uses a **three-environment architecture** with isolated databases:
+
+- **Development** (`wedding-invitation-dev`) - Local development with shared database
+- **Test** (`wedding-invitation-test`) - Vercel preview deployments for QA
+- **Production** (`wedding-invitation-prod`) - Live production environment
+
+#### Environment Variables
+
+Copy `.env.example` to `.env.local` (for local development) and configure:
 
 ```bash
-# Database
-TURSO_DATABASE_URL=libsql://your-database.turso.io
-TURSO_AUTH_TOKEN=your_auth_token
+# Database Configuration (New naming convention)
+DATABASE_URL=libsql://wedding-invitation-dev-YOUR-ORG.turso.io
+DATABASE_AUTH_TOKEN=your_dev_auth_token_here
+
+# Legacy naming (for backward compatibility)
+TURSO_DATABASE_URL=libsql://wedding-invitation-dev-YOUR-ORG.turso.io
+TURSO_AUTH_TOKEN=your_dev_auth_token_here
+
+# Environment Override (optional, defaults to 'development')
+APP_ENV=development
 
 # Production Domain
 NEXT_PUBLIC_BASE_URL=https://oial.vercel.app
@@ -54,6 +69,41 @@ NEXT_PUBLIC_PRODUCTION_DOMAIN=oial.vercel.app
 # File Storage (Optional)
 BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
 ```
+
+#### Database Setup
+
+1. **Create Turso databases** (one-time setup):
+
+   ```bash
+   turso db create wedding-invitation-dev
+   turso db create wedding-invitation-test
+   turso db create wedding-invitation-prod
+   ```
+
+2. **Get credentials**:
+
+   ```bash
+   turso db show wedding-invitation-dev --url
+   turso db tokens create wedding-invitation-dev
+   ```
+
+3. **Apply migrations** to development database:
+
+   ```bash
+   npm run db:push
+   ```
+
+4. **For detailed setup instructions**, see [Environment Quickstart](./specs/010-oial-9-development/quickstart.md)
+
+#### Environment Detection
+
+The application automatically detects the environment:
+
+- **Local development**: Uses `APP_ENV` or defaults to `development`
+- **Vercel preview**: Automatically uses `test` environment (`VERCEL_ENV=preview`)
+- **Vercel production**: Automatically uses `production` environment (`VERCEL_ENV=production`)
+
+Check environment status at `/api/health`
 
 ### Installation
 

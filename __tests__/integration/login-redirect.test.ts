@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * Login Page Redirect Integration Tests
  *
  * Tests that authenticated users are automatically redirected from /login to /admin,
@@ -52,7 +54,7 @@ describe('Login Page Redirect', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Cookie: sessionCookie,
+          ...(sessionCookie && { Cookie: sessionCookie }),
         },
       })
     }
@@ -67,9 +69,7 @@ describe('Login Page Redirect', () => {
 
       const response = await fetch(`${baseUrl}/login`, {
         method: 'GET',
-        headers: {
-          Cookie: sessionCookie,
-        },
+        headers: { ...(sessionCookie && { Cookie: sessionCookie }) },
         redirect: 'manual', // Don't follow redirects automatically
       })
 
@@ -91,9 +91,7 @@ describe('Login Page Redirect', () => {
 
       const response = await fetch(`${baseUrl}/admin`, {
         method: 'GET',
-        headers: {
-          Cookie: sessionCookie,
-        },
+        headers: { ...(sessionCookie && { Cookie: sessionCookie }) },
         redirect: 'manual',
       })
 
@@ -110,9 +108,7 @@ describe('Login Page Redirect', () => {
       // First, try to access /login (should redirect)
       const loginPageResponse = await fetch(`${baseUrl}/login`, {
         method: 'GET',
-        headers: {
-          Cookie: sessionCookie,
-        },
+        headers: { ...(sessionCookie && { Cookie: sessionCookie }) },
         redirect: 'manual',
       })
 
@@ -121,9 +117,7 @@ describe('Login Page Redirect', () => {
       // Verify session is still valid by checking session endpoint
       const sessionResponse = await fetch(`${baseUrl}/api/auth/session`, {
         method: 'GET',
-        headers: {
-          Cookie: sessionCookie,
-        },
+        headers: { ...(sessionCookie && { Cookie: sessionCookie }) },
       })
 
       if (sessionResponse.status === 200) {
@@ -266,9 +260,7 @@ describe('Login Page Redirect', () => {
       const requests = Array.from({ length: 5 }, () =>
         fetch(`${baseUrl}/login`, {
           method: 'GET',
-          headers: {
-            Cookie: sessionCookie ?? '',
-          },
+          headers: { ...(sessionCookie && { Cookie: sessionCookie }) },
           redirect: 'manual',
         })
       )

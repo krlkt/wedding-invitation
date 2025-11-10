@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * Contract Test: POST /api/auth/register - Subdomain Validation
  *
  * Verifies subdomain uniqueness validation and error handling

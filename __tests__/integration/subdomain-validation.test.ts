@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * Integration Test: Subdomain Collision Retry Logic
  */
 

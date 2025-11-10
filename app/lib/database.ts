@@ -9,20 +9,16 @@ import { createClient } from '@libsql/client'
 import { drizzle } from 'drizzle-orm/libsql'
 
 import * as schema from '@/app/db/schema'
+import { getConfig } from '@/app/lib/env-config'
 
-// Validate required environment variables
-if (!process.env.TURSO_DATABASE_URL) {
-  throw new Error('TURSO_DATABASE_URL environment variable is required')
-}
+// Get environment-aware configuration
+// This supports both DATABASE_URL and TURSO_DATABASE_URL (for backwards compatibility)
+const config = getConfig()
 
-if (!process.env.TURSO_AUTH_TOKEN) {
-  throw new Error('TURSO_AUTH_TOKEN environment variable is required')
-}
-
-// Create Turso client
+// Create Turso client with environment-aware configuration
 const client = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
+  url: config.databaseUrl,
+  authToken: config.databaseAuthToken,
 })
 
 // Create Drizzle instance with schema

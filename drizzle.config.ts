@@ -9,8 +9,9 @@ export default {
   out: './app/db/migrations',
   dialect: 'turso',
   dbCredentials: {
-    url: process.env.TURSO_DATABASE_URL!,
-    authToken: process.env.TURSO_AUTH_TOKEN!,
+    // Support both new and legacy naming conventions (T018)
+    url: process.env.DATABASE_URL || process.env.TURSO_DATABASE_URL!,
+    authToken: process.env.DATABASE_AUTH_TOKEN || process.env.TURSO_AUTH_TOKEN!,
   },
   verbose: true,
   strict: true,

@@ -12,7 +12,7 @@ import { describe, it, expect, beforeEach } from '@jest/globals'
 
 describe.skip('PUT /api/wedding/config - New Instagram Fields', () => {
   let sessionCookie: string
-  const baseUrl = process.env.TEST_BASE_URL || 'http://localhost:3000'
+  const baseUrl = process.env.TEST_BASE_URL ?? 'http://localhost:3000'
 
   beforeEach(async () => {
     // TODO: Set up authenticated session
