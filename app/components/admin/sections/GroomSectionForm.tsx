@@ -176,27 +176,12 @@ export function GroomSectionForm({
     onChangeTracking?.(changedFieldsSet.size > 0, changedFieldsSet)
   }, [formValues, groomSectionContent, setDraftGroomSection, onChangeTracking])
 
-  // Photo file selection
+  // Photo file selection - validation handled by hook
   const handlePhotoChange = (slot: PhotoSlot) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    if (!file) return
-
-    // Clear any previous errors
-    photoUpload.reset()
-
-    const validation = validateImageFile(file)
-    if (!validation.valid) {
-      // Show validation error
-      alert(validation.error || 'Invalid file')
-      setSelectedPhoto(null)
-      const inputRef = photoInputRefs.current[slot]
-      if (inputRef) {
-        inputRef.value = ''
-      }
-      return
+    if (file) {
+      setSelectedPhoto({ slot, file }) // Just set the file, hook will validate on upload
     }
-
-    setSelectedPhoto({ slot, file })
   }
 
   // Upload button - check if replacement confirmation needed
@@ -407,26 +392,29 @@ export function GroomSectionForm({
                     >
                       {photoUpload.isUploading && isCurrentSelection ? 'Uploading...' : 'Upload'}
                     </Button>
+
+                    {/* Show error inline for this slot */}
+                    {isCurrentSelection && photoUpload.error && (
+                      <p className="text-sm font-medium text-red-500">{photoUpload.error}</p>
+                    )}
+
+                    {/* Show upload progress for this slot */}
+                    {isCurrentSelection && photoUpload.isUploading && (
+                      <div className="space-y-1">
+                        <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                          <div
+                            className="h-2 rounded-full bg-pink-600 transition-all duration-300 ease-out"
+                            style={{ width: `${photoUpload.progress}%` }}
+                          />
+                        </div>
+                        <p className="text-xs text-gray-600">Uploading: {photoUpload.progress}%</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               )
             })}
           </div>
-
-          {photoUpload.error && <p className="text-sm text-red-500">{photoUpload.error}</p>}
-
-          {/* Upload Progress Bar */}
-          {photoUpload.isUploading && (
-            <div className="space-y-2">
-              <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-200">
-                <div
-                  className="h-2.5 rounded-full bg-pink-600 transition-all duration-300 ease-out"
-                  style={{ width: `${photoUpload.progress}%` }}
-                />
-              </div>
-              <p className="text-xs text-gray-600">Uploading: {photoUpload.progress}%</p>
-            </div>
-          )}
 
           <p className="text-xs text-gray-500">Image only: max 10 MB (JPEG, PNG, WebP, GIF)</p>
         </div>

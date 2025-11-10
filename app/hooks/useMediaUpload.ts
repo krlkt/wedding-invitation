@@ -135,5 +135,6 @@ export function useMediaUpload(config: MediaUploadConfig) {
     progress,
     error,
     reset,
+    setError, // Expose setError for manual error handling
   }
 }

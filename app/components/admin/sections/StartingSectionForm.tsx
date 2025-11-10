@@ -15,7 +15,7 @@ import Image from 'next/image'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { startingSectionContentSchema } from '@/app/lib/validations/starting-section'
-import { validateImageFile, validateVideoFile, formatFileSize } from '@/app/utils/media-validation'
+import { validateImageFile, validateMediaFile, formatFileSize } from '@/app/utils/media-validation'
 import { useDraft } from '@/app/context/DraftContext'
 import { useMediaUpload } from '@/app/hooks/useMediaUpload'
 import type { WeddingConfiguration } from '@/app/db/schema/weddings'
@@ -78,6 +78,7 @@ export function StartingSectionForm({
 
   const backgroundUpload = useMediaUpload({
     apiEndpoint: '/api/wedding/starting-section/upload',
+    validateFile: validateMediaFile, // ✅ Hook handles validation for both images and videos
     onSuccess: async (result) => {
       if (onBackgroundUpload && result.data && selectedFile) {
         onBackgroundUpload({
@@ -245,31 +246,12 @@ export function StartingSectionForm({
     onChangeTracking?.(changedFields.size > 0, changedFields)
   }, [formValues, startingSectionContent, setDraftStartingSection, onChangeTracking])
 
-  // Background file selection with validation
+  // Background file selection - validation handled by hook
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    if (!file) return
-
-    // Validate file type and size
-    const isImage = file.type.startsWith('image/')
-    const isVideo = file.type.startsWith('video/')
-
-    if (!isImage && !isVideo) {
-      backgroundUpload.reset()
-      setSelectedFile(null)
-      if (fileInputRef.current) fileInputRef.current.value = ''
-      return
+    if (file) {
+      setSelectedFile(file) // Just set the file, hook will validate on upload
     }
-
-    const validation = isImage ? validateImageFile(file) : validateVideoFile(file)
-    if (!validation.valid) {
-      backgroundUpload.reset()
-      setSelectedFile(null)
-      if (fileInputRef.current) fileInputRef.current.value = ''
-      return
-    }
-
-    setSelectedFile(file)
   }
 
   // Upload button - check if replacement confirmation needed

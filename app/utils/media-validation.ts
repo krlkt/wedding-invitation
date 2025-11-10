@@ -89,6 +89,29 @@ export function getMediaType(mimeType: string): 'image' | 'video' | null {
 }
 
 /**
+ * Validates a media file (image or video)
+ * Automatically determines type and applies appropriate validation
+ *
+ * @param file - The file to validate
+ * @returns Validation result with error message if invalid
+ */
+export function validateMediaFile(file: File): ValidationResult {
+  const isImage = ACCEPTED_IMAGE_TYPES.includes(file.type)
+  const isVideo = ACCEPTED_VIDEO_TYPES.includes(file.type)
+
+  if (!isImage && !isVideo) {
+    return {
+      valid: false,
+      error:
+        'Invalid file type. Please upload an image (JPEG, PNG, WebP, GIF) or video (MP4, WebM)',
+    }
+  }
+
+  // Delegate to specific validator
+  return isImage ? validateImageFile(file) : validateVideoFile(file)
+}
+
+/**
  * Formats file size in human-readable format
  *
  * @param bytes - File size in bytes
