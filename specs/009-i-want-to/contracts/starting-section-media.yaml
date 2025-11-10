@@ -48,7 +48,7 @@ paths:
                       filename:
                         type: string
                         description: Generated filename for the uploaded file
-                        example: "background-image-1697654321.jpg"
+                        example: 'background-image-1697654321.jpg'
                       fileSize:
                         type: integer
                         description: File size in bytes
@@ -56,12 +56,12 @@ paths:
                       mimeType:
                         type: string
                         description: MIME type of the uploaded file
-                        example: "image/jpeg"
+                        example: 'image/jpeg'
                       type:
                         type: string
                         enum: [image, video]
                         description: Media type category
-                        example: "image"
+                        example: 'image'
                   requiresConfirmation:
                     type: boolean
                     description: True if existing file found and replaceExisting was false
@@ -77,17 +77,17 @@ paths:
                   value:
                     success: true
                     data:
-                      filename: "background-image-1697654321.jpg"
+                      filename: 'background-image-1697654321.jpg'
                       fileSize: 2458624
-                      mimeType: "image/jpeg"
-                      type: "image"
+                      mimeType: 'image/jpeg'
+                      type: 'image'
                 confirmationRequired:
                   summary: Confirmation required (existing file found)
                   value:
                     success: false
                     requiresConfirmation: true
-                    existingFile: "background-video-1697554321.mp4"
-                    message: "Existing media file will be deleted. Set replaceExisting=true to confirm."
+                    existingFile: 'background-video-1697554321.mp4'
+                    message: 'Existing media file will be deleted. Set replaceExisting=true to confirm.'
         '400':
           description: Validation error (file size exceeded or invalid type)
           content:
@@ -99,17 +99,17 @@ paths:
                   summary: Image exceeds 10MB limit
                   value:
                     success: false
-                    error: "Image file size exceeds maximum of 10 MB"
+                    error: 'Image file size exceeds maximum of 10 MB'
                 videoTooLarge:
                   summary: Video exceeds 50MB limit
                   value:
                     success: false
-                    error: "Video file size exceeds maximum of 50 MB"
+                    error: 'Video file size exceeds maximum of 50 MB'
                 invalidType:
                   summary: Unsupported file type
                   value:
                     success: false
-                    error: "Invalid file type. Supported types: image/jpeg, image/png, image/webp, image/gif, video/mp4, video/webm"
+                    error: 'Invalid file type. Supported types: image/jpeg, image/png, image/webp, image/gif, video/mp4, video/webm'
         '401':
           description: Unauthorized - no valid session
           content:
@@ -118,7 +118,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Unauthorized"
+                error: 'Unauthorized'
         '413':
           description: Payload too large
           content:
@@ -127,7 +127,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "File size exceeds server limit"
+                error: 'File size exceeds server limit'
         '500':
           description: Server error during upload
           content:
@@ -136,7 +136,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Failed to upload media file"
+                error: 'Failed to upload media file'
 
     delete:
       summary: Delete background media
@@ -159,7 +159,7 @@ paths:
                     example: true
                   message:
                     type: string
-                    example: "Background media deleted successfully"
+                    example: 'Background media deleted successfully'
         '401':
           description: Unauthorized - no valid session
           content:
@@ -168,7 +168,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Unauthorized"
+                error: 'Unauthorized'
         '404':
           description: No media file to delete
           content:
@@ -177,7 +177,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "No background media found to delete"
+                error: 'No background media found to delete'
         '500':
           description: Server error during deletion
           content:
@@ -186,7 +186,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Failed to delete media file"
+                error: 'Failed to delete media file'
 
 components:
   securitySchemes:
@@ -205,11 +205,10 @@ components:
           example: false
         error:
           type: string
-          example: "Error message"
+          example: 'Error message'
       required:
         - success
         - error
-
 # File Upload Constraints
 #
 # Images:

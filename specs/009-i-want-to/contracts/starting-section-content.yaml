@@ -26,13 +26,13 @@ paths:
                   maxLength: 100
                   nullable: true
                   description: Groom's name for display (falls back to basic info if null)
-                  example: "John Doe"
+                  example: 'John Doe'
                 brideName:
                   type: string
                   maxLength: 100
                   nullable: true
                   description: Bride's name for display (falls back to basic info if null)
-                  example: "Jane Smith"
+                  example: 'Jane Smith'
                 showParentInfo:
                   type: boolean
                   description: Toggle to show/hide parent information
@@ -42,25 +42,25 @@ paths:
                   maxLength: 100
                   nullable: true
                   description: "Groom's father name (X in 'Son of X and Y')"
-                  example: "Robert Doe"
+                  example: 'Robert Doe'
                 groomMotherName:
                   type: string
                   maxLength: 100
                   nullable: true
                   description: "Groom's mother name (Y in 'Son of X and Y')"
-                  example: "Mary Doe"
+                  example: 'Mary Doe'
                 brideFatherName:
                   type: string
                   maxLength: 100
                   nullable: true
                   description: "Bride's father name (Z in 'Daughter of Z and A')"
-                  example: "James Smith"
+                  example: 'James Smith'
                 brideMotherName:
                   type: string
                   maxLength: 100
                   nullable: true
                   description: "Bride's mother name (A in 'Daughter of Z and A')"
-                  example: "Patricia Smith"
+                  example: 'Patricia Smith'
                 showWeddingDate:
                   type: boolean
                   description: Toggle to show/hide wedding date in starting section
@@ -70,20 +70,20 @@ paths:
               fullUpdate:
                 summary: Update all fields
                 value:
-                  groomName: "John Doe"
-                  brideName: "Jane Smith"
+                  groomName: 'John Doe'
+                  brideName: 'Jane Smith'
                   showParentInfo: true
-                  groomFatherName: "Robert Doe"
-                  groomMotherName: "Mary Doe"
-                  brideFatherName: "James Smith"
-                  brideMotherName: "Patricia Smith"
+                  groomFatherName: 'Robert Doe'
+                  groomMotherName: 'Mary Doe'
+                  brideFatherName: 'James Smith'
+                  brideMotherName: 'Patricia Smith'
                   showWeddingDate: true
               partialParentInfo:
                 summary: Partial parent information (only groom's parents)
                 value:
                   showParentInfo: true
-                  groomFatherName: "Robert Doe"
-                  groomMotherName: "Mary Doe"
+                  groomFatherName: 'Robert Doe'
+                  groomMotherName: 'Mary Doe'
                   brideFatherName: null
                   brideMotherName: null
               togglesOnly:
@@ -115,12 +115,12 @@ paths:
                   summary: Name exceeds maximum length
                   value:
                     success: false
-                    error: "groomName must be at most 100 characters"
+                    error: 'groomName must be at most 100 characters'
                 invalidType:
                   summary: Invalid field type
                   value:
                     success: false
-                    error: "showParentInfo must be a boolean"
+                    error: 'showParentInfo must be a boolean'
         '401':
           description: Unauthorized - no valid session
           content:
@@ -129,7 +129,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Unauthorized"
+                error: 'Unauthorized'
         '500':
           description: Server error
           content:
@@ -138,7 +138,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
                 success: false
-                error: "Failed to update starting section content"
+                error: 'Failed to update starting section content'
 
 components:
   securitySchemes:
@@ -154,50 +154,50 @@ components:
       properties:
         id:
           type: string
-          example: "clx1234567890abcdefgh"
+          example: 'clx1234567890abcdefgh'
         userId:
           type: string
-          example: "user_clx9876543210zyxwvu"
+          example: 'user_clx9876543210zyxwvu'
         subdomain:
           type: string
-          example: "john-and-jane"
+          example: 'john-and-jane'
         groomName:
           type: string
-          example: "John Doe"
+          example: 'John Doe'
         brideName:
           type: string
-          example: "Jane Smith"
+          example: 'Jane Smith'
         weddingDate:
           type: string
           format: date-time
-          example: "2025-06-15T00:00:00.000Z"
+          example: '2025-06-15T00:00:00.000Z'
         startingSectionGroomName:
           type: string
           nullable: true
-          example: "John Doe"
+          example: 'John Doe'
         startingSectionBrideName:
           type: string
           nullable: true
-          example: "Jane Smith"
+          example: 'Jane Smith'
         startingSectionShowParentInfo:
           type: boolean
           example: true
         startingSectionGroomFatherName:
           type: string
           nullable: true
-          example: "Robert Doe"
+          example: 'Robert Doe'
         startingSectionGroomMotherName:
           type: string
           nullable: true
-          example: "Mary Doe"
+          example: 'Mary Doe'
         startingSectionBrideFatherName:
           type: string
           nullable: true
-          example: "James Smith"
+          example: 'James Smith'
         startingSectionBrideMotherName:
           type: string
           nullable: true
-          example: "Patricia Smith"
+          example: 'Patricia Smith'
         startingSectionShowWeddingDate:
           type: boolean
           example: true
@@ -205,11 +205,11 @@ components:
           type: string
           enum: [image, video]
           nullable: true
-          example: "image"
+          example: 'image'
         startingSectionBackgroundFilename:
           type: string
           nullable: true
-          example: "background-image-1697654321.jpg"
+          example: 'background-image-1697654321.jpg'
         startingSectionBackgroundFileSize:
           type: integer
           nullable: true
@@ -217,7 +217,7 @@ components:
         startingSectionBackgroundMimeType:
           type: string
           nullable: true
-          example: "image/jpeg"
+          example: 'image/jpeg'
         createdAt:
           type: string
           format: date-time
@@ -233,7 +233,7 @@ components:
           example: false
         error:
           type: string
-          example: "Error message"
+          example: 'Error message'
       required:
         - success
         - error

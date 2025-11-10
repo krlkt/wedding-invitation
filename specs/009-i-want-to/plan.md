@@ -198,23 +198,25 @@ tests/
 **Extended Entity**: WeddingConfiguration
 
 **New Fields**:
+
 ```typescript
 // Starting Section Content
-startingSectionGroomName: string | null          // Editable groom name for display
-startingSectionBrideName: string | null          // Editable bride name for display
-startingSectionShowParentInfo: boolean           // Toggle for parent info display
-startingSectionGroomFatherName: string | null    // X in "Son of X and Y"
-startingSectionGroomMotherName: string | null    // Y in "Son of X and Y"
-startingSectionBrideFatherName: string | null    // Z in "Daughter of Z and A"
-startingSectionBrideMotherName: string | null    // A in "Daughter of Z and A"
-startingSectionShowWeddingDate: boolean          // Toggle for wedding date display
-startingSectionBackgroundType: 'image' | 'video' | null  // Background media type
-startingSectionBackgroundFilename: string | null  // Stored filename
-startingSectionBackgroundFileSize: number | null  // File size in bytes
-startingSectionBackgroundMimeType: string | null  // MIME type
+startingSectionGroomName: string | null // Editable groom name for display
+startingSectionBrideName: string | null // Editable bride name for display
+startingSectionShowParentInfo: boolean // Toggle for parent info display
+startingSectionGroomFatherName: string | null // X in "Son of X and Y"
+startingSectionGroomMotherName: string | null // Y in "Son of X and Y"
+startingSectionBrideFatherName: string | null // Z in "Daughter of Z and A"
+startingSectionBrideMotherName: string | null // A in "Daughter of Z and A"
+startingSectionShowWeddingDate: boolean // Toggle for wedding date display
+startingSectionBackgroundType: 'image' | 'video' | null // Background media type
+startingSectionBackgroundFilename: string | null // Stored filename
+startingSectionBackgroundFileSize: number | null // File size in bytes
+startingSectionBackgroundMimeType: string | null // MIME type
 ```
 
 **Validation Rules**:
+
 - Groom/bride names: Max 100 chars, required if section enabled
 - Parent names: Max 100 chars, optional (partial save allowed)
 - Background media: 10MB max for images, 50MB max for videos
@@ -222,12 +224,14 @@ startingSectionBackgroundMimeType: string | null  // MIME type
 - Supported video types: video/mp4, video/webm
 
 **Relationships**:
+
 - One-to-one with WeddingConfiguration (extends existing table)
 - References basicInfo.weddingDate for date fallback
 
 ### 2. API Contracts (contracts/)
 
 **Contract 1: Update Starting Section Content**
+
 ```typescript
 PUT /api/wedding/config/starting-section
 Request: {
@@ -255,6 +259,7 @@ Error Codes:
 ```
 
 **Contract 2: Upload Background Media**
+
 ```typescript
 POST /api/wedding/media/starting-section
 Content-Type: multipart/form-data
@@ -285,6 +290,7 @@ Error Codes:
 ```
 
 **Contract 3: Delete Background Media**
+
 ```typescript
 DELETE /api/wedding/media/starting-section
 Response: {
@@ -299,12 +305,14 @@ Error Codes:
 ### 3. Contract Tests (tests/contract/)
 
 Generated failing contract tests:
+
 - `starting-section-content.contract.test.ts` - Tests content update API
 - `starting-section-media.contract.test.ts` - Tests media upload/delete APIs
 
 ### 4. Integration Test Scenarios (quickstart.md)
 
 Extracted from user stories:
+
 1. Admin edits groom and bride names → Names persist and preview updates
 2. Admin toggles parent info → Four input fields appear/hide
 3. Admin fills partial parent info → Only filled info displays
@@ -317,6 +325,7 @@ Extracted from user stories:
 Executed: `.specify/scripts/bash/update-agent-context.sh claude`
 
 Updated CLAUDE.md with:
+
 - New feature: Starting section content management (009-i-want-to)
 - Technologies: React Hook Form, Zod validation, shadcn/ui forms
 - Recent changes: Added starting section fields to wedding config schema
@@ -383,6 +392,7 @@ _This section describes what the /tasks command will do - DO NOT execute during 
    - Verify all tests pass (unit + integration + e2e)
 
 **Ordering Strategy**:
+
 - TDD: All test tasks before corresponding implementation
 - Dependency order: Database → Server → UI
 - Parallel execution: Tasks marked [P] can run independently
