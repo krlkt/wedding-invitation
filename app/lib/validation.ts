@@ -96,7 +96,7 @@ export function isValidInstagramUrl(url: string): boolean {
     }
 
     return true
-  } catch (error) {
+  } catch (_error) {
     // Invalid URL format
     return false
   }

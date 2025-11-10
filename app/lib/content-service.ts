@@ -5,7 +5,8 @@
  * Handles love story, locations, FAQs, bank details, and dress code content.
  */
 
-import { db } from './database'
+import { eq, desc } from 'drizzle-orm'
+
 import {
   loveStorySegments,
   locationDetails,
@@ -22,7 +23,8 @@ import {
   type NewWish,
   type NewStartingSectionContent,
 } from '@/app/db/schema'
-import { eq, desc } from 'drizzle-orm'
+
+import { db } from './database'
 
 // ============================================================================
 // Love Story Management
@@ -178,18 +180,17 @@ export async function updateBankDetails(
       .returning()
 
     return updated
-  } else {
-    // Create new
-    const [created] = await db
-      .insert(bankDetails)
-      .values({
-        ...data,
-        weddingConfigId,
-      })
-      .returning()
-
-    return created
   }
+  // Create new
+  const [created] = await db
+    .insert(bankDetails)
+    .values({
+      ...data,
+      weddingConfigId,
+    })
+    .returning()
+
+  return created
 }
 
 // ============================================================================
@@ -225,18 +226,17 @@ export async function updateDressCode(
       .returning()
 
     return updated
-  } else {
-    // Create new
-    const [created] = await db
-      .insert(dressCodes)
-      .values({
-        ...data,
-        weddingConfigId,
-      })
-      .returning()
-
-    return created
   }
+  // Create new
+  const [created] = await db
+    .insert(dressCodes)
+    .values({
+      ...data,
+      weddingConfigId,
+    })
+    .returning()
+
+  return created
 }
 
 // ============================================================================
@@ -294,16 +294,16 @@ export async function updateStartingSectionContent(
       .returning()
 
     return updated
-  } else {
-    // Create new
-    const [created] = await db
-      .insert(startingSectionContent)
-      .values({
-        ...data,
-        weddingConfigId,
-      })
-      .returning()
-
-    return created
   }
+
+  // Create new
+  const [created] = await db
+    .insert(startingSectionContent)
+    .values({
+      ...data,
+      weddingConfigId,
+    })
+    .returning()
+
+  return created
 }

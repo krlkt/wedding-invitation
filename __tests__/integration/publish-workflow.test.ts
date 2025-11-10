@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T018: Publish/Unpublish Workflow Test
  *
  * Tests complete publish/unpublish workflow including validation,

@@ -1,4 +1,5 @@
 import InstagramIcon from '@/app/icons/InstagramIcon'
+
 import Avatar from '../Avatar'
 
 const BrideAndGroom = () => (

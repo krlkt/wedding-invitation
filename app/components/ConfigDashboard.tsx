@@ -9,20 +9,33 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
+
 import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
+import { DraftProvider, useDraft } from '@/app/context/DraftContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
 import type { FAQItem } from '@/app/db/schema/content'
 import { FAQForm } from './admin/sections/FAQForm'
 
 export default function ConfigDashboard() {
+  return (
+    <DraftProvider>
+      <div className="relative flex h-full overflow-hidden bg-gray-100">
+        <ConfigDashboardContent />
+      </div>
+    </DraftProvider>
+  )
+}
+
+function ConfigDashboardContent() {
   const [config, setConfig] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -30,12 +43,13 @@ export default function ConfigDashboard() {
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
   const [startingSectionContent, setStartingSectionContent] =
     useState<StartingSectionContent | null>(null)
-  const [draftStartingSection, setDraftStartingSection] = useState<
-    Partial<StartingSectionContent> | undefined
-  >(undefined)
   const [faqs, setFaqs] = useState<FAQItem[]>([])
 
-  //WIP: session check on dashboard load or time interval or user action?
+  // Use draft context for starting section
+  const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
+    useDraft('startingSection')
+
+  // WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
     try {
       const res = await fetch('/api/auth/session')
@@ -50,10 +64,14 @@ export default function ConfigDashboard() {
   }
 
   useEffect(() => {
-    fetchConfig()
-    fetchStartingSectionContent()
-    fetchFAQs()
-    checkSession()
+    ;(async () => {
+      await fetchConfig()
+      await fetchStartingSectionContent()
+      await fetchFAQs()
+      await checkSession()
+    })().catch((error) => {
+      console.error('Initialization error:', error)
+    })
   }, [])
 
   async function fetchConfig() {
@@ -83,18 +101,18 @@ export default function ConfigDashboard() {
   }
 
   async function fetchFAQs() {
-  try {
-    const res = await fetch('/api/wedding/faqs')
-    if (res.ok) {
-      const data = await res.json()
-      setFaqs(data.data)
-    } else {
-      console.error('Failed to fetch FAQs')
+    try {
+      const res = await fetch('/api/wedding/faqs')
+      if (res.ok) {
+        const data = await res.json()
+        setFaqs(data.data)
+      } else {
+        console.error('Failed to fetch FAQs')
+      }
+    } catch (err) {
+      console.error('Error fetching FAQs', err)
     }
-  } catch (err) {
-    console.error('Error fetching FAQs', err)
   }
-}
 
   async function updateStartingSectionContent(updates: any) {
     try {
@@ -116,7 +134,7 @@ export default function ConfigDashboard() {
       }
 
       // Update text content
-      const { file, ...contentUpdates } = updates
+      const { _file, ...contentUpdates } = updates
       const response = await fetch('/api/wedding/starting-section', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -135,27 +153,6 @@ export default function ConfigDashboard() {
     }
   }
 
-  async function updateConfig(updates: any) {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/config', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updates),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setConfig(data.data)
-        setRefreshTrigger((prev) => prev + 1)
-      }
-    } catch (error) {
-      console.error('Failed to update config:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
   async function toggleFeature(featureName: string, isEnabled: boolean) {
     try {
       const response = await fetch('/api/wedding/config/features', {
@@ -165,7 +162,7 @@ export default function ConfigDashboard() {
       })
 
       if (response.ok) {
-        fetchConfig()
+        await fetchConfig()
         setRefreshTrigger((prev) => prev + 1)
       }
     } catch (error) {
@@ -183,7 +180,7 @@ export default function ConfigDashboard() {
       })
 
       if (response.ok) {
-        fetchConfig()
+        await fetchConfig()
         setDraftFeatures(undefined) // Clear draft features after successful save
         setRefreshTrigger((prev) => prev + 1)
       }
@@ -194,45 +191,6 @@ export default function ConfigDashboard() {
     }
   }
 
-  async function handlePublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/publish', {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to publish:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function handleUnpublish() {
-    try {
-      setSaving(true)
-      const response = await fetch('/api/wedding/unpublish', {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        fetchConfig()
-      }
-    } catch (error) {
-      console.error('Failed to unpublish:', error)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  // Memoize callbacks to prevent infinite loops
-  const handleStartingSectionLocalChange = useCallback((draft: Partial<StartingSectionContent>) => {
-    setDraftStartingSection(draft)
-  }, [])
-
   const handleBackgroundUpload = useCallback(
     (backgroundData: {
       backgroundFilename: string
@@ -241,21 +199,27 @@ export default function ConfigDashboard() {
       backgroundMimeType: string
       backgroundFileSize: number
     }) => {
-      // Only update draft state - don't update saved state yet
-      // This preserves unsaved changes in the form
-      setDraftStartingSection((prev) => ({
-        ...prev,
+      // Update draft state with new background
+      setDraftStartingSection({
+        ...(draftStartingSection || {}),
         ...backgroundData,
-      }))
-      // Preview will update automatically via draft merge
-      // Don't trigger refetch to avoid resetting the form
+      })
+      // Trigger preview refresh to show new background immediately
+      setRefreshTrigger((prev) => prev + 1)
     },
-    []
+    [draftStartingSection, setDraftStartingSection]
   )
+
+  const handleMonogramUpload = useCallback(async () => {
+    // Monogram is saved to config, so refetch config to get updated monogram
+    await fetchConfig()
+    // Trigger preview refresh to show new monogram
+    setRefreshTrigger((prev) => prev + 1)
+  }, [])
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex h-full min-h-screen w-full items-center justify-center">
         <div className="text-center">
           <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-pink-600" />
           <p className="mt-4 text-gray-600">Loading dashboard...</p>
@@ -269,7 +233,7 @@ export default function ConfigDashboard() {
   }
 
   return (
-    <div className="flex h-full overflow-hidden bg-gray-100">
+    <>
       {/* Left Panel - Configuration */}
       <div className="flex w-1/2 flex-col overflow-y-auto border-r bg-white">
         <div className="sticky top-0 z-10 border-b bg-white">
@@ -286,26 +250,24 @@ export default function ConfigDashboard() {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col">
-          <FeaturesForm
-            config={config}
-            onToggle={toggleFeature}
-            onBatchSave={batchUpdateFeatures}
-            saving={saving}
-            onLocalChange={(features: Record<string, boolean>) => {
-              // Only update draft state, don't trigger refresh/fetch
-              setDraftFeatures(features)
-            }}
-            startingSectionContent={startingSectionContent}
-            draftStartingSectionContent={draftStartingSection}
-            onUpdateStartingSection={updateStartingSectionContent}
-            onStartingSectionLocalChange={handleStartingSectionLocalChange}
-            onRefetchStartingSection={fetchStartingSectionContent}
-            onBackgroundUpload={handleBackgroundUpload}
-            faqs={faqs}
-            setFaqs={setFaqs}
-          />
-        </div>
+        <FeaturesForm
+          config={config}
+          onToggle={toggleFeature}
+          onBatchSave={batchUpdateFeatures}
+          saving={saving}
+          onLocalChange={(features: Record<string, boolean>) => {
+            // Only update draft state, don't trigger refresh/fetch
+            setDraftFeatures(features)
+          }}
+          startingSectionContent={startingSectionContent}
+          onUpdateStartingSection={updateStartingSectionContent}
+          onRefetchStartingSection={fetchStartingSectionContent}
+          onBackgroundUpload={handleBackgroundUpload}
+          onMonogramUpload={handleMonogramUpload}
+          onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
+          faqs={faqs}
+          setFaqs={setFaqs}
+        />
       </div>
 
       {/* Right Panel - Live Preview */}
@@ -318,7 +280,7 @@ export default function ConfigDashboard() {
           draftFAQs={faqs}
         />
       </div>
-    </div>
+    </>
   )
 }
 
@@ -331,14 +293,18 @@ function FeaturesForm({
   saving,
   onLocalChange,
   startingSectionContent,
-  draftStartingSectionContent,
   onUpdateStartingSection,
-  onStartingSectionLocalChange,
   onRefetchStartingSection,
   onBackgroundUpload,
+  onMonogramUpload,
+  onRefreshPreview,
   faqs,
   setFaqs,
 }: any) {
+  // Access draft context in FeaturesForm
+  const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
+    useDraft('startingSection')
+
   const features = [
     {
       name: 'hero',
@@ -377,9 +343,6 @@ function FeaturesForm({
   const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(
     new Set()
   )
-  const [localDraftStartingSection, setLocalDraftStartingSection] = useState<
-    Partial<StartingSectionContent>
-  >({})
 
   // Update draft state when config changes (after save)
   useEffect(() => {
@@ -387,10 +350,9 @@ function FeaturesForm({
     setChangedFeatures(new Set())
   }, [config.features])
 
-  // Update draft starting section when content changes (after save)
+  // Clear changed fields when starting section content changes (after save or discard)
   useEffect(() => {
     setChangedStartingSectionFields(new Set())
-    setLocalDraftStartingSection({})
   }, [startingSectionContent])
 
   // Check if there are unsaved changes
@@ -433,9 +395,11 @@ function FeaturesForm({
       await onBatchSave(featuresToUpdate)
     }
 
-    // Save changed starting section content
-    if (changedStartingSectionFields.size > 0) {
-      await onUpdateStartingSection(localDraftStartingSection)
+    // Save changed starting section content (draft is already in context)
+    if (changedStartingSectionFields.size > 0 && draftStartingSection) {
+      await onUpdateStartingSection(draftStartingSection)
+      // Clear draft after successful save
+      clearStartingSectionDraft()
     }
   }
 
@@ -445,14 +409,19 @@ function FeaturesForm({
     setChangedFeatures(new Set())
     onLocalChange(config.features)
 
-    // Reset starting section to saved state
-    setLocalDraftStartingSection({})
+    // Reset starting section to saved state using context
+    // Clearing the draft triggers the useEffect in StartingSectionForm which resets the form
+    clearStartingSectionDraft()
     setChangedStartingSectionFields(new Set())
-    onStartingSectionLocalChange(undefined)
 
-    // Force re-fetch to trigger form reset
+    // Force re-fetch to ensure we have latest data from server
     if (onRefetchStartingSection) {
       await onRefetchStartingSection()
+    }
+
+    // Trigger LivePreview refresh to show actual saved state from server
+    if (onRefreshPreview) {
+      onRefreshPreview()
     }
   }
 
@@ -460,15 +429,78 @@ function FeaturesForm({
     setChangedStartingSectionFields(fields)
   }, [])
 
-  const handleStartingSectionLocalChange = useCallback(
-    (draft: Partial<StartingSectionContent>) => {
-      setLocalDraftStartingSection((prev) => ({
-        ...prev,
-        ...draft,
-      }))
-      onStartingSectionLocalChange(draft)
+  const renderFeatureContent = useCallback(
+    (featureName: string) => {
+      switch (featureName) {
+        case 'hero':
+          return (
+            <StartingSectionForm
+              weddingConfig={config}
+              startingSectionContent={startingSectionContent}
+              onUpdate={onUpdateStartingSection}
+              onChangeTracking={handleStartingSectionChange}
+              changedFields={changedStartingSectionFields}
+              onBackgroundUpload={onBackgroundUpload}
+              onMonogramUpload={onMonogramUpload}
+            />
+          )
+
+        case 'groom_and_bride':
+          return (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="mb-1 block text-sm font-medium">
+                    Groom&apos;s Instagram Link
+                  </label>
+                  <input
+                    type="url"
+                    defaultValue={config.groomsInstagramLink || ''}
+                    placeholder="https://instagram.com/..."
+                    className="w-full rounded-lg border px-3 py-2 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-medium">
+                    Bride&apos;s Instagram Link
+                  </label>
+                  <input
+                    type="url"
+                    defaultValue={config.brideInstagramLink || ''}
+                    placeholder="https://instagram.com/..."
+                    className="w-full rounded-lg border px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
+              <p className="text-xs italic text-gray-500">
+                Note: Instagram link updates will be implemented in a future update
+              </p>
+            </div>
+          )
+
+        case 'faqs':
+          return (
+            <FAQForm
+              faqs={faqs}
+              setFaqs={setFaqs}
+            />
+        )
+
+        default:
+          return (
+            <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
+          )
+      }
     },
-    [onStartingSectionLocalChange]
+    [
+      changedStartingSectionFields,
+      config,
+      handleStartingSectionChange,
+      onBackgroundUpload,
+      onMonogramUpload,
+      onUpdateStartingSection,
+      startingSectionContent,
+    ]
   )
 
   return (
@@ -521,57 +553,7 @@ function FeaturesForm({
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-4 pb-4">
-                  {feature.name === 'faqs' ? (
-                     <FAQForm
-                      faqs={faqs}
-                      setFaqs={setFaqs}
-                    />
-                  ) : feature.name === 'hero' ? (
-                    <StartingSectionForm
-                      weddingConfig={config}
-                      startingSectionContent={startingSectionContent}
-                      draftStartingSectionContent={draftStartingSectionContent}
-                      onUpdate={onUpdateStartingSection}
-                      onLocalChange={handleStartingSectionLocalChange}
-                      onChangeTracking={handleStartingSectionChange}
-                      changedFields={changedStartingSectionFields}
-                      onBackgroundUpload={onBackgroundUpload}
-                    />
-                  ) : feature.name === 'groom_and_bride' ? (
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="mb-1 block text-sm font-medium">
-                            Groom&apos;s Instagram Link
-                          </label>
-                          <input
-                            type="url"
-                            defaultValue={config.groomsInstagramLink || ''}
-                            placeholder="https://instagram.com/..."
-                            className="w-full rounded-lg border px-3 py-2 text-sm"
-                          />
-                        </div>
-                        <div>
-                          <label className="mb-1 block text-sm font-medium">
-                            Bride&apos;s Instagram Link
-                          </label>
-                          <input
-                            type="url"
-                            defaultValue={config.brideInstagramLink || ''}
-                            placeholder="https://instagram.com/..."
-                            className="w-full rounded-lg border px-3 py-2 text-sm"
-                          />
-                        </div>
-                      </div>
-                      <p className="text-xs italic text-gray-500">
-                        Note: Instagram link updates will be implemented in a future update
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="text-sm italic text-gray-500">
-                      Content configuration coming soon...
-                    </div>
-                  )}
+                  {renderFeatureContent(feature.name)}
                 </AccordionContent>
               </AccordionItem>
             )

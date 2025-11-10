@@ -6,8 +6,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/app/lib/session'
-import { getWeddingConfigById, getFeatureToggles } from '@/app/lib/wedding-service'
+
+import type { PreviewData } from '@/app/components/preview/types'
+import type { FeatureName } from '@/app/db/schema/features'
 import {
   getLoveStorySegments,
   getLocations,
@@ -18,14 +19,16 @@ import {
   getStartingSectionContent,
 } from '@/app/lib/content-service'
 import { getGalleryPhotos } from '@/app/lib/file-service'
-import type { PreviewData } from '@/app/components/preview/types'
-import type { FeatureName } from '@/app/db/schema/features'
+import { requireAuth } from '@/app/lib/session'
+import { getWeddingConfigById, getFeatureToggles } from '@/app/lib/wedding-service'
 
 export async function GET(request: NextRequest) {
   try {
     // Require authentication
     const session = await requireAuth()
-    if (session instanceof NextResponse) return session
+    if (session instanceof NextResponse) {
+      return session
+    }
 
     // Get wedding configuration
     const config = await getWeddingConfigById(session.weddingConfigId)
@@ -41,7 +44,7 @@ export async function GET(request: NextRequest) {
     const toggles = await getFeatureToggles(config.id)
     const features = toggles.reduce(
       (acc, t) => {
-        acc[t.featureName as FeatureName] = t.isEnabled
+        acc[t.featureName] = t.isEnabled
         return acc
       },
       {} as Record<FeatureName, boolean>

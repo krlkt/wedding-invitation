@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * T017: Live Preview Functionality Test
  *
  * Tests live preview functionality that shows wedding site updates in real-time.

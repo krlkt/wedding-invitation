@@ -1,7 +1,8 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+
+import { useRouter } from 'next/navigation'
 
 interface LogoutButtonProps {
   className?: string
@@ -20,7 +21,7 @@ export default function LogoutButton({ className, fullWidth }: LogoutButtonProps
       })
 
       if (res.ok) {
-        router.push('/admin/login')
+        router.push('/login')
         router.refresh()
       }
     } catch (error) {

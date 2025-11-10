@@ -33,6 +33,7 @@
 **Decision**: Use Server Actions with FormData
 
 **Rationale**:
+
 - Aligns with Next.js 14 App Router best practices
 - Constitution Principle VII mandates Server Actions for mutations
 - Reduces boilerplate compared to API routes
@@ -40,6 +41,7 @@
 - Automatic cache revalidation
 
 **Implementation Pattern**:
+
 ```typescript
 'use server'
 export async function uploadBackgroundMedia(formData: FormData) {
@@ -51,6 +53,7 @@ export async function uploadBackgroundMedia(formData: FormData) {
 ```
 
 **References**:
+
 - Next.js Server Actions docs: https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations
 - Constitution VII: "Server Actions MUST be used for mutations initiated from Client Components"
 
@@ -85,6 +88,7 @@ export async function uploadBackgroundMedia(formData: FormData) {
 **Decision**: Store in `public/uploads/{weddingConfigId}/starting-section/`
 
 **Rationale**:
+
 - Current project is single-server deployment
 - Keeps infrastructure simple (Constitution IV: avoid premature abstraction)
 - Next.js automatically serves files from public/ directory
@@ -92,6 +96,7 @@ export async function uploadBackgroundMedia(formData: FormData) {
 - Wedding-specific folders provide good organization
 
 **File Organization**:
+
 ```
 public/
 └── uploads/
@@ -133,6 +138,7 @@ public/
 **Decision**: React Hook Form with Zod validation schema
 
 **Rationale**:
+
 - Constitution I mandates React Hook Form for all form implementations
 - shadcn/ui form components built specifically for React Hook Form
 - Zod provides runtime + compile-time type safety
@@ -140,6 +146,7 @@ public/
 - Validates on blur, submit, or change (configurable)
 
 **Implementation Pattern**:
+
 ```typescript
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -147,11 +154,12 @@ import { startingSectionSchema } from '@/lib/validations/starting-section'
 
 const form = useForm({
   resolver: zodResolver(startingSectionSchema),
-  defaultValues: { groomName: config.groomName || '' }
+  defaultValues: { groomName: config.groomName || '' },
 })
 ```
 
 **References**:
+
 - Constitution I: "React Hook Form for all form implementations"
 - shadcn/ui form docs: https://ui.shadcn.com/docs/components/form
 
@@ -178,6 +186,7 @@ const form = useForm({
 **Decision**: Add columns to existing `weddingConfigurations` table
 
 **Rationale**:
+
 - Starting section is 1:1 with wedding configuration
 - Existing table already has similar fields (groomName, brideName, weddingDate)
 - Matches pattern: monogramFilename, groomFather, etc. already in this table
@@ -185,6 +194,7 @@ const form = useForm({
 - No normalization benefit for fields that always load together
 
 **New Columns**:
+
 ```sql
 ALTER TABLE wedding_configurations ADD COLUMN
   starting_section_groom_name TEXT,
@@ -202,6 +212,7 @@ ALTER TABLE wedding_configurations ADD COLUMN
 ```
 
 **References**:
+
 - Existing schema pattern: app/db/schema/weddings.ts lines 30-42
 
 ---
@@ -233,12 +244,14 @@ ALTER TABLE wedding_configurations ADD COLUMN
 **Decision**: Pass draft state object to LivePreview component (similar to draftFeatures pattern)
 
 **Rationale**:
+
 - Existing ConfigDashboard already implements this pattern for feature toggles
 - Zero network latency for preview updates
 - Simple prop passing (Constitution IV: avoid unnecessary complexity)
 - Users expect instant feedback (<100ms per Performance Goals)
 
 **Implementation Pattern**:
+
 ```typescript
 // In StartingSectionForm
 const [draftContent, setDraftContent] = useState(initialContent)
@@ -254,19 +267,20 @@ function handleChange(field, value) {
 ```
 
 **References**:
+
 - Existing pattern: ConfigDashboard.tsx lines 193-196, 206
 
 ---
 
 ## Summary of Decisions
 
-| Area | Decision | Primary Rationale |
-|------|----------|-------------------|
-| File Upload | Server Actions with FormData | Constitutional mandate, built-in streaming |
-| File Storage | public/uploads/{configId}/ | Simple, performant, easy migration path |
-| Form Management | React Hook Form + Zod | Already in stack, shadcn/ui integration |
+| Area            | Decision                     | Primary Rationale                          |
+| --------------- | ---------------------------- | ------------------------------------------ |
+| File Upload     | Server Actions with FormData | Constitutional mandate, built-in streaming |
+| File Storage    | public/uploads/{configId}/   | Simple, performant, easy migration path    |
+| Form Management | React Hook Form + Zod        | Already in stack, shadcn/ui integration    |
 | Database Schema | Extend weddingConfigurations | 1:1 relationship, matches existing pattern |
-| Preview Updates | Draft state prop passing | Zero latency, matches existing pattern |
+| Preview Updates | Draft state prop passing     | Zero latency, matches existing pattern     |
 
 ## Technology Stack Validation
 
@@ -281,6 +295,7 @@ All decisions comply with Constitution v1.2.0:
 ## Next Steps
 
 Proceed to Phase 1: Design & Contracts
+
 - Create data-model.md with schema details
 - Generate API contracts for all endpoints
 - Write failing contract tests

@@ -10,11 +10,13 @@
  * - Background media (image/video)
  */
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { startingSectionContentSchema } from '@/app/lib/validations/starting-section'
 import { validateImageFile, validateVideoFile, formatFileSize } from '@/app/utils/media-validation'
+import { useDraft } from '@/app/context/DraftContext'
+import { useMediaUpload } from '@/app/hooks/useMediaUpload'
 import type { WeddingConfiguration } from '@/app/db/schema/weddings'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
 import type { z } from 'zod'
@@ -22,6 +24,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
+import { FileInput } from '@/components/ui/file-input'
 import {
   Dialog,
   DialogContent,
@@ -37,9 +40,7 @@ type StartingSectionContentFormData = z.infer<typeof startingSectionContentSchem
 interface StartingSectionFormProps {
   weddingConfig: WeddingConfiguration
   startingSectionContent: StartingSectionContent | null
-  draftStartingSectionContent?: Partial<StartingSectionContent>
   onUpdate: (data: StartingSectionContentFormData & { file?: File }) => Promise<void>
-  onLocalChange?: (draft: Partial<StartingSectionContent>) => void
   onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void
   changedFields?: Set<string>
   onBackgroundUpload?: (backgroundData: {
@@ -49,25 +50,75 @@ interface StartingSectionFormProps {
     backgroundMimeType: string
     backgroundFileSize: number
   }) => void
+  onMonogramUpload?: (monogramData: {
+    monogramFilename: string
+    monogramFileSize: number
+    monogramMimeType: string
+  }) => void
 }
 
 export function StartingSectionForm({
   weddingConfig,
   startingSectionContent,
-  draftStartingSectionContent,
   onUpdate,
-  onLocalChange,
   onChangeTracking,
   changedFields = new Set(),
   onBackgroundUpload,
+  onMonogramUpload,
 }: StartingSectionFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  // Use draft context
+  const { draft: draftStartingSectionContent, setDraft: setDraftStartingSection } =
+    useDraft('startingSection')
+
+  // Background media upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [fileError, setFileError] = useState<string | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState<number>(0)
-  const [isUploading, setIsUploading] = useState(false)
+  const [validationError, setValidationError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const backgroundUpload = useMediaUpload({
+    apiEndpoint: '/api/wedding/starting-section/upload',
+    onSuccess: async (result) => {
+      if (onBackgroundUpload && result.data && selectedFile) {
+        onBackgroundUpload({
+          backgroundFilename: result.data.backgroundFilename,
+          backgroundOriginalName: selectedFile.name,
+          backgroundType: result.data.mediaType,
+          backgroundMimeType: selectedFile.type,
+          backgroundFileSize: selectedFile.size,
+        })
+      }
+      // Clear selection
+      setSelectedFile(null)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    },
+  })
+
+  // Monogram upload
+  const [selectedMonogramFile, setSelectedMonogramFile] = useState<File | null>(null)
+  const [showMonogramConfirmDialog, setShowMonogramConfirmDialog] = useState(false)
+  const monogramFileInputRef = useRef<HTMLInputElement>(null)
+
+  const monogramUpload = useMediaUpload({
+    apiEndpoint: '/api/wedding/config/monogram',
+    validateFile: validateImageFile,
+    onSuccess: async (result) => {
+      if (onMonogramUpload && result.data && selectedMonogramFile) {
+        onMonogramUpload({
+          monogramFilename: result.data.monogramFilename,
+          monogramFileSize: selectedMonogramFile.size,
+          monogramMimeType: selectedMonogramFile.type,
+        })
+      }
+      // Clear selection
+      setSelectedMonogramFile(null)
+      if (monogramFileInputRef.current) {
+        monogramFileInputRef.current.value = ''
+      }
+    },
+  })
 
   // Default placeholder text from basic info
   const groomFullName = weddingConfig.groomName
@@ -84,312 +135,276 @@ export function StartingSectionForm({
   } = useForm<StartingSectionContentFormData>({
     resolver: zodResolver(startingSectionContentSchema),
     defaultValues: {
-      groomDisplayName: startingSectionContent?.groomDisplayName ?? null,
-      brideDisplayName: startingSectionContent?.brideDisplayName ?? null,
-      showParentInfo: startingSectionContent?.showParentInfo ?? false,
-      groomFatherName: startingSectionContent?.groomFatherName ?? null,
-      groomMotherName: startingSectionContent?.groomMotherName ?? null,
-      brideFatherName: startingSectionContent?.brideFatherName ?? null,
-      brideMotherName: startingSectionContent?.brideMotherName ?? null,
-      showWeddingDate: startingSectionContent?.showWeddingDate ?? true,
+      // Initialize with draft first, then saved, then defaults
+      groomDisplayName:
+        draftStartingSectionContent?.groomDisplayName ??
+        startingSectionContent?.groomDisplayName ??
+        null,
+      brideDisplayName:
+        draftStartingSectionContent?.brideDisplayName ??
+        startingSectionContent?.brideDisplayName ??
+        null,
+      showParentInfo:
+        draftStartingSectionContent?.showParentInfo ??
+        startingSectionContent?.showParentInfo ??
+        false,
+      groomFatherName:
+        draftStartingSectionContent?.groomFatherName ??
+        startingSectionContent?.groomFatherName ??
+        null,
+      groomMotherName:
+        draftStartingSectionContent?.groomMotherName ??
+        startingSectionContent?.groomMotherName ??
+        null,
+      brideFatherName:
+        draftStartingSectionContent?.brideFatherName ??
+        startingSectionContent?.brideFatherName ??
+        null,
+      brideMotherName:
+        draftStartingSectionContent?.brideMotherName ??
+        startingSectionContent?.brideMotherName ??
+        null,
+      showWeddingDate:
+        draftStartingSectionContent?.showWeddingDate ??
+        startingSectionContent?.showWeddingDate ??
+        true,
     },
   })
 
-  // Reset form when startingSectionContent changes (e.g., after save or discard)
+  // Reset form when saved content changes (after save or discard refetch)
+  // Always use SAVED values to prevent race condition with draft clearing
+  const prevStartingSectionContent = useRef(startingSectionContent)
   useEffect(() => {
-    reset({
-      groomDisplayName: startingSectionContent?.groomDisplayName ?? null,
-      brideDisplayName: startingSectionContent?.brideDisplayName ?? null,
-      showParentInfo: startingSectionContent?.showParentInfo ?? false,
-      groomFatherName: startingSectionContent?.groomFatherName ?? null,
-      groomMotherName: startingSectionContent?.groomMotherName ?? null,
-      brideFatherName: startingSectionContent?.brideFatherName ?? null,
-      brideMotherName: startingSectionContent?.brideMotherName ?? null,
-      showWeddingDate: startingSectionContent?.showWeddingDate ?? true,
-    })
+    if (prevStartingSectionContent.current !== startingSectionContent) {
+      prevStartingSectionContent.current = startingSectionContent
+      reset({
+        groomDisplayName: startingSectionContent?.groomDisplayName ?? null,
+        brideDisplayName: startingSectionContent?.brideDisplayName ?? null,
+        showParentInfo: startingSectionContent?.showParentInfo ?? false,
+        groomFatherName: startingSectionContent?.groomFatherName ?? null,
+        groomMotherName: startingSectionContent?.groomMotherName ?? null,
+        brideFatherName: startingSectionContent?.brideFatherName ?? null,
+        brideMotherName: startingSectionContent?.brideMotherName ?? null,
+        showWeddingDate: startingSectionContent?.showWeddingDate ?? true,
+      })
+    }
   }, [startingSectionContent, reset])
 
   const showParentInfo = watch('showParentInfo')
   const showWeddingDate = watch('showWeddingDate')
 
-  // Watch all form values using useWatch (stable references)
-  const groomDisplayName = useWatch({ control, name: 'groomDisplayName' })
-  const brideDisplayName = useWatch({ control, name: 'brideDisplayName' })
-  const watchShowParentInfo = useWatch({ control, name: 'showParentInfo' })
-  const groomFatherName = useWatch({ control, name: 'groomFatherName' })
-  const groomMotherName = useWatch({ control, name: 'groomMotherName' })
-  const brideFatherName = useWatch({ control, name: 'brideFatherName' })
-  const brideMotherName = useWatch({ control, name: 'brideMotherName' })
-  const watchShowWeddingDate = useWatch({ control, name: 'showWeddingDate' })
-
-  // Memoize the update handlers to prevent re-renders
-  const stableOnLocalChange = useCallback(
-    (draft: Partial<StartingSectionContent>) => {
-      if (onLocalChange) {
-        onLocalChange(draft)
-      }
-    },
-    [onLocalChange]
-  )
-
-  const stableOnChangeTracking = useCallback(
-    (hasChanges: boolean, fields: Set<string>) => {
-      if (onChangeTracking) {
-        onChangeTracking(hasChanges, fields)
-      }
-    },
-    [onChangeTracking]
-  )
-
+  // Auto-save form changes to draft
+  const formValues = useWatch({ control })
   useEffect(() => {
-    // Create draft object with current form values
     const draft: Partial<StartingSectionContent> = {
-      groomDisplayName: groomDisplayName ?? null,
-      brideDisplayName: brideDisplayName ?? null,
-      showParentInfo: watchShowParentInfo ?? false,
-      groomFatherName: groomFatherName ?? null,
-      groomMotherName: groomMotherName ?? null,
-      brideFatherName: brideFatherName ?? null,
-      brideMotherName: brideMotherName ?? null,
-      showWeddingDate: watchShowWeddingDate ?? true,
+      groomDisplayName: formValues.groomDisplayName ?? null,
+      brideDisplayName: formValues.brideDisplayName ?? null,
+      showParentInfo: formValues.showParentInfo ?? false,
+      groomFatherName: formValues.groomFatherName ?? null,
+      groomMotherName: formValues.groomMotherName ?? null,
+      brideFatherName: formValues.brideFatherName ?? null,
+      brideMotherName: formValues.brideMotherName ?? null,
+      showWeddingDate: formValues.showWeddingDate ?? true,
     }
 
-    // Update preview immediately
-    stableOnLocalChange(draft)
-
-    // Track which fields have changed
+    // Track which fields changed from saved state
     const changedFields = new Set<string>()
+    const fields = [
+      'groomDisplayName',
+      'brideDisplayName',
+      'showParentInfo',
+      'groomFatherName',
+      'groomMotherName',
+      'brideFatherName',
+      'brideMotherName',
+      'showWeddingDate',
+    ] as const
 
-    if (draft.groomDisplayName !== (startingSectionContent?.groomDisplayName ?? null)) {
-      changedFields.add('groomDisplayName')
-    }
-    if (draft.brideDisplayName !== (startingSectionContent?.brideDisplayName ?? null)) {
-      changedFields.add('brideDisplayName')
-    }
-    if (draft.showParentInfo !== (startingSectionContent?.showParentInfo ?? false)) {
-      changedFields.add('showParentInfo')
-    }
-    if (draft.groomFatherName !== (startingSectionContent?.groomFatherName ?? null)) {
-      changedFields.add('groomFatherName')
-    }
-    if (draft.groomMotherName !== (startingSectionContent?.groomMotherName ?? null)) {
-      changedFields.add('groomMotherName')
-    }
-    if (draft.brideFatherName !== (startingSectionContent?.brideFatherName ?? null)) {
-      changedFields.add('brideFatherName')
-    }
-    if (draft.brideMotherName !== (startingSectionContent?.brideMotherName ?? null)) {
-      changedFields.add('brideMotherName')
-    }
-    if (draft.showWeddingDate !== (startingSectionContent?.showWeddingDate ?? true)) {
-      changedFields.add('showWeddingDate')
+    fields.forEach((field) => {
+      const savedValue =
+        startingSectionContent?.[field] ??
+        (field === 'showWeddingDate' ? true : field === 'showParentInfo' ? false : null)
+      if (draft[field] !== savedValue) {
+        changedFields.add(field)
+      }
+    })
+
+    // Update draft only if there are changes
+    if (changedFields.size > 0) {
+      // Merge: preserve media fields from prev, update form fields from draft
+      setDraftStartingSection((prev) => ({ ...(prev || {}), ...draft }))
+    } else {
+      setDraftStartingSection(undefined)
     }
 
-    stableOnChangeTracking(changedFields.size > 0, changedFields)
-  }, [
-    groomDisplayName,
-    brideDisplayName,
-    watchShowParentInfo,
-    groomFatherName,
-    groomMotherName,
-    brideFatherName,
-    brideMotherName,
-    watchShowWeddingDate,
-    stableOnLocalChange,
-    stableOnChangeTracking,
-    startingSectionContent,
-  ])
+    onChangeTracking?.(changedFields.size > 0, changedFields)
+  }, [formValues, startingSectionContent, setDraftStartingSection, onChangeTracking])
 
-  // Handle file selection
+  // Background file selection - validate file type and size
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
 
-    // Validate file
+    // Validate file type
     const isImage = file.type.startsWith('image/')
     const isVideo = file.type.startsWith('video/')
 
-    let validation
-    if (isImage) {
-      validation = validateImageFile(file)
-    } else if (isVideo) {
-      validation = validateVideoFile(file)
-    } else {
-      setFileError('Invalid file type. Please upload an image or video.')
+    if (!isImage && !isVideo) {
+      setValidationError('Please select an image or video file')
       setSelectedFile(null)
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
+      if (fileInputRef.current) fileInputRef.current.value = ''
       return
     }
 
+    // Validate file size
+    const validation = isImage ? validateImageFile(file) : validateVideoFile(file)
     if (!validation.valid) {
-      setFileError(validation.error!)
-      setSelectedFile(null)
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
+      setValidationError(validation.error || 'File validation failed')
+      setSelectedFile(file) // Keep the file selected so user can see it
       return
     }
 
-    setFileError(null)
+    // Clear any previous errors and set the selected file
+    setValidationError(null)
+    backgroundUpload.reset()
     setSelectedFile(file)
   }
 
-  // Upload button clicked - check if we need confirmation
+  // Upload button - check if replacement confirmation needed
   const handleUploadBackground = async () => {
-    try {
-      if (!selectedFile) return
-
-      // If there's existing media (saved or draft), show confirmation dialog
-      if (
-        draftStartingSectionContent?.backgroundFilename ||
-        startingSectionContent?.backgroundFilename
-      ) {
-        setShowConfirmDialog(true)
-      } else {
-        // No existing media, upload directly
-        await performUpload()
-      }
-    } catch (error) {
-      console.error('Upload button error:', error)
-      setFileError('Failed to initiate upload. Please try again.')
-    }
-  }
-
-  // Cancel file replacement
-  const handleCancelReplacement = () => {
-    setShowConfirmDialog(false)
-  }
-
-  // Confirm file replacement and start upload
-  const handleConfirmReplacement = async () => {
-    setShowConfirmDialog(false)
-    await performUpload()
-  }
-
-  // Perform the actual upload
-  const performUpload = async () => {
     if (!selectedFile) return
 
-    setIsUploading(true)
-    setUploadProgress(0)
+    // Don't upload if there's a validation error
+    if (validationError) return
 
-    // Simulate progress
-    const progressInterval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(progressInterval)
-          return 90
-        }
-        return prev + 10
-      })
-    }, 200)
-
-    try {
-      const formData = new FormData()
-      formData.append('file', selectedFile)
-
-      const response = await fetch('/api/wedding/starting-section/upload', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Upload failed')
-      }
-
-      const result = await response.json()
-
-      // Update progress to 100%
-      clearInterval(progressInterval)
-      setUploadProgress(100)
-
-      // Update local state with background data (without refetching)
-      if (onBackgroundUpload && result.data) {
-        onBackgroundUpload({
-          backgroundFilename: result.data.backgroundFilename,
-          backgroundOriginalName: selectedFile.name,
-          backgroundType: result.data.mediaType,
-          backgroundMimeType: selectedFile.type,
-          backgroundFileSize: selectedFile.size,
-        })
-      }
-
-      // Clear progress after a short delay
-      setTimeout(() => {
-        setIsUploading(false)
-        setUploadProgress(0)
-        setSelectedFile(null)
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ''
-        }
-      }, 500)
-    } catch (error: any) {
-      clearInterval(progressInterval)
-      setIsUploading(false)
-      setUploadProgress(0)
-      setFileError(error.message || 'Upload failed. Please try again.')
-      console.error('Background upload error:', error)
+    // Show confirmation if replacing existing media
+    if (
+      draftStartingSectionContent?.backgroundFilename ||
+      startingSectionContent?.backgroundFilename
+    ) {
+      setShowConfirmDialog(true)
+    } else {
+      await backgroundUpload.uploadMedia(selectedFile)
     }
   }
 
-  // Form submission
+  // Confirm replacement and upload
+  const handleConfirmReplacement = async () => {
+    setShowConfirmDialog(false)
+    if (selectedFile && !validationError) {
+      await backgroundUpload.uploadMedia(selectedFile)
+    }
+  }
+
+  // Monogram file selection - validation handled by upload hook
+  const handleMonogramFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setSelectedMonogramFile(file)
+    }
+  }
+
+  // Monogram upload button - check if replacement confirmation needed
+  const handleUploadMonogram = async () => {
+    if (!selectedMonogramFile) return
+
+    // Show confirmation if replacing existing monogram
+    if (weddingConfig.monogramFilename) {
+      setShowMonogramConfirmDialog(true)
+    } else {
+      await monogramUpload.uploadMedia(selectedMonogramFile)
+    }
+  }
+
+  // Confirm replacement and upload
+  const handleConfirmMonogramReplacement = async () => {
+    setShowMonogramConfirmDialog(false)
+    if (selectedMonogramFile) {
+      await monogramUpload.uploadMedia(selectedMonogramFile)
+    }
+  }
+
+  // Form submission (media uploads are handled separately)
   const onSubmit = async (data: StartingSectionContentFormData) => {
-    setIsSubmitting(true)
-
     try {
-      // If there's a file, simulate upload progress
-      if (selectedFile) {
-        setIsUploading(true)
-        setUploadProgress(0)
-
-        // Simulate progress
-        const progressInterval = setInterval(() => {
-          setUploadProgress((prev) => {
-            if (prev >= 90) {
-              clearInterval(progressInterval)
-              return 90
-            }
-            return prev + 10
-          })
-        }, 200)
-
-        try {
-          await onUpdate({
-            ...data,
-            file: selectedFile,
-          })
-          clearInterval(progressInterval)
-          setUploadProgress(100)
-
-          // Clear progress after a short delay
-          setTimeout(() => {
-            setIsUploading(false)
-            setUploadProgress(0)
-            setSelectedFile(null)
-            if (fileInputRef.current) {
-              fileInputRef.current.value = ''
-            }
-          }, 500)
-        } catch (error) {
-          clearInterval(progressInterval)
-          setIsUploading(false)
-          setUploadProgress(0)
-          throw error
-        }
-      } else {
-        await onUpdate(data)
-      }
-    } finally {
-      setIsSubmitting(false)
+      await onUpdate(data)
+    } catch (error) {
+      console.error('failed submitting form', error)
     }
   }
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Monogram Upload Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Monogram</h3>
+
+          {weddingConfig.monogramFilename && (
+            <div className="rounded-md border bg-gray-50 p-4">
+              <p className="mb-1 text-sm font-medium">Current Monogram:</p>
+              <div className="mt-2 flex items-center gap-4">
+                <div className="relative h-20 w-16 overflow-hidden rounded border bg-white">
+                  <img
+                    src={weddingConfig.monogramFilename}
+                    alt="Current monogram"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">
+                    {weddingConfig.monogramFilename.split('/').pop()}
+                  </p>
+                  {weddingConfig.monogramFileSize && (
+                    <p className="text-xs text-gray-600">
+                      {formatFileSize(weddingConfig.monogramFileSize)}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="monogramMedia">Upload Monogram Image</Label>
+            <div className="flex gap-2">
+              <FileInput
+                ref={monogramFileInputRef}
+                id="monogramMedia"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleMonogramFileChange}
+                disabled={monogramUpload.isUploading}
+                selectedFile={selectedMonogramFile}
+                formatFileSize={formatFileSize}
+                placeholder="Choose monogram image..."
+              />
+              <Button
+                type="button"
+                onClick={handleUploadMonogram}
+                disabled={!selectedMonogramFile || monogramUpload.isUploading}
+                className="shrink-0"
+              >
+                {monogramUpload.isUploading ? 'Uploading...' : 'Upload'}
+              </Button>
+            </div>
+            <p className="text-xs text-gray-500">Image only: max 10 MB (JPEG, PNG, WebP, GIF)</p>
+            {monogramUpload.error && <p className="text-sm text-red-500">{monogramUpload.error}</p>}
+
+            {/* Upload Progress Bar */}
+            {monogramUpload.isUploading && (
+              <div className="space-y-2">
+                <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-200">
+                  <div
+                    className="h-2.5 rounded-full bg-pink-600 transition-all duration-300 ease-out"
+                    style={{ width: `${monogramUpload.progress}%` }}
+                  />
+                </div>
+                <p className="text-xs text-gray-600">Uploading: {monogramUpload.progress}%</p>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Display Names Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Display Names</h3>
@@ -529,55 +544,49 @@ export function StartingSectionForm({
           <div className="space-y-2">
             <Label htmlFor="backgroundMedia">Upload Background Media</Label>
             <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Input
-                  ref={fileInputRef}
-                  type="file"
-                  id="backgroundMedia"
-                  accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
-                  onChange={handleFileChange}
-                  className="cursor-pointer"
-                  disabled={isUploading}
-                />
-                {selectedFile && !isUploading && (
-                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-                    <span className="bg-white px-2 text-sm text-gray-600">
-                      {formatFileSize(selectedFile.size)}
-                    </span>
-                  </div>
-                )}
-              </div>
+              <FileInput
+                ref={fileInputRef}
+                id="backgroundMedia"
+                accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
+                onChange={handleFileChange}
+                disabled={backgroundUpload.isUploading}
+                selectedFile={selectedFile}
+                formatFileSize={formatFileSize}
+                placeholder="Choose background image or video..."
+              />
               <Button
                 type="button"
                 onClick={handleUploadBackground}
-                disabled={!selectedFile || isUploading}
+                disabled={!selectedFile || backgroundUpload.isUploading}
                 className="shrink-0"
               >
-                {isUploading ? 'Uploading...' : 'Upload'}
+                {backgroundUpload.isUploading ? 'Uploading...' : 'Upload'}
               </Button>
             </div>
             <p className="text-xs text-gray-500">
               Images: max 10 MB (JPEG, PNG, WebP, GIF) | Videos: max 50 MB (MP4, WebM)
             </p>
-            {fileError && <p className="text-sm text-red-500">{fileError}</p>}
+            {(validationError || backgroundUpload.error) && (
+              <p className="text-sm text-red-500">{validationError || backgroundUpload.error}</p>
+            )}
 
             {/* Upload Progress Bar */}
-            {isUploading && (
+            {backgroundUpload.isUploading && (
               <div className="space-y-2">
                 <div className="h-2.5 w-full overflow-hidden rounded-full bg-gray-200">
                   <div
                     className="h-2.5 rounded-full bg-pink-600 transition-all duration-300 ease-out"
-                    style={{ width: `${uploadProgress}%` }}
+                    style={{ width: `${backgroundUpload.progress}%` }}
                   />
                 </div>
-                <p className="text-xs text-gray-600">Uploading: {uploadProgress}%</p>
+                <p className="text-xs text-gray-600">Uploading: {backgroundUpload.progress}%</p>
               </div>
             )}
           </div>
         </div>
       </form>
 
-      {/* Confirmation Dialog */}
+      {/* Background Media Confirmation Dialog */}
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
         <DialogContent>
           <DialogHeader>
@@ -594,10 +603,31 @@ export function StartingSectionForm({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={handleCancelReplacement}>
+            <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
               Cancel
             </Button>
             <Button onClick={handleConfirmReplacement}>Confirm</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Monogram Confirmation Dialog */}
+      <Dialog open={showMonogramConfirmDialog} onOpenChange={setShowMonogramConfirmDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Replace Existing Monogram?</DialogTitle>
+            <DialogDescription>
+              You are about to replace the existing monogram:{' '}
+              <strong>
+                {weddingConfig.monogramFilename?.split('/').pop() || 'current monogram'}
+              </strong>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowMonogramConfirmDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleConfirmMonogramReplacement}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

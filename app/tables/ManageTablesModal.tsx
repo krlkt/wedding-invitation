@@ -1,15 +1,18 @@
 'use client'
 
 import { FC, useState } from 'react'
+
+import AddIcon from '@mui/icons-material/Add'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
+import { Button, TextField, IconButton } from '@mui/material'
+
+import { Locations } from '../components/LocationComponent'
 import Modal from '../components/Modal'
 import { Table } from '../models/table'
-import { Locations } from '../components/LocationComponent'
-import { Button, TextField, IconButton } from '@mui/material'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import AddIcon from '@mui/icons-material/Add'
-import { createTable, updateTableName, updateTableMaxGuests, deleteTable } from './actions'
 import { naturalSort } from '../utils/sort'
+
+import { createTable, updateTableName, updateTableMaxGuests, deleteTable } from './actions'
 
 interface ManageTablesModalProps {
   open: boolean

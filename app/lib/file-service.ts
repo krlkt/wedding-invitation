@@ -6,7 +6,8 @@
  */
 
 import { put, del } from '@vercel/blob'
-import { db } from './database'
+import { eq } from 'drizzle-orm'
+
 import {
   galleryItems,
   dressCodes,
@@ -14,7 +15,8 @@ import {
   startingSectionContent,
   type NewGalleryItem,
 } from '@/app/db/schema'
-import { eq } from 'drizzle-orm'
+
+import { db } from './database'
 import {
   MAX_IMAGE_SIZE,
   MAX_VIDEO_SIZE,
@@ -223,7 +225,7 @@ export async function deleteDressCodePhoto(weddingConfigId: string): Promise<voi
     .where(eq(dressCodes.weddingConfigId, weddingConfigId))
     .limit(1)
 
-  if (!dressCode || !dressCode.photoFilename) {
+  if (!dressCode?.photoFilename) {
     throw new Error('Dress code photo not found')
   }
 
@@ -282,11 +284,11 @@ export async function uploadMonogramPhoto(
     }
   }
 
-  // Update wedding configuration
+  // Update wedding configuration with full URL
   await db
     .update(weddingConfigurations)
     .set({
-      monogramFilename: filename,
+      monogramFilename: blob.url, // Store full URL instead of filename
       monogramFileSize: file.size,
       monogramMimeType: file.type,
       updatedAt: new Date(),
@@ -294,7 +296,7 @@ export async function uploadMonogramPhoto(
     .where(eq(weddingConfigurations.id, weddingConfigId))
 
   return {
-    monogramFilename: filename,
+    monogramFilename: blob.url, // Return full URL
     photoUrl: blob.url,
   }
 }
@@ -309,7 +311,7 @@ export async function deleteMonogramPhoto(weddingConfigId: string): Promise<void
     .where(eq(weddingConfigurations.id, weddingConfigId))
     .limit(1)
 
-  if (!config || !config.monogramFilename) {
+  if (!config?.monogramFilename) {
     throw new Error('Monogram photo not found')
   }
 
@@ -435,7 +437,7 @@ export async function deleteStartingSectionMedia(weddingConfigId: string): Promi
     .where(eq(startingSectionContent.weddingConfigId, weddingConfigId))
     .limit(1)
 
-  if (!content || !content.backgroundFilename) {
+  if (!content?.backgroundFilename) {
     throw new Error('Starting section media not found')
   }
 

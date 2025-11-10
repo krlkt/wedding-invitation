@@ -1,11 +1,14 @@
 import { FC, ReactNode } from 'react'
-import MeetIcon from '../../icons/MeetIcon'
+
+import { motion } from 'framer-motion'
+
+import CatIcon from '@/app/icons/CatIcon'
+import { fadeInVariants } from '@/app/utils/animation'
+
 import BusIcon from '../../icons/BusIcon'
 import CoupleIcon from '../../icons/CoupleIcon'
+import MeetIcon from '../../icons/MeetIcon'
 import RingIcon from '../../icons/RingIcon'
-import CatIcon from '@/app/icons/CatIcon'
-import { motion } from 'framer-motion'
-import { fadeInVariants } from '@/app/utils/animation'
 
 const timelineData = [
   {
@@ -91,7 +94,7 @@ const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
       className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-8"
       variants={fadeInVariants}
       initial="initial"
-      whileInView={'animate'}
+      whileInView="animate"
       viewport={{ once: true }}
     >
       {/* Left side */}

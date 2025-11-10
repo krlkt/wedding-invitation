@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Define public paths that don't require subdomain handling or authentication checks
-  const publicPaths = ['/'] // Add other public paths as needed
+  const publicPaths = ['/', '/register'] // Add other public paths as needed
 
   // Skip middleware for public paths, static files, and API routes (handled in route handlers)
   if (
@@ -25,7 +25,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Allow the login page to be accessed without a session
-  if (pathname.startsWith('/admin/login')) {
+  if (pathname.startsWith('/login')) {
     return NextResponse.next()
   }
 
@@ -33,7 +33,7 @@ export function middleware(request: NextRequest) {
   const session = request.cookies.get('session')?.value
   if (!session) {
     const loginUrl = request.nextUrl.clone()
-    loginUrl.pathname = '/admin/login'
+    loginUrl.pathname = '/login'
     // Optionally, save the original path so user can return after login
     loginUrl.searchParams.set('redirect', pathname)
     return NextResponse.redirect(loginUrl)

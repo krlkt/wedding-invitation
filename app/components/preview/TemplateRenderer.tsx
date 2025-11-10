@@ -9,6 +9,7 @@
  */
 
 import Template1Preview from './Template1Preview'
+
 import type { TemplateProps, TemplateId } from './types'
 
 const TEMPLATES = {
