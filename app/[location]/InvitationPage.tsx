@@ -37,6 +37,8 @@ import { motion } from 'framer-motion'
 import { rotateAnimation } from '../utils/animation'
 import GrowIn from '../components/GrowIn'
 
+import { useFAQs } from '../hooks/features/useFAQs'
+
 export default function InvitationPage({
   location,
   wishes,
@@ -50,6 +52,8 @@ export default function InvitationPage({
 }) {
   const isMalang = location === 'malang'
   const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true)
+  const { faqs } = useFAQs()
+
   // use lenis smooth scroll on page
   useEffect(() => {
     const lenis = new Lenis({
@@ -262,7 +266,7 @@ export default function InvitationPage({
               </FadeIn>
               <SectionTitle title="FAQ" color="secondary" />
               <FadeIn className="w-full px-8">
-                <FAQ />
+                  <FAQ faqs={faqs} />
               </FadeIn>
               <FadeIn from="right" className="absolute -right-10 bottom-12">
                 <Image
