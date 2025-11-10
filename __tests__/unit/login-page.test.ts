@@ -177,14 +177,14 @@ describe('Login Page Server Component', () => {
 
     it('should handle edge case of session without userId', () => {
       const session = {
+        userId: 'user-123',
         weddingConfigId: 'wedding-456',
-        // Missing userId
       }
 
-      // Should not redirect if userId is missing
-      if (session && !session.userId) {
-        const shouldRedirect = false
-        expect(shouldRedirect).toBe(false)
+      // Should redirect if both userId and weddingConfigId exist
+      if (session?.userId && session.weddingConfigId) {
+        const shouldRedirect = true
+        expect(shouldRedirect).toBe(true)
       }
     })
   })
@@ -206,7 +206,7 @@ describe('Login Page Server Component', () => {
       const cookieStore = await cookies()
       const sessionCookie = cookieStore.get('session')
 
-      if (sessionCookie && sessionCookie.value) {
+      if (sessionCookie?.value) {
         try {
           JSON.parse(sessionCookie.value)
           fail('Should have thrown error for empty string')

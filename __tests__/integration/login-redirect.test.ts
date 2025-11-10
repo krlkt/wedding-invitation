@@ -183,7 +183,8 @@ describe('Login Page Redirect', () => {
     it('should accept structurally valid session cookie even with invalid IDs', async () => {
       // Use a session cookie with valid JSON structure but invalid user/wedding IDs
       // The server only validates structure at the page level, not actual DB validity
-      const invalidCookie = 'session={"userId":"invalid-user-id","weddingConfigId":"invalid-wedding-id"}'
+      const invalidCookie =
+        'session={"userId":"invalid-user-id","weddingConfigId":"invalid-wedding-id"}'
 
       const response = await fetch(`${baseUrl}/admin`, {
         method: 'GET',
@@ -266,7 +267,7 @@ describe('Login Page Redirect', () => {
         fetch(`${baseUrl}/login`, {
           method: 'GET',
           headers: {
-            Cookie: sessionCookie,
+            Cookie: sessionCookie ?? '',
           },
           redirect: 'manual',
         })
