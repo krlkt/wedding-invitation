@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 import type { FAQItem, NewFAQItem } from '@/app/db/schema/content'
 import { Input } from '@/components/ui/input'
@@ -9,79 +7,25 @@ import { Trash2, Edit2, Plus } from 'lucide-react'
 
 interface FAQFormProps {
   faqs: FAQItem[]
-  setFaqs: (faqs: FAQItem[]) => void
+  addFAQ: (faq: Partial<NewFAQItem>) => Promise<void>
+  updateFAQ: (faq: FAQItem) => Promise<void>
+  deleteFAQ: (id: string) => Promise<void>
+  saving?: boolean
 }
 
-export function FAQForm({ faqs, setFaqs }: FAQFormProps) {
+export function FAQForm({
+    faqs,
+    addFAQ,
+    updateFAQ,
+    deleteFAQ,
+    saving,
+  }: FAQFormProps) {
   const [newFAQ, setNewFAQ] = useState<Partial<NewFAQItem>>({
     question: '',
     answer: '',
     order: faqs.length,
   })
   const [editingFAQ, setEditingFAQ] = useState<FAQItem | null>(null)
-  const [saving, setSaving] = useState(false)
-
-  async function handleAddFAQ() {
-    if (!newFAQ.question?.trim() || !newFAQ.answer?.trim()) return
-    setSaving(true)
-
-    try {
-      const res = await fetch('/api/wedding/faqs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newFAQ),
-      })
-      const data = await res.json()
-
-      if (data.success) {
-        setFaqs([...faqs, data.data])
-        setNewFAQ({ question: '', answer: '', order: faqs.length + 1 })
-      }
-    } catch (err) {
-      console.error('Failed to add FAQ', err)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function handleUpdateFAQ(updatedFAQ: FAQItem) {
-    setSaving(true)
-    try {
-      const res = await fetch(`/api/wedding/faqs/${updatedFAQ.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedFAQ),
-      })
-      const data = await res.json()
-
-      if (data.success) {
-        setFaqs(faqs.map((faq) => (faq.id === updatedFAQ.id ? data.data : faq)))
-        setEditingFAQ(null)
-      }
-    } catch (err) {
-      console.error('Failed to update FAQ', err)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  async function handleDeleteFAQ(id: string) {
-    if (!confirm('Are you sure you want to delete this FAQ?')) return
-    setSaving(true)
-
-    try {
-      const res = await fetch(`/api/wedding/faqs/${id}`, { method: 'DELETE' })
-      const data = await res.json()
-
-      if (data.success) {
-        setFaqs(faqs.filter((f) => f.id !== id))
-      }
-    } catch (err) {
-      console.error('Failed to delete FAQ', err)
-    } finally {
-      setSaving(false)
-    }
-  }
 
   return (
     <div className="space-y-4">
@@ -107,18 +51,10 @@ export function FAQForm({ faqs, setFaqs }: FAQFormProps) {
                     className="mb-2"
                   />
                   <div className="flex justify-end gap-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditingFAQ(null)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => setEditingFAQ(null)}>
                       Cancel
                     </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => handleUpdateFAQ(editingFAQ)}
-                      disabled={saving}
-                    >
+                    <Button size="sm" onClick={() => { editingFAQ && updateFAQ(editingFAQ); setEditingFAQ(null) }} disabled={saving}>
                       {saving ? 'Saving...' : 'Update'}
                     </Button>
                   </div>
@@ -128,18 +64,10 @@ export function FAQForm({ faqs, setFaqs }: FAQFormProps) {
                   <p className="font-medium">{faq.question}</p>
                   <p className="text-sm text-gray-600">{faq.answer}</p>
                   <div className="flex justify-end gap-1 mt-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setEditingFAQ(faq)}
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => setEditingFAQ(faq)}>
                       <Edit2 className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleDeleteFAQ(faq.id)}
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => deleteFAQ(faq.id)}>
                       <Trash2 className="h-4 w-4 text-red-600" />
                     </Button>
                   </div>
@@ -166,7 +94,7 @@ export function FAQForm({ faqs, setFaqs }: FAQFormProps) {
           rows={3}
         />
         <Button
-          onClick={handleAddFAQ}
+          onClick={() => { addFAQ(newFAQ); setNewFAQ({ question: '', answer: '', order: faqs.length + 1 }) }}
           disabled={saving}
           className="w-full flex items-center justify-center gap-2"
         >

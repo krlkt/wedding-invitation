@@ -22,8 +22,8 @@ import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
 import { DraftProvider, useDraft } from '@/app/context/DraftContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
-import type { FAQItem } from '@/app/db/schema/content'
 import { FAQForm } from './admin/sections/FAQForm'
+import { useFAQs } from '../hooks/features/useFAQs'
 
 export default function ConfigDashboard() {
   return (
@@ -43,7 +43,8 @@ function ConfigDashboardContent() {
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
   const [startingSectionContent, setStartingSectionContent] =
     useState<StartingSectionContent | null>(null)
-  const [faqs, setFaqs] = useState<FAQItem[]>([])
+
+  const { faqs, loading: faqsLoading, saving: faqsSaving, addFAQ, updateFAQ, deleteFAQ } = useFAQs()
 
   // Use draft context for starting section
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
@@ -67,7 +68,6 @@ function ConfigDashboardContent() {
     ;(async () => {
       await fetchConfig()
       await fetchStartingSectionContent()
-      await fetchFAQs()
       await checkSession()
     })().catch((error) => {
       console.error('Initialization error:', error)
@@ -97,20 +97,6 @@ function ConfigDashboardContent() {
       }
     } catch (error) {
       console.error('Failed to fetch starting section content:', error)
-    }
-  }
-
-  async function fetchFAQs() {
-    try {
-      const res = await fetch('/api/wedding/faqs')
-      if (res.ok) {
-        const data = await res.json()
-        setFaqs(data.data)
-      } else {
-        console.error('Failed to fetch FAQs')
-      }
-    } catch (err) {
-      console.error('Error fetching FAQs', err)
     }
   }
 
@@ -266,7 +252,11 @@ function ConfigDashboardContent() {
           onMonogramUpload={handleMonogramUpload}
           onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
           faqs={faqs}
-          setFaqs={setFaqs}
+          faqsLoading={faqsLoading}
+          faqsSaving={faqsSaving}
+          addFAQ={addFAQ}
+          updateFAQ={updateFAQ}
+          deleteFAQ={deleteFAQ}
         />
       </div>
 
@@ -298,8 +288,11 @@ function FeaturesForm({
   onBackgroundUpload,
   onMonogramUpload,
   onRefreshPreview,
-  faqs,
-  setFaqs,
+  faqs, 
+  faqsSaving, // WIP all of these props will be refactored later
+  addFAQ, 
+  updateFAQ, 
+  deleteFAQ,
 }: any) {
   // Access draft context in FeaturesForm
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
@@ -482,7 +475,10 @@ function FeaturesForm({
           return (
             <FAQForm
               faqs={faqs}
-              setFaqs={setFaqs}
+              addFAQ={addFAQ}
+              updateFAQ={updateFAQ}
+              deleteFAQ={deleteFAQ}
+              saving={faqsSaving}        
             />
         )
 
