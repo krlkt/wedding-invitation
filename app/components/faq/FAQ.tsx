@@ -8,10 +8,15 @@ interface FAQProps {
 const FAQ = ({ faqs }: FAQProps) => (
   <div className="w-full space-y-2">
     {faqs.map(({ id, question, answer }) => (
-      <Accordion type="single" key={id} collapsible className="w-full border rounded-lg">
+      <Accordion type="single" key={id} collapsible className="w-full text-base rounded-lg border overflow-hidden">
         <AccordionItem value={id}>
-          <AccordionTrigger className="text-lg font-semibold">{question}</AccordionTrigger>
-          <AccordionContent className="text-sm text-gray-600">{answer}</AccordionContent>
+          <AccordionTrigger className="bg-white font-semibold px-4 py-3 hover:no-underline hover:bg-gray-50">
+            {question}
+          </AccordionTrigger>
+
+          <AccordionContent className="bg-gray-50 text-black px-4 py-3">
+            {answer}
+          </AccordionContent>
         </AccordionItem>
       </Accordion>
     ))}
