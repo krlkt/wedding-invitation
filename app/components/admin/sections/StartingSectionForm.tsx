@@ -74,7 +74,7 @@ export function StartingSectionForm({
   // Background media upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
-  const [validationError, setValidationError] = useState<string | null>(null)
+  const [validationError, _setValidationError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const backgroundUpload = useMediaUpload({

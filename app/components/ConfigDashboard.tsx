@@ -24,9 +24,10 @@ import { GroomSectionForm } from './admin/sections/GroomSectionForm'
 import { BrideSectionForm } from './admin/sections/BrideSectionForm'
 import { DraftProvider, useDraft } from '@/app/context/DraftContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
-import type { GroomSectionContent, SectionPhoto } from '@/app/db/schema/groom-section'
+import type { GroomSectionContent } from '@/app/db/schema/groom-section'
 import type { BrideSectionContent } from '@/app/db/schema/bride-section'
 import { parsePhotos, stringifyPhotos, upsertPhoto } from '@/app/lib/section-photos'
+import { GroomBrideSectionPhoto } from '../db/schema/section-photo-types'
 
 export default function ConfigDashboard() {
   return (
@@ -316,7 +317,7 @@ function ConfigDashboardContent() {
       const existingPhotos = parsePhotos(existingPhotosJson)
 
       // Create new photo object
-      const newPhoto: SectionPhoto = {
+      const newPhoto: GroomBrideSectionPhoto = {
         filename: photoData.filename,
         fileSize: photoData.fileSize,
         mimeType: photoData.mimeType as any,
@@ -346,7 +347,7 @@ function ConfigDashboardContent() {
       const existingPhotos = parsePhotos(existingPhotosJson)
 
       // Create new photo object
-      const newPhoto: SectionPhoto = {
+      const newPhoto: GroomBrideSectionPhoto = {
         filename: photoData.filename,
         fileSize: photoData.fileSize,
         mimeType: photoData.mimeType as any,

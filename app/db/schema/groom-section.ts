@@ -9,7 +9,7 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
 import { createId } from '@paralleldrive/cuid2'
 import { weddingConfigurations } from './weddings'
-import type { SectionPhoto } from './section-photo-types'
+import { GroomBrideSectionPhoto } from './section-photo-types'
 
 export const groomSectionContent = sqliteTable('groom_section_content', {
   id: text('id')
@@ -49,5 +49,5 @@ export type NewGroomSectionContent = typeof groomSectionContent.$inferInsert
 
 // Helper type with parsed photos
 export type GroomSectionContentWithPhotos = Omit<GroomSectionContent, 'photos'> & {
-  photos: SectionPhoto[]
+  photos: GroomBrideSectionPhoto[]
 }
