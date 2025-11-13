@@ -179,14 +179,18 @@ const Groom = () => {
                 {groomSection?.groomDisplayName ?? config.groomName}
               </motion.h2>
               {groomSection?.showParentInfo &&
-                groomSection.fatherName &&
-                groomSection.motherName && (
+                (groomSection.fatherName || groomSection.motherName) && (
                   <motion.h4
                     style={{ opacity: textOpacityParent }}
                     className="text-center text-lg leading-5 drop-shadow-lg"
                   >
                     Son of <br />
-                    {groomSection.fatherName} &<br />
+                    {groomSection.fatherName}{' '}
+                    {groomSection.fatherName && groomSection.motherName && (
+                      <>
+                        &<br />
+                      </>
+                    )}
                     {groomSection.motherName}
                   </motion.h4>
                 )}

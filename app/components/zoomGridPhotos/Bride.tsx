@@ -188,14 +188,18 @@ const Bride = () => {
                 {brideSection?.brideDisplayName ?? config.brideName}
               </motion.h2>
               {brideSection?.showParentInfo &&
-                brideSection.fatherName &&
-                brideSection.motherName && (
+                (brideSection.fatherName || brideSection.motherName) && (
                   <motion.h4
                     style={{ opacity: textOpacityParent }}
                     className="text-center text-lg leading-5 drop-shadow-lg"
                   >
                     Daughter of <br />
-                    {brideSection.fatherName} &<br />
+                    {brideSection.fatherName}{' '}
+                    {brideSection.fatherName && brideSection.motherName && (
+                      <>
+                        &<br />
+                      </>
+                    )}
                     {brideSection.motherName}
                   </motion.h4>
                 )}
