@@ -22,6 +22,9 @@ import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
 import { DraftProvider, useDraft } from '@/app/context/DraftContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
+import { FAQForm } from './admin/sections/FAQForm'
+import { useFAQs } from '../hooks/features/useFAQs'
+import { Switch } from '@/components/ui/switch'
 
 export default function ConfigDashboard() {
   return (
@@ -41,6 +44,8 @@ function ConfigDashboardContent() {
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
   const [startingSectionContent, setStartingSectionContent] =
     useState<StartingSectionContent | null>(null)
+
+  const { faqs, loading: faqsLoading, saving: faqsSaving, addFAQ, updateFAQ, deleteFAQ } = useFAQs()
 
   // Use draft context for starting section
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
@@ -247,6 +252,12 @@ function ConfigDashboardContent() {
           onBackgroundUpload={handleBackgroundUpload}
           onMonogramUpload={handleMonogramUpload}
           onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
+          faqs={faqs}
+          faqsLoading={faqsLoading}
+          faqsSaving={faqsSaving}
+          addFAQ={addFAQ}
+          updateFAQ={updateFAQ}
+          deleteFAQ={deleteFAQ}
         />
       </div>
 
@@ -257,6 +268,7 @@ function ConfigDashboardContent() {
           refreshTrigger={refreshTrigger}
           draftFeatures={draftFeatures}
           draftStartingSection={draftStartingSection}
+          draftFAQs={faqs}
         />
       </div>
     </>
@@ -277,6 +289,11 @@ function FeaturesForm({
   onBackgroundUpload,
   onMonogramUpload,
   onRefreshPreview,
+  faqs, 
+  faqsSaving, // WIP all of these props will be refactored later
+  addFAQ, 
+  updateFAQ, 
+  deleteFAQ,
 }: any) {
   // Access draft context in FeaturesForm
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
@@ -455,6 +472,17 @@ function FeaturesForm({
             </div>
           )
 
+        case 'faqs':
+          return (
+            <FAQForm
+              faqs={faqs}
+              addFAQ={addFAQ}
+              updateFAQ={updateFAQ}
+              deleteFAQ={deleteFAQ}
+              saving={faqsSaving}        
+            />
+        )
+
         default:
           return (
             <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
@@ -491,21 +519,14 @@ function FeaturesForm({
                   <div className="flex w-full items-center justify-between pr-4">
                     <div className="flex flex-1 items-center gap-3">
                       {/* Toggle Switch */}
-                      <button
+                      <div
                         onClick={(e) => {
                           e.stopPropagation()
                           handleToggle(feature.name)
                         }}
-                        className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${
-                          draftFeatures[feature.name] ? 'bg-pink-600' : 'bg-gray-200'
-                        }`}
                       >
-                        <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            draftFeatures[feature.name] ? 'translate-x-6' : 'translate-x-1'
-                          }`}
-                        />
-                      </button>
+                        <Switch checked={draftFeatures[feature.name]} />
+                      </div>
                       {/* Label */}
                       <div className="text-left">
                         <div className="flex items-center gap-2">
