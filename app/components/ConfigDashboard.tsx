@@ -24,6 +24,7 @@ import { DraftProvider, useDraft } from '@/app/context/DraftContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
 import { FAQForm } from './admin/sections/FAQForm'
 import { useFAQs } from '../hooks/features/useFAQs'
+import { Switch } from '@/components/ui/switch'
 
 export default function ConfigDashboard() {
   return (
@@ -523,15 +524,8 @@ function FeaturesForm({
                           e.stopPropagation()
                           handleToggle(feature.name)
                         }}
-                        className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${
-                          draftFeatures[feature.name] ? 'bg-pink-600' : 'bg-gray-200'
-                        }`}
                       >
-                        <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            draftFeatures[feature.name] ? 'translate-x-6' : 'translate-x-1'
-                          }`}
-                        />
+                        <Switch checked={draftFeatures[feature.name]} />
                       </div>
                       {/* Label */}
                       <div className="text-left">
