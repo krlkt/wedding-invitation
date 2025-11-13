@@ -10,6 +10,7 @@
     "lint:fix": "next lint --fix",
     "validate": "yarn check-type && yarn check-format && yarn lint && yarn test",
     "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push --force",
     "db:studio": "drizzle-kit studio",
     "db:introspect": "drizzle-kit introspect",
