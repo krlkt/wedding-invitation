@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "00964522-5205-4f49-827e-2fa3ece542ed",
-  "prevId": "0f4561fc-9439-4440-98cb-6f24a3b3a5a8",
+  "id": "7c3c0c89-a498-4cfc-982c-4d62cc05d8ff",
+  "prevId": "00964522-5205-4f49-827e-2fa3ece542ed",
   "tables": {
     "bride_section_content": {
       "name": "bride_section_content",
@@ -1393,83 +1393,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
-          "autoincrement": false
-        },
-        "monogram_filename": {
-          "name": "monogram_filename",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "monogram_file_size": {
-          "name": "monogram_file_size",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "monogram_mime_type": {
-          "name": "monogram_mime_type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "groom_father": {
-          "name": "groom_father",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "groom_mother": {
-          "name": "groom_mother",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "bride_father": {
-          "name": "bride_father",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "bride_mother": {
-          "name": "bride_mother",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "grooms_instagram_link": {
-          "name": "grooms_instagram_link",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "bride_instagram_link": {
-          "name": "bride_instagram_link",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "footer_text": {
-          "name": "footer_text",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "instagram_link": {
-          "name": "instagram_link",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
           "autoincrement": false
         },
         "is_published": {
