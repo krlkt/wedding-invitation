@@ -27,6 +27,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { FileInput } from '@/components/ui/file-input'
+import { SectionFieldWrapper } from '@/app/components/admin/sections/SectionFieldWrapper'
 import {
   Dialog,
   DialogContent,
@@ -122,6 +123,10 @@ export function GroomSectionForm({
       // Initialize with draft first, then saved, then defaults
       groomDisplayName:
         draftGroomSectionContent?.groomDisplayName ?? groomSectionContent?.groomDisplayName ?? null,
+      groomInstagramLink:
+        draftGroomSectionContent?.groomInstagramLink ??
+        groomSectionContent?.groomInstagramLink ??
+        null,
       showParentInfo:
         draftGroomSectionContent?.showParentInfo ?? groomSectionContent?.showParentInfo ?? false,
       fatherName: draftGroomSectionContent?.fatherName ?? groomSectionContent?.fatherName ?? null,
@@ -136,6 +141,7 @@ export function GroomSectionForm({
       prevGroomSectionContent.current = groomSectionContent
       reset({
         groomDisplayName: groomSectionContent?.groomDisplayName ?? null,
+        groomInstagramLink: groomSectionContent?.groomInstagramLink ?? null,
         showParentInfo: groomSectionContent?.showParentInfo ?? false,
         fatherName: groomSectionContent?.fatherName ?? null,
         motherName: groomSectionContent?.motherName ?? null,
@@ -144,12 +150,14 @@ export function GroomSectionForm({
   }, [groomSectionContent, reset])
 
   const showParentInfo = watch('showParentInfo')
+  const groomInstagramLink = watch('groomInstagramLink')
 
   // Auto-save form changes to draft
   const formValues = useWatch({ control })
   useEffect(() => {
     const draft: Partial<GroomSectionContent> = {
       groomDisplayName: formValues.groomDisplayName ?? null,
+      groomInstagramLink: formValues.groomInstagramLink ?? null,
       showParentInfo: formValues.showParentInfo ?? false,
       fatherName: formValues.fatherName ?? null,
       motherName: formValues.motherName ?? null,
@@ -157,7 +165,13 @@ export function GroomSectionForm({
 
     // Track which fields changed from saved state
     const changedFieldsSet = new Set<string>()
-    const fields = ['groomDisplayName', 'showParentInfo', 'fatherName', 'motherName'] as const
+    const fields = [
+      'groomDisplayName',
+      'groomInstagramLink',
+      'showParentInfo',
+      'fatherName',
+      'motherName',
+    ] as const
 
     fields.forEach((field) => {
       const savedValue = groomSectionContent?.[field] ?? (field === 'showParentInfo' ? false : null)
@@ -287,18 +301,18 @@ export function GroomSectionForm({
         {/* Instagram Link Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Instagram Link</h3>
-          <div className="space-y-2">
-            <Label>Groom&apos;s Instagram</Label>
+          <SectionFieldWrapper
+            value={groomInstagramLink}
+            savedValue={groomSectionContent?.groomInstagramLink}
+            validationSchema={groomSectionContentSchema.shape.groomInstagramLink}
+          >
+            <Label htmlFor="groomInstagramLink">Groom&apos;s Instagram</Label>
             <Input
-              value={'placeholder link'}
-              disabled
-              placeholder="Configure in Basic Info"
-              className="bg-gray-50"
+              {...register('groomInstagramLink')}
+              id="groomInstagramLink"
+              placeholder="https://instagram.com/username"
             />
-            <p className="text-xs text-gray-500">
-              Instagram link is managed in the Basic Info section
-            </p>
-          </div>
+          </SectionFieldWrapper>
         </div>
 
         {/* Parent Information Section */}

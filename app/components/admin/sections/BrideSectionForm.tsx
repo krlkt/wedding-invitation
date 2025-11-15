@@ -27,6 +27,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { FileInput } from '@/components/ui/file-input'
+import { SectionFieldWrapper } from '@/app/components/admin/sections/SectionFieldWrapper'
 import {
   Dialog,
   DialogContent,
@@ -122,6 +123,10 @@ export function BrideSectionForm({
       // Initialize with draft first, then saved, then defaults
       brideDisplayName:
         draftBrideSectionContent?.brideDisplayName ?? brideSectionContent?.brideDisplayName ?? null,
+      brideInstagramLink:
+        draftBrideSectionContent?.brideInstagramLink ??
+        brideSectionContent?.brideInstagramLink ??
+        null,
       showParentInfo:
         draftBrideSectionContent?.showParentInfo ?? brideSectionContent?.showParentInfo ?? false,
       fatherName: draftBrideSectionContent?.fatherName ?? brideSectionContent?.fatherName ?? null,
@@ -136,6 +141,7 @@ export function BrideSectionForm({
       prevBrideSectionContent.current = brideSectionContent
       reset({
         brideDisplayName: brideSectionContent?.brideDisplayName ?? null,
+        brideInstagramLink: brideSectionContent?.brideInstagramLink ?? null,
         showParentInfo: brideSectionContent?.showParentInfo ?? false,
         fatherName: brideSectionContent?.fatherName ?? null,
         motherName: brideSectionContent?.motherName ?? null,
@@ -144,12 +150,14 @@ export function BrideSectionForm({
   }, [brideSectionContent, reset])
 
   const showParentInfo = watch('showParentInfo')
+  const brideInstagramLink = watch('brideInstagramLink')
 
   // Auto-save form changes to draft
   const formValues = useWatch({ control })
   useEffect(() => {
     const draft: Partial<BrideSectionContent> = {
       brideDisplayName: formValues.brideDisplayName ?? null,
+      brideInstagramLink: formValues.brideInstagramLink ?? null,
       showParentInfo: formValues.showParentInfo ?? false,
       fatherName: formValues.fatherName ?? null,
       motherName: formValues.motherName ?? null,
@@ -157,7 +165,13 @@ export function BrideSectionForm({
 
     // Track which fields changed from saved state
     const changedFieldsSet = new Set<string>()
-    const fields = ['brideDisplayName', 'showParentInfo', 'fatherName', 'motherName'] as const
+    const fields = [
+      'brideDisplayName',
+      'brideInstagramLink',
+      'showParentInfo',
+      'fatherName',
+      'motherName',
+    ] as const
 
     fields.forEach((field) => {
       const savedValue = brideSectionContent?.[field] ?? (field === 'showParentInfo' ? false : null)
@@ -287,18 +301,18 @@ export function BrideSectionForm({
         {/* Instagram Link Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Instagram Link</h3>
-          <div className="space-y-2">
-            <Label>Bride&apos;s Instagram</Label>
+          <SectionFieldWrapper
+            value={brideInstagramLink}
+            savedValue={brideSectionContent?.brideInstagramLink}
+            validationSchema={brideSectionContentSchema.shape.brideInstagramLink}
+          >
+            <Label htmlFor="brideInstagramLink">Bride&apos;s Instagram</Label>
             <Input
-              value={weddingConfig.brideInstagramLink ?? ''}
-              disabled
-              placeholder="Configure in Basic Info"
-              className="bg-gray-50"
+              {...register('brideInstagramLink')}
+              id="brideInstagramLink"
+              placeholder="https://instagram.com/username"
             />
-            <p className="text-xs text-gray-500">
-              Instagram link is managed in the Basic Info section
-            </p>
-          </div>
+          </SectionFieldWrapper>
         </div>
 
         {/* Parent Information Section */}

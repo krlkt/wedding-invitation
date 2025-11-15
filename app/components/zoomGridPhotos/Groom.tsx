@@ -165,8 +165,12 @@ const Groom = () => {
               >
                 <span className="inline-flex items-center gap-2">
                   The Groom
-                  {features.groom_and_bride === true && (
-                    <a href={'/'} target="_blank" rel="noopener noreferrer">
+                  {features.groom_and_bride === true && groomSection?.groomInstagramLink && (
+                    <a
+                      href={groomSection.groomInstagramLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <InstagramIcon width="25px" color="white" />
                     </a>
                   )}
