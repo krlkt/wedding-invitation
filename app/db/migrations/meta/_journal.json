@@ -3,13 +3,6 @@
   "dialect": "sqlite",
   "entries": [
     {
-      "idx": 0,
-      "version": "6",
-      "when": 1763057113849,
-      "tag": "0001_stormy_bromley",
-      "breakpoints": true
-    },
-    {
       "idx": 1,
       "version": "6",
       "when": 1763203810856,
