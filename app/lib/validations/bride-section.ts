@@ -49,6 +49,18 @@ export const brideSectionContentSchema = z.object({
 
   motherName: z.string().nullable().optional(),
 
+  brideInstagramLink: z
+    .string()
+    .refine(
+      (val) => {
+        if (!val) return true // Optional field
+        return /^https?:\/\/(www\.)?instagram\.com\/.+/.test(val)
+      },
+      { message: 'Must be a valid Instagram URL' }
+    )
+    .nullable()
+    .optional(),
+
   photos: z.array(sectionPhotoObjectSchema).optional(),
 })
 

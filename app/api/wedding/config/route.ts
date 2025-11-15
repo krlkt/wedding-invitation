@@ -8,7 +8,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { requireAuth } from '@/app/lib/session'
-import { isValidInstagramUrl } from '@/app/lib/validation'
 import {
   getWeddingConfigById,
   updateWeddingConfiguration,

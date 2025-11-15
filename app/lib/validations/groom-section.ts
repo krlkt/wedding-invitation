@@ -49,6 +49,18 @@ export const groomSectionContentSchema = z.object({
 
   motherName: z.string().nullable().optional(),
 
+  groomInstagramLink: z
+    .string()
+    .refine(
+      (val) => {
+        if (!val) return true // Optional field
+        return /^https?:\/\/(www\.)?instagram\.com\/.+/.test(val)
+      },
+      { message: 'Must be a valid Instagram URL' }
+    )
+    .nullable()
+    .optional(),
+
   photos: z.array(sectionPhotoObjectSchema).optional(),
 })
 
