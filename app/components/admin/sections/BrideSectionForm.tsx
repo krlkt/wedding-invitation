@@ -45,7 +45,6 @@ interface BrideSectionFormProps {
   brideSectionContent: BrideSectionContent | null
   onUpdate: (data: BrideSectionContentFormData) => Promise<void>
   onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void
-  changedFields?: Set<string>
   onPhotoUpload?: (
     photoSlot: number,
     photoData: {
@@ -63,7 +62,6 @@ export function BrideSectionForm({
   brideSectionContent,
   onUpdate,
   onChangeTracking,
-  changedFields = new Set(),
   onPhotoUpload,
 }: BrideSectionFormProps) {
   // Use draft context
@@ -109,15 +107,8 @@ export function BrideSectionForm({
   // Default placeholder text from basic info
   const brideFullName = weddingConfig.brideName
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<BrideSectionContentFormData>({
+  const { register, handleSubmit, watch, setValue, reset, control } =
+    useForm<BrideSectionContentFormData>({
     resolver: zodResolver(brideSectionContentSchema),
     defaultValues: {
       // Initialize with draft first, then saved, then defaults
@@ -150,10 +141,11 @@ export function BrideSectionForm({
   }, [brideSectionContent, reset])
 
   const showParentInfo = watch('showParentInfo')
-  const brideInstagramLink = watch('brideInstagramLink')
 
-  // Auto-save form changes to draft
+  // Auto-save form changes to draft with centralized change tracking
   const formValues = useWatch({ control })
+  const [changedFieldsSet, setChangedFieldsSet] = useState<Set<string>>(new Set())
+
   useEffect(() => {
     const draft: Partial<BrideSectionContent> = {
       brideDisplayName: formValues.brideDisplayName ?? null,
@@ -163,8 +155,8 @@ export function BrideSectionForm({
       motherName: formValues.motherName ?? null,
     }
 
-    // Track which fields changed from saved state
-    const changedFieldsSet = new Set<string>()
+    // Track which fields changed from saved state (centralized)
+    const newChangedFields = new Set<string>()
     const fields = [
       'brideDisplayName',
       'brideInstagramLink',
@@ -176,18 +168,21 @@ export function BrideSectionForm({
     fields.forEach((field) => {
       const savedValue = brideSectionContent?.[field] ?? (field === 'showParentInfo' ? false : null)
       if (draft[field] !== savedValue) {
-        changedFieldsSet.add(field)
+        newChangedFields.add(field)
       }
     })
 
+    // Update changed fields state
+    setChangedFieldsSet(newChangedFields)
+
     // Update draft only if there are changes
-    if (changedFieldsSet.size > 0) {
+    if (newChangedFields.size > 0) {
       setDraftBrideSection((prev) => ({ ...(prev ?? {}), ...draft }))
     } else {
       setDraftBrideSection(undefined)
     }
 
-    onChangeTracking?.(changedFieldsSet.size > 0, changedFieldsSet)
+    onChangeTracking?.(newChangedFields.size > 0, newChangedFields)
   }, [formValues, brideSectionContent, setDraftBrideSection, onChangeTracking])
 
   // Photo file selection - validation handled by hook
@@ -283,8 +278,10 @@ export function BrideSectionForm({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Bride Information</h3>
 
-          <div
-            className={`space-y-2 rounded-lg transition-all ${changedFields.has('brideDisplayName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+          <SectionFieldWrapper
+            isChanged={changedFieldsSet.has('brideDisplayName')}
+            value={formValues.brideDisplayName}
+            validationSchema={brideSectionContentSchema.shape.brideDisplayName}
           >
             <Label htmlFor="brideDisplayName">Bride&apos;s Display Name</Label>
             <Input
@@ -292,18 +289,15 @@ export function BrideSectionForm({
               id="brideDisplayName"
               placeholder={brideFullName}
             />
-            {errors.brideDisplayName && (
-              <p className="text-sm text-red-500">{errors.brideDisplayName.message}</p>
-            )}
-          </div>
+          </SectionFieldWrapper>
         </div>
 
         {/* Instagram Link Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Instagram Link</h3>
           <SectionFieldWrapper
-            value={brideInstagramLink}
-            savedValue={brideSectionContent?.brideInstagramLink}
+            isChanged={changedFieldsSet.has('brideInstagramLink')}
+            value={formValues.brideInstagramLink}
             validationSchema={brideSectionContentSchema.shape.brideInstagramLink}
           >
             <Label htmlFor="brideInstagramLink">Bride&apos;s Instagram</Label>
@@ -319,35 +313,42 @@ export function BrideSectionForm({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Parent Information</h3>
 
-          <div
-            className={`flex items-center space-x-2 rounded-lg transition-all ${changedFields.has('showParentInfo') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+          <SectionFieldWrapper
+            isChanged={changedFieldsSet.has('showParentInfo')}
+            value={formValues.showParentInfo}
           >
-            <Checkbox
-              id="bride-showParentInfo"
-              checked={showParentInfo}
-              onCheckedChange={(checked) => setValue('showParentInfo', checked as boolean)}
-            />
-            <Label htmlFor="bride-showParentInfo" className="cursor-pointer">
-              Show Parent Information
-            </Label>
-          </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="bride-showParentInfo"
+                checked={showParentInfo}
+                onCheckedChange={(checked) => setValue('showParentInfo', checked as boolean)}
+              />
+              <Label htmlFor="bride-showParentInfo" className="cursor-pointer">
+                Show Parent Information
+              </Label>
+            </div>
+          </SectionFieldWrapper>
 
           {showParentInfo && (
             <div className="space-y-4 border-l-2 border-gray-200 pl-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('fatherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('fatherName')}
+                  value={formValues.fatherName}
+                  validationSchema={brideSectionContentSchema.shape.fatherName}
                 >
                   <Label htmlFor="bride-fatherName">Father&apos;s Name</Label>
                   <Input {...register('fatherName')} id="bride-fatherName" />
-                </div>
+                </SectionFieldWrapper>
 
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('motherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('motherName')}
+                  value={formValues.motherName}
+                  validationSchema={brideSectionContentSchema.shape.motherName}
                 >
                   <Label htmlFor="bride-motherName">Mother&apos;s Name</Label>
                   <Input {...register('motherName')} id="bride-motherName" />
-                </div>
+                </SectionFieldWrapper>
               </div>
             </div>
           )}

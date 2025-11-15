@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { FileInput } from '@/components/ui/file-input'
+import { SectionFieldWrapper } from '@/app/components/admin/sections/SectionFieldWrapper'
 import {
   Dialog,
   DialogContent,
@@ -43,7 +44,6 @@ interface StartingSectionFormProps {
   startingSectionContent: StartingSectionContent | null
   onUpdate: (data: StartingSectionContentFormData & { file?: File }) => Promise<void>
   onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void
-  changedFields?: Set<string>
   onBackgroundUpload?: (backgroundData: {
     backgroundFilename: string
     backgroundOriginalName: string
@@ -63,7 +63,6 @@ export function StartingSectionForm({
   startingSectionContent,
   onUpdate,
   onChangeTracking,
-  changedFields = new Set(),
   onBackgroundUpload,
   onMonogramUpload,
 }: StartingSectionFormProps) {
@@ -126,52 +125,45 @@ export function StartingSectionForm({
   const groomFullName = weddingConfig.groomName
   const brideFullName = weddingConfig.brideName
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<StartingSectionContentFormData>({
-    resolver: zodResolver(startingSectionContentSchema),
-    defaultValues: {
-      // Initialize with draft first, then saved, then defaults
-      groomDisplayName:
-        draftStartingSectionContent?.groomDisplayName ??
-        startingSectionContent?.groomDisplayName ??
-        null,
-      brideDisplayName:
-        draftStartingSectionContent?.brideDisplayName ??
-        startingSectionContent?.brideDisplayName ??
-        null,
-      showParentInfo:
-        draftStartingSectionContent?.showParentInfo ??
-        startingSectionContent?.showParentInfo ??
-        false,
-      groomFatherName:
-        draftStartingSectionContent?.groomFatherName ??
-        startingSectionContent?.groomFatherName ??
-        null,
-      groomMotherName:
-        draftStartingSectionContent?.groomMotherName ??
-        startingSectionContent?.groomMotherName ??
-        null,
-      brideFatherName:
-        draftStartingSectionContent?.brideFatherName ??
-        startingSectionContent?.brideFatherName ??
-        null,
-      brideMotherName:
-        draftStartingSectionContent?.brideMotherName ??
-        startingSectionContent?.brideMotherName ??
-        null,
-      showWeddingDate:
-        draftStartingSectionContent?.showWeddingDate ??
-        startingSectionContent?.showWeddingDate ??
-        true,
-    },
-  })
+  const { register, handleSubmit, watch, setValue, reset, control } =
+    useForm<StartingSectionContentFormData>({
+      resolver: zodResolver(startingSectionContentSchema),
+      defaultValues: {
+        // Initialize with draft first, then saved, then defaults
+        groomDisplayName:
+          draftStartingSectionContent?.groomDisplayName ??
+          startingSectionContent?.groomDisplayName ??
+          null,
+        brideDisplayName:
+          draftStartingSectionContent?.brideDisplayName ??
+          startingSectionContent?.brideDisplayName ??
+          null,
+        showParentInfo:
+          draftStartingSectionContent?.showParentInfo ??
+          startingSectionContent?.showParentInfo ??
+          false,
+        groomFatherName:
+          draftStartingSectionContent?.groomFatherName ??
+          startingSectionContent?.groomFatherName ??
+          null,
+        groomMotherName:
+          draftStartingSectionContent?.groomMotherName ??
+          startingSectionContent?.groomMotherName ??
+          null,
+        brideFatherName:
+          draftStartingSectionContent?.brideFatherName ??
+          startingSectionContent?.brideFatherName ??
+          null,
+        brideMotherName:
+          draftStartingSectionContent?.brideMotherName ??
+          startingSectionContent?.brideMotherName ??
+          null,
+        showWeddingDate:
+          draftStartingSectionContent?.showWeddingDate ??
+          startingSectionContent?.showWeddingDate ??
+          true,
+      },
+    })
 
   // Reset form when saved content changes (after save or discard refetch)
   // Always use SAVED values to prevent race condition with draft clearing
@@ -195,8 +187,10 @@ export function StartingSectionForm({
   const showParentInfo = watch('showParentInfo')
   const showWeddingDate = watch('showWeddingDate')
 
-  // Auto-save form changes to draft
+  // Auto-save form changes to draft with centralized change tracking
   const formValues = useWatch({ control })
+  const [changedFieldsSet, setChangedFieldsSet] = useState<Set<string>>(new Set())
+
   useEffect(() => {
     const draft: Partial<StartingSectionContent> = {
       groomDisplayName: formValues.groomDisplayName ?? null,
@@ -209,8 +203,8 @@ export function StartingSectionForm({
       showWeddingDate: formValues.showWeddingDate ?? true,
     }
 
-    // Track which fields changed from saved state
-    const changedFields = new Set<string>()
+    // Track which fields changed from saved state (centralized)
+    const newChangedFields = new Set<string>()
     const fields = [
       'groomDisplayName',
       'brideDisplayName',
@@ -232,19 +226,22 @@ export function StartingSectionForm({
 
       const savedValue = startingSectionContent?.[field] ?? defaultValue
       if (draft[field] !== savedValue) {
-        changedFields.add(field)
+        newChangedFields.add(field)
       }
     })
 
+    // Update changed fields state
+    setChangedFieldsSet(newChangedFields)
+
     // Update draft only if there are changes
-    if (changedFields.size > 0) {
+    if (newChangedFields.size > 0) {
       // Merge: preserve media fields from prev, update form fields from draft
       setDraftStartingSection((prev) => ({ ...(prev ?? {}), ...draft }))
     } else {
       setDraftStartingSection(undefined)
     }
 
-    onChangeTracking?.(changedFields.size > 0, changedFields)
+    onChangeTracking?.(newChangedFields.size > 0, newChangedFields)
   }, [formValues, startingSectionContent, setDraftStartingSection, onChangeTracking])
 
   // Background file selection - validation handled by hook
@@ -396,8 +393,10 @@ export function StartingSectionForm({
           <h3 className="text-lg font-semibold">Display Names</h3>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div
-              className={`space-y-2 rounded-lg transition-all ${changedFields.has('groomDisplayName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+            <SectionFieldWrapper
+              isChanged={changedFieldsSet.has('groomDisplayName')}
+              value={formValues.groomDisplayName}
+              validationSchema={startingSectionContentSchema.shape.groomDisplayName}
             >
               <Label htmlFor="groomDisplayName">Groom&apos;s Display Name</Label>
               <Input
@@ -405,13 +404,12 @@ export function StartingSectionForm({
                 id="groomDisplayName"
                 placeholder={groomFullName}
               />
-              {errors.groomDisplayName && (
-                <p className="text-sm text-red-500">{errors.groomDisplayName.message}</p>
-              )}
-            </div>
+            </SectionFieldWrapper>
 
-            <div
-              className={`space-y-2 rounded-lg transition-all ${changedFields.has('brideDisplayName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+            <SectionFieldWrapper
+              isChanged={changedFieldsSet.has('brideDisplayName')}
+              value={formValues.brideDisplayName}
+              validationSchema={startingSectionContentSchema.shape.brideDisplayName}
             >
               <Label htmlFor="brideDisplayName">Bride&apos;s Display Name</Label>
               <Input
@@ -419,10 +417,7 @@ export function StartingSectionForm({
                 id="brideDisplayName"
                 placeholder={brideFullName}
               />
-              {errors.brideDisplayName && (
-                <p className="text-sm text-red-500">{errors.brideDisplayName.message}</p>
-              )}
-            </div>
+            </SectionFieldWrapper>
           </div>
         </div>
 
@@ -430,53 +425,64 @@ export function StartingSectionForm({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Parent Information</h3>
 
-          <div
-            className={`flex items-center space-x-2 rounded-lg transition-all ${changedFields.has('showParentInfo') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+          <SectionFieldWrapper
+            isChanged={changedFieldsSet.has('showParentInfo')}
+            value={formValues.showParentInfo}
           >
-            <Checkbox
-              id="starting-showParentInfo"
-              checked={showParentInfo}
-              onCheckedChange={(checked) => setValue('showParentInfo', checked as boolean)}
-            />
-            <Label htmlFor="starting-showParentInfo" className="cursor-pointer">
-              Show Parent Information
-            </Label>
-          </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="starting-showParentInfo"
+                checked={showParentInfo}
+                onCheckedChange={(checked) => setValue('showParentInfo', checked as boolean)}
+              />
+              <Label htmlFor="starting-showParentInfo" className="cursor-pointer">
+                Show Parent Information
+              </Label>
+            </div>
+          </SectionFieldWrapper>
 
           {showParentInfo && (
             <div className="space-y-4 border-l-2 border-gray-200 pl-4">
               {/* Groom's Parents - Responsive Layout */}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('groomFatherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('groomFatherName')}
+                  value={formValues.groomFatherName}
+                  validationSchema={startingSectionContentSchema.shape.groomFatherName}
                 >
                   <Label htmlFor="groomFatherName">Groom&apos;s Father Name</Label>
                   <Input {...register('groomFatherName')} id="groomFatherName" />
-                </div>
+                </SectionFieldWrapper>
 
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('groomMotherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('groomMotherName')}
+                  value={formValues.groomMotherName}
+                  validationSchema={startingSectionContentSchema.shape.groomMotherName}
                 >
                   <Label htmlFor="groomMotherName">Groom&apos;s Mother Name</Label>
                   <Input {...register('groomMotherName')} id="groomMotherName" />
-                </div>
+                </SectionFieldWrapper>
               </div>
 
               {/* Bride's Parents - Responsive Layout */}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('brideFatherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('brideFatherName')}
+                  value={formValues.brideFatherName}
+                  validationSchema={startingSectionContentSchema.shape.brideFatherName}
                 >
                   <Label htmlFor="brideFatherName">Bride&apos;s Father Name</Label>
                   <Input {...register('brideFatherName')} id="brideFatherName" />
-                </div>
+                </SectionFieldWrapper>
 
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('brideMotherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('brideMotherName')}
+                  value={formValues.brideMotherName}
+                  validationSchema={startingSectionContentSchema.shape.brideMotherName}
                 >
                   <Label htmlFor="brideMotherName">Bride&apos;s Mother Name</Label>
                   <Input {...register('brideMotherName')} id="brideMotherName" />
-                </div>
+                </SectionFieldWrapper>
               </div>
             </div>
           )}
@@ -486,18 +492,21 @@ export function StartingSectionForm({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Wedding Date</h3>
 
-          <div
-            className={`flex items-center space-x-2 rounded-lg transition-all ${changedFields.has('showWeddingDate') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+          <SectionFieldWrapper
+            isChanged={changedFieldsSet.has('showWeddingDate')}
+            value={formValues.showWeddingDate}
           >
-            <Checkbox
-              id="showWeddingDate"
-              checked={showWeddingDate}
-              onCheckedChange={(checked) => setValue('showWeddingDate', checked as boolean)}
-            />
-            <Label htmlFor="showWeddingDate" className="cursor-pointer">
-              Show Wedding Date
-            </Label>
-          </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="showWeddingDate"
+                checked={showWeddingDate}
+                onCheckedChange={(checked) => setValue('showWeddingDate', checked as boolean)}
+              />
+              <Label htmlFor="showWeddingDate" className="cursor-pointer">
+                Show Wedding Date
+              </Label>
+            </div>
+          </SectionFieldWrapper>
         </div>
 
         {/* Background Media Section */}

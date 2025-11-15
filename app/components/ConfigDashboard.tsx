@@ -28,6 +28,7 @@ import type { GroomSectionContent } from '@/app/db/schema/groom-section'
 import type { BrideSectionContent } from '@/app/db/schema/bride-section'
 import { parsePhotos, stringifyPhotos, upsertPhoto } from '@/app/lib/section-photos'
 import { GroomBrideSectionPhoto } from '../db/schema/section-photo-types'
+import { updateChangedFieldsSet } from '@/app/utils/field-validation'
 
 export default function ConfigDashboard() {
   return (
@@ -555,17 +556,10 @@ function FeaturesForm({
     }
     setDraftFeatures(newDraftFeatures)
 
-    // Track which features have changed
-    if (newValue !== config.features[featureName]) {
-      setChangedFeatures((prev) => new Set(prev).add(featureName))
-    } else {
-      // If toggled back to original value, remove from changed set
-      setChangedFeatures((prev) => {
-        const next = new Set(prev)
-        next.delete(featureName)
-        return next
-      })
-    }
+    // Track which features have changed using utility function
+    setChangedFeatures((prev) =>
+      updateChangedFieldsSet(featureName, newValue, config.features[featureName], prev)
+    )
 
     // Update preview immediately with local state
     onLocalChange(newDraftFeatures)
@@ -655,7 +649,6 @@ function FeaturesForm({
               startingSectionContent={startingSectionContent}
               onUpdate={onUpdateStartingSection}
               onChangeTracking={handleStartingSectionChange}
-              changedFields={changedStartingSectionFields}
               onBackgroundUpload={onBackgroundUpload}
               onMonogramUpload={onMonogramUpload}
             />
@@ -671,7 +664,6 @@ function FeaturesForm({
                   groomSectionContent={groomSectionContent}
                   onUpdate={onUpdateGroomSection}
                   onChangeTracking={handleGroomSectionChange}
-                  changedFields={changedGroomSectionFields}
                   onPhotoUpload={onGroomPhotoUpload}
                 />
               </div>
@@ -682,7 +674,6 @@ function FeaturesForm({
                   brideSectionContent={brideSectionContent}
                   onUpdate={onUpdateBrideSection}
                   onChangeTracking={handleBrideSectionChange}
-                  changedFields={changedBrideSectionFields}
                   onPhotoUpload={onBridePhotoUpload}
                 />
               </div>
@@ -697,8 +688,6 @@ function FeaturesForm({
     },
     [
       changedStartingSectionFields,
-      changedGroomSectionFields,
-      changedBrideSectionFields,
       config,
       handleStartingSectionChange,
       handleGroomSectionChange,

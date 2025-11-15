@@ -1,34 +1,37 @@
 /**
- * Validated Field Component
+ * Validated Field Component (Optimized)
  *
- * Reusable component for form fields with real-time validation and visual feedback.
- * Handles field state (pristine/changed/error) and displays validation errors.
+ * Optimized reusable component for form fields with real-time validation and visual feedback.
+ * Uses memoization to prevent unnecessary re-renders and centralized change tracking for performance.
  *
  * Features:
  * - Automatic yellow highlight for unsaved changes
  * - Automatic red highlight for validation errors
- * - Optional real-time Zod validation
+ * - Optional real-time Zod validation (memoized)
  * - Consistent styling across all forms
+ * - Optimized with React.memo to only re-render when props actually change
+ *
+ * Performance optimization:
+ * - Uses centralized change tracking (passed via isChanged prop)
+ * - Memoizes validation results to avoid recalculation
+ * - Only re-renders when isChanged, value, or validationSchema changes
  */
 
-import { ReactNode } from 'react'
+import { ReactNode, useMemo, memo } from 'react'
 import { type ZodType } from 'zod'
-import {
-  getFieldContainerClasses,
-  getFieldState,
-  validateField,
-} from '@/app/utils/field-validation'
+import { getFieldContainerClasses, validateField } from '@/app/utils/field-validation'
 
 interface SectionFieldWrapperProps {
   /**
-   * Current value of the field
+   * Whether the field has changed from saved value
+   * Should come from centralized change tracking in parent form
    */
-  value: any
+  isChanged: boolean
 
   /**
-   * Saved value from database (for change tracking)
+   * Current value of the field (for validation)
    */
-  savedValue: any
+  value: any
 
   /**
    * Optional Zod schema for real-time validation
@@ -51,42 +54,35 @@ interface SectionFieldWrapperProps {
  * SectionFieldWrapper component wraps form fields with automatic validation and state styling
  *
  * @example
- * // Basic usage with validation
+ * // Optimized usage with centralized change tracking
  * <SectionFieldWrapper
- *   value={groomInstagramLink}
- *   savedValue={groomSectionContent?.groomInstagramLink}
+ *   isChanged={changedFields.has('groomInstagramLink')}
+ *   value={formValues.groomInstagramLink}
  *   validationSchema={groomSectionContentSchema.shape.groomInstagramLink}
  * >
  *   <Label htmlFor="groomInstagramLink">Instagram Link</Label>
  *   <Input {...register('groomInstagramLink')} />
  * </SectionFieldWrapper>
- *
- * @example
- * // Without validation (just change tracking)
- * <SectionFieldWrapper
- *   value={groomDisplayName}
- *   savedValue={groomSectionContent?.groomDisplayName}
- * >
- *   <Label htmlFor="groomDisplayName">Display Name</Label>
- *   <Input {...register('groomDisplayName')} />
- * </SectionFieldWrapper>
  */
-export function SectionFieldWrapper({
+export const SectionFieldWrapper = memo(function SectionFieldWrapper({
+  isChanged,
   value,
-  savedValue,
   validationSchema,
   children,
   customError,
 }: SectionFieldWrapperProps) {
-  // Perform validation if schema is provided
-  const validation = validationSchema ? validateField(value, validationSchema) : { valid: true }
+  // Memoized validation - only runs when value or schema changes
+  const validation = useMemo(
+    () => (validationSchema ? validateField(value, validationSchema) : { valid: true }),
+    [value, validationSchema]
+  )
 
   // Use custom error if provided, otherwise use validation error
   const hasError = customError ? true : !validation.valid
-  const errorMessage = customError || validation.error
+  const errorMessage = customError ?? validation.error
 
-  // Determine field state and get appropriate classes
-  const fieldState = getFieldState(value, savedValue, hasError)
+  // Determine field state based on isChanged (from parent) and error state
+  const fieldState = hasError ? 'error' : isChanged ? 'changed' : 'pristine'
   const containerClasses = getFieldContainerClasses(fieldState, hasError)
 
   return (
@@ -97,4 +93,4 @@ export function SectionFieldWrapper({
       )}
     </div>
   )
-}
+})

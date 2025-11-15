@@ -45,7 +45,6 @@ interface GroomSectionFormProps {
   groomSectionContent: GroomSectionContent | null
   onUpdate: (data: GroomSectionContentFormData) => Promise<void>
   onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void
-  changedFields?: Set<string>
   onPhotoUpload?: (
     photoSlot: number,
     photoData: {
@@ -63,7 +62,6 @@ export function GroomSectionForm({
   groomSectionContent,
   onUpdate,
   onChangeTracking,
-  changedFields = new Set(),
   onPhotoUpload,
 }: GroomSectionFormProps) {
   // Use draft context
@@ -109,30 +107,25 @@ export function GroomSectionForm({
   // Default placeholder text from basic info
   const groomFullName = weddingConfig.groomName
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<GroomSectionContentFormData>({
-    resolver: zodResolver(groomSectionContentSchema),
-    defaultValues: {
-      // Initialize with draft first, then saved, then defaults
-      groomDisplayName:
-        draftGroomSectionContent?.groomDisplayName ?? groomSectionContent?.groomDisplayName ?? null,
-      groomInstagramLink:
-        draftGroomSectionContent?.groomInstagramLink ??
-        groomSectionContent?.groomInstagramLink ??
-        null,
-      showParentInfo:
-        draftGroomSectionContent?.showParentInfo ?? groomSectionContent?.showParentInfo ?? false,
-      fatherName: draftGroomSectionContent?.fatherName ?? groomSectionContent?.fatherName ?? null,
-      motherName: draftGroomSectionContent?.motherName ?? groomSectionContent?.motherName ?? null,
-    },
-  })
+  const { register, handleSubmit, watch, setValue, reset, control } =
+    useForm<GroomSectionContentFormData>({
+      resolver: zodResolver(groomSectionContentSchema),
+      defaultValues: {
+        // Initialize with draft first, then saved, then defaults
+        groomDisplayName:
+          draftGroomSectionContent?.groomDisplayName ??
+          groomSectionContent?.groomDisplayName ??
+          null,
+        groomInstagramLink:
+          draftGroomSectionContent?.groomInstagramLink ??
+          groomSectionContent?.groomInstagramLink ??
+          null,
+        showParentInfo:
+          draftGroomSectionContent?.showParentInfo ?? groomSectionContent?.showParentInfo ?? false,
+        fatherName: draftGroomSectionContent?.fatherName ?? groomSectionContent?.fatherName ?? null,
+        motherName: draftGroomSectionContent?.motherName ?? groomSectionContent?.motherName ?? null,
+      },
+    })
 
   // Reset form when saved content changes (after save or discard refetch)
   const prevGroomSectionContent = useRef(groomSectionContent)
@@ -150,10 +143,11 @@ export function GroomSectionForm({
   }, [groomSectionContent, reset])
 
   const showParentInfo = watch('showParentInfo')
-  const groomInstagramLink = watch('groomInstagramLink')
 
-  // Auto-save form changes to draft
+  // Auto-save form changes to draft with centralized change tracking
   const formValues = useWatch({ control })
+  const [changedFieldsSet, setChangedFieldsSet] = useState<Set<string>>(new Set())
+
   useEffect(() => {
     const draft: Partial<GroomSectionContent> = {
       groomDisplayName: formValues.groomDisplayName ?? null,
@@ -163,8 +157,8 @@ export function GroomSectionForm({
       motherName: formValues.motherName ?? null,
     }
 
-    // Track which fields changed from saved state
-    const changedFieldsSet = new Set<string>()
+    // Track which fields changed from saved state (centralized)
+    const newChangedFields = new Set<string>()
     const fields = [
       'groomDisplayName',
       'groomInstagramLink',
@@ -176,18 +170,21 @@ export function GroomSectionForm({
     fields.forEach((field) => {
       const savedValue = groomSectionContent?.[field] ?? (field === 'showParentInfo' ? false : null)
       if (draft[field] !== savedValue) {
-        changedFieldsSet.add(field)
+        newChangedFields.add(field)
       }
     })
 
+    // Update changed fields state
+    setChangedFieldsSet(newChangedFields)
+
     // Update draft only if there are changes
-    if (changedFieldsSet.size > 0) {
-      setDraftGroomSection((prev) => ({ ...(prev || {}), ...draft }))
+    if (newChangedFields.size > 0) {
+      setDraftGroomSection((prev) => ({ ...(prev ?? {}), ...draft }))
     } else {
       setDraftGroomSection(undefined)
     }
 
-    onChangeTracking?.(changedFieldsSet.size > 0, changedFieldsSet)
+    onChangeTracking?.(newChangedFields.size > 0, newChangedFields)
   }, [formValues, groomSectionContent, setDraftGroomSection, onChangeTracking])
 
   // Photo file selection - validation handled by hook
@@ -283,8 +280,10 @@ export function GroomSectionForm({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Groom Information</h3>
 
-          <div
-            className={`space-y-2 rounded-lg transition-all ${changedFields.has('groomDisplayName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+          <SectionFieldWrapper
+            isChanged={changedFieldsSet.has('groomDisplayName')}
+            value={formValues.groomDisplayName}
+            validationSchema={groomSectionContentSchema.shape.groomDisplayName}
           >
             <Label htmlFor="groomDisplayName">Groom&apos;s Display Name</Label>
             <Input
@@ -292,18 +291,15 @@ export function GroomSectionForm({
               id="groomDisplayName"
               placeholder={groomFullName}
             />
-            {errors.groomDisplayName && (
-              <p className="text-sm text-red-500">{errors.groomDisplayName.message}</p>
-            )}
-          </div>
+          </SectionFieldWrapper>
         </div>
 
         {/* Instagram Link Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Instagram Link</h3>
           <SectionFieldWrapper
-            value={groomInstagramLink}
-            savedValue={groomSectionContent?.groomInstagramLink}
+            isChanged={changedFieldsSet.has('groomInstagramLink')}
+            value={formValues.groomInstagramLink}
             validationSchema={groomSectionContentSchema.shape.groomInstagramLink}
           >
             <Label htmlFor="groomInstagramLink">Groom&apos;s Instagram</Label>
@@ -319,35 +315,42 @@ export function GroomSectionForm({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Parent Information</h3>
 
-          <div
-            className={`flex items-center space-x-2 rounded-lg transition-all ${changedFields.has('showParentInfo') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+          <SectionFieldWrapper
+            isChanged={changedFieldsSet.has('showParentInfo')}
+            value={formValues.showParentInfo}
           >
-            <Checkbox
-              id="groom-showParentInfo"
-              checked={showParentInfo}
-              onCheckedChange={(checked) => setValue('showParentInfo', checked as boolean)}
-            />
-            <Label htmlFor="groom-showParentInfo" className="cursor-pointer">
-              Show Parent Information
-            </Label>
-          </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="groom-showParentInfo"
+                checked={showParentInfo}
+                onCheckedChange={(checked) => setValue('showParentInfo', checked as boolean)}
+              />
+              <Label htmlFor="groom-showParentInfo" className="cursor-pointer">
+                Show Parent Information
+              </Label>
+            </div>
+          </SectionFieldWrapper>
 
           {showParentInfo && (
             <div className="space-y-4 border-l-2 border-gray-200 pl-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('fatherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('fatherName')}
+                  value={formValues.fatherName}
+                  validationSchema={groomSectionContentSchema.shape.fatherName}
                 >
                   <Label htmlFor="groom-fatherName">Father&apos;s Name</Label>
                   <Input {...register('fatherName')} id="groom-fatherName" />
-                </div>
+                </SectionFieldWrapper>
 
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('motherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('motherName')}
+                  value={formValues.motherName}
+                  validationSchema={groomSectionContentSchema.shape.motherName}
                 >
                   <Label htmlFor="groom-motherName">Mother&apos;s Name</Label>
                   <Input {...register('motherName')} id="groom-motherName" />
-                </div>
+                </SectionFieldWrapper>
               </div>
             </div>
           )}

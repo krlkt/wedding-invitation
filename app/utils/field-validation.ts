@@ -91,3 +91,34 @@ export function getFieldState(
 
   return 'pristine'
 }
+
+/**
+ * Update a Set of changed field names based on draft vs saved values
+ * Returns a new Set with updated changed fields
+ *
+ * @param fieldName - Name of the field being updated
+ * @param draftValue - Current draft value
+ * @param savedValue - Saved value from database
+ * @param currentChangedSet - Current Set of changed fields
+ * @returns New Set with updated changed fields
+ */
+export function updateChangedFieldsSet(
+  fieldName: string,
+  draftValue: any,
+  savedValue: any,
+  currentChangedSet: Set<string>
+): Set<string> {
+  const newSet = new Set(currentChangedSet)
+
+  // Normalize values for comparison
+  const normalizedDraft = draftValue ?? null
+  const normalizedSaved = savedValue ?? null
+
+  if (normalizedDraft !== normalizedSaved) {
+    newSet.add(fieldName)
+  } else {
+    newSet.delete(fieldName)
+  }
+
+  return newSet
+}
