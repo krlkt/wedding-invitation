@@ -16,22 +16,6 @@ paths:
             schema:
               type: object
               properties:
-                groomsInstagramLink:
-                  type: string
-                  format: uri
-                  nullable: true
-                  maxLength: 500
-                  pattern: '^https://(www\.)?instagram\.com/.+'
-                  description: Instagram profile URL for the groom
-                  example: 'https://instagram.com/groomhandle'
-                brideInstagramLink:
-                  type: string
-                  format: uri
-                  nullable: true
-                  maxLength: 500
-                  pattern: '^https://(www\.)?instagram\.com/.+'
-                  description: Instagram profile URL for the bride
-                  example: 'https://instagram.com/bridehandle'
                 footerText:
                   type: string
                   nullable: true

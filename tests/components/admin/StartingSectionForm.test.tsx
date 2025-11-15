@@ -36,8 +36,6 @@ const mockWeddingConfig = {
   groomMother: null,
   brideFather: null,
   brideMother: null,
-  groomsInstagramLink: null,
-  brideInstagramLink: null,
   footerText: null,
   instagramLink: null,
   isPublished: false,

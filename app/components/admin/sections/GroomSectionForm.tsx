@@ -290,7 +290,7 @@ export function GroomSectionForm({
           <div className="space-y-2">
             <Label>Groom&apos;s Instagram</Label>
             <Input
-              value={weddingConfig.groomsInstagramLink || ''}
+              value={'placeholder link'}
               disabled
               placeholder="Configure in Basic Info"
               className="bg-gray-50"

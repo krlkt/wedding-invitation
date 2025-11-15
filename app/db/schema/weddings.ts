@@ -36,9 +36,6 @@ export const weddingConfigurations = sqliteTable('wedding_configurations', {
   // Content Fields
   footerText: text('footer_text'),
 
-  // DEPRECATED: Use groomsInstagramLink and brideInstagramLink instead
-  instagramLink: text('instagram_link'),
-
   isPublished: integer('is_published', { mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .$defaultFn(() => new Date())
