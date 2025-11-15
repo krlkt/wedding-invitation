@@ -28,7 +28,8 @@ export const groomSectionContent = sqliteTable('groom_section_content', {
   fatherName: text('father_name'),
   motherName: text('mother_name'),
 
-  // Instagram Link (uses groomsInstagramLink from wedding_configurations)
+  // Instagram link
+  groomInstagramLink: text('groom_instagram_link'),
 
   // Photo Gallery (flexible count for different templates)
   // JSON array of photo objects: [{filename, fileSize, mimeType, slot, uploadedAt}]
