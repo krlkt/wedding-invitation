@@ -15,6 +15,13 @@
       "when": 1763203810856,
       "tag": "0002_cynical_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1763216693581,
+      "tag": "0003_brainy_mockingbird",
+      "breakpoints": true
     }
   ]
 }

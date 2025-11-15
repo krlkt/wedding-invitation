@@ -116,6 +116,10 @@ export function GroomSectionForm({
           draftGroomSectionContent?.groomDisplayName ??
           groomSectionContent?.groomDisplayName ??
           null,
+        showInstagramLink:
+          draftGroomSectionContent?.showInstagramLink ??
+          groomSectionContent?.showInstagramLink ??
+          false,
         groomInstagramLink:
           draftGroomSectionContent?.groomInstagramLink ??
           groomSectionContent?.groomInstagramLink ??
@@ -134,6 +138,7 @@ export function GroomSectionForm({
       prevGroomSectionContent.current = groomSectionContent
       reset({
         groomDisplayName: groomSectionContent?.groomDisplayName ?? null,
+        showInstagramLink: groomSectionContent?.showInstagramLink ?? false,
         groomInstagramLink: groomSectionContent?.groomInstagramLink ?? null,
         showParentInfo: groomSectionContent?.showParentInfo ?? false,
         fatherName: groomSectionContent?.fatherName ?? null,
@@ -143,6 +148,7 @@ export function GroomSectionForm({
   }, [groomSectionContent, reset])
 
   const showParentInfo = watch('showParentInfo')
+  const showInstagramLink = watch('showInstagramLink')
 
   // Auto-save form changes to draft with centralized change tracking
   const formValues = useWatch({ control })
@@ -151,6 +157,7 @@ export function GroomSectionForm({
   useEffect(() => {
     const draft: Partial<GroomSectionContent> = {
       groomDisplayName: formValues.groomDisplayName ?? null,
+      showInstagramLink: formValues.showInstagramLink ?? false,
       groomInstagramLink: formValues.groomInstagramLink ?? null,
       showParentInfo: formValues.showParentInfo ?? false,
       fatherName: formValues.fatherName ?? null,
@@ -161,6 +168,7 @@ export function GroomSectionForm({
     const newChangedFields = new Set<string>()
     const fields = [
       'groomDisplayName',
+      'showInstagramLink',
       'groomInstagramLink',
       'showParentInfo',
       'fatherName',
@@ -168,7 +176,9 @@ export function GroomSectionForm({
     ] as const
 
     fields.forEach((field) => {
-      const savedValue = groomSectionContent?.[field] ?? (field === 'showParentInfo' ? false : null)
+      const savedValue =
+        groomSectionContent?.[field] ??
+        (field === 'showParentInfo' || field === 'showInstagramLink' ? false : null)
       if (draft[field] !== savedValue) {
         newChangedFields.add(field)
       }
@@ -297,18 +307,39 @@ export function GroomSectionForm({
         {/* Instagram Link Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Instagram Link</h3>
+
           <SectionFieldWrapper
-            isChanged={changedFieldsSet.has('groomInstagramLink')}
-            value={formValues.groomInstagramLink}
-            validationSchema={groomSectionContentSchema.shape.groomInstagramLink}
+            isChanged={changedFieldsSet.has('showInstagramLink')}
+            value={formValues.showInstagramLink}
           >
-            <Label htmlFor="groomInstagramLink">Groom&apos;s Instagram</Label>
-            <Input
-              {...register('groomInstagramLink')}
-              id="groomInstagramLink"
-              placeholder="https://instagram.com/username"
-            />
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="groom-showInstagramLink"
+                checked={showInstagramLink}
+                onCheckedChange={(checked) => setValue('showInstagramLink', checked as boolean)}
+              />
+              <Label htmlFor="groom-showInstagramLink" className="cursor-pointer">
+                Show Instagram Link
+              </Label>
+            </div>
           </SectionFieldWrapper>
+
+          {showInstagramLink && (
+            <div className="space-y-4 border-l-2 border-gray-200 pl-4">
+              <SectionFieldWrapper
+                isChanged={changedFieldsSet.has('groomInstagramLink')}
+                value={formValues.groomInstagramLink}
+                validationSchema={groomSectionContentSchema.shape.groomInstagramLink}
+              >
+                <Label htmlFor="groomInstagramLink">Groom&apos;s Instagram</Label>
+                <Input
+                  {...register('groomInstagramLink')}
+                  id="groomInstagramLink"
+                  placeholder="https://instagram.com/username"
+                />
+              </SectionFieldWrapper>
+            </div>
+          )}
         </div>
 
         {/* Parent Information Section */}

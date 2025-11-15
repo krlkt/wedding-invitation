@@ -109,21 +109,27 @@ export function BrideSectionForm({
 
   const { register, handleSubmit, watch, setValue, reset, control } =
     useForm<BrideSectionContentFormData>({
-    resolver: zodResolver(brideSectionContentSchema),
-    defaultValues: {
-      // Initialize with draft first, then saved, then defaults
-      brideDisplayName:
-        draftBrideSectionContent?.brideDisplayName ?? brideSectionContent?.brideDisplayName ?? null,
-      brideInstagramLink:
-        draftBrideSectionContent?.brideInstagramLink ??
-        brideSectionContent?.brideInstagramLink ??
-        null,
-      showParentInfo:
-        draftBrideSectionContent?.showParentInfo ?? brideSectionContent?.showParentInfo ?? false,
-      fatherName: draftBrideSectionContent?.fatherName ?? brideSectionContent?.fatherName ?? null,
-      motherName: draftBrideSectionContent?.motherName ?? brideSectionContent?.motherName ?? null,
-    },
-  })
+      resolver: zodResolver(brideSectionContentSchema),
+      defaultValues: {
+        // Initialize with draft first, then saved, then defaults
+        brideDisplayName:
+          draftBrideSectionContent?.brideDisplayName ??
+          brideSectionContent?.brideDisplayName ??
+          null,
+        showInstagramLink:
+          draftBrideSectionContent?.showInstagramLink ??
+          brideSectionContent?.showInstagramLink ??
+          false,
+        brideInstagramLink:
+          draftBrideSectionContent?.brideInstagramLink ??
+          brideSectionContent?.brideInstagramLink ??
+          null,
+        showParentInfo:
+          draftBrideSectionContent?.showParentInfo ?? brideSectionContent?.showParentInfo ?? false,
+        fatherName: draftBrideSectionContent?.fatherName ?? brideSectionContent?.fatherName ?? null,
+        motherName: draftBrideSectionContent?.motherName ?? brideSectionContent?.motherName ?? null,
+      },
+    })
 
   // Reset form when saved content changes (after save or discard refetch)
   const prevBrideSectionContent = useRef(brideSectionContent)
@@ -132,6 +138,7 @@ export function BrideSectionForm({
       prevBrideSectionContent.current = brideSectionContent
       reset({
         brideDisplayName: brideSectionContent?.brideDisplayName ?? null,
+        showInstagramLink: brideSectionContent?.showInstagramLink ?? false,
         brideInstagramLink: brideSectionContent?.brideInstagramLink ?? null,
         showParentInfo: brideSectionContent?.showParentInfo ?? false,
         fatherName: brideSectionContent?.fatherName ?? null,
@@ -141,6 +148,7 @@ export function BrideSectionForm({
   }, [brideSectionContent, reset])
 
   const showParentInfo = watch('showParentInfo')
+  const showInstagramLink = watch('showInstagramLink')
 
   // Auto-save form changes to draft with centralized change tracking
   const formValues = useWatch({ control })
@@ -149,6 +157,7 @@ export function BrideSectionForm({
   useEffect(() => {
     const draft: Partial<BrideSectionContent> = {
       brideDisplayName: formValues.brideDisplayName ?? null,
+      showInstagramLink: formValues.showInstagramLink ?? false,
       brideInstagramLink: formValues.brideInstagramLink ?? null,
       showParentInfo: formValues.showParentInfo ?? false,
       fatherName: formValues.fatherName ?? null,
@@ -159,6 +168,7 @@ export function BrideSectionForm({
     const newChangedFields = new Set<string>()
     const fields = [
       'brideDisplayName',
+      'showInstagramLink',
       'brideInstagramLink',
       'showParentInfo',
       'fatherName',
@@ -166,7 +176,9 @@ export function BrideSectionForm({
     ] as const
 
     fields.forEach((field) => {
-      const savedValue = brideSectionContent?.[field] ?? (field === 'showParentInfo' ? false : null)
+      const savedValue =
+        brideSectionContent?.[field] ??
+        (field === 'showParentInfo' || field === 'showInstagramLink' ? false : null)
       if (draft[field] !== savedValue) {
         newChangedFields.add(field)
       }
@@ -295,18 +307,39 @@ export function BrideSectionForm({
         {/* Instagram Link Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Instagram Link</h3>
+
           <SectionFieldWrapper
-            isChanged={changedFieldsSet.has('brideInstagramLink')}
-            value={formValues.brideInstagramLink}
-            validationSchema={brideSectionContentSchema.shape.brideInstagramLink}
+            isChanged={changedFieldsSet.has('showInstagramLink')}
+            value={formValues.showInstagramLink}
           >
-            <Label htmlFor="brideInstagramLink">Bride&apos;s Instagram</Label>
-            <Input
-              {...register('brideInstagramLink')}
-              id="brideInstagramLink"
-              placeholder="https://instagram.com/username"
-            />
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="bride-showInstagramLink"
+                checked={showInstagramLink}
+                onCheckedChange={(checked) => setValue('showInstagramLink', checked as boolean)}
+              />
+              <Label htmlFor="bride-showInstagramLink" className="cursor-pointer">
+                Show Instagram Link
+              </Label>
+            </div>
           </SectionFieldWrapper>
+
+          {showInstagramLink && (
+            <div className="space-y-4 border-l-2 border-gray-200 pl-4">
+              <SectionFieldWrapper
+                isChanged={changedFieldsSet.has('brideInstagramLink')}
+                value={formValues.brideInstagramLink}
+                validationSchema={brideSectionContentSchema.shape.brideInstagramLink}
+              >
+                <Label htmlFor="brideInstagramLink">Bride&apos;s Instagram</Label>
+                <Input
+                  {...register('brideInstagramLink')}
+                  id="brideInstagramLink"
+                  placeholder="https://instagram.com/username"
+                />
+              </SectionFieldWrapper>
+            </div>
+          )}
         </div>
 
         {/* Parent Information Section */}

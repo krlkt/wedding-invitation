@@ -165,15 +165,17 @@ const Groom = () => {
               >
                 <span className="inline-flex items-center gap-2">
                   The Groom
-                  {features.groom_and_bride === true && groomSection?.groomInstagramLink && (
-                    <a
-                      href={groomSection.groomInstagramLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <InstagramIcon width="25px" color="white" />
-                    </a>
-                  )}
+                  {features.groom_and_bride === true &&
+                    groomSection?.groomInstagramLink &&
+                    groomSection?.showInstagramLink && (
+                      <a
+                        href={groomSection.groomInstagramLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <InstagramIcon width="25px" color="white" />
+                      </a>
+                    )}
                 </span>
               </motion.h2>
               <motion.h2

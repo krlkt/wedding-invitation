@@ -29,6 +29,7 @@ export const groomSectionContent = sqliteTable('groom_section_content', {
   motherName: text('mother_name'),
 
   // Instagram link
+  showInstagramLink: integer('show_instagram_link', { mode: 'boolean' }).notNull().default(false),
   groomInstagramLink: text('groom_instagram_link'),
 
   // Photo Gallery (flexible count for different templates)

@@ -49,6 +49,8 @@ export const brideSectionContentSchema = z.object({
 
   motherName: z.string().nullable().optional(),
 
+  showInstagramLink: z.boolean().optional(),
+
   brideInstagramLink: z
     .string()
     .refine(

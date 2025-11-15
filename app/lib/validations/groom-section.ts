@@ -49,6 +49,8 @@ export const groomSectionContentSchema = z.object({
 
   motherName: z.string().nullable().optional(),
 
+  showInstagramLink: z.boolean().optional(),
+
   groomInstagramLink: z
     .string()
     .refine(
