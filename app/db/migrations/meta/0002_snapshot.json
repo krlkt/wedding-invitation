@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c783f081-50c2-428a-99d6-8ededdaf4c61",
-  "prevId": "7d458be4-a4c6-4736-81b4-553404844a39",
+  "id": "7bca55be-4eb8-490d-b0ce-22d353543856",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "bride_section_content": {
       "name": "bride_section_content",
@@ -49,6 +49,14 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "show_instagram_link": {
+          "name": "show_instagram_link",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
         },
         "bride_instagram_link": {
           "name": "bride_instagram_link",
@@ -765,6 +773,14 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "show_instagram_link": {
+          "name": "show_instagram_link",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
         },
         "groom_instagram_link": {
           "name": "groom_instagram_link",
