@@ -190,18 +190,6 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
 
       {/* Footer */}
       <footer className="bg-gray-50 py-8 text-center">
-        {wedding.instagramLink && wedding.features.instagram_link && (
-          <div className="mb-4">
-            <a
-              href={wedding.instagramLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-pink-600 hover:text-pink-700"
-            >
-              Follow us on Instagram
-            </a>
-          </div>
-        )}
         {wedding.footerText && <p className="text-sm text-gray-600">{wedding.footerText}</p>}
         <p className="mt-2 text-xs text-gray-400">
           Created with ❤️ using Wedding Invitation Platform

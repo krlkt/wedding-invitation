@@ -15,10 +15,14 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
+import type { GroomSectionContent } from '@/app/db/schema/groom-section'
+import type { BrideSectionContent } from '@/app/db/schema/bride-section'
 
 // Define all section draft types here as you build them
 export type DraftState = {
   startingSection?: Partial<StartingSectionContent>
+  groomSection?: Partial<GroomSectionContent>
+  brideSection?: Partial<BrideSectionContent>
   // Add more sections as you implement them:
   // loveStory?: Partial<LoveStoryContent>
   // locations?: Partial<LocationContent>

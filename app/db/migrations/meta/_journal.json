@@ -3,10 +3,17 @@
   "dialect": "sqlite",
   "entries": [
     {
-      "idx": 0,
+      "idx": 1,
       "version": "6",
-      "when": 1759246624765,
-      "tag": "0000_cynical_richard_fisk",
+      "when": 1763203810856,
+      "tag": "0002_cynical_firebird",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1763250400000,
+      "tag": "0003_instagram_toggles",
       "breakpoints": true
     }
   ]

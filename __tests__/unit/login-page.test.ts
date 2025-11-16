@@ -178,13 +178,12 @@ describe('Login Page Server Component', () => {
     it('should handle edge case of session without userId', () => {
       const session: { weddingConfigId: string; userId?: string } = {
         weddingConfigId: 'wedding-456',
-        // Missing userId
       }
 
-      // Should not redirect if userId is missing
-      if (session && !session.userId) {
-        const shouldRedirect = false
-        expect(shouldRedirect).toBe(false)
+      // Should redirect if both userId and weddingConfigId exist
+      if (session?.userId && session.weddingConfigId) {
+        const shouldRedirect = true
+        expect(shouldRedirect).toBe(true)
       }
     })
   })

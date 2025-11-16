@@ -15,6 +15,8 @@ import {
   dressCodes,
   wishes,
   startingSectionContent,
+  groomSectionContent,
+  brideSectionContent,
   type NewLoveStorySegment,
   type NewLocationDetails,
   type NewFAQItem,
@@ -22,6 +24,8 @@ import {
   type NewDressCode,
   type NewWish,
   type NewStartingSectionContent,
+  type NewGroomSectionContent,
+  type NewBrideSectionContent,
 } from '@/app/db/schema'
 
 import { db } from './database'
@@ -289,6 +293,100 @@ export async function updateStartingSectionContent(
   // Create new
   const [created] = await db
     .insert(startingSectionContent)
+    .values({
+      ...data,
+      weddingConfigId,
+    })
+    .returning()
+
+  return created
+}
+
+// ============================================================================
+// Groom Section Content Management
+// ============================================================================
+
+export async function getGroomSectionContent(weddingConfigId: string) {
+  const [content] = await db
+    .select()
+    .from(groomSectionContent)
+    .where(eq(groomSectionContent.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  return content ?? null
+}
+
+export async function updateGroomSectionContent(
+  weddingConfigId: string,
+  data: Partial<Omit<NewGroomSectionContent, 'weddingConfigId'>>
+) {
+  // Check if groom section content exists
+  const existing = await getGroomSectionContent(weddingConfigId)
+
+  if (existing) {
+    // Update existing
+    const [updated] = await db
+      .update(groomSectionContent)
+      .set({
+        ...data,
+        updatedAt: new Date(),
+      })
+      .where(eq(groomSectionContent.id, existing.id))
+      .returning()
+
+    return updated
+  }
+
+  // Create new
+  const [created] = await db
+    .insert(groomSectionContent)
+    .values({
+      ...data,
+      weddingConfigId,
+    })
+    .returning()
+
+  return created
+}
+
+// ============================================================================
+// Bride Section Content Management
+// ============================================================================
+
+export async function getBrideSectionContent(weddingConfigId: string) {
+  const [content] = await db
+    .select()
+    .from(brideSectionContent)
+    .where(eq(brideSectionContent.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  return content ?? null
+}
+
+export async function updateBrideSectionContent(
+  weddingConfigId: string,
+  data: Partial<Omit<NewBrideSectionContent, 'weddingConfigId'>>
+) {
+  // Check if bride section content exists
+  const existing = await getBrideSectionContent(weddingConfigId)
+
+  if (existing) {
+    // Update existing
+    const [updated] = await db
+      .update(brideSectionContent)
+      .set({
+        ...data,
+        updatedAt: new Date(),
+      })
+      .where(eq(brideSectionContent.id, existing.id))
+      .returning()
+
+    return updated
+  }
+
+  // Create new
+  const [created] = await db
+    .insert(brideSectionContent)
     .values({
       ...data,
       weddingConfigId,

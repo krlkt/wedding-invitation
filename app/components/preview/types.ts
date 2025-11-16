@@ -15,6 +15,8 @@ import {
   BankDetails,
   Wish,
   StartingSectionContent,
+  GroomSectionContent,
+  BrideSectionContent,
 } from '@/app/db/schema'
 import type { FeatureName } from '@/app/db/schema/features'
 
@@ -32,6 +34,8 @@ export interface PreviewData {
   features: Record<FeatureName, boolean>
   content: {
     startingSection: StartingSectionContent | null
+    groomSection: GroomSectionContent | null
+    brideSection: BrideSectionContent | null
     loveStory: LoveStorySegment[]
     gallery: GalleryItem[]
     faqs: FAQItem[]

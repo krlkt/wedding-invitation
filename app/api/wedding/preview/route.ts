@@ -17,6 +17,8 @@ import {
   getBankDetails,
   getWishes,
   getStartingSectionContent,
+  getGroomSectionContent,
+  getBrideSectionContent,
 } from '@/app/lib/content-service'
 import { getGalleryPhotos } from '@/app/lib/file-service'
 import { requireAuth } from '@/app/lib/session'
@@ -53,6 +55,8 @@ export async function GET(request: NextRequest) {
     // Fetch content based on enabled features (parallel execution)
     const [
       startingSection,
+      groomSection,
+      brideSection,
       loveStory,
       gallery,
       faqs,
@@ -62,6 +66,8 @@ export async function GET(request: NextRequest) {
       wishesRaw,
     ] = await Promise.all([
       getStartingSectionContent(config.id), // Always fetch (needed for Starting Section)
+      getGroomSectionContent(config.id), // Always fetch (needed for Groom section)
+      getBrideSectionContent(config.id), // Always fetch (needed for Bride section)
       features.love_story ? getLoveStorySegments(config.id) : Promise.resolve([]),
       features.gallery ? getGalleryPhotos(config.id) : Promise.resolve([]),
       features.faqs ? getFAQs(config.id) : Promise.resolve([]),
@@ -85,6 +91,8 @@ export async function GET(request: NextRequest) {
       features,
       content: {
         startingSection,
+        groomSection,
+        brideSection,
         loveStory,
         gallery: gallery.slice(0, 20), // Limit to 20 for performance
         faqs,

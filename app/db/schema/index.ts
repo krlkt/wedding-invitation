@@ -15,6 +15,9 @@ export * from './features'
 // Content Management
 export * from './content'
 export * from './starting-section'
+export * from './section-photo-types'
+export * from './groom-section'
+export * from './bride-section'
 
 // Guest Management
 export * from './guests'

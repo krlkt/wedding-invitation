@@ -7,7 +7,12 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { getWishes, getStartingSectionContent } from '@/app/lib/content-service'
+import {
+  getWishes,
+  getStartingSectionContent,
+  getGroomSectionContent,
+  getBrideSectionContent,
+} from '@/app/lib/content-service'
 import TemplateRenderer from '@/app/components/preview/TemplateRenderer'
 import type { PreviewData } from '@/app/components/preview/types'
 import {
@@ -63,6 +68,8 @@ export default async function AdminPreviewPage() {
   const [
     features,
     startingSection,
+    groomSection,
+    brideSection,
     loveStory,
     locations,
     gallery,
@@ -73,6 +80,8 @@ export default async function AdminPreviewPage() {
   ] = await Promise.all([
     getFeatureToggles(config.id),
     getStartingSectionContent(config.id),
+    getGroomSectionContent(config.id),
+    getBrideSectionContent(config.id),
     getLoveStorySegments(config.id),
     getLocationDetails(config.id),
     getGalleryItems(config.id),
@@ -105,6 +114,8 @@ export default async function AdminPreviewPage() {
     features: featuresMap as any,
     content: {
       startingSection,
+      groomSection,
+      brideSection,
       loveStory,
       locations,
       gallery,

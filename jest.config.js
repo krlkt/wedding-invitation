@@ -23,7 +23,7 @@ const customJestConfig = {
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
     '<rootDir>/node_modules/',
-    '<rootDir>/tests/e2e/', // Exclude Playwright tests
+    '<rootDir>/e2e-tests/', // Exclude Playwright tests
     // Skip integration tests that require live database connection
     '<rootDir>/__tests__/integration/subdomain-routing.test.ts',
     '<rootDir>/__tests__/integration/subdomain-validation.test.ts',

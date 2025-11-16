@@ -42,15 +42,21 @@ export function useMediaUpload(config: MediaUploadConfig) {
   const [error, setError] = useState<string | null>(null)
 
   const uploadMedia = useCallback(
-    async (file: File): Promise<{ success: boolean; data?: any; error?: string }> => {
+    async (
+      fileOrFormData: File | FormData
+    ): Promise<{ success: boolean; data?: any; error?: string }> => {
       try {
         setError(null)
 
+        // Extract file for validation if needed
+        const file =
+          fileOrFormData instanceof FormData ? (fileOrFormData.get('file') as File) : fileOrFormData
+
         // Validate file if validator provided
-        if (config.validateFile) {
+        if (config.validateFile && file) {
           const validation = config.validateFile(file)
           if (!validation.valid) {
-            setError(validation.error || 'Invalid file')
+            setError(validation.error ?? 'Invalid file')
             return { success: false, error: validation.error }
           }
         }
@@ -69,9 +75,15 @@ export function useMediaUpload(config: MediaUploadConfig) {
           })
         }, 200)
 
-        // Upload file
-        const formData = new FormData()
-        formData.append('file', file)
+        // Use provided FormData or create new one
+        const formData =
+          fileOrFormData instanceof FormData
+            ? fileOrFormData
+            : (() => {
+                const fd = new FormData()
+                fd.append('file', fileOrFormData)
+                return fd
+              })()
 
         const response = await fetch(config.apiEndpoint, {
           method: 'POST',
@@ -82,7 +94,7 @@ export function useMediaUpload(config: MediaUploadConfig) {
 
         if (!response.ok) {
           const errorData = await response.json()
-          throw new Error(errorData.error || 'Upload failed')
+          throw new Error(errorData.error ?? 'Upload failed')
         }
 
         const result = await response.json()
@@ -103,7 +115,7 @@ export function useMediaUpload(config: MediaUploadConfig) {
       } catch (err: any) {
         setIsUploading(false)
         setProgress(0)
-        const errorMessage = err.message || 'Upload failed'
+        const errorMessage = err.message ?? 'Upload failed'
         setError(errorMessage)
         return { success: false, error: errorMessage }
       }
@@ -123,5 +135,6 @@ export function useMediaUpload(config: MediaUploadConfig) {
     progress,
     error,
     reset,
+    setError, // Expose setError for manual error handling
   }
 }
