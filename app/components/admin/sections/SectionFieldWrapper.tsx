@@ -64,33 +64,40 @@ interface SectionFieldWrapperProps {
  *   <Input {...register('groomInstagramLink')} />
  * </SectionFieldWrapper>
  */
-export const SectionFieldWrapper = memo(function SectionFieldWrapper({
-  isChanged,
-  value,
-  validationSchema,
-  children,
-  customError,
-}: SectionFieldWrapperProps) {
-  // Memoized validation - only runs when value or schema changes
-  const validation = useMemo(
-    () => (validationSchema ? validateField(value, validationSchema) : { valid: true }),
-    [value, validationSchema]
-  )
+export const SectionFieldWrapper = memo(
+  ({ isChanged, value, validationSchema, children, customError }: SectionFieldWrapperProps) => {
+    // Memoized validation - only runs when value or schema changes
+    const validation = useMemo(
+      () => (validationSchema ? validateField(value, validationSchema) : { valid: true }),
+      [value, validationSchema]
+    )
 
-  // Use custom error if provided, otherwise use validation error
-  const hasError = customError ? true : !validation.valid
-  const errorMessage = customError ?? validation.error
+    // Use custom error if provided, otherwise use validation error
+    const hasError = customError ? true : !validation.valid
+    const errorMessage = customError ?? validation.error
 
-  // Determine field state based on isChanged (from parent) and error state
-  const fieldState = hasError ? 'error' : isChanged ? 'changed' : 'pristine'
-  const containerClasses = getFieldContainerClasses(fieldState, hasError)
+    // Determine field state based on isChanged (from parent) and error state
+    let fieldState: 'error' | 'changed' | 'pristine'
 
-  return (
-    <div className={containerClasses}>
-      {children}
-      {hasError && errorMessage && (
-        <p className="text-sm font-medium text-red-600">{errorMessage}</p>
-      )}
-    </div>
-  )
-})
+    if (hasError) {
+      fieldState = 'error'
+    } else if (isChanged) {
+      fieldState = 'changed'
+    } else {
+      fieldState = 'pristine'
+    }
+
+    const containerClasses = getFieldContainerClasses(fieldState, hasError)
+
+    return (
+      <div className={containerClasses}>
+        {children}
+        {hasError && errorMessage && (
+          <p className="text-sm font-medium text-red-600">{errorMessage}</p>
+        )}
+      </div>
+    )
+  }
+)
+
+SectionFieldWrapper.displayName = 'SectionFieldWrapper'

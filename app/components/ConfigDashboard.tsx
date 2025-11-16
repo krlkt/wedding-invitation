@@ -687,7 +687,6 @@ function FeaturesForm({
       }
     },
     [
-      changedStartingSectionFields,
       config,
       handleStartingSectionChange,
       handleGroomSectionChange,
