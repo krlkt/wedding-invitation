@@ -23,6 +23,7 @@ import { StartingSectionForm } from './admin/sections/StartingSectionForm'
 import { GroomSectionForm } from './admin/sections/GroomSectionForm'
 import { BrideSectionForm } from './admin/sections/BrideSectionForm'
 import { DraftProvider, useDraft } from '@/app/context/DraftContext'
+import { useSnackbar } from '@/app/context/SnackbarContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
 import type { GroomSectionContent } from '@/app/db/schema/groom-section'
 import type { BrideSectionContent } from '@/app/db/schema/bride-section'
@@ -56,6 +57,9 @@ function ConfigDashboardContent() {
     useDraft('startingSection')
   const { draft: draftGroomSection, setDraft: setDraftGroomSection } = useDraft('groomSection')
   const { draft: draftBrideSection, setDraft: setDraftBrideSection } = useDraft('brideSection')
+
+  // Snackbar for notifications
+  const { showError } = useSnackbar()
 
   // WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
@@ -166,8 +170,7 @@ function ConfigDashboardContent() {
       }
     } catch (error) {
       console.error('Failed to update starting section:', error)
-      // FIXME: Remove alert and use snack for error messages
-      alert('Failed to update starting section. Please try again.')
+      showError('Failed to update starting section. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -196,15 +199,13 @@ function ConfigDashboardContent() {
         // Show detailed error from API
         const errorData = await response.json()
         console.error('API error:', errorData)
-        // FIXME: Remove alert and use snack for error messages
-        alert(
-          `Failed to update groom section: ${errorData.error || 'Unknown error'}\n${errorData.details ? JSON.stringify(errorData.details) : ''}`
+        showError(
+          `Failed to update groom section: ${errorData.error ?? 'Unknown error'}${errorData.details ? ` - ${JSON.stringify(errorData.details)}` : ''}`
         )
       }
     } catch (error) {
       console.error('Failed to update groom section:', error)
-      // FIXME: Remove alert and use snack for error messages
-      alert('Failed to update groom section. Please try again.')
+      showError('Failed to update groom section. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -233,15 +234,13 @@ function ConfigDashboardContent() {
         // Show detailed error from API
         const errorData = await response.json()
         console.error('API error:', errorData)
-        // FIXME: Remove alert and use snack for error messages
-        alert(
-          `Failed to update bride section: ${errorData.error || 'Unknown error'}\n${errorData.details ? JSON.stringify(errorData.details) : ''}`
+        showError(
+          `Failed to update bride section: ${errorData.error ?? 'Unknown error'}${errorData.details ? ` - ${JSON.stringify(errorData.details)}` : ''}`
         )
       }
     } catch (error) {
       console.error('Failed to update bride section:', error)
-      // FIXME: Remove alert and use snack for error messages
-      alert('Failed to update bride section. Please try again.')
+      showError('Failed to update bride section. Please try again.')
     } finally {
       setSaving(false)
     }

@@ -91,9 +91,7 @@
       "indexes": {
         "bride_section_content_wedding_config_id_unique": {
           "name": "bride_section_content_wedding_config_id_unique",
-          "columns": [
-            "wedding_config_id"
-          ],
+          "columns": ["wedding_config_id"],
           "isUnique": true
         }
       },
@@ -102,12 +100,8 @@
           "name": "bride_section_content_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "bride_section_content",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -186,9 +180,7 @@
       "indexes": {
         "bank_details_wedding_config_id_unique": {
           "name": "bank_details_wedding_config_id_unique",
-          "columns": [
-            "wedding_config_id"
-          ],
+          "columns": ["wedding_config_id"],
           "isUnique": true
         }
       },
@@ -197,12 +189,8 @@
           "name": "bank_details_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "bank_details",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -281,9 +269,7 @@
       "indexes": {
         "dress_codes_wedding_config_id_unique": {
           "name": "dress_codes_wedding_config_id_unique",
-          "columns": [
-            "wedding_config_id"
-          ],
+          "columns": ["wedding_config_id"],
           "isUnique": true
         }
       },
@@ -292,12 +278,8 @@
           "name": "dress_codes_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "dress_codes",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -365,12 +347,8 @@
           "name": "faq_items_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "faq_items",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -459,12 +437,8 @@
           "name": "gallery_items_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "gallery_items",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -560,12 +534,8 @@
           "name": "location_details_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "location_details",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -647,12 +617,8 @@
           "name": "love_story_segments_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "love_story_segments",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -714,12 +680,8 @@
           "name": "feature_toggles_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "feature_toggles",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -815,9 +777,7 @@
       "indexes": {
         "groom_section_content_wedding_config_id_unique": {
           "name": "groom_section_content_wedding_config_id_unique",
-          "columns": [
-            "wedding_config_id"
-          ],
+          "columns": ["wedding_config_id"],
           "isUnique": true
         }
       },
@@ -826,12 +786,8 @@
           "name": "groom_section_content_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "groom_section_content",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -892,12 +848,8 @@
           "name": "groups_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "groups",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -994,12 +946,8 @@
           "name": "guests_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "guests",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1007,12 +955,8 @@
           "name": "guests_rsvp_id_rsvps_id_fk",
           "tableFrom": "guests",
           "tableTo": "rsvps",
-          "columnsFrom": [
-            "rsvp_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rsvp_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1020,12 +964,8 @@
           "name": "guests_table_id_tables_id_fk",
           "tableFrom": "guests",
           "tableTo": "tables",
-          "columnsFrom": [
-            "table_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["table_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1147,12 +1087,8 @@
           "name": "rsvps_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "rsvps",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1227,12 +1163,8 @@
           "name": "tables_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "tables",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1300,12 +1232,8 @@
           "name": "wishes_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "wishes",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1313,12 +1241,8 @@
           "name": "wishes_guest_id_guests_id_fk",
           "tableFrom": "wishes",
           "tableTo": "guests",
-          "columnsFrom": [
-            "guest_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["guest_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1369,9 +1293,7 @@
       "indexes": {
         "user_accounts_email_unique": {
           "name": "user_accounts_email_unique",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         }
       },
@@ -1507,16 +1429,12 @@
       "indexes": {
         "wedding_configurations_user_id_unique": {
           "name": "wedding_configurations_user_id_unique",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": true
         },
         "wedding_configurations_subdomain_unique": {
           "name": "wedding_configurations_subdomain_unique",
-          "columns": [
-            "subdomain"
-          ],
+          "columns": ["subdomain"],
           "isUnique": true
         }
       },
@@ -1525,12 +1443,8 @@
           "name": "wedding_configurations_user_id_user_accounts_id_fk",
           "tableFrom": "wedding_configurations",
           "tableTo": "user_accounts",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1667,9 +1581,7 @@
       "indexes": {
         "starting_section_content_wedding_config_id_unique": {
           "name": "starting_section_content_wedding_config_id_unique",
-          "columns": [
-            "wedding_config_id"
-          ],
+          "columns": ["wedding_config_id"],
           "isUnique": true
         }
       },
@@ -1678,12 +1590,8 @@
           "name": "starting_section_content_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "starting_section_content",
           "tableTo": "wedding_configurations",
-          "columnsFrom": [
-            "wedding_config_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }

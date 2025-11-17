@@ -83,16 +83,19 @@ describe('Groom Section API', () => {
 
     it('should include showInstagramLink field', async () => {
       // First create some data to ensure content exists
-      await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          groomDisplayName: 'Test Groom',
-          showInstagramLink: false,
-        }),
-      }))
+      await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            groomDisplayName: 'Test Groom',
+            showInstagramLink: false,
+          }),
+        })
+      )
 
       // Then verify GET includes the field
       const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie))
@@ -105,15 +108,18 @@ describe('Groom Section API', () => {
 
   describe('PUT /api/wedding/groom-section', () => {
     it('should update groom display name', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          groomDisplayName: 'John Doe',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            groomDisplayName: 'John Doe',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -122,15 +128,18 @@ describe('Groom Section API', () => {
     })
 
     it('should update showInstagramLink toggle', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -139,16 +148,19 @@ describe('Groom Section API', () => {
     })
 
     it('should update Instagram link when showInstagramLink is true', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          groomInstagramLink: 'https://www.instagram.com/johndoe',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            groomInstagramLink: 'https://www.instagram.com/johndoe',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -158,16 +170,19 @@ describe('Groom Section API', () => {
     })
 
     it('should accept null for groomInstagramLink when showInstagramLink is false', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: false,
-          groomInstagramLink: null,
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: false,
+            groomInstagramLink: null,
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -176,17 +191,20 @@ describe('Groom Section API', () => {
     })
 
     it('should update parent information fields', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showParentInfo: true,
-          fatherName: 'John Doe Sr.',
-          motherName: 'Jane Doe',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showParentInfo: true,
+            fatherName: 'John Doe Sr.',
+            motherName: 'Jane Doe',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -199,16 +217,19 @@ describe('Groom Section API', () => {
 
   describe('Instagram Link Validation - Groom', () => {
     it('should reject invalid URL format for groomInstagramLink', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          groomInstagramLink: 'not-a-valid-url',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            groomInstagramLink: 'not-a-valid-url',
+          }),
+        })
+      )
 
       expect(response.status).toBe(400)
       const data = await response.json()
@@ -217,16 +238,19 @@ describe('Groom Section API', () => {
     })
 
     it('should reject non-Instagram URLs', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          groomInstagramLink: 'https://twitter.com/someuser',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            groomInstagramLink: 'https://twitter.com/someuser',
+          }),
+        })
+      )
 
       expect(response.status).toBe(400)
       const data = await response.json()
@@ -234,16 +258,19 @@ describe('Groom Section API', () => {
     })
 
     it('should accept valid Instagram URL with www', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          groomInstagramLink: 'https://www.instagram.com/test_user',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            groomInstagramLink: 'https://www.instagram.com/test_user',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -251,16 +278,19 @@ describe('Groom Section API', () => {
     })
 
     it('should accept valid Instagram URL without www', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          groomInstagramLink: 'https://instagram.com/test_user',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            groomInstagramLink: 'https://instagram.com/test_user',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -268,16 +298,19 @@ describe('Groom Section API', () => {
     })
 
     it('should accept null value when showInstagramLink is false', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/groom-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: false,
-          groomInstagramLink: null,
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/groom-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: false,
+            groomInstagramLink: null,
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -338,16 +371,19 @@ describe('Bride Section API', () => {
 
     it('should include showInstagramLink field', async () => {
       // First create some data to ensure content exists
-      await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          brideDisplayName: 'Test Bride',
-          showInstagramLink: false,
-        }),
-      }))
+      await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            brideDisplayName: 'Test Bride',
+            showInstagramLink: false,
+          }),
+        })
+      )
 
       // Then verify GET includes the field
       const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie))
@@ -360,15 +396,18 @@ describe('Bride Section API', () => {
 
   describe('PUT /api/wedding/bride-section', () => {
     it('should update bride display name', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          brideDisplayName: 'Jane Smith',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            brideDisplayName: 'Jane Smith',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -377,15 +416,18 @@ describe('Bride Section API', () => {
     })
 
     it('should update showInstagramLink toggle', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -394,16 +436,19 @@ describe('Bride Section API', () => {
     })
 
     it('should update Instagram link when showInstagramLink is true', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          brideInstagramLink: 'https://www.instagram.com/janesmith',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            brideInstagramLink: 'https://www.instagram.com/janesmith',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -413,16 +458,19 @@ describe('Bride Section API', () => {
     })
 
     it('should accept null for brideInstagramLink when showInstagramLink is false', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: false,
-          brideInstagramLink: null,
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: false,
+            brideInstagramLink: null,
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -431,17 +479,20 @@ describe('Bride Section API', () => {
     })
 
     it('should update parent information fields', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showParentInfo: true,
-          fatherName: 'Robert Smith',
-          motherName: 'Mary Smith',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showParentInfo: true,
+            fatherName: 'Robert Smith',
+            motherName: 'Mary Smith',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -454,16 +505,19 @@ describe('Bride Section API', () => {
 
   describe('Instagram Link Validation - Bride', () => {
     it('should reject invalid URL format for brideInstagramLink', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          brideInstagramLink: 'invalid url',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            brideInstagramLink: 'invalid url',
+          }),
+        })
+      )
 
       expect(response.status).toBe(400)
       const data = await response.json()
@@ -472,16 +526,19 @@ describe('Bride Section API', () => {
     })
 
     it('should reject non-Instagram URLs', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          brideInstagramLink: 'https://facebook.com/someuser',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            brideInstagramLink: 'https://facebook.com/someuser',
+          }),
+        })
+      )
 
       expect(response.status).toBe(400)
       const data = await response.json()
@@ -489,16 +546,19 @@ describe('Bride Section API', () => {
     })
 
     it('should accept valid Instagram URL with www', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          brideInstagramLink: 'https://www.instagram.com/test_bride',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            brideInstagramLink: 'https://www.instagram.com/test_bride',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -506,16 +566,19 @@ describe('Bride Section API', () => {
     })
 
     it('should accept valid Instagram URL without www', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          brideInstagramLink: 'https://instagram.com/test_bride',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            brideInstagramLink: 'https://instagram.com/test_bride',
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -523,16 +586,19 @@ describe('Bride Section API', () => {
     })
 
     it('should accept null value when showInstagramLink is false', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: false,
-          brideInstagramLink: null,
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: false,
+            brideInstagramLink: null,
+          }),
+        })
+      )
 
       expect(response.status).toBe(200)
       const data = await response.json()
@@ -540,16 +606,19 @@ describe('Bride Section API', () => {
     })
 
     it('should provide clear error messages for validation failures', async () => {
-      const response = await fetch(`${baseUrl}/api/wedding/bride-section`, withAuth(sessionCookie, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          showInstagramLink: true,
-          brideInstagramLink: 'bad-url',
-        }),
-      }))
+      const response = await fetch(
+        `${baseUrl}/api/wedding/bride-section`,
+        withAuth(sessionCookie, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            showInstagramLink: true,
+            brideInstagramLink: 'bad-url',
+          }),
+        })
+      )
 
       expect(response.status).toBe(400)
       const data = await response.json()
