@@ -67,19 +67,6 @@ describe('SnackbarContext', () => {
 
       consoleErrorSpy.mockRestore()
     })
-
-    test('should return context value with correct shape', () => {
-      const { result } = renderHook(() => useSnackbar(), {
-        wrapper: SnackbarProvider,
-      })
-
-      expect(result.current).toHaveProperty('showSuccess')
-      expect(result.current).toHaveProperty('showWarning')
-      expect(result.current).toHaveProperty('showError')
-      expect(typeof result.current.showSuccess).toBe('function')
-      expect(typeof result.current.showWarning).toBe('function')
-      expect(typeof result.current.showError).toBe('function')
-    })
   })
 
   describe('showSuccess', () => {
@@ -100,6 +87,26 @@ describe('SnackbarContext', () => {
 
       expect(() => {
         result.current.showSuccess('')
+      }).not.toThrow()
+    })
+
+    test('should accept duration option without errors', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showSuccess('Success message', { duration: 5000 })
+      }).not.toThrow()
+    })
+
+    test('should accept persist option without errors', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showSuccess('Persistent message', { persist: true })
       }).not.toThrow()
     })
   })
@@ -127,6 +134,26 @@ describe('SnackbarContext', () => {
         result.current.showWarning(longMessage)
       }).not.toThrow()
     })
+
+    test('should accept duration option without errors', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showWarning('Warning message', { duration: 8000 })
+      }).not.toThrow()
+    })
+
+    test('should accept persist option without errors', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showWarning('Persistent warning', { persist: true })
+      }).not.toThrow()
+    })
   })
 
   describe('showError', () => {
@@ -149,6 +176,81 @@ describe('SnackbarContext', () => {
 
       expect(() => {
         result.current.showError(specialMessage)
+      }).not.toThrow()
+    })
+
+    test('should accept duration option without errors', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showError('Error message', { duration: 10000 })
+      }).not.toThrow()
+    })
+
+    test('should accept persist option without errors', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showError('Critical error', { persist: true })
+      }).not.toThrow()
+    })
+  })
+
+  describe('Options behavior', () => {
+    test('should handle default behavior when no options provided', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showSuccess('Default message')
+      }).not.toThrow()
+    })
+
+    test('should handle both persist and duration options together', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showError('Persistent with duration', {
+          persist: true,
+          duration: 5000,
+        })
+      }).not.toThrow()
+    })
+
+    test('should handle duration option alone', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showWarning('With duration only', { duration: 5000 })
+      }).not.toThrow()
+    })
+
+    test('should handle persist false explicitly', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showSuccess('Not persistent', { persist: false })
+      }).not.toThrow()
+    })
+
+    test('should handle zero duration', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showSuccess('Zero duration', { duration: 0 })
       }).not.toThrow()
     })
   })
@@ -175,6 +277,18 @@ describe('SnackbarContext', () => {
         result.current.showSuccess('Message 1')
         result.current.showSuccess('Message 2')
         result.current.showSuccess('Message 3')
+      }).not.toThrow()
+    })
+
+    test('should handle mixed options in sequence', () => {
+      const { result } = renderHook(() => useSnackbar(), {
+        wrapper: SnackbarProvider,
+      })
+
+      expect(() => {
+        result.current.showSuccess('Quick', { duration: 2000 })
+        result.current.showWarning('Persistent', { persist: true })
+        result.current.showError('Default')
       }).not.toThrow()
     })
   })

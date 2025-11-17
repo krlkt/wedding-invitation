@@ -472,6 +472,7 @@ function FeaturesForm({
     useDraft('startingSection')
   const { draft: draftGroomSection, clearDraft: clearGroomSectionDraft } = useDraft('groomSection')
   const { draft: draftBrideSection, clearDraft: clearBrideSectionDraft } = useDraft('brideSection')
+  const { showSuccess, showError } = useSnackbar()
 
   const features = [
     {
@@ -565,31 +566,37 @@ function FeaturesForm({
   }
 
   async function handleSave() {
-    // Save changed features
-    if (changedFeatures.size > 0) {
-      const featuresToUpdate: Record<string, boolean> = {}
-      changedFeatures.forEach((featureName) => {
-        featuresToUpdate[featureName] = draftFeatures[featureName]
-      })
-      await onBatchSave(featuresToUpdate)
-    }
+    try {
+      // Save changed features
+      if (changedFeatures.size > 0) {
+        const featuresToUpdate: Record<string, boolean> = {}
+        changedFeatures.forEach((featureName) => {
+          featuresToUpdate[featureName] = draftFeatures[featureName]
+        })
+        await onBatchSave(featuresToUpdate)
+      }
 
-    // Save changed starting section content (draft is already in context)
-    if (changedStartingSectionFields.size > 0 && draftStartingSection) {
-      await onUpdateStartingSection(draftStartingSection)
-      clearStartingSectionDraft()
-    }
+      // Save changed starting section content (draft is already in context)
+      if (changedStartingSectionFields.size > 0 && draftStartingSection) {
+        await onUpdateStartingSection(draftStartingSection)
+        clearStartingSectionDraft()
+      }
 
-    // Save changed groom section content
-    if (changedGroomSectionFields.size > 0 && draftGroomSection) {
-      await onUpdateGroomSection(draftGroomSection)
-      clearGroomSectionDraft()
-    }
+      // Save changed groom section content
+      if (changedGroomSectionFields.size > 0 && draftGroomSection) {
+        await onUpdateGroomSection(draftGroomSection)
+        clearGroomSectionDraft()
+      }
 
-    // Save changed bride section content
-    if (changedBrideSectionFields.size > 0 && draftBrideSection) {
-      await onUpdateBrideSection(draftBrideSection)
-      clearBrideSectionDraft()
+      // Save changed bride section content
+      if (changedBrideSectionFields.size > 0 && draftBrideSection) {
+        await onUpdateBrideSection(draftBrideSection)
+        clearBrideSectionDraft()
+      }
+
+      showSuccess('Changes has been saved', { persist: true })
+    } catch (error) {
+      showError(error instanceof Error ? error.message : 'Failed to save changes')
     }
   }
 
