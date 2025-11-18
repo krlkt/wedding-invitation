@@ -10,12 +10,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
+import { Accordion, AccordionContent, AccordionItem } from '@/components/ui/accordion'
+import * as AccordionPrimitive from '@radix-ui/react-accordion'
+import { ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 import LivePreview from './LivePreview'
@@ -289,10 +286,10 @@ function FeaturesForm({
   onBackgroundUpload,
   onMonogramUpload,
   onRefreshPreview,
-  faqs, 
+  faqs,
   faqsSaving, // WIP all of these props will be refactored later
-  addFAQ, 
-  updateFAQ, 
+  addFAQ,
+  updateFAQ,
   deleteFAQ,
 }: any) {
   // Access draft context in FeaturesForm
@@ -479,9 +476,9 @@ function FeaturesForm({
               addFAQ={addFAQ}
               updateFAQ={updateFAQ}
               deleteFAQ={deleteFAQ}
-              saving={faqsSaving}        
+              saving={faqsSaving}
             />
-        )
+          )
 
         default:
           return (
@@ -490,13 +487,18 @@ function FeaturesForm({
       }
     },
     [
+      addFAQ,
       changedStartingSectionFields,
       config,
+      deleteFAQ,
+      faqs,
+      faqsSaving,
       handleStartingSectionChange,
       onBackgroundUpload,
       onMonogramUpload,
       onUpdateStartingSection,
       startingSectionContent,
+      updateFAQ,
     ]
   )
 
@@ -515,33 +517,33 @@ function FeaturesForm({
                   isChanged ? 'border-yellow-300 bg-yellow-50' : ''
                 }`}
               >
-                <AccordionTrigger className="px-4 hover:no-underline">
-                  <div className="flex w-full items-center justify-between pr-4">
-                    <div className="flex flex-1 items-center gap-3">
-                      {/* Toggle Switch */}
-                      <div
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleToggle(feature.name)
-                        }}
-                      >
-                        <Switch checked={draftFeatures[feature.name]} />
+                {/* Custom header with Switch positioned outside Trigger to avoid button-in-button warning */}
+                <AccordionPrimitive.Header className="relative px-4">
+                  {/* Accordion Trigger - covers full width for better clickability */}
+                  <AccordionPrimitive.Trigger className="flex w-full items-center gap-3 py-4 pl-14 text-left transition-all hover:no-underline [&[data-state=open]>svg]:rotate-180">
+                    {/* Label */}
+                    <div className="flex-1 text-left">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-medium">{feature.label}</h3>
+                        {isChanged && (
+                          <span className="inline-flex items-center rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
+                            Modified
+                          </span>
+                        )}
                       </div>
-                      {/* Label */}
-                      <div className="text-left">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-medium">{feature.label}</h3>
-                          {isChanged && (
-                            <span className="inline-flex items-center rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
-                              Modified
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm font-normal text-gray-500">{feature.description}</p>
-                      </div>
+                      <p className="text-sm font-normal text-gray-500">{feature.description}</p>
                     </div>
-                  </div>
-                </AccordionTrigger>
+                    <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                  </AccordionPrimitive.Trigger>
+
+                  {/* Toggle Switch - absolutely positioned over the trigger, click events work due to z-index */}
+                  <Switch
+                    checked={draftFeatures[feature.name]}
+                    onCheckedChange={() => handleToggle(feature.name)}
+                    className="absolute left-4 top-1/2 z-10 -translate-y-1/2"
+                  />
+                </AccordionPrimitive.Header>
+
                 <AccordionContent className="px-4 pb-4">
                   {renderFeatureContent(feature.name)}
                 </AccordionContent>
