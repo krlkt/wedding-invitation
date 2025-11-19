@@ -10,18 +10,22 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 
-import { Accordion, AccordionContent, AccordionItem } from '@/components/ui/accordion'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+} from '@/components/ui/accordion'
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 import { ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Switch } from '@/components/ui/switch'
 
 import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
 import { DraftProvider, useDraft } from '@/app/context/DraftContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
+import type { FAQItem } from '@/app/db/schema/content'
 import { FAQForm } from './admin/sections/FAQForm'
-import { useFAQs } from '../hooks/features/useFAQs'
-import { Switch } from '@/components/ui/switch'
 
 export default function ConfigDashboard() {
   return (
@@ -42,7 +46,10 @@ function ConfigDashboardContent() {
   const [startingSectionContent, setStartingSectionContent] =
     useState<StartingSectionContent | null>(null)
 
-  const { faqs, loading: faqsLoading, saving: faqsSaving, addFAQ, updateFAQ, deleteFAQ } = useFAQs()
+  const [,setChangedFAQs] = useState<FAQItem[]>([])
+  const [,setDeletedFAQIds] = useState<string[]>([])
+
+  const [faqs, setFaqs] = useState<FAQItem[]>([])
 
   // Use draft context for starting section
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
@@ -66,6 +73,7 @@ function ConfigDashboardContent() {
     ;(async () => {
       await fetchConfig()
       await fetchStartingSectionContent()
+      await fetchFAQs()
       await checkSession()
     })().catch((error) => {
       console.error('Initialization error:', error)
@@ -95,6 +103,20 @@ function ConfigDashboardContent() {
       }
     } catch (error) {
       console.error('Failed to fetch starting section content:', error)
+    }
+  }
+
+  async function fetchFAQs() {
+    try {
+      const res = await fetch('/api/wedding/faqs')
+      if (res.ok) {
+        const data = await res.json()
+        setFaqs(data.data)
+      } else {
+        console.error('Failed to fetch FAQs')
+      }
+    } catch (err) {
+      console.error('Error fetching FAQs', err)
     }
   }
 
@@ -186,6 +208,7 @@ function ConfigDashboardContent() {
       // Update draft state with new background
       setDraftStartingSection({
         ...(draftStartingSection || {}),
+
         ...backgroundData,
       })
       // Trigger preview refresh to show new background immediately
@@ -250,13 +273,13 @@ function ConfigDashboardContent() {
           onMonogramUpload={handleMonogramUpload}
           onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
           faqs={faqs}
-          faqsLoading={faqsLoading}
-          faqsSaving={faqsSaving}
-          addFAQ={addFAQ}
-          updateFAQ={updateFAQ}
-          deleteFAQ={deleteFAQ}
-        />
-      </div>
+          setFaqs={setFaqs}
+          onFAQChange={(changed: FAQItem[], deleted: string[]) => {
+            setChangedFAQs(changed)
+            setDeletedFAQIds(deleted)
+          }}
+          />
+        </div>
 
       {/* Right Panel - Live Preview */}
       <div className="h-full w-1/2 overflow-hidden">
@@ -287,14 +310,29 @@ function FeaturesForm({
   onMonogramUpload,
   onRefreshPreview,
   faqs,
-  faqsSaving, // WIP all of these props will be refactored later
-  addFAQ,
-  updateFAQ,
-  deleteFAQ,
+  setFaqs,
+  onFAQChange,
 }: any) {
   // Access draft context in FeaturesForm
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
     useDraft('startingSection')
+  
+  const [changedFAQs, setChangedFAQs] = useState<FAQItem[]>([])
+  const [deletedFAQIds, setDeletedFAQIds] = useState<string[]>([])
+
+   async function fetchFAQs() {
+    try {
+      const res = await fetch('/api/wedding/faqs')
+      if (res.ok) {
+        const data = await res.json()
+        setFaqs(data.data)
+      } else {
+        console.error('Failed to fetch FAQs')
+      }
+    } catch (err) {
+      console.error('Error fetching FAQs', err)
+    }
+  }
 
   const features = [
     {
@@ -344,11 +382,21 @@ function FeaturesForm({
   // Clear changed fields when starting section content changes (after save or discard)
   useEffect(() => {
     setChangedStartingSectionFields(new Set())
+
   }, [startingSectionContent])
 
   // Check if there are unsaved changes
-  const hasUnsavedChanges = changedFeatures.size > 0 || changedStartingSectionFields.size > 0
-  const totalChanges = changedFeatures.size + changedStartingSectionFields.size
+  const hasUnsavedChanges =
+  changedFeatures.size > 0 ||
+  changedStartingSectionFields.size > 0 ||
+  changedFAQs.length > 0 ||
+  deletedFAQIds.length > 0
+
+  const totalChanges =
+  changedFeatures.size +
+  changedStartingSectionFields.size +
+  changedFAQs.length +
+  deletedFAQIds.length
 
   function handleToggle(featureName: string) {
     const newValue = !draftFeatures[featureName]
@@ -392,6 +440,22 @@ function FeaturesForm({
       // Clear draft after successful save
       clearStartingSectionDraft()
     }
+
+    if (changedFAQs.length > 0 || deletedFAQIds.length > 0) {
+      await fetch("/api/wedding/faqs/batch", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          updated: changedFAQs,
+          deleted: deletedFAQIds
+        })
+      })
+
+      // Refetch fresh FAQs from server
+      await fetchFAQs()
+      setChangedFAQs([])
+      setDeletedFAQIds([])
+    }
   }
 
   async function handleDiscard() {
@@ -404,6 +468,10 @@ function FeaturesForm({
     // Clearing the draft triggers the useEffect in StartingSectionForm which resets the form
     clearStartingSectionDraft()
     setChangedStartingSectionFields(new Set())
+
+    setFaqs(await fetchFAQs()) // reload from server
+    setChangedFAQs([])
+    setDeletedFAQIds([])
 
     // Force re-fetch to ensure we have latest data from server
     if (onRefetchStartingSection) {
@@ -473,12 +541,16 @@ function FeaturesForm({
           return (
             <FAQForm
               faqs={faqs}
-              addFAQ={addFAQ}
-              updateFAQ={updateFAQ}
-              deleteFAQ={deleteFAQ}
-              saving={faqsSaving}
+              setFaqs={setFaqs}
+              changedFAQs={changedFAQs} 
+              deletedIds={deletedFAQIds}
+              onChange={(changed, deleted) => {
+                setChangedFAQs(changed)
+                setDeletedFAQIds(deleted)
+                onFAQChange(changed, deleted)
+              }}
             />
-          )
+        )
 
         default:
           return (
@@ -486,20 +558,7 @@ function FeaturesForm({
           )
       }
     },
-    [
-      addFAQ,
-      changedStartingSectionFields,
-      config,
-      deleteFAQ,
-      faqs,
-      faqsSaving,
-      handleStartingSectionChange,
-      onBackgroundUpload,
-      onMonogramUpload,
-      onUpdateStartingSection,
-      startingSectionContent,
-      updateFAQ,
-    ]
+    [changedFAQs, changedStartingSectionFields, config, deletedFAQIds, faqs, handleStartingSectionChange, onBackgroundUpload, onFAQChange, onMonogramUpload, onUpdateStartingSection, setFaqs, startingSectionContent]
   )
 
   return (
@@ -543,7 +602,6 @@ function FeaturesForm({
                     className="absolute left-4 top-1/2 z-10 -translate-y-1/2"
                   />
                 </AccordionPrimitive.Header>
-
                 <AccordionContent className="px-4 pb-4">
                   {renderFeatureContent(feature.name)}
                 </AccordionContent>
