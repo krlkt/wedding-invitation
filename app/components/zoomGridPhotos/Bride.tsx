@@ -118,9 +118,9 @@ const Bride = () => {
         className={`sticky top-0 ${stickyHeightClass} overflow-hidden`}
         style={isEmbedded && stickyHeightValue ? { height: stickyHeightValue } : undefined}
       >
-        {pictures.map(({ scale, src }) => (
+        {pictures.map(({ scale, src }, index) => (
           // Element container div to make sure everything has the same layout
-          <motion.div key={src.src} style={{ scale }} className="grid-placement">
+          <motion.div key={index} style={{ scale }} className="grid-placement">
             <div className="imageContainer">
               <Image
                 src={src}
