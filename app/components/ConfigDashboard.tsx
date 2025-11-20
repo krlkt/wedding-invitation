@@ -46,14 +46,9 @@ function ConfigDashboardContent() {
   const [startingSectionContent, setStartingSectionContent] =
     useState<StartingSectionContent | null>(null)
 
-  const [,setChangedFAQs] = useState<FAQItem[]>([])
-  const [,setDeletedFAQIds] = useState<string[]>([])
-
-  const [faqs, setFaqs] = useState<FAQItem[]>([])
-
-  // Use draft context for starting section
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
     useDraft('startingSection')
+  const { draft: draftFAQs, setDraft: setDraftFAQs } = useDraft('faqs')
 
   // WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
@@ -69,17 +64,6 @@ function ConfigDashboardContent() {
     }
   }
 
-  useEffect(() => {
-    ;(async () => {
-      await fetchConfig()
-      await fetchStartingSectionContent()
-      await fetchFAQs()
-      await checkSession()
-    })().catch((error) => {
-      console.error('Initialization error:', error)
-    })
-  }, [])
-
   async function fetchConfig() {
     try {
       const response = await fetch('/api/wedding/config')
@@ -94,7 +78,7 @@ function ConfigDashboardContent() {
     }
   }
 
-  async function fetchStartingSectionContent() {
+  const fetchStartingSectionContent = useCallback(async () => {
     try {
       const response = await fetch('/api/wedding/starting-section')
       if (response.ok) {
@@ -104,21 +88,34 @@ function ConfigDashboardContent() {
     } catch (error) {
       console.error('Failed to fetch starting section content:', error)
     }
-  }
-
-  async function fetchFAQs() {
+  }, [])
+  
+  const fetchFAQs = useCallback(async () => {
     try {
       const res = await fetch('/api/wedding/faqs')
       if (res.ok) {
         const data = await res.json()
-        setFaqs(data.data)
-      } else {
-        console.error('Failed to fetch FAQs')
+        // Only initialize draft if undefined
+        if (draftFAQs === undefined) {
+          setDraftFAQs(data.data)
+        }
       }
     } catch (err) {
       console.error('Error fetching FAQs', err)
     }
-  }
+  }, [draftFAQs, setDraftFAQs])
+
+  useEffect(() => {
+    ;(async () => {
+      await fetchConfig()
+      await fetchStartingSectionContent()
+      await fetchFAQs()
+      await checkSession()
+    })().catch((error) => {
+      console.error('Initialization error:', error)
+    })
+  }, [fetchFAQs, fetchStartingSectionContent])
+
 
   async function updateStartingSectionContent(updates: any) {
     try {
@@ -272,12 +269,6 @@ function ConfigDashboardContent() {
           onBackgroundUpload={handleBackgroundUpload}
           onMonogramUpload={handleMonogramUpload}
           onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
-          faqs={faqs}
-          setFaqs={setFaqs}
-          onFAQChange={(changed: FAQItem[], deleted: string[]) => {
-            setChangedFAQs(changed)
-            setDeletedFAQIds(deleted)
-          }}
           />
         </div>
 
@@ -288,7 +279,7 @@ function ConfigDashboardContent() {
           refreshTrigger={refreshTrigger}
           draftFeatures={draftFeatures}
           draftStartingSection={draftStartingSection}
-          draftFAQs={faqs}
+          draftFAQs={draftFAQs} 
         />
       </div>
     </>
@@ -309,184 +300,159 @@ function FeaturesForm({
   onBackgroundUpload,
   onMonogramUpload,
   onRefreshPreview,
-  faqs,
-  setFaqs,
-  onFAQChange,
 }: any) {
-  // Access draft context in FeaturesForm
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
     useDraft('startingSection')
-  
+
+  const { draft: draftFAQs, setDraft: setDraftFAQs, clearDraft: clearFAQsDraft } =
+    useDraft('faqs')
+
+  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
+  const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set())
+  const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(new Set())
   const [changedFAQs, setChangedFAQs] = useState<FAQItem[]>([])
   const [deletedFAQIds, setDeletedFAQIds] = useState<string[]>([])
-
-   async function fetchFAQs() {
-    try {
-      const res = await fetch('/api/wedding/faqs')
-      if (res.ok) {
-        const data = await res.json()
-        setFaqs(data.data)
-      } else {
-        console.error('Failed to fetch FAQs')
-      }
-    } catch (err) {
-      console.error('Error fetching FAQs', err)
-    }
-  }
+  const [resetChangedFAQs, setResetChangedFAQs] = useState(false)
 
   const features = [
-    {
-      name: 'hero',
-      label: 'Starting Section',
-      description: 'Opening section with couple names and wedding date',
-    },
-    {
-      name: 'groom_and_bride',
-      label: 'Groom and Bride',
-      description: 'Introduction of the groom and bride',
-    },
+    { name: 'hero', label: 'Starting Section', description: 'Opening section with couple names and wedding date' },
+    { name: 'groom_and_bride', label: 'Groom and Bride', description: 'Introduction of the groom and bride' },
     { name: 'love_story', label: 'Love Story', description: 'Timeline of your relationship' },
-    {
-      name: 'save_the_date',
-      label: 'Save The Date',
-      description: 'Save the date section with add to calendar button',
-    },
+    { name: 'save_the_date', label: 'Save The Date', description: 'Save the date section with add to calendar button' },
     { name: 'location', label: 'Location', description: 'Event location' },
     { name: 'rsvp', label: 'RSVP', description: 'Guest response management' },
     { name: 'gallery', label: 'Gallery', description: 'Photo gallery' },
     { name: 'prewedding_videos', label: 'Pre-wedding Videos', description: 'Video embeds' },
     { name: 'faqs', label: 'FAQs', description: 'Frequently asked questions' },
     { name: 'dress_code', label: 'Dress Code', description: 'Attire guidelines' },
-    {
-      name: 'gift',
-      label: 'Gift',
-      description: 'Information for guests who want to send digital gift(s)',
-    },
+    { name: 'gift', label: 'Gift', description: 'Information for guests who want to send digital gift(s)' },
     { name: 'wishes', label: 'Wishes', description: 'Guest wishes and messages' },
     { name: 'footer', label: 'Footer', description: 'Closing section with thank you message' },
   ]
 
-  // Track draft state locally (separate from saved state)
-  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
-  const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set())
-  const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(
-    new Set()
+  const handleToggle = (featureName: string) => {
+    const newValue = !draftFeatures[featureName]
+    const newDraft = { ...draftFeatures, [featureName]: newValue }
+    setDraftFeatures(newDraft)
+
+    if (newValue !== config.features[featureName]) {
+      setChangedFeatures(prev => new Set(prev).add(featureName))
+    } else {
+      setChangedFeatures(prev => { const next = new Set(prev); next.delete(featureName); return next })
+    }
+
+    onLocalChange(newDraft)
+  }
+
+  const handleStartingSectionChange = useCallback((_: boolean, fields: Set<string>) => {
+    setChangedStartingSectionFields(fields)
+  }, [])
+
+  const handleFAQChange = useCallback(
+    (changed: FAQItem[], deleted: string[]) => {
+      setChangedFAQs(changed)       // track changed FAQ items
+      setDeletedFAQIds(deleted)     // track deleted FAQ IDs
+    },
+    [] // no dependencies needed
   )
 
-  // Update draft state when config changes (after save)
+  // Update draftFeatures when config changes
   useEffect(() => {
     setDraftFeatures(config.features)
     setChangedFeatures(new Set())
   }, [config.features])
 
-  // Clear changed fields when starting section content changes (after save or discard)
+  // Reset starting section changes when content updates
   useEffect(() => {
     setChangedStartingSectionFields(new Set())
-
   }, [startingSectionContent])
 
-  // Check if there are unsaved changes
+  const [originalFAQs, setOriginalFAQs] = useState<FAQItem[]>([])
+
+  // After fetching
+  useEffect(() => {
+    if (draftFAQs) {
+      setOriginalFAQs([...draftFAQs]) // make a stable copy
+    }
+  }, [draftFAQs])
+
   const hasUnsavedChanges =
-  changedFeatures.size > 0 ||
-  changedStartingSectionFields.size > 0 ||
-  changedFAQs.length > 0 ||
-  deletedFAQIds.length > 0
+    changedFeatures.size > 0 ||
+    changedStartingSectionFields.size > 0 ||
+    changedFAQs.length > 0 ||
+    deletedFAQIds.length > 0
 
   const totalChanges =
-  changedFeatures.size +
-  changedStartingSectionFields.size +
-  changedFAQs.length +
-  deletedFAQIds.length
+    changedFeatures.size +
+    changedStartingSectionFields.size +
+    changedFAQs.length +
+    deletedFAQIds.length
 
-  function handleToggle(featureName: string) {
-    const newValue = !draftFeatures[featureName]
-
-    // Update local draft state
-    const newDraftFeatures = {
-      ...draftFeatures,
-      [featureName]: newValue,
-    }
-    setDraftFeatures(newDraftFeatures)
-
-    // Track which features have changed
-    if (newValue !== config.features[featureName]) {
-      setChangedFeatures((prev) => new Set(prev).add(featureName))
-    } else {
-      // If toggled back to original value, remove from changed set
-      setChangedFeatures((prev) => {
-        const next = new Set(prev)
-        next.delete(featureName)
-        return next
-      })
-    }
-
-    // Update preview immediately with local state
-    onLocalChange(newDraftFeatures)
-  }
-
-  async function handleSave() {
-    // Save changed features
+  const handleSave = async () => {
     if (changedFeatures.size > 0) {
       const featuresToUpdate: Record<string, boolean> = {}
-      changedFeatures.forEach((featureName) => {
-        featuresToUpdate[featureName] = draftFeatures[featureName]
-      })
+      changedFeatures.forEach(f => { featuresToUpdate[f] = draftFeatures[f] })
       await onBatchSave(featuresToUpdate)
     }
 
-    // Save changed starting section content (draft is already in context)
     if (changedStartingSectionFields.size > 0 && draftStartingSection) {
       await onUpdateStartingSection(draftStartingSection)
-      // Clear draft after successful save
       clearStartingSectionDraft()
     }
 
     if (changedFAQs.length > 0 || deletedFAQIds.length > 0) {
-      await fetch("/api/wedding/faqs/batch", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          updated: changedFAQs,
-          deleted: deletedFAQIds
-        })
-      })
+      const response = await fetch('/api/wedding/faqs/batch', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updated: changedFAQs, deleted: deletedFAQIds })
+      });
 
-      // Refetch fresh FAQs from server
-      await fetchFAQs()
-      setChangedFAQs([])
-      setDeletedFAQIds([])
+      if (response.ok) {
+        // Update original FAQs with new state
+        const updatedFAQs = [...originalFAQs];
+
+        // Replace updated items
+        changedFAQs.forEach((item) => {
+          const idx = updatedFAQs.findIndex(f => f.id === item.id);
+          if (idx > -1) {
+            updatedFAQs[idx] = item;
+          } else {
+            // New FAQ, add it
+            updatedFAQs.push(item);
+          }
+        });
+
+        // Remove deleted items
+        const finalFAQs = updatedFAQs.filter(f => !deletedFAQIds.includes(f.id));
+
+        setOriginalFAQs(finalFAQs);
+        setDraftFAQs(finalFAQs); // optional if FAQForm relies on draftFAQs
+
+        setResetChangedFAQs(prev => !prev);
+        setChangedFAQs([]);
+        setDeletedFAQIds([]);
+      }
     }
+
+    onRefreshPreview()
   }
 
-  async function handleDiscard() {
-    // Reset features to saved state
+  const handleDiscard = async () => {
     setDraftFeatures(config.features)
     setChangedFeatures(new Set())
     onLocalChange(config.features)
 
-    // Reset starting section to saved state using context
-    // Clearing the draft triggers the useEffect in StartingSectionForm which resets the form
     clearStartingSectionDraft()
+    clearFAQsDraft()
     setChangedStartingSectionFields(new Set())
 
-    setFaqs(await fetchFAQs()) // reload from server
+    setResetChangedFAQs(prev => !prev) 
     setChangedFAQs([])
     setDeletedFAQIds([])
 
-    // Force re-fetch to ensure we have latest data from server
-    if (onRefetchStartingSection) {
-      await onRefetchStartingSection()
-    }
-
-    // Trigger LivePreview refresh to show actual saved state from server
-    if (onRefreshPreview) {
-      onRefreshPreview()
-    }
+    if (onRefetchStartingSection) await onRefetchStartingSection()
+    if (onRefreshPreview) onRefreshPreview()
   }
-
-  const handleStartingSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
-    setChangedStartingSectionFields(fields)
-  }, [])
 
   const renderFeatureContent = useCallback(
     (featureName: string) => {
@@ -509,9 +475,7 @@ function FeaturesForm({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    Groom&apos;s Instagram Link
-                  </label>
+                  <label className="mb-1 block text-sm font-medium">Groom&apos;s Instagram Link</label>
                   <input
                     type="url"
                     defaultValue={config.groomsInstagramLink || ''}
@@ -520,9 +484,7 @@ function FeaturesForm({
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium">
-                    Bride&apos;s Instagram Link
-                  </label>
+                  <label className="mb-1 block text-sm font-medium">Bride&apos;s Instagram Link</label>
                   <input
                     type="url"
                     defaultValue={config.brideInstagramLink || ''}
@@ -540,91 +502,61 @@ function FeaturesForm({
         case 'faqs':
           return (
             <FAQForm
-              faqs={faqs}
-              setFaqs={setFaqs}
-              changedFAQs={changedFAQs} 
-              deletedIds={deletedFAQIds}
-              onChange={(changed, deleted) => {
-                setChangedFAQs(changed)
-                setDeletedFAQIds(deleted)
-                onFAQChange(changed, deleted)
-              }}
+              resetChanged={resetChangedFAQs}
+              onChangeTracking={handleFAQChange}
+              originalFAQs={originalFAQs}
             />
-        )
+          )
 
         default:
-          return (
-            <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
-          )
+          return <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
       }
     },
-    [changedFAQs, changedStartingSectionFields, config, deletedFAQIds, faqs, handleStartingSectionChange, onBackgroundUpload, onFAQChange, onMonogramUpload, onUpdateStartingSection, setFaqs, startingSectionContent]
+    [changedStartingSectionFields, config, handleFAQChange, handleStartingSectionChange, onBackgroundUpload, onMonogramUpload, onUpdateStartingSection, originalFAQs, resetChangedFAQs, startingSectionContent]
   )
 
   return (
     <>
-      {/* Scrollable content area */}
       <div className="flex-1 overflow-y-auto p-6">
         <Accordion type="multiple" className="space-y-2">
-          {features.map((feature) => {
+          {features.map(feature => {
             const isChanged = changedFeatures.has(feature.name)
             return (
               <AccordionItem
                 key={feature.name}
                 value={feature.name}
-                className={`rounded-lg border transition-colors ${
-                  isChanged ? 'border-yellow-300 bg-yellow-50' : ''
-                }`}
+                className={`rounded-lg border transition-colors ${isChanged ? 'border-yellow-300 bg-yellow-50' : ''}`}
               >
-                {/* Custom header with Switch positioned outside Trigger to avoid button-in-button warning */}
                 <AccordionPrimitive.Header className="relative px-4">
-                  {/* Accordion Trigger - covers full width for better clickability */}
                   <AccordionPrimitive.Trigger className="flex w-full items-center gap-3 py-4 pl-14 text-left transition-all hover:no-underline [&[data-state=open]>svg]:rotate-180">
-                    {/* Label */}
                     <div className="flex-1 text-left">
                       <div className="flex items-center gap-2">
                         <h3 className="font-medium">{feature.label}</h3>
-                        {isChanged && (
-                          <span className="inline-flex items-center rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
-                            Modified
-                          </span>
-                        )}
+                        {isChanged && <span className="inline-flex items-center rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">Modified</span>}
                       </div>
                       <p className="text-sm font-normal text-gray-500">{feature.description}</p>
                     </div>
                     <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
                   </AccordionPrimitive.Trigger>
 
-                  {/* Toggle Switch - absolutely positioned over the trigger, click events work due to z-index */}
                   <Switch
                     checked={draftFeatures[feature.name]}
                     onCheckedChange={() => handleToggle(feature.name)}
                     className="absolute left-4 top-1/2 z-10 -translate-y-1/2"
                   />
                 </AccordionPrimitive.Header>
-                <AccordionContent className="px-4 pb-4">
-                  {renderFeatureContent(feature.name)}
-                </AccordionContent>
+                <AccordionContent className="px-4 pb-4">{renderFeatureContent(feature.name)}</AccordionContent>
               </AccordionItem>
             )
           })}
         </Accordion>
       </div>
 
-      {/* Sticky alert at bottom - only show when there are changes */}
       {hasUnsavedChanges && (
         <div className="sticky bottom-0 z-10 border-t border-yellow-200 bg-yellow-50 px-6 py-3">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <svg
-                className="h-5 w-5 flex-shrink-0 text-yellow-600"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg className="h-5 w-5 flex-shrink-0 text-yellow-600" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                 <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
               <span className="text-sm font-medium text-yellow-800">
@@ -632,18 +564,8 @@ function FeaturesForm({
               </span>
             </div>
             <div className="flex gap-2">
-              <button
-                onClick={handleDiscard}
-                disabled={saving}
-                className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-white disabled:opacity-50"
-              >
-                Discard
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="rounded-lg bg-pink-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-pink-700 disabled:opacity-50"
-              >
+              <button onClick={handleDiscard} disabled={saving} className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-white disabled:opacity-50">Discard</button>
+              <button onClick={handleSave} disabled={saving} className="rounded-lg bg-pink-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-pink-700 disabled:opacity-50">
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
