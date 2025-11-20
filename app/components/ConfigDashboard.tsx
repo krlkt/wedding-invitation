@@ -116,7 +116,6 @@ function ConfigDashboardContent() {
     })
   }, [fetchFAQs, fetchStartingSectionContent])
 
-
   async function updateStartingSectionContent(updates: any) {
     try {
       setSaving(true)
@@ -288,7 +287,6 @@ function ConfigDashboardContent() {
 
 // BasicInfoForm and ContentForm removed - features are now managed in accordions below
 // API endpoints remain the same
-
 function FeaturesForm({
   config,
   onBatchSave,
@@ -350,29 +348,26 @@ function FeaturesForm({
 
   const handleFAQChange = useCallback(
     (changed: FAQItem[], deleted: string[]) => {
-      setChangedFAQs(changed)       // track changed FAQ items
-      setDeletedFAQIds(deleted)     // track deleted FAQ IDs
+      setChangedFAQs(changed) 
+      setDeletedFAQIds(deleted)
     },
-    [] // no dependencies needed
+    []
   )
 
-  // Update draftFeatures when config changes
   useEffect(() => {
     setDraftFeatures(config.features)
     setChangedFeatures(new Set())
   }, [config.features])
 
-  // Reset starting section changes when content updates
   useEffect(() => {
     setChangedStartingSectionFields(new Set())
   }, [startingSectionContent])
 
   const [originalFAQs, setOriginalFAQs] = useState<FAQItem[]>([])
 
-  // After fetching
   useEffect(() => {
     if (draftFAQs) {
-      setOriginalFAQs([...draftFAQs]) // make a stable copy
+      setOriginalFAQs([...draftFAQs])
     }
   }, [draftFAQs])
 
@@ -408,25 +403,21 @@ function FeaturesForm({
       });
 
       if (response.ok) {
-        // Update original FAQs with new state
         const updatedFAQs = [...originalFAQs];
 
-        // Replace updated items
         changedFAQs.forEach((item) => {
           const idx = updatedFAQs.findIndex(f => f.id === item.id);
           if (idx > -1) {
             updatedFAQs[idx] = item;
           } else {
-            // New FAQ, add it
             updatedFAQs.push(item);
           }
         });
 
-        // Remove deleted items
         const finalFAQs = updatedFAQs.filter(f => !deletedFAQIds.includes(f.id));
 
         setOriginalFAQs(finalFAQs);
-        setDraftFAQs(finalFAQs); // optional if FAQForm relies on draftFAQs
+        setDraftFAQs(finalFAQs);
 
         setResetChangedFAQs(prev => !prev);
         setChangedFAQs([]);

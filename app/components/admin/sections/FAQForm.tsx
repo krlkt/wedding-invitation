@@ -5,7 +5,7 @@ import type { FAQItem } from '@/app/db/schema/content'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { Trash2, Edit2, Plus } from 'lucide-react'
+import { Trash2, Edit2, Plus, Undo } from 'lucide-react'
 
 interface FAQFormProps {
   originalFAQs?: FAQItem[]
@@ -20,14 +20,12 @@ export function FAQForm({ originalFAQs = [], resetChanged, onChangeTracking }: F
   const [deletedIds, setDeletedIds] = useState<string[]>([])
   const [changedIds, setChangedIds] = useState<Set<string>>(new Set())
 
-  // Sync with parent when originalFAQs change
   useEffect(() => {
     setFaqs(originalFAQs)
     setDeletedIds([])
     setChangedIds(new Set())
   }, [originalFAQs])
 
-  // Handle reset request from parent
   useEffect(() => {
     if (resetChanged) {
       setFaqs(originalFAQs)
@@ -37,7 +35,6 @@ export function FAQForm({ originalFAQs = [], resetChanged, onChangeTracking }: F
     }
   }, [resetChanged, originalFAQs])
 
-  // Propagate changes upward
   useEffect(() => {
     const changed = faqs.filter(f => changedIds.has(f.id))
     onChangeTracking?.(changed, deletedIds)
@@ -69,15 +66,28 @@ export function FAQForm({ originalFAQs = [], resetChanged, onChangeTracking }: F
     setEditingFAQ(null)
   }
 
-  const handleDeleteFAQ = (id: string) => {
-    setFaqs(prev => prev.filter(f => f.id !== id))
-    setDeletedIds(prev => [...prev, id])
-    setChangedIds(prev => {
-      const next = new Set(prev)
-      next.delete(id)
-      return next
-    })
-  }
+    const handleDeleteFAQ = (id: string) => {
+    const faq = faqs.find(f => f.id === id);
+    if (!faq) return;
+
+    if (faq.weddingConfigId === 'TEMP') {
+      setFaqs(prev => prev.filter(f => f.id !== id));
+      setChangedIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    } else {
+      setDeletedIds(prev =>
+        prev.includes(id) ? prev.filter(d => d !== id) : [...prev, id]
+      );
+      setChangedIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -86,16 +96,19 @@ export function FAQForm({ originalFAQs = [], resetChanged, onChangeTracking }: F
 
         {faqs.map(faq => {
           const isChanged = changedIds.has(faq.id)
+          const isDeleted = deletedIds.includes(faq.id)
+          const isEditing = editingFAQ?.id === faq.id && !isDeleted
 
           return (
             <li
               key={faq.id}
-              className={`rounded-md border p-3 transition-all ${isChanged
-                  ? 'bg-yellow-50 ring-2 ring-yellow-400'
-                  : ''
-              }`}
+              className={`rounded-md border p-3 transition-all ${
+                  isDeleted
+                    ? 'opacity-50'
+                    : isChanged && 'bg-yellow-50 ring-2 ring-yellow-400'
+                }`}
             >
-              {editingFAQ?.id === faq.id ? (
+              {isEditing ? (
                 <>
                   <Input
                     value={editingFAQ.question}
@@ -119,14 +132,21 @@ export function FAQForm({ originalFAQs = [], resetChanged, onChangeTracking }: F
                 </>
               ) : (
                 <>
-                  <p className="font-medium">{faq.question}</p>
-                  <p className="text-sm text-gray-600">{faq.answer}</p>
+                  <p className={`font-medium ${isDeleted ? 'line-through' : ''}`}>{faq.question}</p>
+                  <p className={`text-sm text-gray-600 ${isDeleted ? 'line-through' : ''}`}>{faq.answer}</p>
                   <div className="flex justify-end gap-1 mt-2">
-                    <Button variant="ghost" size="sm" onClick={() => setEditingFAQ(faq)}>
-                      <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDeleteFAQ(faq.id)}>
-                      <Trash2 className="h-4 w-4 text-red-600" />
+                    {!isDeleted && (
+                      <Button variant="ghost" size="sm" onClick={() => setEditingFAQ(faq)}>
+                        <Edit2 className="h-4 w-4" />
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteFAQ(faq.id)}
+                      className={isDeleted ? 'text-black' : 'text-red-600'}
+                    >
+                      {isDeleted ? <Undo className="h-4 w-4" /> : <Trash2 className="h-4 w-4" />}
                     </Button>
                   </div>
                 </>
