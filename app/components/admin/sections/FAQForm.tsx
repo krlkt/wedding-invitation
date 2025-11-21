@@ -6,107 +6,99 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Trash2, Edit2, Plus, Undo } from 'lucide-react'
+import { useDraft } from '@/app/context/DraftContext'
 
 interface FAQFormProps {
-  originalFAQs?: FAQItem[]
   resetChanged?: boolean
-  onChangeTracking?: (changed: FAQItem[], deletedIds: string[]) => void
+  onChangeTracking?: (draft: FAQItem[], deletedIds: string[]) => void
 }
 
-export function FAQForm({ originalFAQs = [], resetChanged, onChangeTracking }: FAQFormProps) {
-  const [faqs, setFaqs] = useState<FAQItem[]>(originalFAQs)
+export function FAQForm({ resetChanged, onChangeTracking }: FAQFormProps) {
+  const { draft: draftFAQs, setDraft: setDraftFAQs, clearDraft: clearFAQsDraft } = useDraft('faqs')
   const [editingFAQ, setEditingFAQ] = useState<FAQItem | null>(null)
   const [newFAQ, setNewFAQ] = useState<Partial<FAQItem>>({ question: '', answer: '' })
-  const [deletedIds, setDeletedIds] = useState<string[]>([])
   const [changedIds, setChangedIds] = useState<Set<string>>(new Set())
+  const [deletedIds, setDeletedIds] = useState<string[]>([])
 
+  // Initialize draft if undefined
   useEffect(() => {
-    setFaqs(originalFAQs)
-    setDeletedIds([])
-    setChangedIds(new Set())
-  }, [originalFAQs])
+    if (!draftFAQs) setDraftFAQs([])
+  }, [draftFAQs, setDraftFAQs])
 
+  // Reset logic
   useEffect(() => {
     if (resetChanged) {
-      setFaqs(originalFAQs)
-      setDeletedIds([])
-      setChangedIds(new Set())
+      clearFAQsDraft()
       setEditingFAQ(null)
+      setNewFAQ({ question: '', answer: '' })
+      setDeletedIds([])
     }
-  }, [resetChanged, originalFAQs])
+  }, [resetChanged, clearFAQsDraft])
 
+  // Notify parent of changes
   useEffect(() => {
-    const changed = faqs.filter(f => changedIds.has(f.id))
-    onChangeTracking?.(changed, deletedIds)
-  }, [faqs, deletedIds, changedIds, onChangeTracking])
+    if (draftFAQs) onChangeTracking?.(draftFAQs, deletedIds)
+  }, [draftFAQs, deletedIds, onChangeTracking])
 
+  // Add new FAQ
   const handleAddFAQ = () => {
-    if (!newFAQ.question?.trim() || !newFAQ.answer?.trim()) return
+    if (!newFAQ.question?.trim() || !newFAQ.answer?.trim() || !draftFAQs) return
 
     const newItem: FAQItem = {
       id: crypto.randomUUID(),
       question: newFAQ.question,
       answer: newFAQ.answer,
-      order: faqs.length + 1,
+      order: draftFAQs.length + 1,
       weddingConfigId: 'TEMP',
       createdAt: new Date(),
       updatedAt: new Date(),
     }
 
-    setFaqs(prev => [...prev, newItem])
+    setDraftFAQs([...draftFAQs, newItem])
+    onChangeTracking?.([...draftFAQs, newItem], deletedIds)
     setChangedIds(prev => new Set(prev).add(newItem.id))
     setNewFAQ({ question: '', answer: '' })
   }
 
+  // Save edit
   const handleEditSave = () => {
-    if (!editingFAQ) return
-
-    setFaqs(prev => prev.map(f => (f.id === editingFAQ.id ? { ...editingFAQ } : f)))
+    if (!editingFAQ || !draftFAQs) return
+    setDraftFAQs(draftFAQs.map(f => (f.id === editingFAQ.id ? editingFAQ : f)))
     setChangedIds(prev => new Set(prev).add(editingFAQ.id))
     setEditingFAQ(null)
   }
 
-    const handleDeleteFAQ = (id: string) => {
-    const faq = faqs.find(f => f.id === id);
-    if (!faq) return;
-
+  // Delete / Undo
+  const handleDeleteFAQ = (faq: FAQItem) => {
+    if (!draftFAQs) return
     if (faq.weddingConfigId === 'TEMP') {
-      setFaqs(prev => prev.filter(f => f.id !== id));
-      setChangedIds(prev => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
+      // Remove temp items completely
+      setDraftFAQs(draftFAQs.filter(f => f.id !== faq.id))
     } else {
       setDeletedIds(prev =>
-        prev.includes(id) ? prev.filter(d => d !== id) : [...prev, id]
-      );
-      setChangedIds(prev => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
+        prev.includes(faq.id) ? prev.filter(id => id !== faq.id) : [...prev, faq.id]
+      )
     }
-  };
+  }
 
   return (
     <div className="space-y-4">
       <ul className="space-y-2 mt-2">
-        {faqs.length === 0 && <p className="text-sm text-gray-500">No FAQs added yet.</p>}
+        {(!draftFAQs || draftFAQs.length === 0) && (
+          <p className="text-sm text-gray-500">No FAQs added yet.</p>
+        )}
 
-        {faqs.map(faq => {
-          const isChanged = changedIds.has(faq.id)
+        {draftFAQs?.map(faq => {
           const isDeleted = deletedIds.includes(faq.id)
+          const isChanged = changedIds.has(faq.id)
           const isEditing = editingFAQ?.id === faq.id && !isDeleted
 
           return (
             <li
               key={faq.id}
-              className={`rounded-md border p-3 transition-all ${
-                  isDeleted
-                    ? 'opacity-50'
-                    : isChanged && 'bg-yellow-50 ring-2 ring-yellow-400'
-                }`}
+              className={`rounded-md border p-3 transition-all 
+                ${isDeleted ? 'opacity-50 line-through' : ''} 
+                ${isChanged ? 'bg-yellow-50 ring-2 ring-yellow-400' : ''}`}
             >
               {isEditing ? (
                 <>
@@ -143,7 +135,7 @@ export function FAQForm({ originalFAQs = [], resetChanged, onChangeTracking }: F
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleDeleteFAQ(faq.id)}
+                      onClick={() => handleDeleteFAQ(faq)}
                       className={isDeleted ? 'text-black' : 'text-red-600'}
                     >
                       {isDeleted ? <Undo className="h-4 w-4" /> : <Trash2 className="h-4 w-4" />}
@@ -158,7 +150,6 @@ export function FAQForm({ originalFAQs = [], resetChanged, onChangeTracking }: F
 
       <div className="mt-4 space-y-2 border-t pt-4">
         <h4 className="font-semibold">Add New FAQ</h4>
-
         <Input
           placeholder="Question"
           value={newFAQ.question ?? ''}
@@ -170,7 +161,6 @@ export function FAQForm({ originalFAQs = [], resetChanged, onChangeTracking }: F
           onChange={e => setNewFAQ({ ...newFAQ, answer: e.target.value })}
           rows={3}
         />
-
         <Button className="w-full flex items-center justify-center gap-2" onClick={handleAddFAQ}>
           <Plus className="h-4 w-4" /> Add FAQ
         </Button>

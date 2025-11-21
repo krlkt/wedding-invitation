@@ -107,10 +107,10 @@ function ConfigDashboardContent() {
 
   useEffect(() => {
     ;(async () => {
+      await checkSession()
       await fetchConfig()
       await fetchStartingSectionContent()
       await fetchFAQs()
-      await checkSession()
     })().catch((error) => {
       console.error('Initialization error:', error)
     })
@@ -302,13 +302,13 @@ function FeaturesForm({
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
     useDraft('startingSection')
 
-  const { draft: draftFAQs, setDraft: setDraftFAQs, clearDraft: clearFAQsDraft } =
+  const { draft: draftFAQs, clearDraft: clearFAQsDraft } =
     useDraft('faqs')
 
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
   const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set())
   const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(new Set())
-  const [changedFAQs, setChangedFAQs] = useState<FAQItem[]>([])
+  const [originalFAQs, setOriginalFAQs] = useState<FAQItem[]>([])
   const [deletedFAQIds, setDeletedFAQIds] = useState<string[]>([])
   const [resetChangedFAQs, setResetChangedFAQs] = useState(false)
 
@@ -327,6 +327,21 @@ function FeaturesForm({
     { name: 'wishes', label: 'Wishes', description: 'Guest wishes and messages' },
     { name: 'footer', label: 'Footer', description: 'Closing section with thank you message' },
   ]
+
+  useEffect(() => {
+    setDraftFeatures(config.features)
+    setChangedFeatures(new Set())
+  }, [config.features])
+
+  useEffect(() => {
+    setChangedStartingSectionFields(new Set())
+  }, [startingSectionContent])
+
+  useEffect(() => {
+    if (draftFAQs && originalFAQs.length === 0) {
+      setOriginalFAQs(draftFAQs)
+    }
+  }, [draftFAQs, originalFAQs.length])
 
   const handleToggle = (featureName: string) => {
     const newValue = !draftFeatures[featureName]
@@ -347,41 +362,30 @@ function FeaturesForm({
   }, [])
 
   const handleFAQChange = useCallback(
-    (changed: FAQItem[], deleted: string[]) => {
-      setChangedFAQs(changed) 
-      setDeletedFAQIds(deleted)
+    (_draftFAQs: FAQItem[], deletedIds: string[]) => {
+      setDeletedFAQIds(deletedIds)
     },
     []
   )
 
-  useEffect(() => {
-    setDraftFeatures(config.features)
-    setChangedFeatures(new Set())
-  }, [config.features])
+  const changedFAQsCount = draftFAQs?.filter(faq => {
+    // Find original FAQ by id
+    const orig = originalFAQs.find(o => o.id === faq.id)
+    return !orig || faq.question !== orig.question || faq.answer !== orig.answer
+  }).length ?? 0
 
-  useEffect(() => {
-    setChangedStartingSectionFields(new Set())
-  }, [startingSectionContent])
-
-  const [originalFAQs, setOriginalFAQs] = useState<FAQItem[]>([])
-
-  useEffect(() => {
-    if (draftFAQs) {
-      setOriginalFAQs([...draftFAQs])
-    }
-  }, [draftFAQs])
-
-  const hasUnsavedChanges =
-    changedFeatures.size > 0 ||
-    changedStartingSectionFields.size > 0 ||
-    changedFAQs.length > 0 ||
-    deletedFAQIds.length > 0
+  const hasFAQChanges = changedFAQsCount > 0 || deletedFAQIds.length > 0
 
   const totalChanges =
     changedFeatures.size +
     changedStartingSectionFields.size +
-    changedFAQs.length +
+    changedFAQsCount +
     deletedFAQIds.length
+
+  const hasUnsavedChanges =
+    changedFeatures.size > 0 ||
+    changedStartingSectionFields.size > 0 ||
+    hasFAQChanges
 
   const handleSave = async () => {
     if (changedFeatures.size > 0) {
@@ -395,33 +399,20 @@ function FeaturesForm({
       clearStartingSectionDraft()
     }
 
-    if (changedFAQs.length > 0 || deletedFAQIds.length > 0) {
+    if ((draftFAQs?.length ?? 0) > 0 || deletedFAQIds.length > 0) {
       const response = await fetch('/api/wedding/faqs/batch', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ updated: changedFAQs, deleted: deletedFAQIds })
-      });
+        body: JSON.stringify({ updated: draftFAQs, deleted: deletedFAQIds })
+      })
 
       if (response.ok) {
-        const updatedFAQs = [...originalFAQs];
+        clearFAQsDraft()
+        setDeletedFAQIds([])
+        setResetChangedFAQs(prev => !prev)
 
-        changedFAQs.forEach((item) => {
-          const idx = updatedFAQs.findIndex(f => f.id === item.id);
-          if (idx > -1) {
-            updatedFAQs[idx] = item;
-          } else {
-            updatedFAQs.push(item);
-          }
-        });
-
-        const finalFAQs = updatedFAQs.filter(f => !deletedFAQIds.includes(f.id));
-
-        setOriginalFAQs(finalFAQs);
-        setDraftFAQs(finalFAQs);
-
-        setResetChangedFAQs(prev => !prev);
-        setChangedFAQs([]);
-        setDeletedFAQIds([]);
+        // Update originalFAQs so future changes are tracked correctly
+        setOriginalFAQs(draftFAQs ?? [])
       }
     }
 
@@ -436,13 +427,13 @@ function FeaturesForm({
     clearStartingSectionDraft()
     clearFAQsDraft()
     setChangedStartingSectionFields(new Set())
-
-    setResetChangedFAQs(prev => !prev) 
-    setChangedFAQs([])
     setDeletedFAQIds([])
+    setResetChangedFAQs(prev => !prev)
 
     if (onRefetchStartingSection) await onRefetchStartingSection()
     if (onRefreshPreview) onRefreshPreview()
+
+    setOriginalFAQs(draftFAQs ?? [])
   }
 
   const renderFeatureContent = useCallback(
@@ -495,7 +486,6 @@ function FeaturesForm({
             <FAQForm
               resetChanged={resetChangedFAQs}
               onChangeTracking={handleFAQChange}
-              originalFAQs={originalFAQs}
             />
           )
 
@@ -503,7 +493,7 @@ function FeaturesForm({
           return <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
       }
     },
-    [changedStartingSectionFields, config, handleFAQChange, handleStartingSectionChange, onBackgroundUpload, onMonogramUpload, onUpdateStartingSection, originalFAQs, resetChangedFAQs, startingSectionContent]
+    [changedStartingSectionFields, config, handleFAQChange, handleStartingSectionChange, onBackgroundUpload, onMonogramUpload, onUpdateStartingSection, resetChangedFAQs, startingSectionContent]
   )
 
   return (
