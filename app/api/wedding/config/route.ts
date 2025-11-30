@@ -8,7 +8,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { requireAuth } from '@/app/lib/session'
-import { isValidInstagramUrl } from '@/app/lib/validation'
 import {
   getWeddingConfigById,
   updateWeddingConfiguration,
@@ -57,8 +56,6 @@ export async function GET(request: NextRequest) {
         groomMother: config.groomMother,
         brideFather: config.brideFather,
         brideMother: config.brideMother,
-        groomsInstagramLink: config.groomsInstagramLink,
-        brideInstagramLink: config.brideInstagramLink,
         footerText: config.footerText,
         isPublished: config.isPublished,
         features: featuresMap,
@@ -91,8 +88,6 @@ export async function PUT(request: NextRequest) {
       groomMother,
       brideFather,
       brideMother,
-      groomsInstagramLink,
-      brideInstagramLink,
       footerText,
     } = body
 
@@ -101,26 +96,6 @@ export async function PUT(request: NextRequest) {
       const date = new Date(weddingDate)
       if (isNaN(date.getTime())) {
         return NextResponse.json({ success: false, error: 'Invalid date format' }, { status: 400 })
-      }
-    }
-
-    // Validate groom's Instagram link if provided
-    if (groomsInstagramLink !== undefined && groomsInstagramLink !== null) {
-      if (!isValidInstagramUrl(groomsInstagramLink)) {
-        return NextResponse.json(
-          { success: false, error: 'Invalid Instagram URL for groom' },
-          { status: 400 }
-        )
-      }
-    }
-
-    // Validate bride's Instagram link if provided
-    if (brideInstagramLink !== undefined && brideInstagramLink !== null) {
-      if (!isValidInstagramUrl(brideInstagramLink)) {
-        return NextResponse.json(
-          { success: false, error: 'Invalid Instagram URL for bride' },
-          { status: 400 }
-        )
       }
     }
 
@@ -133,8 +108,6 @@ export async function PUT(request: NextRequest) {
       groomMother,
       brideFather,
       brideMother,
-      groomsInstagramLink,
-      brideInstagramLink,
       footerText,
     })
 

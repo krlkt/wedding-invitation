@@ -1,9 +1,115 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "0f4561fc-9439-4440-98cb-6f24a3b3a5a8",
+  "id": "7bca55be-4eb8-490d-b0ce-22d353543856",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "bride_section_content": {
+      "name": "bride_section_content",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "wedding_config_id": {
+          "name": "wedding_config_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "bride_display_name": {
+          "name": "bride_display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "show_parent_info": {
+          "name": "show_parent_info",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "father_name": {
+          "name": "father_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mother_name": {
+          "name": "mother_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "show_instagram_link": {
+          "name": "show_instagram_link",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "bride_instagram_link": {
+          "name": "bride_instagram_link",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "photos": {
+          "name": "photos",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'[]'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "bride_section_content_wedding_config_id_unique": {
+          "name": "bride_section_content_wedding_config_id_unique",
+          "columns": ["wedding_config_id"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "bride_section_content_wedding_config_id_wedding_configurations_id_fk": {
+          "name": "bride_section_content_wedding_config_id_wedding_configurations_id_fk",
+          "tableFrom": "bride_section_content",
+          "tableTo": "wedding_configurations",
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "bank_details": {
       "name": "bank_details",
       "columns": {
@@ -573,6 +679,112 @@
         "feature_toggles_wedding_config_id_wedding_configurations_id_fk": {
           "name": "feature_toggles_wedding_config_id_wedding_configurations_id_fk",
           "tableFrom": "feature_toggles",
+          "tableTo": "wedding_configurations",
+          "columnsFrom": ["wedding_config_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "groom_section_content": {
+      "name": "groom_section_content",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "wedding_config_id": {
+          "name": "wedding_config_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "groom_display_name": {
+          "name": "groom_display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "show_parent_info": {
+          "name": "show_parent_info",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "father_name": {
+          "name": "father_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "mother_name": {
+          "name": "mother_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "show_instagram_link": {
+          "name": "show_instagram_link",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "groom_instagram_link": {
+          "name": "groom_instagram_link",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "photos": {
+          "name": "photos",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'[]'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "groom_section_content_wedding_config_id_unique": {
+          "name": "groom_section_content_wedding_config_id_unique",
+          "columns": ["wedding_config_id"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "groom_section_content_wedding_config_id_wedding_configurations_id_fk": {
+          "name": "groom_section_content_wedding_config_id_wedding_configurations_id_fk",
+          "tableFrom": "groom_section_content",
           "tableTo": "wedding_configurations",
           "columnsFrom": ["wedding_config_id"],
           "columnsTo": ["id"],
@@ -1184,13 +1396,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "instagram_link": {
-          "name": "instagram_link",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "footer_text": {
           "name": "footer_text",
           "type": "text",
@@ -1239,6 +1444,153 @@
           "tableFrom": "wedding_configurations",
           "tableTo": "user_accounts",
           "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "starting_section_content": {
+      "name": "starting_section_content",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "wedding_config_id": {
+          "name": "wedding_config_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "groom_display_name": {
+          "name": "groom_display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bride_display_name": {
+          "name": "bride_display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "show_parent_info": {
+          "name": "show_parent_info",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
+        },
+        "groom_father_name": {
+          "name": "groom_father_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "groom_mother_name": {
+          "name": "groom_mother_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bride_father_name": {
+          "name": "bride_father_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bride_mother_name": {
+          "name": "bride_mother_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "show_wedding_date": {
+          "name": "show_wedding_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "background_type": {
+          "name": "background_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "background_filename": {
+          "name": "background_filename",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "background_original_name": {
+          "name": "background_original_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "background_file_size": {
+          "name": "background_file_size",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "background_mime_type": {
+          "name": "background_mime_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "starting_section_content_wedding_config_id_unique": {
+          "name": "starting_section_content_wedding_config_id_unique",
+          "columns": ["wedding_config_id"],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "starting_section_content_wedding_config_id_wedding_configurations_id_fk": {
+          "name": "starting_section_content_wedding_config_id_wedding_configurations_id_fk",
+          "tableFrom": "starting_section_content",
+          "tableTo": "wedding_configurations",
+          "columnsFrom": ["wedding_config_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"

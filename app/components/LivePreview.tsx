@@ -15,6 +15,8 @@ import TemplateRenderer from './preview/TemplateRenderer'
 
 import type { PreviewData } from './preview/types'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
+import type { GroomSectionContent } from '@/app/db/schema/groom-section'
+import type { BrideSectionContent } from '@/app/db/schema/bride-section'
 import type { FAQItem } from '../db/schema/content'
 
 interface LivePreviewProps {
@@ -22,14 +24,18 @@ interface LivePreviewProps {
   refreshTrigger?: number // Increment to force refresh
   draftFeatures?: Record<string, boolean> // Draft features from local state
   draftStartingSection?: Partial<StartingSectionContent> // Draft starting section from local state
+  draftGroomSection?: Partial<GroomSectionContent> // Draft groom section from local state
+  draftBrideSection?: Partial<BrideSectionContent> // Draft bride section from local state
   draftFAQs?: FAQItem[]
 }
 
 export default function LivePreview({
   weddingConfigId,
   refreshTrigger = 0,
-  draftFeatures,  
+  draftFeatures,
   draftStartingSection,
+  draftGroomSection,
+  draftBrideSection,
   draftFAQs,
 }: LivePreviewProps) {
   const [previewData, setPreviewData] = useState<PreviewData | null>(null)
@@ -38,6 +44,8 @@ export default function LivePreview({
   const [error, setError] = useState<string | null>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [containerHeight, setContainerHeight] = useState<number | null>(null)
+  const savedScrollPosition = useRef<number>(0)
+  const shouldRestoreScroll = useRef<boolean>(false)
 
   // Measure container height and set CSS variable
   useEffect(() => {
@@ -61,6 +69,12 @@ export default function LivePreview({
   useEffect(() => {
     async function fetchPreview() {
       try {
+        // Save current scroll position before fetching and mark that we should restore it
+        if (scrollContainerRef.current) {
+          savedScrollPosition.current = scrollContainerRef.current.scrollTop
+          shouldRestoreScroll.current = true
+        }
+
         setLoading(true)
         setError(null)
         // Add timestamp to bust Next.js cache
@@ -73,7 +87,7 @@ export default function LivePreview({
           setPreviewData(data)
         } else {
           const errorData = await response.json()
-          setError(errorData.message || 'Failed to load preview')
+          setError(errorData.message ?? 'Failed to load preview')
         }
       } catch (err) {
         console.error('Failed to fetch preview:', err)
@@ -83,19 +97,32 @@ export default function LivePreview({
       }
     }
 
-    fetchPreview()
+    void fetchPreview()
   }, [weddingConfigId, refreshTrigger])
 
-  // Merge draft features and starting section with preview data for immediate feedback
+  // Merge draft features and section content with preview data for immediate feedback
   useEffect(() => {
     if (previewData) {
-      const mergedStartingSection =
-        draftStartingSection && previewData.content.startingSection
-          ? ({
-              ...previewData.content.startingSection,
-              ...draftStartingSection,
-            } as StartingSectionContent)
-          : previewData.content.startingSection
+      const mergedStartingSection = draftStartingSection
+        ? ({
+            ...(previewData.content.startingSection ?? {}),
+            ...draftStartingSection,
+          } as StartingSectionContent)
+        : previewData.content.startingSection
+
+      const mergedGroomSection = draftGroomSection
+        ? ({
+            ...(previewData.content.groomSection ?? {}),
+            ...draftGroomSection,
+          } as GroomSectionContent)
+        : previewData.content.groomSection
+
+      const mergedBrideSection = draftBrideSection
+        ? ({
+            ...(previewData.content.brideSection ?? {}),
+            ...draftBrideSection,
+          } as BrideSectionContent)
+        : previewData.content.brideSection
 
       setDisplayData({
         ...previewData,
@@ -109,10 +136,38 @@ export default function LivePreview({
           ...previewData.content,
           startingSection: mergedStartingSection,
           faqs: draftFAQs ?? previewData.content.faqs,
+          groomSection: mergedGroomSection,
+          brideSection: mergedBrideSection,
         },
       })
     }
-  }, [previewData, draftFeatures, draftStartingSection, draftFAQs])
+  }, [
+    previewData,
+    draftFeatures,
+    draftStartingSection,
+    draftGroomSection,
+    draftBrideSection,
+    draftFAQs,
+  ])
+
+  // Restore scroll position only after fetch operations, not on every draft change
+  useEffect(() => {
+    if (
+      displayData &&
+      scrollContainerRef.current &&
+      shouldRestoreScroll.current &&
+      savedScrollPosition.current > 0
+    ) {
+      // Use requestAnimationFrame to ensure DOM has updated
+      requestAnimationFrame(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTop = savedScrollPosition.current
+          // Reset the flag after restoring
+          shouldRestoreScroll.current = false
+        }
+      })
+    }
+  }, [displayData])
 
   if (loading) {
     return (

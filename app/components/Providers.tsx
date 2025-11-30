@@ -2,7 +2,9 @@
 
 import { ReactNode } from 'react'
 
-import { SnackbarProvider } from 'notistack'
+import { SnackbarProvider as NotistackProvider } from 'notistack'
+import { SnackbarProvider } from '../context/SnackbarContext'
+import { Toaster } from '@/components/ui/sonner'
 
 import { useViewportHeight } from '../utils/useViewportHeight'
 
@@ -10,8 +12,11 @@ const Providers = ({ children }: { children: ReactNode }) => {
   useViewportHeight()
 
   return (
-    <SnackbarProvider autoHideDuration={2000} maxSnack={3}>
-      {children}
+    <SnackbarProvider>
+      <NotistackProvider autoHideDuration={2000} maxSnack={3}>
+        {children}
+        <Toaster />
+      </NotistackProvider>
     </SnackbarProvider>
   )
 }

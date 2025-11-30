@@ -1,7 +1,13 @@
 'use client'
 
 import { createContext, useContext } from 'react'
-import type { WeddingConfiguration, StartingSectionContent, FAQItem } from '@/app/db/schema'
+import type {
+  WeddingConfiguration,
+  StartingSectionContent,
+  GroomSectionContent,
+  BrideSectionContent,
+  FAQItem,
+} from '@/app/db/schema'
 import type { FeatureName } from '@/app/db/schema/features'
 
 /**
@@ -16,6 +22,8 @@ interface WeddingDataContextValue {
   features: Record<FeatureName, boolean>
   startingSection?: StartingSectionContent | null
   faqs?: FAQItem[] | null
+  groomSection?: GroomSectionContent | null
+  brideSection?: BrideSectionContent | null
 }
 
 const WeddingDataContext = createContext<WeddingDataContextValue | null>(null)
@@ -26,15 +34,21 @@ export function WeddingDataProvider({
   features,
   startingSection,
   faqs,
+  groomSection,
+  brideSection,
 }: {
   children: React.ReactNode
   config: WeddingConfiguration
   features: Record<FeatureName, boolean>
   startingSection?: StartingSectionContent | null
   faqs?: FAQItem[] | null
+  groomSection?: GroomSectionContent | null
+  brideSection?: BrideSectionContent | null
 }) {
   return (
-    <WeddingDataContext.Provider value={{ config, features, startingSection, faqs }}>
+    <WeddingDataContext.Provider
+      value={{ config, features, startingSection, groomSection, brideSection, faqs }}
+    >
       {children}
     </WeddingDataContext.Provider>
   )

@@ -10,11 +10,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-} from '@/components/ui/accordion'
+import { Accordion, AccordionContent, AccordionItem } from '@/components/ui/accordion'
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 import { ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -22,10 +18,18 @@ import { Switch } from '@/components/ui/switch'
 
 import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
+import { GroomSectionForm } from './admin/sections/GroomSectionForm'
+import { BrideSectionForm } from './admin/sections/BrideSectionForm'
 import { DraftProvider, useDraft } from '@/app/context/DraftContext'
+import { useSnackbar } from '@/app/context/SnackbarContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
 import type { FAQItem } from '@/app/db/schema/content'
 import { FAQForm } from './admin/sections/FAQForm'
+import type { GroomSectionContent } from '@/app/db/schema/groom-section'
+import type { BrideSectionContent } from '@/app/db/schema/bride-section'
+import { parsePhotos, stringifyPhotos, upsertPhoto } from '@/app/lib/section-photos'
+import { GroomBrideSectionPhoto } from '../db/schema/section-photo-types'
+import { updateChangedFieldsSet } from '@/app/utils/field-validation'
 
 export default function ConfigDashboard() {
   return (
@@ -45,10 +49,18 @@ function ConfigDashboardContent() {
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
   const [startingSectionContent, setStartingSectionContent] =
     useState<StartingSectionContent | null>(null)
+  const [groomSectionContent, setGroomSectionContent] = useState<GroomSectionContent | null>(null)
+  const [brideSectionContent, setBrideSectionContent] = useState<BrideSectionContent | null>(null)
 
+  // Use draft context for sections
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
     useDraft('startingSection')
+  const { draft: draftGroomSection, setDraft: setDraftGroomSection } = useDraft('groomSection')
+  const { draft: draftBrideSection, setDraft: setDraftBrideSection } = useDraft('brideSection')
   const { draft: draftFAQs, setDraft: setDraftFAQs } = useDraft('faqs')
+
+  // Snackbar for notifications
+  const { showError } = useSnackbar()
 
   // WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
@@ -64,7 +76,7 @@ function ConfigDashboardContent() {
     }
   }
 
-  async function fetchConfig() {
+  const fetchConfig = useCallback(async () => {
     try {
       const response = await fetch('/api/wedding/config')
       if (response.ok) {
@@ -76,7 +88,7 @@ function ConfigDashboardContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   const fetchStartingSectionContent = useCallback(async () => {
     try {
@@ -89,7 +101,7 @@ function ConfigDashboardContent() {
       console.error('Failed to fetch starting section content:', error)
     }
   }, [])
-  
+
   const fetchFAQs = useCallback(async () => {
     try {
       const res = await fetch('/api/wedding/faqs')
@@ -110,11 +122,37 @@ function ConfigDashboardContent() {
       await checkSession()
       await fetchConfig()
       await fetchStartingSectionContent()
+      await fetchGroomSectionContent()
+      await fetchBrideSectionContent()
       await fetchFAQs()
     })().catch((error) => {
       console.error('Initialization error:', error)
     })
-  }, [fetchFAQs, fetchStartingSectionContent])
+  }, [fetchConfig, fetchFAQs, fetchStartingSectionContent])
+
+  async function fetchGroomSectionContent() {
+    try {
+      const response = await fetch('/api/wedding/groom-section')
+      if (response.ok) {
+        const data = await response.json()
+        setGroomSectionContent(data.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch groom section content:', error)
+    }
+  }
+
+  async function fetchBrideSectionContent() {
+    try {
+      const response = await fetch('/api/wedding/bride-section')
+      if (response.ok) {
+        const data = await response.json()
+        setBrideSectionContent(data.data)
+      }
+    } catch (error) {
+      console.error('Failed to fetch bride section content:', error)
+    }
+  }
 
   async function updateStartingSectionContent(updates: any) {
     try {
@@ -149,7 +187,77 @@ function ConfigDashboardContent() {
       }
     } catch (error) {
       console.error('Failed to update starting section:', error)
-      alert('Failed to update starting section. Please try again.')
+      showError('Failed to update starting section. Please try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function updateGroomSectionContent(updates: any) {
+    try {
+      setSaving(true)
+
+      // Parse photos if it's a string (from draft/saved state)
+      const dataToSend = { ...updates }
+      if (dataToSend.photos && typeof dataToSend.photos === 'string') {
+        dataToSend.photos = parsePhotos(dataToSend.photos)
+      }
+
+      const response = await fetch('/api/wedding/groom-section', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend),
+      })
+
+      if (response.ok) {
+        await fetchGroomSectionContent()
+        setRefreshTrigger((prev) => prev + 1)
+      } else {
+        // Show detailed error from API
+        const errorData = await response.json()
+        console.error('API error:', errorData)
+        showError(
+          `Failed to update groom section: ${errorData.error ?? 'Unknown error'}${errorData.details ? ` - ${JSON.stringify(errorData.details)}` : ''}`
+        )
+      }
+    } catch (error) {
+      console.error('Failed to update groom section:', error)
+      showError('Failed to update groom section. Please try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function updateBrideSectionContent(updates: any) {
+    try {
+      setSaving(true)
+
+      // Parse photos if it's a string (from draft/saved state)
+      const dataToSend = { ...updates }
+      if (dataToSend.photos && typeof dataToSend.photos === 'string') {
+        dataToSend.photos = parsePhotos(dataToSend.photos)
+      }
+
+      const response = await fetch('/api/wedding/bride-section', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend),
+      })
+
+      if (response.ok) {
+        await fetchBrideSectionContent()
+        setRefreshTrigger((prev) => prev + 1)
+      } else {
+        // Show detailed error from API
+        const errorData = await response.json()
+        console.error('API error:', errorData)
+        showError(
+          `Failed to update bride section: ${errorData.error ?? 'Unknown error'}${errorData.details ? ` - ${JSON.stringify(errorData.details)}` : ''}`
+        )
+      }
+    } catch (error) {
+      console.error('Failed to update bride section:', error)
+      showError('Failed to update bride section. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -203,8 +311,7 @@ function ConfigDashboardContent() {
     }) => {
       // Update draft state with new background
       setDraftStartingSection({
-        ...(draftStartingSection || {}),
-
+        ...(draftStartingSection ?? {}),
         ...backgroundData,
       })
       // Trigger preview refresh to show new background immediately
@@ -218,7 +325,67 @@ function ConfigDashboardContent() {
     await fetchConfig()
     // Trigger preview refresh to show new monogram
     setRefreshTrigger((prev) => prev + 1)
-  }, [])
+  }, [fetchConfig, setRefreshTrigger])
+
+  const handleGroomPhotoUpload = useCallback(
+    (photoSlot: number, photoData: { filename: string; fileSize: number; mimeType: string }) => {
+      // Get existing photos from draft or saved content
+      const existingPhotosJson = draftGroomSection?.photos ?? groomSectionContent?.photos ?? '[]'
+      const existingPhotos = parsePhotos(existingPhotosJson)
+
+      // Create new photo object
+      const newPhoto: GroomBrideSectionPhoto = {
+        filename: photoData.filename,
+        fileSize: photoData.fileSize,
+        mimeType: photoData.mimeType as any,
+        slot: photoSlot,
+        uploadedAt: new Date().toISOString(),
+      }
+
+      // Upsert photo into array
+      const updatedPhotos = upsertPhoto(existingPhotos, newPhoto)
+
+      // Update draft state with new photos
+      setDraftGroomSection({
+        ...(draftGroomSection ?? {}),
+        photos: stringifyPhotos(updatedPhotos),
+      })
+
+      // Trigger preview refresh to show new photo immediately
+      setRefreshTrigger((prev) => prev + 1)
+    },
+    [draftGroomSection, groomSectionContent, setDraftGroomSection, setRefreshTrigger]
+  )
+
+  const handleBridePhotoUpload = useCallback(
+    (photoSlot: number, photoData: { filename: string; fileSize: number; mimeType: string }) => {
+      // Get existing photos from draft or saved content
+      const existingPhotosJson = draftBrideSection?.photos ?? brideSectionContent?.photos ?? '[]'
+      const existingPhotos = parsePhotos(existingPhotosJson)
+
+      // Create new photo object
+      const newPhoto: GroomBrideSectionPhoto = {
+        filename: photoData.filename,
+        fileSize: photoData.fileSize,
+        mimeType: photoData.mimeType as any,
+        slot: photoSlot,
+        uploadedAt: new Date().toISOString(),
+      }
+
+      // Upsert photo into array
+      const updatedPhotos = upsertPhoto(existingPhotos, newPhoto)
+
+      // Update draft state with new photos
+      setDraftBrideSection({
+        ...(draftBrideSection ?? {}),
+        photos: stringifyPhotos(updatedPhotos),
+      })
+
+      // Trigger preview refresh to show new photo immediately
+      setRefreshTrigger((prev) => prev + 1)
+    },
+    [draftBrideSection, brideSectionContent, setDraftBrideSection, setRefreshTrigger]
+  )
 
   if (loading) {
     return (
@@ -267,9 +434,17 @@ function ConfigDashboardContent() {
           onRefetchStartingSection={fetchStartingSectionContent}
           onBackgroundUpload={handleBackgroundUpload}
           onMonogramUpload={handleMonogramUpload}
+          groomSectionContent={groomSectionContent}
+          onUpdateGroomSection={updateGroomSectionContent}
+          onRefetchGroomSection={fetchGroomSectionContent}
+          onGroomPhotoUpload={handleGroomPhotoUpload}
+          brideSectionContent={brideSectionContent}
+          onUpdateBrideSection={updateBrideSectionContent}
+          onRefetchBrideSection={fetchBrideSectionContent}
+          onBridePhotoUpload={handleBridePhotoUpload}
           onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
-          />
-        </div>
+        />
+      </div>
 
       {/* Right Panel - Live Preview */}
       <div className="h-full w-1/2 overflow-hidden">
@@ -278,7 +453,9 @@ function ConfigDashboardContent() {
           refreshTrigger={refreshTrigger}
           draftFeatures={draftFeatures}
           draftStartingSection={draftStartingSection}
-          draftFAQs={draftFAQs} 
+          draftGroomSection={draftGroomSection}
+          draftBrideSection={draftBrideSection}
+          draftFAQs={draftFAQs}
         />
       </div>
     </>
@@ -297,42 +474,75 @@ function FeaturesForm({
   onRefetchStartingSection,
   onBackgroundUpload,
   onMonogramUpload,
+  groomSectionContent,
+  onUpdateGroomSection,
+  onRefetchGroomSection,
+  onGroomPhotoUpload,
+  brideSectionContent,
+  onUpdateBrideSection,
+  onRefetchBrideSection,
+  onBridePhotoUpload,
   onRefreshPreview,
 }: any) {
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
     useDraft('startingSection')
+  const { draft: draftGroomSection, clearDraft: clearGroomSectionDraft } = useDraft('groomSection')
+  const { draft: draftBrideSection, clearDraft: clearBrideSectionDraft } = useDraft('brideSection')
+  const { draft: draftFAQs, clearDraft: clearFAQsDraft } = useDraft('faqs')
+  const { showSuccess, showError } = useSnackbar()
 
-  const { draft: draftFAQs, clearDraft: clearFAQsDraft } =
-    useDraft('faqs')
-
-  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
-  const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set())
-  const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(new Set())
   const [originalFAQs, setOriginalFAQs] = useState<FAQItem[]>([])
   const [deletedFAQIds, setDeletedFAQIds] = useState<string[]>([])
   const [resetChangedFAQs, setResetChangedFAQs] = useState(false)
 
+  // Track draft state locally (separate from saved state)
+  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
+  const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set())
+  const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(
+    new Set()
+  )
+  const [changedGroomSectionFields, setChangedGroomSectionFields] = useState<Set<string>>(new Set())
+  const [changedBrideSectionFields, setChangedBrideSectionFields] = useState<Set<string>>(new Set())
+
   const features = [
-    { name: 'hero', label: 'Starting Section', description: 'Opening section with couple names and wedding date' },
-    { name: 'groom_and_bride', label: 'Groom and Bride', description: 'Introduction of the groom and bride' },
+    {
+      name: 'hero',
+      label: 'Starting Section',
+      description: 'Opening section with couple names and wedding date',
+    },
+    {
+      name: 'groom_and_bride',
+      label: 'Groom and Bride',
+      description: 'Introduction of the groom and bride',
+    },
     { name: 'love_story', label: 'Love Story', description: 'Timeline of your relationship' },
-    { name: 'save_the_date', label: 'Save The Date', description: 'Save the date section with add to calendar button' },
+    {
+      name: 'save_the_date',
+      label: 'Save The Date',
+      description: 'Save the date section with add to calendar button',
+    },
     { name: 'location', label: 'Location', description: 'Event location' },
     { name: 'rsvp', label: 'RSVP', description: 'Guest response management' },
     { name: 'gallery', label: 'Gallery', description: 'Photo gallery' },
     { name: 'prewedding_videos', label: 'Pre-wedding Videos', description: 'Video embeds' },
     { name: 'faqs', label: 'FAQs', description: 'Frequently asked questions' },
     { name: 'dress_code', label: 'Dress Code', description: 'Attire guidelines' },
-    { name: 'gift', label: 'Gift', description: 'Information for guests who want to send digital gift(s)' },
+    {
+      name: 'gift',
+      label: 'Gift',
+      description: 'Information for guests who want to send digital gift(s)',
+    },
     { name: 'wishes', label: 'Wishes', description: 'Guest wishes and messages' },
     { name: 'footer', label: 'Footer', description: 'Closing section with thank you message' },
   ]
 
+  // Update draft state when config changes (after save)
   useEffect(() => {
     setDraftFeatures(config.features)
     setChangedFeatures(new Set())
   }, [config.features])
 
+  // Clear changed fields when section content changes (after save or discard)
   useEffect(() => {
     setChangedStartingSectionFields(new Set())
   }, [startingSectionContent])
@@ -343,73 +553,100 @@ function FeaturesForm({
     }
   }, [draftFAQs, originalFAQs.length])
 
+  useEffect(() => {
+    setChangedGroomSectionFields(new Set())
+  }, [groomSectionContent])
+
+  useEffect(() => {
+    setChangedBrideSectionFields(new Set())
+  }, [brideSectionContent])
+
+  // Check if there are unsaved changes
+  const hasUnsavedChanges =
+    changedFeatures.size > 0 ||
+    changedStartingSectionFields.size > 0 ||
+    changedGroomSectionFields.size > 0 ||
+    changedBrideSectionFields.size > 0
+  const totalChanges =
+    changedFeatures.size +
+    changedStartingSectionFields.size +
+    changedGroomSectionFields.size +
+    changedBrideSectionFields.size
+
   const handleToggle = (featureName: string) => {
     const newValue = !draftFeatures[featureName]
     const newDraft = { ...draftFeatures, [featureName]: newValue }
     setDraftFeatures(newDraft)
 
     if (newValue !== config.features[featureName]) {
-      setChangedFeatures(prev => new Set(prev).add(featureName))
+      setChangedFeatures((prev) => new Set(prev).add(featureName))
     } else {
-      setChangedFeatures(prev => { const next = new Set(prev); next.delete(featureName); return next })
+      setChangedFeatures((prev) => {
+        const next = new Set(prev)
+        next.delete(featureName)
+        return next
+      })
     }
+    // Update local draft state
+    const newDraftFeatures = {
+      ...draftFeatures,
+      [featureName]: newValue,
+    }
+    setDraftFeatures(newDraftFeatures)
+
+    // Track which features have changed using utility function
+    setChangedFeatures((prev) =>
+      updateChangedFieldsSet(featureName, newValue, config.features[featureName], prev)
+    )
 
     onLocalChange(newDraft)
   }
 
-  const handleStartingSectionChange = useCallback((_: boolean, fields: Set<string>) => {
-    setChangedStartingSectionFields(fields)
-  }, [])
+  async function handleSave() {
+    try {
+      // Save changed features
+      if (changedFeatures.size > 0) {
+        const featuresToUpdate: Record<string, boolean> = {}
+        changedFeatures.forEach((featureName) => {
+          featuresToUpdate[featureName] = draftFeatures[featureName]
+        })
+        await onBatchSave(featuresToUpdate)
+      }
 
-  const handleFAQChange = useCallback(
-    (_draftFAQs: FAQItem[], deletedIds: string[]) => {
-      setDeletedFAQIds(deletedIds)
-    },
-    []
-  )
+      // Save changed starting section content (draft is already in context)
+      if (changedStartingSectionFields.size > 0 && draftStartingSection) {
+        await onUpdateStartingSection(draftStartingSection)
+        clearStartingSectionDraft()
+      }
 
-  const changedFAQsCount = draftFAQs?.filter(faq => {
-    // Find original FAQ by id
-    const orig = originalFAQs.find(o => o.id === faq.id)
-    return !orig || faq.question !== orig.question || faq.answer !== orig.answer
-  }).length ?? 0
+      // Save changed groom section content
+      if (changedGroomSectionFields.size > 0 && draftGroomSection) {
+        await onUpdateGroomSection(draftGroomSection)
+        clearGroomSectionDraft()
+      }
 
-  const hasFAQChanges = changedFAQsCount > 0 || deletedFAQIds.length > 0
+      // Save changed bride section content
+      if (changedBrideSectionFields.size > 0 && draftBrideSection) {
+        await onUpdateBrideSection(draftBrideSection)
+        clearBrideSectionDraft()
+      }
 
-  const totalChanges =
-    changedFeatures.size +
-    changedStartingSectionFields.size +
-    changedFAQsCount +
-    deletedFAQIds.length
-
-  const hasUnsavedChanges =
-    changedFeatures.size > 0 ||
-    changedStartingSectionFields.size > 0 ||
-    hasFAQChanges
-
-  const handleSave = async () => {
-    if (changedFeatures.size > 0) {
-      const featuresToUpdate: Record<string, boolean> = {}
-      changedFeatures.forEach(f => { featuresToUpdate[f] = draftFeatures[f] })
-      await onBatchSave(featuresToUpdate)
-    }
-
-    if (changedStartingSectionFields.size > 0 && draftStartingSection) {
-      await onUpdateStartingSection(draftStartingSection)
-      clearStartingSectionDraft()
+      showSuccess('Changes has been saved', { persist: true })
+    } catch (error) {
+      showError(error instanceof Error ? error.message : 'Failed to save changes')
     }
 
     if ((draftFAQs?.length ?? 0) > 0 || deletedFAQIds.length > 0) {
       const response = await fetch('/api/wedding/faqs/batch', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ updated: draftFAQs, deleted: deletedFAQIds })
+        body: JSON.stringify({ updated: draftFAQs, deleted: deletedFAQIds }),
       })
 
       if (response.ok) {
         clearFAQsDraft()
         setDeletedFAQIds([])
-        setResetChangedFAQs(prev => !prev)
+        setResetChangedFAQs((prev) => !prev)
 
         // Update originalFAQs so future changes are tracked correctly
         setOriginalFAQs(draftFAQs ?? [])
@@ -424,17 +661,48 @@ function FeaturesForm({
     setChangedFeatures(new Set())
     onLocalChange(config.features)
 
+    // Reset all sections to saved state using context
     clearStartingSectionDraft()
     clearFAQsDraft()
     setChangedStartingSectionFields(new Set())
     setDeletedFAQIds([])
-    setResetChangedFAQs(prev => !prev)
+    setResetChangedFAQs((prev) => !prev)
 
-    if (onRefetchStartingSection) await onRefetchStartingSection()
-    if (onRefreshPreview) onRefreshPreview()
+    clearGroomSectionDraft()
+    setChangedGroomSectionFields(new Set())
+
+    clearBrideSectionDraft()
+    setChangedBrideSectionFields(new Set())
+
+    // Force re-fetch to ensure we have latest data from server
+    if (onRefetchStartingSection) {
+      await onRefetchStartingSection()
+    }
+    if (onRefetchGroomSection) {
+      await onRefetchGroomSection()
+    }
+    if (onRefetchBrideSection) {
+      await onRefetchBrideSection()
+    }
 
     setOriginalFAQs(draftFAQs ?? [])
   }
+
+  const handleStartingSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
+    setChangedStartingSectionFields(fields)
+  }, [])
+
+  const handleGroomSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
+    setChangedGroomSectionFields(fields)
+  }, [])
+
+  const handleBrideSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
+    setChangedBrideSectionFields(fields)
+  }, [])
+
+  const handleFAQChange = useCallback((_draftFAQs: FAQItem[], deletedIds: string[]) => {
+    setDeletedFAQIds(deletedIds)
+  }, [])
 
   const renderFeatureContent = useCallback(
     (featureName: string) => {
@@ -446,7 +714,6 @@ function FeaturesForm({
               startingSectionContent={startingSectionContent}
               onUpdate={onUpdateStartingSection}
               onChangeTracking={handleStartingSectionChange}
-              changedFields={changedStartingSectionFields}
               onBackgroundUpload={onBackgroundUpload}
               onMonogramUpload={onMonogramUpload}
             />
@@ -454,53 +721,64 @@ function FeaturesForm({
 
         case 'groom_and_bride':
           return (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="mb-1 block text-sm font-medium">Groom&apos;s Instagram Link</label>
-                  <input
-                    type="url"
-                    defaultValue={config.groomsInstagramLink || ''}
-                    placeholder="https://instagram.com/..."
-                    className="w-full rounded-lg border px-3 py-2 text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium">Bride&apos;s Instagram Link</label>
-                  <input
-                    type="url"
-                    defaultValue={config.brideInstagramLink || ''}
-                    placeholder="https://instagram.com/..."
-                    className="w-full rounded-lg border px-3 py-2 text-sm"
-                  />
-                </div>
+            <div className="space-y-6">
+              <div>
+                <h4 className="mb-3 font-semibold text-gray-800">Groom Section</h4>
+                <GroomSectionForm
+                  weddingConfig={config}
+                  groomSectionContent={groomSectionContent}
+                  onUpdate={onUpdateGroomSection}
+                  onChangeTracking={handleGroomSectionChange}
+                  onPhotoUpload={onGroomPhotoUpload}
+                />
               </div>
-              <p className="text-xs italic text-gray-500">
-                Note: Instagram link updates will be implemented in a future update
-              </p>
+              <div className="border-t pt-6">
+                <h4 className="mb-3 font-semibold text-gray-800">Bride Section</h4>
+                <BrideSectionForm
+                  weddingConfig={config}
+                  brideSectionContent={brideSectionContent}
+                  onUpdate={onUpdateBrideSection}
+                  onChangeTracking={handleBrideSectionChange}
+                  onPhotoUpload={onBridePhotoUpload}
+                />
+              </div>
             </div>
           )
 
         case 'faqs':
-          return (
-            <FAQForm
-              resetChanged={resetChangedFAQs}
-              onChangeTracking={handleFAQChange}
-            />
-          )
+          return <FAQForm resetChanged={resetChangedFAQs} onChangeTracking={handleFAQChange} />
 
         default:
-          return <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
+          return (
+            <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
+          )
       }
     },
-    [changedStartingSectionFields, config, handleFAQChange, handleStartingSectionChange, onBackgroundUpload, onMonogramUpload, onUpdateStartingSection, resetChangedFAQs, startingSectionContent]
+    [
+      config,
+      startingSectionContent,
+      onUpdateStartingSection,
+      handleStartingSectionChange,
+      onBackgroundUpload,
+      onMonogramUpload,
+      groomSectionContent,
+      onUpdateGroomSection,
+      handleGroomSectionChange,
+      onGroomPhotoUpload,
+      brideSectionContent,
+      onUpdateBrideSection,
+      handleBrideSectionChange,
+      onBridePhotoUpload,
+      resetChangedFAQs,
+      handleFAQChange,
+    ]
   )
 
   return (
     <>
       <div className="flex-1 overflow-y-auto p-6">
         <Accordion type="multiple" className="space-y-2">
-          {features.map(feature => {
+          {features.map((feature) => {
             const isChanged = changedFeatures.has(feature.name)
             return (
               <AccordionItem
@@ -513,7 +791,11 @@ function FeaturesForm({
                     <div className="flex-1 text-left">
                       <div className="flex items-center gap-2">
                         <h3 className="font-medium">{feature.label}</h3>
-                        {isChanged && <span className="inline-flex items-center rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">Modified</span>}
+                        {isChanged && (
+                          <span className="inline-flex items-center rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
+                            Modified
+                          </span>
+                        )}
                       </div>
                       <p className="text-sm font-normal text-gray-500">{feature.description}</p>
                     </div>
@@ -526,7 +808,9 @@ function FeaturesForm({
                     className="absolute left-4 top-1/2 z-10 -translate-y-1/2"
                   />
                 </AccordionPrimitive.Header>
-                <AccordionContent className="px-4 pb-4">{renderFeatureContent(feature.name)}</AccordionContent>
+                <AccordionContent className="px-4 pb-4">
+                  {renderFeatureContent(feature.name)}
+                </AccordionContent>
               </AccordionItem>
             )
           })}
@@ -537,7 +821,15 @@ function FeaturesForm({
         <div className="sticky bottom-0 z-10 border-t border-yellow-200 bg-yellow-50 px-6 py-3">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <svg className="h-5 w-5 flex-shrink-0 text-yellow-600" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+              <svg
+                className="h-5 w-5 flex-shrink-0 text-yellow-600"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
                 <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
               <span className="text-sm font-medium text-yellow-800">
@@ -545,8 +837,18 @@ function FeaturesForm({
               </span>
             </div>
             <div className="flex gap-2">
-              <button onClick={handleDiscard} disabled={saving} className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-white disabled:opacity-50">Discard</button>
-              <button onClick={handleSave} disabled={saving} className="rounded-lg bg-pink-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-pink-700 disabled:opacity-50">
+              <button
+                onClick={handleDiscard}
+                disabled={saving}
+                className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-white disabled:opacity-50"
+              >
+                Discard
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="rounded-lg bg-pink-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-pink-700 disabled:opacity-50"
+              >
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
             </div>

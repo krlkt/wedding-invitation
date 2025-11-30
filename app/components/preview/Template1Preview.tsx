@@ -97,6 +97,8 @@ export default function Template1Preview({
         features={features}
         startingSection={content.startingSection}
         faqs={content.faqs}
+        groomSection={content.groomSection}
+        brideSection={content.brideSection}
       >
         <ScrollContainerProvider containerRef={scrollContainerRef} isEmbedded={!isFullscreenMode}>
           <LocationProvider location="bali">
@@ -111,8 +113,8 @@ export default function Template1Preview({
                   <div id="overlay" className="overlay absolute -z-10 h-full w-full" />
                   <div className="absolute bottom-1/2 w-full translate-y-16 px-4 text-center font-serif text-secondary-main">
                     <h1 className="text-shadow-header break-words sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
-                      {content.startingSection?.groomDisplayName || config.groomName} and{' '}
-                      {content.startingSection?.brideDisplayName || config.brideName}
+                      {content.startingSection?.groomDisplayName ?? config.groomName} and{' '}
+                      {content.startingSection?.brideDisplayName ?? config.brideName}
                     </h1>
                     <h2 className="text-shadow-header font-cursive3 text-gray-300 sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
                       {new Date(config.weddingDate).toLocaleDateString('en-GB', {
@@ -148,41 +150,53 @@ export default function Template1Preview({
                       style={viewportHeightStyle}
                     >
                       {/* Background Media - Use custom media if uploaded, otherwise default */}
-                      {content.startingSection?.backgroundFilename &&
-                      content.startingSection?.backgroundType === 'video' ? (
-                        <video
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          className="absolute h-full w-full object-cover"
-                        >
-                          <source
-                            src={content.startingSection.backgroundFilename}
-                            type={content.startingSection.backgroundMimeType || 'video/mp4'}
-                          />
-                        </video>
-                      ) : content.startingSection?.backgroundFilename &&
-                        content.startingSection?.backgroundType === 'image' ? (
-                        <Image
-                          src={content.startingSection.backgroundFilename}
-                          alt="Wedding background"
-                          fill
-                          className="absolute h-full w-full object-cover"
-                          priority
-                        />
-                      ) : (
+                      {(() => {
+                        const customBackgroundFilename = content.startingSection?.backgroundFilename
+                        const hasCustomBackgroundFilename = !!customBackgroundFilename
+                        const backgroundType = content.startingSection?.backgroundType
+
+                        if (hasCustomBackgroundFilename && backgroundType === 'video') {
+                          return (
+                            <video
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="absolute h-full w-full object-cover"
+                            >
+                              <source
+                                src={customBackgroundFilename}
+                                type={content.startingSection?.backgroundMimeType ?? 'video/mp4'}
+                              />
+                            </video>
+                          )
+                        }
+
+                        if (hasCustomBackgroundFilename && backgroundType === 'image') {
+                          return (
+                            <Image
+                              src={customBackgroundFilename}
+                              alt="Wedding background"
+                              fill
+                              className="absolute h-full w-full object-cover"
+                              priority
+                            />
+                          )
+                        }
+
                         // Default video if no custom media
-                        <video
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          className="absolute h-full w-full object-cover"
-                        >
-                          <source src="/hero.mp4" type="video/mp4" />
-                        </video>
-                      )}
+                        return (
+                          <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="absolute h-full w-full object-cover"
+                          >
+                            <source src="/hero.mp4" type="video/mp4" />
+                          </video>
+                        )
+                      })()}
                       <Hero />
                     </section>
                   )}
