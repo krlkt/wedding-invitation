@@ -96,6 +96,7 @@ export default function Template1Preview({
         config={config}
         features={features}
         startingSection={content.startingSection}
+        faqs={content.faqs}
       >
         <ScrollContainerProvider containerRef={scrollContainerRef} isEmbedded={!isFullscreenMode}>
           <LocationProvider location="bali">
