@@ -14,7 +14,10 @@ import {
   weddingConfigurations,
   startingSectionContent,
   type NewGalleryItem,
+  GroomBrideSectionPhoto,
 } from '@/app/db/schema'
+import { groomSectionContent } from '@/app/db/schema/groom-section'
+import { brideSectionContent } from '@/app/db/schema/bride-section'
 
 import { db } from './database'
 import {
@@ -23,6 +26,11 @@ import {
   ACCEPTED_IMAGE_TYPES,
   ACCEPTED_VIDEO_TYPES,
 } from '@/app/lib/validations/starting-section'
+import {
+  MAX_IMAGE_SIZE as SECTION_MAX_IMAGE_SIZE,
+  ACCEPTED_IMAGE_TYPES as SECTION_ACCEPTED_IMAGE_TYPES,
+} from '@/app/lib/validations/groom-section'
+import { parsePhotos, stringifyPhotos, upsertPhoto, removePhoto } from './section-photos'
 
 // File validation constants
 const MAX_FILE_SIZE = 4 * 1024 * 1024 // 4MB in bytes
@@ -459,4 +467,269 @@ export async function deleteStartingSectionMedia(weddingConfigId: string): Promi
       updatedAt: new Date(),
     })
     .where(eq(startingSectionContent.id, content.id))
+}
+
+/**
+ * ============================================================================
+ * GROOM SECTION PHOTO MANAGEMENT
+ * ============================================================================
+ */
+
+/**
+ * Validate section photo file
+ */
+function validateSectionPhoto(file: File): void {
+  if (!file) {
+    throw new Error('No file provided')
+  }
+
+  if (file.size > SECTION_MAX_IMAGE_SIZE) {
+    throw new Error('Image file size exceeds 10MB limit')
+  }
+
+  if (!SECTION_ACCEPTED_IMAGE_TYPES.includes(file.type as any)) {
+    throw new Error('Invalid file type. Please upload JPEG, PNG, WebP, or GIF image.')
+  }
+}
+
+/**
+ * Upload photo to groom section
+ */
+export async function uploadGroomSectionPhoto(
+  weddingConfigId: string,
+  file: File,
+  slot: number
+): Promise<{ photo: GroomBrideSectionPhoto; photoUrl: string }> {
+  validateSectionPhoto(file)
+
+  // Upload to Vercel Blob
+  const filename = generateFilename(file.name, `groom-section-photo-${slot}`)
+  const blob = await put(filename, file, {
+    access: 'public',
+    addRandomSuffix: false,
+  })
+
+  // Get existing groom section content
+  const [existing] = await db
+    .select()
+    .from(groomSectionContent)
+    .where(eq(groomSectionContent.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  // Parse existing photos
+  const existingPhotos = existing ? parsePhotos(existing.photos) : []
+
+  // Check if slot already has a photo and delete it
+  const oldPhoto = existingPhotos.find((p) => p.slot === slot)
+  if (oldPhoto?.filename) {
+    try {
+      await del(oldPhoto.filename)
+    } catch (error) {
+      console.error('Failed to delete old photo:', error)
+    }
+  }
+
+  // Create new photo object
+  const newPhoto: GroomBrideSectionPhoto = {
+    filename: blob.url,
+    fileSize: file.size,
+    mimeType: file.type as any,
+    slot,
+    uploadedAt: new Date().toISOString(),
+  }
+
+  // Add/replace photo in array
+  const updatedPhotos = upsertPhoto(existingPhotos, newPhoto)
+
+  if (existing) {
+    // Update existing record
+    await db
+      .update(groomSectionContent)
+      .set({
+        photos: stringifyPhotos(updatedPhotos),
+        updatedAt: new Date(),
+      })
+      .where(eq(groomSectionContent.id, existing.id))
+  } else {
+    // Create new record
+    await db.insert(groomSectionContent).values({
+      weddingConfigId,
+      photos: stringifyPhotos(updatedPhotos),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+  }
+
+  return {
+    photo: newPhoto,
+    photoUrl: blob.url,
+  }
+}
+
+/**
+ * Delete photo from groom section
+ */
+export async function deleteGroomSectionPhoto(
+  weddingConfigId: string,
+  slot: number
+): Promise<void> {
+  const [content] = await db
+    .select()
+    .from(groomSectionContent)
+    .where(eq(groomSectionContent.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  if (!content) {
+    throw new Error('Groom section not found')
+  }
+
+  const photos = parsePhotos(content.photos)
+  const photoToDelete = photos.find((p) => p.slot === slot)
+
+  if (!photoToDelete) {
+    throw new Error('Photo not found')
+  }
+
+  // Delete from Vercel Blob
+  try {
+    await del(photoToDelete.filename)
+  } catch (error) {
+    console.error('Failed to delete blob:', error)
+  }
+
+  // Remove from array
+  const updatedPhotos = removePhoto(photos, slot)
+
+  // Update database
+  await db
+    .update(groomSectionContent)
+    .set({
+      photos: stringifyPhotos(updatedPhotos),
+      updatedAt: new Date(),
+    })
+    .where(eq(groomSectionContent.id, content.id))
+}
+
+/**
+ * ============================================================================
+ * BRIDE SECTION PHOTO MANAGEMENT
+ * ============================================================================
+ */
+
+/**
+ * Upload photo to bride section
+ */
+export async function uploadBrideSectionPhoto(
+  weddingConfigId: string,
+  file: File,
+  slot: number
+): Promise<{ photo: GroomBrideSectionPhoto; photoUrl: string }> {
+  validateSectionPhoto(file)
+
+  // Upload to Vercel Blob
+  const filename = generateFilename(file.name, `bride-section-photo-${slot}`)
+  const blob = await put(filename, file, {
+    access: 'public',
+    addRandomSuffix: false,
+  })
+
+  // Get existing bride section content
+  const [existing] = await db
+    .select()
+    .from(brideSectionContent)
+    .where(eq(brideSectionContent.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  // Parse existing photos
+  const existingPhotos = existing ? parsePhotos(existing.photos) : []
+
+  // Check if slot already has a photo and delete it
+  const oldPhoto = existingPhotos.find((p) => p.slot === slot)
+  if (oldPhoto?.filename) {
+    try {
+      await del(oldPhoto.filename)
+    } catch (error) {
+      console.error('Failed to delete old photo:', error)
+    }
+  }
+
+  // Create new photo object
+  const newPhoto: GroomBrideSectionPhoto = {
+    filename: blob.url,
+    fileSize: file.size,
+    mimeType: file.type as any,
+    slot,
+    uploadedAt: new Date().toISOString(),
+  }
+
+  // Add/replace photo in array
+  const updatedPhotos = upsertPhoto(existingPhotos, newPhoto)
+
+  if (existing) {
+    // Update existing record
+    await db
+      .update(brideSectionContent)
+      .set({
+        photos: stringifyPhotos(updatedPhotos),
+        updatedAt: new Date(),
+      })
+      .where(eq(brideSectionContent.id, existing.id))
+  } else {
+    // Create new record
+    await db.insert(brideSectionContent).values({
+      weddingConfigId,
+      photos: stringifyPhotos(updatedPhotos),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+  }
+
+  return {
+    photo: newPhoto,
+    photoUrl: blob.url,
+  }
+}
+
+/**
+ * Delete photo from bride section
+ */
+export async function deleteBrideSectionPhoto(
+  weddingConfigId: string,
+  slot: number
+): Promise<void> {
+  const [content] = await db
+    .select()
+    .from(brideSectionContent)
+    .where(eq(brideSectionContent.weddingConfigId, weddingConfigId))
+    .limit(1)
+
+  if (!content) {
+    throw new Error('Bride section not found')
+  }
+
+  const photos = parsePhotos(content.photos)
+  const photoToDelete = photos.find((p) => p.slot === slot)
+
+  if (!photoToDelete) {
+    throw new Error('Photo not found')
+  }
+
+  // Delete from Vercel Blob
+  try {
+    await del(photoToDelete.filename)
+  } catch (error) {
+    console.error('Failed to delete blob:', error)
+  }
+
+  // Remove from array
+  const updatedPhotos = removePhoto(photos, slot)
+
+  // Update database
+  await db
+    .update(brideSectionContent)
+    .set({
+      photos: stringifyPhotos(updatedPhotos),
+      updatedAt: new Date(),
+    })
+    .where(eq(brideSectionContent.id, content.id))
 }

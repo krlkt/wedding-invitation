@@ -146,15 +146,7 @@ describe('startingSectionMediaSchema', () => {
       type: 'image/jpeg',
     })
 
-    console.log('File size:', mockFile.size, 'Type:', mockFile.type)
-
     const result = startingSectionMediaSchema.safeParse({ file: mockFile })
-    console.log(
-      'Result:',
-      result.success,
-      'Errors:',
-      result.success ? null : result.error.issues.map((i) => i.message)
-    )
 
     expect(result.success).toBe(false)
     if (!result.success) {

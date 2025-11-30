@@ -11,10 +11,11 @@
  */
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { startingSectionContentSchema } from '@/app/lib/validations/starting-section'
-import { validateImageFile, validateVideoFile, formatFileSize } from '@/app/utils/media-validation'
+import { validateImageFile, validateMediaFile, formatFileSize } from '@/app/utils/media-validation'
 import { useDraft } from '@/app/context/DraftContext'
 import { useMediaUpload } from '@/app/hooks/useMediaUpload'
 import type { WeddingConfiguration } from '@/app/db/schema/weddings'
@@ -25,6 +26,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { FileInput } from '@/components/ui/file-input'
+import { SectionFieldWrapper } from '@/app/components/admin/sections/SectionFieldWrapper'
 import {
   Dialog,
   DialogContent,
@@ -42,7 +44,6 @@ interface StartingSectionFormProps {
   startingSectionContent: StartingSectionContent | null
   onUpdate: (data: StartingSectionContentFormData & { file?: File }) => Promise<void>
   onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void
-  changedFields?: Set<string>
   onBackgroundUpload?: (backgroundData: {
     backgroundFilename: string
     backgroundOriginalName: string
@@ -62,7 +63,6 @@ export function StartingSectionForm({
   startingSectionContent,
   onUpdate,
   onChangeTracking,
-  changedFields = new Set(),
   onBackgroundUpload,
   onMonogramUpload,
 }: StartingSectionFormProps) {
@@ -73,11 +73,12 @@ export function StartingSectionForm({
   // Background media upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [showConfirmDialog, setShowConfirmDialog] = useState(false)
-  const [validationError, setValidationError] = useState<string | null>(null)
+  const [validationError, _setValidationError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const backgroundUpload = useMediaUpload({
     apiEndpoint: '/api/wedding/starting-section/upload',
+    validateFile: validateMediaFile, // ✅ Hook handles validation for both images and videos
     onSuccess: async (result) => {
       if (onBackgroundUpload && result.data && selectedFile) {
         onBackgroundUpload({
@@ -124,52 +125,45 @@ export function StartingSectionForm({
   const groomFullName = weddingConfig.groomName
   const brideFullName = weddingConfig.brideName
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    reset,
-    control,
-    formState: { errors },
-  } = useForm<StartingSectionContentFormData>({
-    resolver: zodResolver(startingSectionContentSchema),
-    defaultValues: {
-      // Initialize with draft first, then saved, then defaults
-      groomDisplayName:
-        draftStartingSectionContent?.groomDisplayName ??
-        startingSectionContent?.groomDisplayName ??
-        null,
-      brideDisplayName:
-        draftStartingSectionContent?.brideDisplayName ??
-        startingSectionContent?.brideDisplayName ??
-        null,
-      showParentInfo:
-        draftStartingSectionContent?.showParentInfo ??
-        startingSectionContent?.showParentInfo ??
-        false,
-      groomFatherName:
-        draftStartingSectionContent?.groomFatherName ??
-        startingSectionContent?.groomFatherName ??
-        null,
-      groomMotherName:
-        draftStartingSectionContent?.groomMotherName ??
-        startingSectionContent?.groomMotherName ??
-        null,
-      brideFatherName:
-        draftStartingSectionContent?.brideFatherName ??
-        startingSectionContent?.brideFatherName ??
-        null,
-      brideMotherName:
-        draftStartingSectionContent?.brideMotherName ??
-        startingSectionContent?.brideMotherName ??
-        null,
-      showWeddingDate:
-        draftStartingSectionContent?.showWeddingDate ??
-        startingSectionContent?.showWeddingDate ??
-        true,
-    },
-  })
+  const { register, handleSubmit, watch, setValue, reset, control } =
+    useForm<StartingSectionContentFormData>({
+      resolver: zodResolver(startingSectionContentSchema),
+      defaultValues: {
+        // Initialize with draft first, then saved, then defaults
+        groomDisplayName:
+          draftStartingSectionContent?.groomDisplayName ??
+          startingSectionContent?.groomDisplayName ??
+          null,
+        brideDisplayName:
+          draftStartingSectionContent?.brideDisplayName ??
+          startingSectionContent?.brideDisplayName ??
+          null,
+        showParentInfo:
+          draftStartingSectionContent?.showParentInfo ??
+          startingSectionContent?.showParentInfo ??
+          false,
+        groomFatherName:
+          draftStartingSectionContent?.groomFatherName ??
+          startingSectionContent?.groomFatherName ??
+          null,
+        groomMotherName:
+          draftStartingSectionContent?.groomMotherName ??
+          startingSectionContent?.groomMotherName ??
+          null,
+        brideFatherName:
+          draftStartingSectionContent?.brideFatherName ??
+          startingSectionContent?.brideFatherName ??
+          null,
+        brideMotherName:
+          draftStartingSectionContent?.brideMotherName ??
+          startingSectionContent?.brideMotherName ??
+          null,
+        showWeddingDate:
+          draftStartingSectionContent?.showWeddingDate ??
+          startingSectionContent?.showWeddingDate ??
+          true,
+      },
+    })
 
   // Reset form when saved content changes (after save or discard refetch)
   // Always use SAVED values to prevent race condition with draft clearing
@@ -193,8 +187,10 @@ export function StartingSectionForm({
   const showParentInfo = watch('showParentInfo')
   const showWeddingDate = watch('showWeddingDate')
 
-  // Auto-save form changes to draft
+  // Auto-save form changes to draft with centralized change tracking
   const formValues = useWatch({ control })
+  const [changedFieldsSet, setChangedFieldsSet] = useState<Set<string>>(new Set())
+
   useEffect(() => {
     const draft: Partial<StartingSectionContent> = {
       groomDisplayName: formValues.groomDisplayName ?? null,
@@ -207,8 +203,8 @@ export function StartingSectionForm({
       showWeddingDate: formValues.showWeddingDate ?? true,
     }
 
-    // Track which fields changed from saved state
-    const changedFields = new Set<string>()
+    // Track which fields changed from saved state (centralized)
+    const newChangedFields = new Set<string>()
     const fields = [
       'groomDisplayName',
       'brideDisplayName',
@@ -221,53 +217,39 @@ export function StartingSectionForm({
     ] as const
 
     fields.forEach((field) => {
-      const savedValue =
-        startingSectionContent?.[field] ??
-        (field === 'showWeddingDate' ? true : field === 'showParentInfo' ? false : null)
+      let defaultValue = null
+      if (field === 'showWeddingDate') {
+        defaultValue = true
+      } else if (field === 'showParentInfo') {
+        defaultValue = false
+      }
+
+      const savedValue = startingSectionContent?.[field] ?? defaultValue
       if (draft[field] !== savedValue) {
-        changedFields.add(field)
+        newChangedFields.add(field)
       }
     })
 
+    // Update changed fields state
+    setChangedFieldsSet(newChangedFields)
+
     // Update draft only if there are changes
-    if (changedFields.size > 0) {
+    if (newChangedFields.size > 0) {
       // Merge: preserve media fields from prev, update form fields from draft
-      setDraftStartingSection((prev) => ({ ...(prev || {}), ...draft }))
+      setDraftStartingSection((prev) => ({ ...(prev ?? {}), ...draft }))
     } else {
       setDraftStartingSection(undefined)
     }
 
-    onChangeTracking?.(changedFields.size > 0, changedFields)
+    onChangeTracking?.(newChangedFields.size > 0, newChangedFields)
   }, [formValues, startingSectionContent, setDraftStartingSection, onChangeTracking])
 
-  // Background file selection - validate file type and size
+  // Background file selection - validation handled by hook
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
-    if (!file) return
-
-    // Validate file type
-    const isImage = file.type.startsWith('image/')
-    const isVideo = file.type.startsWith('video/')
-
-    if (!isImage && !isVideo) {
-      setValidationError('Please select an image or video file')
-      setSelectedFile(null)
-      if (fileInputRef.current) fileInputRef.current.value = ''
-      return
+    if (file) {
+      setSelectedFile(file) // Just set the file, hook will validate on upload
     }
-
-    // Validate file size
-    const validation = isImage ? validateImageFile(file) : validateVideoFile(file)
-    if (!validation.valid) {
-      setValidationError(validation.error || 'File validation failed')
-      setSelectedFile(file) // Keep the file selected so user can see it
-      return
-    }
-
-    // Clear any previous errors and set the selected file
-    setValidationError(null)
-    backgroundUpload.reset()
-    setSelectedFile(file)
   }
 
   // Upload button - check if replacement confirmation needed
@@ -345,10 +327,11 @@ export function StartingSectionForm({
               <p className="mb-1 text-sm font-medium">Current Monogram:</p>
               <div className="mt-2 flex items-center gap-4">
                 <div className="relative h-20 w-16 overflow-hidden rounded border bg-white">
-                  <img
+                  <Image
                     src={weddingConfig.monogramFilename}
                     alt="Current monogram"
-                    className="h-full w-full object-contain"
+                    fill
+                    className="object-contain"
                   />
                 </div>
                 <div>
@@ -371,7 +354,7 @@ export function StartingSectionForm({
               <FileInput
                 ref={monogramFileInputRef}
                 id="monogramMedia"
-                accept="image/jpeg,image/png,image/webp,image/gif"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
                 onChange={handleMonogramFileChange}
                 disabled={monogramUpload.isUploading}
                 selectedFile={selectedMonogramFile}
@@ -410,8 +393,10 @@ export function StartingSectionForm({
           <h3 className="text-lg font-semibold">Display Names</h3>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div
-              className={`space-y-2 rounded-lg transition-all ${changedFields.has('groomDisplayName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+            <SectionFieldWrapper
+              isChanged={changedFieldsSet.has('groomDisplayName')}
+              value={formValues.groomDisplayName}
+              validationSchema={startingSectionContentSchema.shape.groomDisplayName}
             >
               <Label htmlFor="groomDisplayName">Groom&apos;s Display Name</Label>
               <Input
@@ -419,13 +404,12 @@ export function StartingSectionForm({
                 id="groomDisplayName"
                 placeholder={groomFullName}
               />
-              {errors.groomDisplayName && (
-                <p className="text-sm text-red-500">{errors.groomDisplayName.message}</p>
-              )}
-            </div>
+            </SectionFieldWrapper>
 
-            <div
-              className={`space-y-2 rounded-lg transition-all ${changedFields.has('brideDisplayName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+            <SectionFieldWrapper
+              isChanged={changedFieldsSet.has('brideDisplayName')}
+              value={formValues.brideDisplayName}
+              validationSchema={startingSectionContentSchema.shape.brideDisplayName}
             >
               <Label htmlFor="brideDisplayName">Bride&apos;s Display Name</Label>
               <Input
@@ -433,10 +417,7 @@ export function StartingSectionForm({
                 id="brideDisplayName"
                 placeholder={brideFullName}
               />
-              {errors.brideDisplayName && (
-                <p className="text-sm text-red-500">{errors.brideDisplayName.message}</p>
-              )}
-            </div>
+            </SectionFieldWrapper>
           </div>
         </div>
 
@@ -444,53 +425,64 @@ export function StartingSectionForm({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Parent Information</h3>
 
-          <div
-            className={`flex items-center space-x-2 rounded-lg transition-all ${changedFields.has('showParentInfo') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+          <SectionFieldWrapper
+            isChanged={changedFieldsSet.has('showParentInfo')}
+            value={formValues.showParentInfo}
           >
-            <Checkbox
-              id="showParentInfo"
-              checked={showParentInfo}
-              onCheckedChange={(checked) => setValue('showParentInfo', checked as boolean)}
-            />
-            <Label htmlFor="showParentInfo" className="cursor-pointer">
-              Show Parent Information
-            </Label>
-          </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="starting-showParentInfo"
+                checked={showParentInfo}
+                onCheckedChange={(checked) => setValue('showParentInfo', checked as boolean)}
+              />
+              <Label htmlFor="starting-showParentInfo" className="cursor-pointer">
+                Show Parent Information
+              </Label>
+            </div>
+          </SectionFieldWrapper>
 
           {showParentInfo && (
             <div className="space-y-4 border-l-2 border-gray-200 pl-4">
               {/* Groom's Parents - Responsive Layout */}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('groomFatherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('groomFatherName')}
+                  value={formValues.groomFatherName}
+                  validationSchema={startingSectionContentSchema.shape.groomFatherName}
                 >
                   <Label htmlFor="groomFatherName">Groom&apos;s Father Name</Label>
                   <Input {...register('groomFatherName')} id="groomFatherName" />
-                </div>
+                </SectionFieldWrapper>
 
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('groomMotherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('groomMotherName')}
+                  value={formValues.groomMotherName}
+                  validationSchema={startingSectionContentSchema.shape.groomMotherName}
                 >
                   <Label htmlFor="groomMotherName">Groom&apos;s Mother Name</Label>
                   <Input {...register('groomMotherName')} id="groomMotherName" />
-                </div>
+                </SectionFieldWrapper>
               </div>
 
               {/* Bride's Parents - Responsive Layout */}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('brideFatherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('brideFatherName')}
+                  value={formValues.brideFatherName}
+                  validationSchema={startingSectionContentSchema.shape.brideFatherName}
                 >
                   <Label htmlFor="brideFatherName">Bride&apos;s Father Name</Label>
                   <Input {...register('brideFatherName')} id="brideFatherName" />
-                </div>
+                </SectionFieldWrapper>
 
-                <div
-                  className={`space-y-2 rounded-lg transition-all ${changedFields.has('brideMotherName') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+                <SectionFieldWrapper
+                  isChanged={changedFieldsSet.has('brideMotherName')}
+                  value={formValues.brideMotherName}
+                  validationSchema={startingSectionContentSchema.shape.brideMotherName}
                 >
                   <Label htmlFor="brideMotherName">Bride&apos;s Mother Name</Label>
                   <Input {...register('brideMotherName')} id="brideMotherName" />
-                </div>
+                </SectionFieldWrapper>
               </div>
             </div>
           )}
@@ -500,40 +492,43 @@ export function StartingSectionForm({
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Wedding Date</h3>
 
-          <div
-            className={`flex items-center space-x-2 rounded-lg transition-all ${changedFields.has('showWeddingDate') ? 'bg-yellow-50 p-2 ring-2 ring-yellow-400' : ''}`}
+          <SectionFieldWrapper
+            isChanged={changedFieldsSet.has('showWeddingDate')}
+            value={formValues.showWeddingDate}
           >
-            <Checkbox
-              id="showWeddingDate"
-              checked={showWeddingDate}
-              onCheckedChange={(checked) => setValue('showWeddingDate', checked as boolean)}
-            />
-            <Label htmlFor="showWeddingDate" className="cursor-pointer">
-              Show Wedding Date
-            </Label>
-          </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="showWeddingDate"
+                checked={showWeddingDate}
+                onCheckedChange={(checked) => setValue('showWeddingDate', checked as boolean)}
+              />
+              <Label htmlFor="showWeddingDate" className="cursor-pointer">
+                Show Wedding Date
+              </Label>
+            </div>
+          </SectionFieldWrapper>
         </div>
 
         {/* Background Media Section */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Background Media</h3>
 
-          {(draftStartingSectionContent?.backgroundFilename ||
+          {(draftStartingSectionContent?.backgroundFilename ??
             startingSectionContent?.backgroundFilename) && (
             <div className="rounded-md border bg-gray-50 p-4">
               <p className="mb-1 text-sm font-medium">Current Media:</p>
               <p className="text-sm text-gray-600">
-                {draftStartingSectionContent?.backgroundOriginalName ||
-                  startingSectionContent?.backgroundOriginalName ||
-                  draftStartingSectionContent?.backgroundFilename?.split('/').pop() ||
+                {draftStartingSectionContent?.backgroundOriginalName ??
+                  startingSectionContent?.backgroundOriginalName ??
+                  draftStartingSectionContent?.backgroundFilename?.split('/').pop() ??
                   startingSectionContent?.backgroundFilename?.split('/').pop()}
               </p>
-              {(draftStartingSectionContent?.backgroundFileSize ||
+              {(draftStartingSectionContent?.backgroundFileSize ??
                 startingSectionContent?.backgroundFileSize) && (
                 <p className="text-sm text-gray-600">
                   {formatFileSize(
-                    draftStartingSectionContent?.backgroundFileSize ||
-                      startingSectionContent?.backgroundFileSize ||
+                    draftStartingSectionContent?.backgroundFileSize ??
+                      startingSectionContent?.backgroundFileSize ??
                       0
                   )}
                 </p>
@@ -547,7 +542,7 @@ export function StartingSectionForm({
               <FileInput
                 ref={fileInputRef}
                 id="backgroundMedia"
-                accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,video/mp4,video/webm"
                 onChange={handleFileChange}
                 disabled={backgroundUpload.isUploading}
                 selectedFile={selectedFile}
@@ -594,10 +589,10 @@ export function StartingSectionForm({
             <DialogDescription>
               You are about to replace the existing background media:{' '}
               <strong>
-                {draftStartingSectionContent?.backgroundOriginalName ||
-                  startingSectionContent?.backgroundOriginalName ||
-                  draftStartingSectionContent?.backgroundFilename?.split('/').pop() ||
-                  startingSectionContent?.backgroundFilename?.split('/').pop() ||
+                {draftStartingSectionContent?.backgroundOriginalName ??
+                  startingSectionContent?.backgroundOriginalName ??
+                  draftStartingSectionContent?.backgroundFilename?.split('/').pop() ??
+                  startingSectionContent?.backgroundFilename?.split('/').pop() ??
                   'current media'}
               </strong>
             </DialogDescription>
@@ -619,7 +614,7 @@ export function StartingSectionForm({
             <DialogDescription>
               You are about to replace the existing monogram:{' '}
               <strong>
-                {weddingConfig.monogramFilename?.split('/').pop() || 'current monogram'}
+                {weddingConfig.monogramFilename?.split('/').pop() ?? 'current monogram'}
               </strong>
             </DialogDescription>
           </DialogHeader>
