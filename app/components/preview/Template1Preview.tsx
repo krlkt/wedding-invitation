@@ -319,13 +319,13 @@ export default function Template1Preview({
                 {/* FAQ Section */}
                 {features.faqs && (
                   <section className="relative w-full overflow-hidden bg-primary-main py-16 pb-28">
-                    <FadeIn from="left" className="absolute -left-16 -top-0">
+                    <FadeIn from="left" className="pointer-events-none absolute -left-16 -top-3">
                       <Image
                         src="/images/ornaments/baby_orn.png"
                         alt="Baby breath"
                         width={200}
                         height={100}
-                        className="pointer-events-none rotate-90"
+                        className="rotate-90"
                       />
                     </FadeIn>
                     <SectionTitle title="FAQ" color="secondary" />
@@ -336,13 +336,16 @@ export default function Template1Preview({
                     ) : (
                       <EmptyState message="Add frequently asked questions" icon="❓" />
                     )}
-                    <FadeIn from="right" className="absolute -right-10 bottom-12">
+                    <FadeIn
+                      from="right"
+                      className="pointer-events-none absolute -right-10 bottom-4 z-10"
+                    >
                       <Image
                         src="/images/ornaments/baby_orn4.png"
                         alt="Baby breath"
                         width={200}
                         height={100}
-                        className="pointer-events-none -rotate-180"
+                        className="-rotate-180"
                       />
                     </FadeIn>
                     <div className="section-transition-secondary-fix" />
