@@ -50,6 +50,7 @@ export default function InvitationPage({
 }) {
   const isMalang = location === 'malang'
   const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true)
+
   // use lenis smooth scroll on page
   useEffect(() => {
     const lenis = new Lenis({
@@ -262,7 +263,7 @@ export default function InvitationPage({
               </FadeIn>
               <SectionTitle title="FAQ" color="secondary" />
               <FadeIn className="w-full px-8">
-                <FAQ />
+                <FAQ faqs={[]} />
               </FadeIn>
               <FadeIn from="right" className="absolute -right-10 bottom-12">
                 <Image

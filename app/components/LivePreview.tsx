@@ -17,6 +17,7 @@ import type { PreviewData } from './preview/types'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
 import type { GroomSectionContent } from '@/app/db/schema/groom-section'
 import type { BrideSectionContent } from '@/app/db/schema/bride-section'
+import type { FAQItem } from '../db/schema/content'
 
 interface LivePreviewProps {
   weddingConfigId: string
@@ -25,6 +26,7 @@ interface LivePreviewProps {
   draftStartingSection?: Partial<StartingSectionContent> // Draft starting section from local state
   draftGroomSection?: Partial<GroomSectionContent> // Draft groom section from local state
   draftBrideSection?: Partial<BrideSectionContent> // Draft bride section from local state
+  draftFAQs?: Partial<FAQItem>[]
 }
 
 export default function LivePreview({
@@ -34,6 +36,7 @@ export default function LivePreview({
   draftStartingSection,
   draftGroomSection,
   draftBrideSection,
+  draftFAQs,
 }: LivePreviewProps) {
   const [previewData, setPreviewData] = useState<PreviewData | null>(null)
   const [displayData, setDisplayData] = useState<PreviewData | null>(null)
@@ -132,12 +135,20 @@ export default function LivePreview({
         content: {
           ...previewData.content,
           startingSection: mergedStartingSection,
+          faqs: draftFAQs ?? previewData.content.faqs,
           groomSection: mergedGroomSection,
           brideSection: mergedBrideSection,
         },
       })
     }
-  }, [previewData, draftFeatures, draftStartingSection, draftGroomSection, draftBrideSection])
+  }, [
+    previewData,
+    draftFeatures,
+    draftStartingSection,
+    draftGroomSection,
+    draftBrideSection,
+    draftFAQs,
+  ])
 
   // Restore scroll position only after fetch operations, not on every draft change
   useEffect(() => {

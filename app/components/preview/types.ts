@@ -38,7 +38,7 @@ export interface PreviewData {
     brideSection: BrideSectionContent | null
     loveStory: LoveStorySegment[]
     gallery: GalleryItem[]
-    faqs: FAQItem[]
+    faqs: Partial<FAQItem>[]
     dressCode: DressCode | null
     locations: LocationDetails[]
     bankDetails: BankDetails | null

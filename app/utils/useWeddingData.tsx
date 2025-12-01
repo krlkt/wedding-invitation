@@ -6,6 +6,7 @@ import type {
   StartingSectionContent,
   GroomSectionContent,
   BrideSectionContent,
+  FAQItem,
 } from '@/app/db/schema'
 import type { FeatureName } from '@/app/db/schema/features'
 
@@ -20,6 +21,7 @@ interface WeddingDataContextValue {
   config: WeddingConfiguration
   features: Record<FeatureName, boolean>
   startingSection?: StartingSectionContent | null
+  faqs?: Partial<FAQItem>[] | null
   groomSection?: GroomSectionContent | null
   brideSection?: BrideSectionContent | null
 }
@@ -31,6 +33,7 @@ export function WeddingDataProvider({
   config,
   features,
   startingSection,
+  faqs,
   groomSection,
   brideSection,
 }: {
@@ -38,12 +41,13 @@ export function WeddingDataProvider({
   config: WeddingConfiguration
   features: Record<FeatureName, boolean>
   startingSection?: StartingSectionContent | null
+  faqs?: Partial<FAQItem>[] | null
   groomSection?: GroomSectionContent | null
   brideSection?: BrideSectionContent | null
 }) {
   return (
     <WeddingDataContext.Provider
-      value={{ config, features, startingSection, groomSection, brideSection }}
+      value={{ config, features, startingSection, groomSection, brideSection, faqs }}
     >
       {children}
     </WeddingDataContext.Provider>

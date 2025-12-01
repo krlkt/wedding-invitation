@@ -121,6 +121,12 @@ export async function getFAQs(weddingConfigId: string) {
     .orderBy(faqItems.order)
 }
 
+export async function getFAQById(faqId: string) {
+  const [faq] = await db.select().from(faqItems).where(eq(faqItems.id, faqId)).limit(1)
+
+  return faq || null
+}
+
 export async function updateFAQ(
   faqId: string,
   updates: Partial<Omit<NewFAQItem, 'weddingConfigId'>>

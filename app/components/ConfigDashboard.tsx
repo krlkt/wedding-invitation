@@ -10,13 +10,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
+import { Accordion, AccordionContent, AccordionItem } from '@/components/ui/accordion'
+import * as AccordionPrimitive from '@radix-ui/react-accordion'
+import { ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Switch } from '@/components/ui/switch'
 
 import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
@@ -25,6 +23,8 @@ import { BrideSectionForm } from './admin/sections/BrideSectionForm'
 import { DraftProvider, useDraft } from '@/app/context/DraftContext'
 import { useSnackbar } from '@/app/context/SnackbarContext'
 import type { StartingSectionContent } from '@/app/db/schema/starting-section'
+import type { FAQItem } from '@/app/db/schema/content'
+import { FAQForm } from './admin/sections/FAQForm'
 import type { GroomSectionContent } from '@/app/db/schema/groom-section'
 import type { BrideSectionContent } from '@/app/db/schema/bride-section'
 import { parsePhotos, stringifyPhotos, upsertPhoto } from '@/app/lib/section-photos'
@@ -51,12 +51,14 @@ function ConfigDashboardContent() {
     useState<StartingSectionContent | null>(null)
   const [groomSectionContent, setGroomSectionContent] = useState<GroomSectionContent | null>(null)
   const [brideSectionContent, setBrideSectionContent] = useState<BrideSectionContent | null>(null)
+  const [faqSectionContent, setFAQSectionContent] = useState<FAQItem[] | null>(null)
 
   // Use draft context for sections
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
     useDraft('startingSection')
   const { draft: draftGroomSection, setDraft: setDraftGroomSection } = useDraft('groomSection')
   const { draft: draftBrideSection, setDraft: setDraftBrideSection } = useDraft('brideSection')
+  const { draft: draftFAQs } = useDraft('faqs')
 
   // Snackbar for notifications
   const { showError } = useSnackbar()
@@ -89,19 +91,7 @@ function ConfigDashboardContent() {
     }
   }, [])
 
-  useEffect(() => {
-    ;(async () => {
-      await fetchConfig()
-      await fetchStartingSectionContent()
-      await fetchGroomSectionContent()
-      await fetchBrideSectionContent()
-      await checkSession()
-    })().catch((error) => {
-      console.error('Initialization error:', error)
-    })
-  }, [fetchConfig])
-
-  async function fetchStartingSectionContent() {
+  const fetchStartingSectionContent = useCallback(async () => {
     try {
       const response = await fetch('/api/wedding/starting-section')
       if (response.ok) {
@@ -111,7 +101,19 @@ function ConfigDashboardContent() {
     } catch (error) {
       console.error('Failed to fetch starting section content:', error)
     }
-  }
+  }, [])
+
+  const fetchFAQSectionContent = useCallback(async () => {
+    try {
+      const res = await fetch('/api/wedding/faqs')
+      if (res.ok) {
+        const data = await res.json()
+        setFAQSectionContent(data.data)
+      }
+    } catch (err) {
+      console.error('Error fetching FAQs', err)
+    }
+  }, [])
 
   async function fetchGroomSectionContent() {
     try {
@@ -137,6 +139,21 @@ function ConfigDashboardContent() {
     }
   }
 
+  // Initalize data on load
+  useEffect(() => {
+    ;(async () => {
+      await checkSession()
+      await fetchConfig()
+      await fetchStartingSectionContent()
+      await fetchGroomSectionContent()
+      await fetchBrideSectionContent()
+      await fetchFAQSectionContent()
+    })().catch((error) => {
+      console.error('Initialization error:', error)
+    })
+  }, [fetchConfig, fetchFAQSectionContent, fetchStartingSectionContent])
+
+  // Update section content functions
   async function updateStartingSectionContent(updates: any) {
     try {
       setSaving(true)
@@ -241,6 +258,35 @@ function ConfigDashboardContent() {
     } catch (error) {
       console.error('Failed to update bride section:', error)
       showError('Failed to update bride section. Please try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function updateFAQSectionContent(updates: any) {
+    try {
+      setSaving(true)
+
+      const response = await fetch('/api/wedding/faqs/batch', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updated: updates.updated, deleted: updates.deleted }),
+      })
+
+      if (response.ok) {
+        await fetchFAQSectionContent()
+        setRefreshTrigger((prev) => prev + 1)
+      } else {
+        // Show detailed error from API
+        const errorData = await response.json()
+        console.error('API error:', errorData)
+        showError(
+          `Failed to update FAQ section: ${errorData.error ?? 'Unknown error'}${errorData.details ? ` - ${JSON.stringify(errorData.details)}` : ''}`
+        )
+      }
+    } catch (error) {
+      console.error('Failed to FAQ section:', error)
+      showError('Failed to update FAQ section. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -425,6 +471,9 @@ function ConfigDashboardContent() {
           onUpdateBrideSection={updateBrideSectionContent}
           onRefetchBrideSection={fetchBrideSectionContent}
           onBridePhotoUpload={handleBridePhotoUpload}
+          faqSectionContent={faqSectionContent}
+          onUpdateFAQSection={updateFAQSectionContent}
+          onRefetchFAQSection={fetchFAQSectionContent}
           onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
         />
       </div>
@@ -438,6 +487,7 @@ function ConfigDashboardContent() {
           draftStartingSection={draftStartingSection}
           draftGroomSection={draftGroomSection}
           draftBrideSection={draftBrideSection}
+          draftFAQs={draftFAQs}
         />
       </div>
     </>
@@ -446,7 +496,6 @@ function ConfigDashboardContent() {
 
 // BasicInfoForm and ContentForm removed - features are now managed in accordions below
 // API endpoints remain the same
-
 function FeaturesForm({
   config,
   onBatchSave,
@@ -465,13 +514,27 @@ function FeaturesForm({
   onUpdateBrideSection,
   onRefetchBrideSection,
   onBridePhotoUpload,
+  faqSectionContent,
+  onUpdateFAQSection,
+  onRefetchFAQSection,
   onRefreshPreview,
 }: any) {
-  // Access draft context in FeaturesForm
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
     useDraft('startingSection')
   const { draft: draftGroomSection, clearDraft: clearGroomSectionDraft } = useDraft('groomSection')
   const { draft: draftBrideSection, clearDraft: clearBrideSectionDraft } = useDraft('brideSection')
+  const { draft: draftFAQs, clearDraft: clearFAQsDraft } = useDraft('faqs')
+
+  // Track draft state locally (separate from saved state)
+  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
+  const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set())
+  const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(
+    new Set()
+  )
+  const [changedGroomSectionFields, setChangedGroomSectionFields] = useState<Set<string>>(new Set())
+  const [changedBrideSectionFields, setChangedBrideSectionFields] = useState<Set<string>>(new Set())
+  const [changedFAQFields, setChangedFAQFields] = useState<Set<string>>(new Set())
+
   const { showSuccess, showError } = useSnackbar()
 
   const features = [
@@ -506,15 +569,6 @@ function FeaturesForm({
     { name: 'footer', label: 'Footer', description: 'Closing section with thank you message' },
   ]
 
-  // Track draft state locally (separate from saved state)
-  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
-  const [changedFeatures, setChangedFeatures] = useState<Set<string>>(new Set())
-  const [changedStartingSectionFields, setChangedStartingSectionFields] = useState<Set<string>>(
-    new Set()
-  )
-  const [changedGroomSectionFields, setChangedGroomSectionFields] = useState<Set<string>>(new Set())
-  const [changedBrideSectionFields, setChangedBrideSectionFields] = useState<Set<string>>(new Set())
-
   // Update draft state when config changes (after save)
   useEffect(() => {
     setDraftFeatures(config.features)
@@ -525,6 +579,10 @@ function FeaturesForm({
   useEffect(() => {
     setChangedStartingSectionFields(new Set())
   }, [startingSectionContent])
+
+  useEffect(() => {
+    setChangedFAQFields(new Set())
+  }, [faqSectionContent])
 
   useEffect(() => {
     setChangedGroomSectionFields(new Set())
@@ -539,16 +597,29 @@ function FeaturesForm({
     changedFeatures.size > 0 ||
     changedStartingSectionFields.size > 0 ||
     changedGroomSectionFields.size > 0 ||
-    changedBrideSectionFields.size > 0
+    changedBrideSectionFields.size > 0 ||
+    changedFAQFields.size > 0
   const totalChanges =
     changedFeatures.size +
     changedStartingSectionFields.size +
     changedGroomSectionFields.size +
-    changedBrideSectionFields.size
+    changedBrideSectionFields.size +
+    changedFAQFields.size
 
-  function handleToggle(featureName: string) {
+  const handleToggle = (featureName: string) => {
     const newValue = !draftFeatures[featureName]
+    const newDraft = { ...draftFeatures, [featureName]: newValue }
+    setDraftFeatures(newDraft)
 
+    if (newValue !== config.features[featureName]) {
+      setChangedFeatures((prev) => new Set(prev).add(featureName))
+    } else {
+      setChangedFeatures((prev) => {
+        const next = new Set(prev)
+        next.delete(featureName)
+        return next
+      })
+    }
     // Update local draft state
     const newDraftFeatures = {
       ...draftFeatures,
@@ -561,8 +632,7 @@ function FeaturesForm({
       updateChangedFieldsSet(featureName, newValue, config.features[featureName], prev)
     )
 
-    // Update preview immediately with local state
-    onLocalChange(newDraftFeatures)
+    onLocalChange(newDraft)
   }
 
   async function handleSave() {
@@ -594,14 +664,33 @@ function FeaturesForm({
         clearBrideSectionDraft()
       }
 
-      showSuccess('Changes has been saved', { persist: true })
+      // Save changed FAQ content
+      if (changedFAQFields.size > 0 && draftFAQs) {
+        // Find deleted items by comparing saved vs draft
+        const savedIds = new Set((faqSectionContent ?? []).map((faq: FAQItem) => faq.id))
+        const draftIds = new Set(
+          draftFAQs
+            .filter((faq) => faq.id && faq.weddingConfigId !== 'TEMP')
+            .map((faq) => faq.id as string)
+        )
+        const deletedIds = Array.from(savedIds).filter((id) => !draftIds.has(id as string))
+
+        await onUpdateFAQSection({
+          updated: draftFAQs,
+          deleted: deletedIds,
+        })
+        clearFAQsDraft()
+      }
+
+      showSuccess('Changes has been saved')
     } catch (error) {
       showError(error instanceof Error ? error.message : 'Failed to save changes')
     }
+
+    onRefreshPreview()
   }
 
-  async function handleDiscard() {
-    // Reset features to saved state
+  const handleDiscard = async () => {
     setDraftFeatures(config.features)
     setChangedFeatures(new Set())
     onLocalChange(config.features)
@@ -616,6 +705,9 @@ function FeaturesForm({
     clearBrideSectionDraft()
     setChangedBrideSectionFields(new Set())
 
+    clearFAQsDraft()
+    setChangedFAQFields(new Set())
+
     // Force re-fetch to ensure we have latest data from server
     if (onRefetchStartingSection) {
       await onRefetchStartingSection()
@@ -626,10 +718,8 @@ function FeaturesForm({
     if (onRefetchBrideSection) {
       await onRefetchBrideSection()
     }
-
-    // Trigger LivePreview refresh to show actual saved state from server
-    if (onRefreshPreview) {
-      onRefreshPreview()
+    if (onRefetchFAQSection) {
+      await onRefetchFAQSection()
     }
   }
 
@@ -643,6 +733,10 @@ function FeaturesForm({
 
   const handleBrideSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
     setChangedBrideSectionFields(fields)
+  }, [])
+
+  const handleFAQSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
+    setChangedFAQFields(fields)
   }, [])
 
   const renderFeatureContent = useCallback(
@@ -686,6 +780,15 @@ function FeaturesForm({
             </div>
           )
 
+        case 'faqs':
+          return (
+            <FAQForm
+              weddingConfig={config}
+              faqSectionContent={faqSectionContent}
+              onChangeTracking={handleFAQSectionChange}
+            />
+          )
+
         default:
           return (
             <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
@@ -694,25 +797,26 @@ function FeaturesForm({
     },
     [
       config,
+      startingSectionContent,
+      onUpdateStartingSection,
       handleStartingSectionChange,
-      handleGroomSectionChange,
-      handleBrideSectionChange,
       onBackgroundUpload,
       onMonogramUpload,
-      onUpdateStartingSection,
-      onUpdateGroomSection,
-      onUpdateBrideSection,
-      startingSectionContent,
       groomSectionContent,
-      brideSectionContent,
+      onUpdateGroomSection,
+      handleGroomSectionChange,
       onGroomPhotoUpload,
+      brideSectionContent,
+      onUpdateBrideSection,
+      handleBrideSectionChange,
       onBridePhotoUpload,
+      faqSectionContent,
+      handleFAQSectionChange,
     ]
   )
 
   return (
     <>
-      {/* Scrollable content area */}
       <div className="flex-1 overflow-y-auto p-6">
         <Accordion type="multiple" className="space-y-2">
           {features.map((feature) => {
@@ -721,44 +825,30 @@ function FeaturesForm({
               <AccordionItem
                 key={feature.name}
                 value={feature.name}
-                className={`rounded-lg border transition-colors ${
-                  isChanged ? 'border-yellow-300 bg-yellow-50' : ''
-                }`}
+                className={`rounded-lg border transition-colors ${isChanged ? 'border-yellow-300 bg-yellow-50' : ''}`}
               >
-                <AccordionTrigger className="px-4 hover:no-underline">
-                  <div className="flex w-full items-center justify-between pr-4">
-                    <div className="flex flex-1 items-center gap-3">
-                      {/* Toggle Switch */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleToggle(feature.name)
-                        }}
-                        className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${
-                          draftFeatures[feature.name] ? 'bg-pink-600' : 'bg-gray-200'
-                        }`}
-                      >
-                        <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            draftFeatures[feature.name] ? 'translate-x-6' : 'translate-x-1'
-                          }`}
-                        />
-                      </button>
-                      {/* Label */}
-                      <div className="text-left">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-medium">{feature.label}</h3>
-                          {isChanged && (
-                            <span className="inline-flex items-center rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
-                              Modified
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm font-normal text-gray-500">{feature.description}</p>
+                <AccordionPrimitive.Header className="relative px-4">
+                  <AccordionPrimitive.Trigger className="flex w-full items-center gap-3 py-4 pl-14 text-left transition-all hover:no-underline [&[data-state=open]>svg]:rotate-180">
+                    <div className="flex-1 text-left">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-medium">{feature.label}</h3>
+                        {isChanged && (
+                          <span className="inline-flex items-center rounded bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
+                            Modified
+                          </span>
+                        )}
                       </div>
+                      <p className="text-sm font-normal text-gray-500">{feature.description}</p>
                     </div>
-                  </div>
-                </AccordionTrigger>
+                    <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
+                  </AccordionPrimitive.Trigger>
+
+                  <Switch
+                    checked={draftFeatures[feature.name]}
+                    onCheckedChange={() => handleToggle(feature.name)}
+                    className="absolute left-4 top-1/2 z-10 -translate-y-1/2"
+                  />
+                </AccordionPrimitive.Header>
                 <AccordionContent className="px-4 pb-4">
                   {renderFeatureContent(feature.name)}
                 </AccordionContent>
@@ -768,7 +858,6 @@ function FeaturesForm({
         </Accordion>
       </div>
 
-      {/* Sticky alert at bottom - only show when there are changes */}
       {hasUnsavedChanges && (
         <div className="sticky bottom-0 z-10 border-t border-yellow-200 bg-yellow-50 px-6 py-3">
           <div className="flex items-center justify-between gap-4">
