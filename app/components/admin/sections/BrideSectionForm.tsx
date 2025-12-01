@@ -150,7 +150,7 @@ export function BrideSectionForm({
   const showParentInfo = watch('showParentInfo')
   const showInstagramLink = watch('showInstagramLink')
 
-  // Auto-save form changes to draft with centralized change tracking
+  // Track changes into draft
   const formValues = useWatch({ control })
   const [changedFieldsSet, setChangedFieldsSet] = useState<Set<string>>(new Set())
 

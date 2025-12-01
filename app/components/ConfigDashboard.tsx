@@ -51,13 +51,14 @@ function ConfigDashboardContent() {
     useState<StartingSectionContent | null>(null)
   const [groomSectionContent, setGroomSectionContent] = useState<GroomSectionContent | null>(null)
   const [brideSectionContent, setBrideSectionContent] = useState<BrideSectionContent | null>(null)
+  const [faqSectionContent, setFAQSectionContent] = useState<FAQItem[] | null>(null)
 
   // Use draft context for sections
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
     useDraft('startingSection')
   const { draft: draftGroomSection, setDraft: setDraftGroomSection } = useDraft('groomSection')
   const { draft: draftBrideSection, setDraft: setDraftBrideSection } = useDraft('brideSection')
-  const { draft: draftFAQs, setDraft: setDraftFAQs } = useDraft('faqs')
+  const { draft: draftFAQs } = useDraft('faqs')
 
   // Snackbar for notifications
   const { showError } = useSnackbar()
@@ -102,33 +103,17 @@ function ConfigDashboardContent() {
     }
   }, [])
 
-  const fetchFAQs = useCallback(async () => {
+  const fetchFAQSectionContent = useCallback(async () => {
     try {
       const res = await fetch('/api/wedding/faqs')
       if (res.ok) {
         const data = await res.json()
-        // Only initialize draft if undefined
-        if (draftFAQs === undefined) {
-          setDraftFAQs(data.data)
-        }
+        setFAQSectionContent(data.data)
       }
     } catch (err) {
       console.error('Error fetching FAQs', err)
     }
-  }, [draftFAQs, setDraftFAQs])
-
-  useEffect(() => {
-    ;(async () => {
-      await checkSession()
-      await fetchConfig()
-      await fetchStartingSectionContent()
-      await fetchGroomSectionContent()
-      await fetchBrideSectionContent()
-      await fetchFAQs()
-    })().catch((error) => {
-      console.error('Initialization error:', error)
-    })
-  }, [fetchConfig, fetchFAQs, fetchStartingSectionContent])
+  }, [])
 
   async function fetchGroomSectionContent() {
     try {
@@ -154,6 +139,21 @@ function ConfigDashboardContent() {
     }
   }
 
+  // Initalize data on load
+  useEffect(() => {
+    ;(async () => {
+      await checkSession()
+      await fetchConfig()
+      await fetchStartingSectionContent()
+      await fetchGroomSectionContent()
+      await fetchBrideSectionContent()
+      await fetchFAQSectionContent()
+    })().catch((error) => {
+      console.error('Initialization error:', error)
+    })
+  }, [fetchConfig, fetchFAQSectionContent, fetchStartingSectionContent])
+
+  // Update section content functions
   async function updateStartingSectionContent(updates: any) {
     try {
       setSaving(true)
@@ -258,6 +258,35 @@ function ConfigDashboardContent() {
     } catch (error) {
       console.error('Failed to update bride section:', error)
       showError('Failed to update bride section. Please try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function updateFAQSectionContent(updates: any) {
+    try {
+      setSaving(true)
+
+      const response = await fetch('/api/wedding/faqs/batch', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ updated: updates.updated, deleted: updates.deleted }),
+      })
+
+      if (response.ok) {
+        await fetchFAQSectionContent()
+        setRefreshTrigger((prev) => prev + 1)
+      } else {
+        // Show detailed error from API
+        const errorData = await response.json()
+        console.error('API error:', errorData)
+        showError(
+          `Failed to update FAQ section: ${errorData.error ?? 'Unknown error'}${errorData.details ? ` - ${JSON.stringify(errorData.details)}` : ''}`
+        )
+      }
+    } catch (error) {
+      console.error('Failed to FAQ section:', error)
+      showError('Failed to update FAQ section. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -442,6 +471,9 @@ function ConfigDashboardContent() {
           onUpdateBrideSection={updateBrideSectionContent}
           onRefetchBrideSection={fetchBrideSectionContent}
           onBridePhotoUpload={handleBridePhotoUpload}
+          faqSectionContent={faqSectionContent}
+          onUpdateFAQSection={updateFAQSectionContent}
+          onRefetchFAQSection={fetchFAQSectionContent}
           onRefreshPreview={() => setRefreshTrigger((prev) => prev + 1)}
         />
       </div>
@@ -482,6 +514,9 @@ function FeaturesForm({
   onUpdateBrideSection,
   onRefetchBrideSection,
   onBridePhotoUpload,
+  faqSectionContent,
+  onUpdateFAQSection,
+  onRefetchFAQSection,
   onRefreshPreview,
 }: any) {
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
@@ -489,11 +524,6 @@ function FeaturesForm({
   const { draft: draftGroomSection, clearDraft: clearGroomSectionDraft } = useDraft('groomSection')
   const { draft: draftBrideSection, clearDraft: clearBrideSectionDraft } = useDraft('brideSection')
   const { draft: draftFAQs, clearDraft: clearFAQsDraft } = useDraft('faqs')
-  const { showSuccess, showError } = useSnackbar()
-
-  const [originalFAQs, setOriginalFAQs] = useState<FAQItem[]>([])
-  const [deletedFAQIds, setDeletedFAQIds] = useState<string[]>([])
-  const [resetChangedFAQs, setResetChangedFAQs] = useState(false)
 
   // Track draft state locally (separate from saved state)
   const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
@@ -503,6 +533,9 @@ function FeaturesForm({
   )
   const [changedGroomSectionFields, setChangedGroomSectionFields] = useState<Set<string>>(new Set())
   const [changedBrideSectionFields, setChangedBrideSectionFields] = useState<Set<string>>(new Set())
+  const [changedFAQFields, setChangedFAQFields] = useState<Set<string>>(new Set())
+
+  const { showSuccess, showError } = useSnackbar()
 
   const features = [
     {
@@ -548,10 +581,8 @@ function FeaturesForm({
   }, [startingSectionContent])
 
   useEffect(() => {
-    if (draftFAQs && originalFAQs.length === 0) {
-      setOriginalFAQs(draftFAQs)
-    }
-  }, [draftFAQs, originalFAQs.length])
+    setChangedFAQFields(new Set())
+  }, [faqSectionContent])
 
   useEffect(() => {
     setChangedGroomSectionFields(new Set())
@@ -566,12 +597,14 @@ function FeaturesForm({
     changedFeatures.size > 0 ||
     changedStartingSectionFields.size > 0 ||
     changedGroomSectionFields.size > 0 ||
-    changedBrideSectionFields.size > 0
+    changedBrideSectionFields.size > 0 ||
+    changedFAQFields.size > 0
   const totalChanges =
     changedFeatures.size +
     changedStartingSectionFields.size +
     changedGroomSectionFields.size +
-    changedBrideSectionFields.size
+    changedBrideSectionFields.size +
+    changedFAQFields.size
 
   const handleToggle = (featureName: string) => {
     const newValue = !draftFeatures[featureName]
@@ -631,26 +664,27 @@ function FeaturesForm({
         clearBrideSectionDraft()
       }
 
+      // Save changed FAQ content
+      if (changedFAQFields.size > 0 && draftFAQs) {
+        // Find deleted items by comparing saved vs draft
+        const savedIds = new Set((faqSectionContent ?? []).map((faq: FAQItem) => faq.id))
+        const draftIds = new Set(
+          draftFAQs
+            .filter((faq) => faq.id && faq.weddingConfigId !== 'TEMP')
+            .map((faq) => faq.id as string)
+        )
+        const deletedIds = Array.from(savedIds).filter((id) => !draftIds.has(id as string))
+
+        await onUpdateFAQSection({
+          updated: draftFAQs,
+          deleted: deletedIds,
+        })
+        clearFAQsDraft()
+      }
+
       showSuccess('Changes has been saved', { persist: true })
     } catch (error) {
       showError(error instanceof Error ? error.message : 'Failed to save changes')
-    }
-
-    if ((draftFAQs?.length ?? 0) > 0 || deletedFAQIds.length > 0) {
-      const response = await fetch('/api/wedding/faqs/batch', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ updated: draftFAQs, deleted: deletedFAQIds }),
-      })
-
-      if (response.ok) {
-        clearFAQsDraft()
-        setDeletedFAQIds([])
-        setResetChangedFAQs((prev) => !prev)
-
-        // Update originalFAQs so future changes are tracked correctly
-        setOriginalFAQs(draftFAQs ?? [])
-      }
     }
 
     onRefreshPreview()
@@ -663,16 +697,16 @@ function FeaturesForm({
 
     // Reset all sections to saved state using context
     clearStartingSectionDraft()
-    clearFAQsDraft()
     setChangedStartingSectionFields(new Set())
-    setDeletedFAQIds([])
-    setResetChangedFAQs((prev) => !prev)
 
     clearGroomSectionDraft()
     setChangedGroomSectionFields(new Set())
 
     clearBrideSectionDraft()
     setChangedBrideSectionFields(new Set())
+
+    clearFAQsDraft()
+    setChangedFAQFields(new Set())
 
     // Force re-fetch to ensure we have latest data from server
     if (onRefetchStartingSection) {
@@ -684,8 +718,9 @@ function FeaturesForm({
     if (onRefetchBrideSection) {
       await onRefetchBrideSection()
     }
-
-    setOriginalFAQs(draftFAQs ?? [])
+    if (onRefetchFAQSection) {
+      await onRefetchFAQSection()
+    }
   }
 
   const handleStartingSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
@@ -700,8 +735,8 @@ function FeaturesForm({
     setChangedBrideSectionFields(fields)
   }, [])
 
-  const handleFAQChange = useCallback((_draftFAQs: FAQItem[], deletedIds: string[]) => {
-    setDeletedFAQIds(deletedIds)
+  const handleFAQSectionChange = useCallback((hasChanges: boolean, fields: Set<string>) => {
+    setChangedFAQFields(fields)
   }, [])
 
   const renderFeatureContent = useCallback(
@@ -746,7 +781,13 @@ function FeaturesForm({
           )
 
         case 'faqs':
-          return <FAQForm resetChanged={resetChangedFAQs} onChangeTracking={handleFAQChange} />
+          return (
+            <FAQForm
+              weddingConfig={config}
+              faqSectionContent={faqSectionContent}
+              onChangeTracking={handleFAQSectionChange}
+            />
+          )
 
         default:
           return (
@@ -769,8 +810,8 @@ function FeaturesForm({
       onUpdateBrideSection,
       handleBrideSectionChange,
       onBridePhotoUpload,
-      resetChangedFAQs,
-      handleFAQChange,
+      faqSectionContent,
+      handleFAQSectionChange,
     ]
   )
 

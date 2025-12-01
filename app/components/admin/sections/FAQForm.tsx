@@ -1,168 +1,253 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import type { FAQItem } from '@/app/db/schema/content'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { Trash2, Edit2, Plus, Undo } from 'lucide-react'
+/**
+ * FAQ Section Form Component
+ *
+ * Form for managing FAQ items using react-hook-form's useFieldArray.
+ * Features:
+ * - Single form managing entire FAQ list
+ * - Add, edit, remove items inline
+ * - Auto-draft saving via context
+ * - Change tracking without manual state
+ */
+
+import { useEffect, useRef } from 'react'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createFaqItemSchema } from '@/app/lib/validations/faq-section'
 import { useDraft } from '@/app/context/DraftContext'
+import type { FAQItem } from '@/app/db/schema/content'
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { SectionFieldWrapper } from '@/app/components/admin/sections/SectionFieldWrapper'
+import { Trash2, Plus } from 'lucide-react'
+import type { WeddingConfiguration } from '@/app/db/schema/weddings'
+
+// Form schema for the entire FAQ list
+const faqFormSchema = z.object({
+  faqs: z.array(createFaqItemSchema),
+})
+
+type FAQFormData = z.infer<typeof faqFormSchema>
 
 interface FAQFormProps {
-  resetChanged?: boolean
-  onChangeTracking?: (draft: FAQItem[], deletedIds: string[]) => void
+  weddingConfig: WeddingConfiguration
+  faqSectionContent: FAQItem[] | null
+  onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void
 }
 
-export function FAQForm({ resetChanged, onChangeTracking }: FAQFormProps) {
-  const { draft: draftFAQs, setDraft: setDraftFAQs, clearDraft: clearFAQsDraft } = useDraft('faqs')
-  const [editingFAQ, setEditingFAQ] = useState<FAQItem | null>(null)
-  const [newFAQ, setNewFAQ] = useState<Partial<FAQItem>>({ question: '', answer: '' })
-  const [changedIds, setChangedIds] = useState<Set<string>>(new Set())
-  const [deletedIds, setDeletedIds] = useState<string[]>([])
+export function FAQForm({ faqSectionContent, onChangeTracking }: FAQFormProps) {
+  // Use draft context
+  const { draft: draftFAQs, setDraft: setDraftFAQs } = useDraft('faqs')
 
-  // Initialize draft if undefined
-  useEffect(() => {
-    if (!draftFAQs) setDraftFAQs([])
-  }, [draftFAQs, setDraftFAQs])
+  // Initialize form data from draft or saved content
+  const initialFaqs = (draftFAQs ?? faqSectionContent ?? []).map((faq) => ({
+    question: faq.question ?? '',
+    answer: faq.answer ?? '',
+    order: faq.order ?? 1,
+  }))
 
-  // Reset logic
+  // Single form managing entire FAQ list
+  const { register, control, reset } = useForm<FAQFormData>({
+    resolver: zodResolver(faqFormSchema),
+    defaultValues: {
+      faqs: initialFaqs,
+    },
+  })
+
+  // useFieldArray for managing FAQ items
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'faqs',
+  })
+
+  // Reset form when saved content changes (after save or discard)
+  const prevFaqSectionContent = useRef(faqSectionContent)
   useEffect(() => {
-    if (resetChanged) {
-      clearFAQsDraft()
-      setEditingFAQ(null)
-      setNewFAQ({ question: '', answer: '' })
-      setDeletedIds([])
+    if (prevFaqSectionContent.current !== faqSectionContent) {
+      prevFaqSectionContent.current = faqSectionContent
+      const resetFaqs = (faqSectionContent ?? []).map((faq) => ({
+        question: faq.question,
+        answer: faq.answer,
+        order: faq.order,
+      }))
+      reset({ faqs: resetFaqs })
     }
-  }, [resetChanged, clearFAQsDraft])
+  }, [faqSectionContent, reset])
 
-  // Notify parent of changes
+  // Watch all form values for change tracking
+  const watchedFaqs = useWatch({
+    control,
+    name: 'faqs',
+  })
+
+  // Auto-save to draft and track changes
   useEffect(() => {
-    if (draftFAQs) onChangeTracking?.(draftFAQs, deletedIds)
-  }, [draftFAQs, deletedIds, onChangeTracking])
+    if (!watchedFaqs) return
 
-  // Add new FAQ
-  const handleAddFAQ = () => {
-    if (!newFAQ.question?.trim() || !newFAQ.answer?.trim() || !draftFAQs) return
+    const savedFaqs = faqSectionContent ?? []
 
-    const newItem: FAQItem = {
-      id: crypto.randomUUID(),
-      question: newFAQ.question,
-      answer: newFAQ.answer,
-      order: draftFAQs.length + 1,
-      weddingConfigId: 'TEMP',
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    // Normalize values for comparison (treat null, undefined, and empty string as equivalent)
+    const normalizeValue = (val: string | null | undefined) => val?.trim() ?? ''
+
+    // Convert watched values to draft format (only if we have actual content)
+    const hasContent = watchedFaqs.some(
+      (faq) => normalizeValue(faq?.question) || normalizeValue(faq?.answer)
+    )
+
+    if (!hasContent && savedFaqs.length === 0) {
+      // No content and nothing saved - clear draft
+      setDraftFAQs(undefined)
+      onChangeTracking?.(false, new Set())
+      return
     }
 
-    setDraftFAQs([...draftFAQs, newItem])
-    onChangeTracking?.([...draftFAQs, newItem], deletedIds)
-    setChangedIds(prev => new Set(prev).add(newItem.id))
-    setNewFAQ({ question: '', answer: '' })
-  }
+    // Detect changes by comparing with saved content (before building draft)
+    let hasChanges = watchedFaqs.length !== savedFaqs.length
 
-  // Save edit
-  const handleEditSave = () => {
-    if (!editingFAQ || !draftFAQs) return
-    setDraftFAQs(draftFAQs.map(f => (f.id === editingFAQ.id ? editingFAQ : f)))
-    setChangedIds(prev => new Set(prev).add(editingFAQ.id))
-    setEditingFAQ(null)
-  }
+    if (!hasChanges && savedFaqs.length > 0) {
+      // Check if any FAQ item changed (normalized comparison)
+      hasChanges = watchedFaqs.some((watchedFaq, index) => {
+        const savedFaq = savedFaqs[index]
+        if (!savedFaq) return true
+        return (
+          normalizeValue(watchedFaq?.question) !== normalizeValue(savedFaq.question) ||
+          normalizeValue(watchedFaq?.answer) !== normalizeValue(savedFaq.answer) ||
+          (watchedFaq?.order ?? index + 1) !== savedFaq.order
+        )
+      })
+    }
 
-  // Delete / Undo
-  const handleDeleteFAQ = (faq: FAQItem) => {
-    if (!draftFAQs) return
-    if (faq.weddingConfigId === 'TEMP') {
-      // Remove temp items completely
-      setDraftFAQs(draftFAQs.filter(f => f.id !== faq.id))
+    // Only build and set draft if there are actual changes
+    if (hasChanges) {
+      const draft: Partial<FAQItem>[] = watchedFaqs.map((faq, index) => {
+        const savedFaq = savedFaqs[index]
+        return {
+          id: savedFaq?.id ?? crypto.randomUUID(),
+          question: faq?.question ?? '',
+          answer: faq?.answer ?? '',
+          order: faq?.order ?? index + 1,
+          weddingConfigId: savedFaq?.weddingConfigId ?? 'TEMP',
+          createdAt: savedFaq?.createdAt ?? new Date(),
+          updatedAt: new Date(),
+        }
+      })
+      setDraftFAQs(draft)
     } else {
-      setDeletedIds(prev =>
-        prev.includes(faq.id) ? prev.filter(id => id !== faq.id) : [...prev, faq.id]
-      )
+      setDraftFAQs(undefined)
     }
+
+    // Notify parent about changes
+    const changedFields = hasChanges ? new Set(['faqs']) : new Set<string>()
+    onChangeTracking?.(hasChanges, changedFields)
+  }, [watchedFaqs, faqSectionContent, setDraftFAQs, onChangeTracking])
+
+  // Add new FAQ item
+  const handleAddFaq = () => {
+    const newOrder = fields.length + 1
+    append({
+      question: '',
+      answer: '',
+      order: newOrder,
+    })
+  }
+
+  // Remove FAQ item (hard delete, no undo)
+  const handleRemoveFaq = (index: number) => {
+    remove(index)
   }
 
   return (
-    <div className="space-y-4">
-      <ul className="space-y-2 mt-2">
-        {(!draftFAQs || draftFAQs.length === 0) && (
-          <p className="text-sm text-gray-500">No FAQs added yet.</p>
-        )}
+    <div className="space-y-6">
+      {/* Existing FAQ Items */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">FAQ Items</h3>
 
-        {draftFAQs?.map(faq => {
-          const isDeleted = deletedIds.includes(faq.id)
-          const isChanged = changedIds.has(faq.id)
-          const isEditing = editingFAQ?.id === faq.id && !isDeleted
+        {fields.length === 0 && <p className="text-sm text-gray-500">No FAQs added yet.</p>}
 
-          return (
-            <li
-              key={faq.id}
-              className={`rounded-md border p-3 transition-all 
-                ${isDeleted ? 'opacity-50 line-through' : ''} 
-                ${isChanged ? 'bg-yellow-50 ring-2 ring-yellow-400' : ''}`}
-            >
-              {isEditing ? (
-                <>
-                  <Input
-                    value={editingFAQ.question}
-                    onChange={e => setEditingFAQ({ ...editingFAQ, question: e.target.value })}
-                    className="mb-2"
+        <ul className="space-y-3">
+          {fields.map((field, index) => {
+            const watchedFaq = watchedFaqs?.[index]
+            const savedFaq = faqSectionContent?.[index]
+
+            // Normalize values for comparison
+            const normalizeValue = (val: string | null | undefined) => val?.trim() ?? ''
+
+            // Determine if this item has changes
+            const hasChanges =
+              !savedFaq ||
+              normalizeValue(watchedFaq?.question) !== normalizeValue(savedFaq.question) ||
+              normalizeValue(watchedFaq?.answer) !== normalizeValue(savedFaq.answer)
+
+            return (
+              <li
+                key={field.id}
+                className={`rounded-lg border p-4 transition-all ${
+                  hasChanges ? 'border-yellow-400 bg-yellow-50 ring-2 ring-yellow-400' : ''
+                }`}
+              >
+                <div className="space-y-3">
+                  <SectionFieldWrapper
+                    isChanged={hasChanges}
+                    value={watchedFaq?.question}
+                    validationSchema={createFaqItemSchema.shape.question}
+                  >
+                    <Label htmlFor={`faq-question-${index}`}>Question {index + 1}</Label>
+                    <Input
+                      {...register(`faqs.${index}.question` as const)}
+                      id={`faq-question-${index}`}
+                      placeholder="Enter question"
+                    />
+                  </SectionFieldWrapper>
+
+                  <SectionFieldWrapper
+                    isChanged={hasChanges}
+                    value={watchedFaq?.answer}
+                    validationSchema={createFaqItemSchema.shape.answer}
+                  >
+                    <Label htmlFor={`faq-answer-${index}`}>Answer</Label>
+                    <Textarea
+                      {...register(`faqs.${index}.answer` as const)}
+                      id={`faq-answer-${index}`}
+                      placeholder="Enter answer"
+                      rows={3}
+                    />
+                  </SectionFieldWrapper>
+
+                  {/* Hidden field for order */}
+                  <input
+                    type="hidden"
+                    {...register(`faqs.${index}.order` as const, {
+                      valueAsNumber: true,
+                    })}
+                    value={index + 1}
                   />
-                  <Textarea
-                    value={editingFAQ.answer}
-                    onChange={e => setEditingFAQ({ ...editingFAQ, answer: e.target.value })}
-                    rows={3}
-                    className="mb-2"
-                  />
-                  <div className="flex justify-end gap-1">
-                    <Button variant="outline" size="sm" onClick={() => setEditingFAQ(null)}>
-                      Cancel
-                    </Button>
-                    <Button size="sm" onClick={handleEditSave}>
-                      Update
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p className={`font-medium ${isDeleted ? 'line-through' : ''}`}>{faq.question}</p>
-                  <p className={`text-sm text-gray-600 ${isDeleted ? 'line-through' : ''}`}>{faq.answer}</p>
-                  <div className="flex justify-end gap-1 mt-2">
-                    {!isDeleted && (
-                      <Button variant="ghost" size="sm" onClick={() => setEditingFAQ(faq)}>
-                        <Edit2 className="h-4 w-4" />
-                      </Button>
-                    )}
+
+                  <div className="flex justify-end">
                     <Button
+                      type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleDeleteFAQ(faq)}
-                      className={isDeleted ? 'text-black' : 'text-red-600'}
+                      onClick={() => handleRemoveFaq(index)}
+                      className="text-red-600"
                     >
-                      {isDeleted ? <Undo className="h-4 w-4" /> : <Trash2 className="h-4 w-4" />}
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
-                </>
-              )}
-            </li>
-          )
-        })}
-      </ul>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
 
-      <div className="mt-4 space-y-2 border-t pt-4">
-        <h4 className="font-semibold">Add New FAQ</h4>
-        <Input
-          placeholder="Question"
-          value={newFAQ.question ?? ''}
-          onChange={e => setNewFAQ({ ...newFAQ, question: e.target.value })}
-        />
-        <Textarea
-          placeholder="Answer"
-          value={newFAQ.answer ?? ''}
-          onChange={e => setNewFAQ({ ...newFAQ, answer: e.target.value })}
-          rows={3}
-        />
-        <Button className="w-full flex items-center justify-center gap-2" onClick={handleAddFAQ}>
-          <Plus className="h-4 w-4" /> Add FAQ
+      {/* Add New FAQ Button */}
+      <div className="border-t pt-6">
+        <Button type="button" onClick={handleAddFaq} className="w-full">
+          <Plus className="mr-2 h-4 w-4" /> Add FAQ
         </Button>
       </div>
     </div>

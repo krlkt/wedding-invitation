@@ -21,7 +21,7 @@ interface WeddingDataContextValue {
   config: WeddingConfiguration
   features: Record<FeatureName, boolean>
   startingSection?: StartingSectionContent | null
-  faqs?: FAQItem[] | null
+  faqs?: Partial<FAQItem>[] | null
   groomSection?: GroomSectionContent | null
   brideSection?: BrideSectionContent | null
 }
@@ -41,7 +41,7 @@ export function WeddingDataProvider({
   config: WeddingConfiguration
   features: Record<FeatureName, boolean>
   startingSection?: StartingSectionContent | null
-  faqs?: FAQItem[] | null
+  faqs?: Partial<FAQItem>[] | null
   groomSection?: GroomSectionContent | null
   brideSection?: BrideSectionContent | null
 }) {

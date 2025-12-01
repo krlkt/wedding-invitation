@@ -24,7 +24,7 @@ export type DraftState = {
   startingSection?: Partial<StartingSectionContent>
   groomSection?: Partial<GroomSectionContent>
   brideSection?: Partial<BrideSectionContent>
-  faqs?: FAQItem[]
+  faqs?: Partial<FAQItem>[]
   // Add more sections as you implement them:
   // loveStory?: Partial<LoveStoryContent>
   // locations?: Partial<LocationContent>

@@ -26,7 +26,7 @@ interface LivePreviewProps {
   draftStartingSection?: Partial<StartingSectionContent> // Draft starting section from local state
   draftGroomSection?: Partial<GroomSectionContent> // Draft groom section from local state
   draftBrideSection?: Partial<BrideSectionContent> // Draft bride section from local state
-  draftFAQs?: FAQItem[]
+  draftFAQs?: Partial<FAQItem>[]
 }
 
 export default function LivePreview({
