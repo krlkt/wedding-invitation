@@ -263,7 +263,7 @@ export default function InvitationPage({
               </FadeIn>
               <SectionTitle title="FAQ" color="secondary" />
               <FadeIn className="w-full px-8">
-                  <FAQ faqs={[]} />
+                <FAQ faqs={[]} />
               </FadeIn>
               <FadeIn from="right" className="absolute -right-10 bottom-12">
                 <Image

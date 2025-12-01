@@ -12,7 +12,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const { question, answer, order } = body
 
     if (!question || !answer || order === undefined) {
-      return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: 'Missing required fields' },
+        { status: 400 }
+      )
     }
 
     const existingFAQ = await getFAQById(id)

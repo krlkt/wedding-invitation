@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAuth } from '@/app/lib/session'
-import {
-  createFAQ,
-  updateFAQ,
-  deleteFAQ,
-  getFAQById,
-} from '@/app/lib/content-service'
+import { createFAQ, updateFAQ, deleteFAQ, getFAQById } from '@/app/lib/content-service'
 
 export async function PUT(req: NextRequest) {
   try {
@@ -16,36 +11,33 @@ export async function PUT(req: NextRequest) {
     const { updated = [], deleted = [] } = await req.json()
 
     if (!Array.isArray(updated) || !Array.isArray(deleted)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid payload format' },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, error: 'Invalid payload format' }, { status: 400 })
     }
 
     const updatePromises = updated.map(async (faq: any) => {
-    let existing = null
-    if (faq.id) {
+      let existing = null
+      if (faq.id) {
         existing = await getFAQById(faq.id)
-    }
+      }
 
-    if (!faq.id || !existing) {
+      if (!faq.id || !existing) {
         return createFAQ({
-        weddingConfigId,
-        question: faq.question,
-        answer: faq.answer,
-        order: faq.order,
+          weddingConfigId,
+          question: faq.question,
+          answer: faq.answer,
+          order: faq.order,
         })
-    }
+      }
 
-    if (existing.weddingConfigId !== weddingConfigId) {
+      if (existing.weddingConfigId !== weddingConfigId) {
         throw new Error(`FAQ not found or unauthorized: ${faq.id}`)
-    }
+      }
 
-    return updateFAQ(faq.id, {
+      return updateFAQ(faq.id, {
         question: faq.question,
         answer: faq.answer,
         order: faq.order,
-    })
+      })
     })
 
     const deletePromises = deleted.map(async (id: string) => {

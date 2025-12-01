@@ -682,7 +682,7 @@ function FeaturesForm({
         clearFAQsDraft()
       }
 
-      showSuccess('Changes has been saved', { persist: true })
+      showSuccess('Changes has been saved')
     } catch (error) {
       showError(error instanceof Error ? error.message : 'Failed to save changes')
     }

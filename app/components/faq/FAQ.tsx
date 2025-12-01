@@ -1,4 +1,9 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import type { FAQItem } from '@/app/db/schema/content'
 
 interface FAQProps {
@@ -14,14 +19,16 @@ const FAQ = ({ faqs }: FAQProps) => (
           type="single"
           key={id!}
           collapsible
-          className="w-full text-base rounded-lg border overflow-hidden"
+          className="w-full overflow-hidden rounded-lg border text-base"
         >
           <AccordionItem value={id!}>
-            <AccordionTrigger className="bg-white font-semibold px-4 py-3 hover:no-underline hover:bg-gray-50">
+            <AccordionTrigger className="bg-white px-4 py-3 font-semibold hover:bg-gray-50 hover:no-underline">
               {question}
             </AccordionTrigger>
 
-            <AccordionContent className="bg-gray-50 text-black px-4 py-3">{answer}</AccordionContent>
+            <AccordionContent className="bg-gray-50 px-4 py-3 text-black">
+              {answer}
+            </AccordionContent>
           </AccordionItem>
         </Accordion>
       ))}
