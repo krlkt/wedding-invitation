@@ -7,8 +7,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import type { PreviewData } from '@/app/components/preview/types'
-import type { FeatureName } from '@/app/db/schema/features'
+import type { PreviewData } from '@/components/preview/types'
+import type { FeatureName } from '@/db/schema/features'
 import {
   getLoveStorySegments,
   getLocations,
@@ -19,10 +19,10 @@ import {
   getStartingSectionContent,
   getGroomSectionContent,
   getBrideSectionContent,
-} from '@/app/lib/content-service'
-import { getGalleryPhotos } from '@/app/lib/file-service'
-import { requireAuth } from '@/app/lib/session'
-import { getWeddingConfigById, getFeatureToggles } from '@/app/lib/wedding-service'
+} from '@/lib/content-service'
+import { getGalleryPhotos } from '@/lib/file-service'
+import { requireAuth } from '@/lib/session'
+import { getWeddingConfigById, getFeatureToggles } from '@/lib/wedding-service'
 
 export async function GET(request: NextRequest) {
   try {

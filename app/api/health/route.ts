@@ -5,7 +5,7 @@
  */
 
 import { NextResponse } from 'next/server'
-import { getConfig } from '@/app/lib/env-config'
+import { getConfig } from '@/lib/env-config'
 
 export async function GET() {
   try {
@@ -15,7 +15,7 @@ export async function GET() {
     // Test database connection
     let databaseStatus: 'connected' | 'error' = 'connected'
     try {
-      const { query } = await import('@/app/db/client')
+      const { query } = await import('@/db/client')
       await query('SELECT 1')
     } catch (error) {
       console.error('Database health check failed:', error)

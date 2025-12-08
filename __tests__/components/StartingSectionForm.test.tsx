@@ -10,14 +10,14 @@ import { describe, test, expect, jest } from '@jest/globals'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState, useCallback } from 'react'
-import { StartingSectionForm } from '@/app/components/admin/sections/StartingSectionForm'
-import { DraftProvider, useDraft } from '@/app/context/DraftContext'
+import { StartingSectionForm } from '@/components/admin/sections/StartingSectionForm'
+import { DraftProvider, useDraft } from '@/context/DraftContext'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/app/components/shadcn/accordion'
+} from '@/components/shadcn/accordion'
 
 // Mock data
 const mockWeddingConfig = {

@@ -4,9 +4,9 @@ import { useRef } from 'react'
 
 import { useVirtualizer } from '@tanstack/react-virtual'
 
-import { Locations } from '@/app/components/LocationComponent'
-import { Guest } from '@/app/models/guest'
-import { Table } from '@/app/models/table'
+import { Locations } from '@/components/LocationComponent'
+import { Guest } from '@/legacy/types/guest'
+import { Table } from '@/legacy/types/table'
 
 import { GuestComponent } from './GuestComponent'
 

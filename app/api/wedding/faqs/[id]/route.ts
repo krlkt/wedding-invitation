@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/app/lib/session'
-import { updateFAQ, deleteFAQ, getFAQById } from '@/app/lib/content-service'
+import { requireAuth } from '@/lib/session'
+import { updateFAQ, deleteFAQ, getFAQById } from '@/lib/content-service'
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {

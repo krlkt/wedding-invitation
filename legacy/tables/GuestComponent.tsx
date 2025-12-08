@@ -6,9 +6,9 @@ import OpenWithIcon from '@mui/icons-material/OpenWith'
 import { IconButton, Switch } from '@mui/material'
 import { useDrag } from 'react-dnd'
 
-import { Locations } from '@/app/components/LocationComponent'
-import { Guest } from '@/app/models/guest'
-import { Table } from '@/app/models/table'
+import { Locations } from '@/components/LocationComponent'
+import { Guest } from '@/legacy/types/guest'
+import { Table } from '@/legacy/types/table'
 
 import { updateGuestName, updateGuestCheckinStatus } from './actions'
 

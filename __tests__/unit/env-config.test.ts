@@ -26,7 +26,7 @@ describe('Environment Detection (T007)', () => {
   it('should return "development" when APP_ENV=development', async () => {
     process.env.APP_ENV = 'development'
 
-    const { getEnvironment } = await import('@/app/lib/env-config')
+    const { getEnvironment } = await import('@/lib/env-config')
 
     expect(getEnvironment()).toBe('development')
   })
@@ -34,7 +34,7 @@ describe('Environment Detection (T007)', () => {
   it('should return "test" when VERCEL_ENV=preview', async () => {
     process.env.VERCEL_ENV = 'preview'
 
-    const { getEnvironment } = await import('@/app/lib/env-config')
+    const { getEnvironment } = await import('@/lib/env-config')
 
     expect(getEnvironment()).toBe('test')
   })
@@ -42,7 +42,7 @@ describe('Environment Detection (T007)', () => {
   it('should return "production" when VERCEL_ENV=production', async () => {
     process.env.VERCEL_ENV = 'production'
 
-    const { getEnvironment } = await import('@/app/lib/env-config')
+    const { getEnvironment } = await import('@/lib/env-config')
 
     expect(getEnvironment()).toBe('production')
   })
@@ -51,7 +51,7 @@ describe('Environment Detection (T007)', () => {
     delete process.env.APP_ENV
     delete process.env.VERCEL_ENV
 
-    const { getEnvironment } = await import('@/app/lib/env-config')
+    const { getEnvironment } = await import('@/lib/env-config')
 
     expect(getEnvironment()).toBe('development')
   })
@@ -60,7 +60,7 @@ describe('Environment Detection (T007)', () => {
     process.env.APP_ENV = 'test'
     process.env.VERCEL_ENV = 'production'
 
-    const { getEnvironment } = await import('@/app/lib/env-config')
+    const { getEnvironment } = await import('@/lib/env-config')
 
     expect(getEnvironment()).toBe('test')
   })
@@ -87,7 +87,7 @@ describe('Config Validation (T008)', () => {
     process.env.DATABASE_AUTH_TOKEN = 'some-token'
 
     // This will fail until validateConfig is implemented
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     expect(() => getConfig()).toThrow(/DATABASE_URL/)
   })
@@ -96,7 +96,7 @@ describe('Config Validation (T008)', () => {
     process.env.DATABASE_URL = 'libsql://wedding-invitation-dev.turso.io'
     process.env.DATABASE_AUTH_TOKEN = 'valid-token'
 
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     expect(() => getConfig()).not.toThrow()
   })
@@ -106,7 +106,7 @@ describe('Config Validation (T008)', () => {
     process.env.DATABASE_AUTH_TOKEN = ''
     process.env.APP_ENV = 'development'
 
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     expect(() => getConfig()).not.toThrow()
   })
@@ -116,7 +116,7 @@ describe('Config Validation (T008)', () => {
     delete process.env.DATABASE_AUTH_TOKEN
     delete process.env.TURSO_AUTH_TOKEN // Also delete legacy variable
 
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     expect(() => getConfig()).toThrow(/auth.*token/i)
   })
@@ -127,7 +127,7 @@ describe('Config Validation (T008)', () => {
     process.env.VERCEL_ENV = 'production'
     delete process.env.APP_ENV // Ensure APP_ENV doesn't override
 
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
 
@@ -140,7 +140,7 @@ describe('Config Validation (T008)', () => {
     process.env.DATABASE_AUTH_TOKEN = 'dev-token'
     process.env.APP_ENV = 'development'
 
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
 
@@ -154,7 +154,7 @@ describe('Config Validation (T008)', () => {
     process.env.DATABASE_AUTH_TOKEN = 'test-token'
     process.env.APP_ENV = 'test'
 
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
 
@@ -170,7 +170,7 @@ describe('Config Validation (T008)', () => {
     process.env.NEXT_PUBLIC_DATABASE_URL = 'libsql://wedding-invitation-dev.turso.io'
     process.env.DATABASE_AUTH_TOKEN = 'dev-token'
 
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     // Should warn or throw if NEXT_PUBLIC_ prefix detected on sensitive vars
     const consoleSpy = jest.spyOn(console, 'warn').mockImplementation()

@@ -4,8 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import { getDressCode, updateDressCode } from '@/app/lib/content-service'
-import { requireAuth } from '@/app/lib/session'
+import { getDressCode, updateDressCode } from '@/lib/content-service'
+import { requireAuth } from '@/lib/session'
 
 export async function GET(request: NextRequest) {
   try {

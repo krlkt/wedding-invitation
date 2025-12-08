@@ -25,7 +25,7 @@ jest.mock('sonner', () => ({
   Toaster: () => null,
 }))
 
-import { SnackbarProvider, useSnackbar } from '@/app/context/SnackbarContext'
+import { SnackbarProvider, useSnackbar } from '@/context/SnackbarContext'
 
 describe('SnackbarContext', () => {
   beforeEach(() => {

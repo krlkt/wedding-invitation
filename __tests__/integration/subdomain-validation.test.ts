@@ -4,7 +4,7 @@
  * Integration Test: Subdomain Collision Retry Logic
  */
 
-import { createWeddingConfiguration, isSubdomainAvailable } from '@/app/lib/wedding-service'
+import { createWeddingConfiguration, isSubdomainAvailable } from '@/lib/wedding-service'
 
 describe('Subdomain Validation Integration', () => {
   it('should retry subdomain generation on collision up to 5 times', async () => {

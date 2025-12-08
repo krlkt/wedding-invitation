@@ -10,7 +10,7 @@ jest.mock('@vercel/blob', () => ({
   del: jest.fn().mockResolvedValue(undefined),
 }))
 
-jest.mock('@/app/lib/database', () => ({
+jest.mock('@/lib/database', () => ({
   db: {
     select: jest.fn(),
     insert: jest.fn(),
@@ -26,9 +26,9 @@ import {
   deleteGalleryPhoto,
   uploadDressCodePhoto,
   deleteDressCodePhoto,
-} from '@/app/lib/file-service'
+} from '@/lib/file-service'
 import { put, del } from '@vercel/blob'
-import { db } from '@/app/lib/database'
+import { db } from '@/lib/database'
 
 describe('File Upload Service', () => {
   beforeEach(() => {

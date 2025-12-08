@@ -5,9 +5,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/app/lib/session'
-import { getBrideSectionContent, updateBrideSectionContent } from '@/app/lib/content-service'
-import { brideSectionContentSchema } from '@/app/lib/validations/bride-section'
+import { requireAuth } from '@/lib/session'
+import { getBrideSectionContent, updateBrideSectionContent } from '@/lib/content-service'
+import { brideSectionContentSchema } from '@/lib/validations/bride-section'
 
 export async function GET(request: NextRequest) {
   try {

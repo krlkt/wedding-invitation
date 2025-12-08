@@ -4,8 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import { uploadGalleryPhoto } from '@/app/lib/file-service'
-import { requireAuth } from '@/app/lib/session'
+import { uploadGalleryPhoto } from '@/lib/file-service'
+import { requireAuth } from '@/lib/session'
 
 export async function POST(request: NextRequest) {
   try {

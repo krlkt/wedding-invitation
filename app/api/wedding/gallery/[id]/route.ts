@@ -4,8 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import { updateGalleryPhoto, deleteGalleryPhoto } from '@/app/lib/file-service'
-import { requireAuth } from '@/app/lib/session'
+import { updateGalleryPhoto, deleteGalleryPhoto } from '@/lib/file-service'
+import { requireAuth } from '@/lib/session'
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {

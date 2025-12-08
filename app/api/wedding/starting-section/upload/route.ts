@@ -5,8 +5,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/app/lib/session'
-import { uploadStartingSectionMedia, deleteStartingSectionMedia } from '@/app/lib/file-service'
+import { requireAuth } from '@/lib/session'
+import { uploadStartingSectionMedia, deleteStartingSectionMedia } from '@/lib/file-service'
 
 export async function POST(request: NextRequest) {
   try {

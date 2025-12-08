@@ -5,9 +5,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/app/lib/session'
-import { getGroomSectionContent, updateGroomSectionContent } from '@/app/lib/content-service'
-import { groomSectionContentSchema } from '@/app/lib/validations/groom-section'
+import { requireAuth } from '@/lib/session'
+import { getGroomSectionContent, updateGroomSectionContent } from '@/lib/content-service'
+import { groomSectionContentSchema } from '@/lib/validations/groom-section'
 
 export async function GET(request: NextRequest) {
   try {

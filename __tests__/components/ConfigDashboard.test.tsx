@@ -4,7 +4,7 @@
  */
 
 import { render, screen } from '@testing-library/react'
-import ConfigDashboard from '@/app/components/ConfigDashboard'
+import ConfigDashboard from '@/components/admin/ConfigDashboard'
 
 // Mock fetch
 global.fetch = jest.fn()

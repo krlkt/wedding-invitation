@@ -9,19 +9,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 // Mock the session module
-jest.mock('../../app/lib/session', () => ({
+jest.mock('../../lib/session', () => ({
   requireAuth: jest.fn(),
 }))
 
 // Mock the wedding service module
-jest.mock('../../app/lib/wedding-service', () => ({
+jest.mock('../../lib/wedding-service', () => ({
   getWeddingConfigById: jest.fn(),
   getFeatureToggles: jest.fn(),
 }))
 
 import { GET } from '@/app/api/wedding/config/route'
-import { requireAuth } from '../../app/lib/session'
-import { getWeddingConfigById, getFeatureToggles } from '../../app/lib/wedding-service'
+import { requireAuth } from '@/lib/session'
+import { getWeddingConfigById, getFeatureToggles } from '@/lib/wedding-service'
 
 const mockRequireAuth = requireAuth as jest.MockedFunction<typeof requireAuth>
 const mockGetWeddingConfigById = getWeddingConfigById as jest.MockedFunction<

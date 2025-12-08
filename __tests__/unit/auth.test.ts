@@ -5,15 +5,15 @@
  */
 
 // Mock database BEFORE importing modules that depend on it
-jest.mock('@/app/lib/database', () => ({
+jest.mock('@/lib/database', () => ({
   db: {
     select: jest.fn(),
     insert: jest.fn(),
   },
 }))
 
-import { registerUser, authenticateUser, getUserById, getUserByEmail } from '@/app/lib/auth'
-import { db } from '@/app/lib/database'
+import { registerUser, authenticateUser, getUserById, getUserByEmail } from '@/lib/auth'
+import { db } from '@/lib/database'
 
 describe('Authentication Service', () => {
   beforeEach(() => {

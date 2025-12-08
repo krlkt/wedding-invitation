@@ -13,7 +13,7 @@ import {
   validateFileUpload,
   validateRequired,
   validateDate,
-} from '@/app/lib/validation'
+} from '@/lib/validation'
 
 describe('Validation Utilities', () => {
   describe('validateEmail', () => {

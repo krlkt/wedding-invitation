@@ -7,12 +7,12 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import { requireAuth } from '@/app/lib/session'
+import { requireAuth } from '@/lib/session'
 import {
   getWeddingConfigById,
   updateWeddingConfiguration,
   getFeatureToggles,
-} from '@/app/lib/wedding-service'
+} from '@/lib/wedding-service'
 
 export async function GET(request: NextRequest) {
   try {

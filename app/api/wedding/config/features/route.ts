@@ -6,9 +6,9 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import { FEATURE_NAMES } from '@/app/db/schema/features'
-import { requireAuth } from '@/app/lib/session'
-import { toggleFeature } from '@/app/lib/wedding-service'
+import { FEATURE_NAMES } from '@/db/schema/features'
+import { requireAuth } from '@/lib/session'
+import { toggleFeature } from '@/lib/wedding-service'
 
 // Use the single source of truth from the database schema
 const VALID_FEATURES = FEATURE_NAMES as readonly string[]

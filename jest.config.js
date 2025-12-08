@@ -10,11 +10,13 @@ const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     '^@/app/(.*)$': '<rootDir>/app/$1',
-    '^@/components/(.*)$': '<rootDir>/app/components/$1',
-    '^@/models/(.*)$': '<rootDir>/app/models/$1',
-    '^@/lib/(.*)$': '<rootDir>/app/lib/$1',
-    '^@/db/(.*)$': '<rootDir>/app/db/$1',
-    '^@/utils/(.*)$': '<rootDir>/app/utils/$1',
+    '^@/components/(.*)$': '<rootDir>/components/$1',
+    '^@/types/(.*)$': '<rootDir>/types/$1',
+    '^@/lib/(.*)$': '<rootDir>/lib/$1',
+    '^@/db/(.*)$': '<rootDir>/db/$1',
+    '^@/hooks/(.*)$': '<rootDir>/hooks/$1',
+    '^@/context/(.*)$': '<rootDir>/context/$1',
+    '^@/config/(.*)$': '<rootDir>/config/$1',
   },
   testEnvironment: 'jsdom',
   // Transform ESM modules for MSW compatibility

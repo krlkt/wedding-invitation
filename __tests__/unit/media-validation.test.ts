@@ -13,7 +13,7 @@ import {
   validateVideoFile,
   getMediaType,
   formatFileSize,
-} from '@/app/utils/media-validation'
+} from '@/lib/media-validation'
 
 describe('validateImageFile', () => {
   test('should validate 5MB JPEG image', () => {

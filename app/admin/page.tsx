@@ -10,10 +10,10 @@ import { redirect } from 'next/navigation'
 
 import { eq } from 'drizzle-orm'
 
-import ConfigDashboard from '@/app/components/ConfigDashboard'
-import LogoutButton from '@/app/components/LogoutButton'
-import { weddingConfigurations } from '@/app/db/schema'
-import { db } from '@/app/lib/database'
+import ConfigDashboard from '@/components/admin/ConfigDashboard'
+import LogoutButton from '@/components/LogoutButton'
+import { weddingConfigurations } from '@/db/schema'
+import { db } from '@/lib/database'
 
 async function getSession() {
   const cookieStore = await cookies()

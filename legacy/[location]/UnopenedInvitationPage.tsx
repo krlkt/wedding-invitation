@@ -2,9 +2,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import Button from '@/app/components/Button'
-import CycleBackground from '@/app/components/CycleBackground'
-import { createQueryString } from '@/app/utils/link'
+import Button from '@/components/Button'
+import CycleBackground from '@/components/CycleBackground'
+import { createQueryString } from '@/lib/link'
 
 export default function UnopenedInvitationPage({
   guestName,

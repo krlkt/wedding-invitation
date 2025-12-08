@@ -17,7 +17,7 @@ describe('Database Connection (T009)', () => {
 
   it('should connect to database with valid credentials', async () => {
     // This will fail until we implement environment-aware connection
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
 
@@ -28,7 +28,7 @@ describe('Database Connection (T009)', () => {
 
   it('should execute simple query successfully', async () => {
     // This will fail until app/db/index.ts uses env-aware config
-    const { query } = await import('@/app/db/client')
+    const { query } = await import('@/db/client')
 
     const result = await query<{ result: number }>('SELECT 1 as result')
 
@@ -38,7 +38,7 @@ describe('Database Connection (T009)', () => {
   })
 
   it('should use correct database URL per environment', async () => {
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
     const env = config.environment
@@ -68,7 +68,7 @@ describe('Database Connection (T009)', () => {
   })
 
   it('should return EnvironmentConfig with all required properties', async () => {
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
 

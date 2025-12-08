@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { Locations } from '@/app/components/LocationComponent'
+import { Locations } from '@/components/LocationComponent'
 import { getParticipants } from '../action'
 import DashboardClientPage from '../DashboardClientPage'
 

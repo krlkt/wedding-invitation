@@ -7,8 +7,8 @@
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
-import { authenticateUser } from '@/app/lib/auth'
-import { getWeddingConfigByUserId } from '@/app/lib/wedding-service'
+import { authenticateUser } from '@/lib/auth'
+import { getWeddingConfigByUserId } from '@/lib/wedding-service'
 
 export async function POST(request: NextRequest) {
   try {

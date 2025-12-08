@@ -27,8 +27,8 @@ import { DataGrid, GridColDef, GridRowsProp, GridActionsCellItem } from '@mui/x-
 import { useSnackbar } from 'notistack'
 import * as XLSX from 'xlsx'
 
-import { Locations } from '@/app/components/LocationComponent'
-import { RSVP, RSVPForm } from '@/app/models/rsvp'
+import { Locations } from '@/components/LocationComponent'
+import { RSVP, RSVPForm } from '@/legacy/types/rsvp'
 
 import {
   addParticipant,

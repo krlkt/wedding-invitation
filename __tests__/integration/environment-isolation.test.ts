@@ -10,7 +10,7 @@ import { describe, it, expect } from '@jest/globals'
 describe('Environment Isolation (T010)', () => {
   it('should use different database URLs for different environments', async () => {
     // This will fail until env-config.ts is implemented
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
 
@@ -26,7 +26,7 @@ describe('Environment Isolation (T010)', () => {
   })
 
   it('should not allow production database to be marked as destroyable', async () => {
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
 
@@ -36,7 +36,7 @@ describe('Environment Isolation (T010)', () => {
   })
 
   it('should allow dev/test databases to be destroyable', async () => {
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
 
@@ -47,7 +47,7 @@ describe('Environment Isolation (T010)', () => {
 
   it('should isolate database connections per environment', async () => {
     // Verify that changing APP_ENV would change database connection
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
     const currentEnv = config.environment
@@ -65,7 +65,7 @@ describe('Environment Isolation (T010)', () => {
 
   it('should have independent migration tracking per environment', async () => {
     // This test verifies concept - actual implementation happens in T018-T021
-    const { getConfig } = await import('@/app/lib/env-config')
+    const { getConfig } = await import('@/lib/env-config')
 
     const config = getConfig()
 

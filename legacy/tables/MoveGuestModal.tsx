@@ -2,10 +2,10 @@
 
 import { FC, useState } from 'react'
 
-import { Locations } from '@/app/components/LocationComponent'
-import Modal from '@/app/components/Modal'
-import { Guest } from '@/app/models/guest'
-import { Table } from '@/app/models/table'
+import { Locations } from '@/components/LocationComponent'
+import Modal from '@/components/Modal'
+import { Guest } from '@/legacy/types/guest'
+import { Table } from '@/legacy/types/table'
 
 import { moveGuestToTable } from './actions'
 

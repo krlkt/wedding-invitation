@@ -4,7 +4,7 @@
  */
 
 import { render, screen } from '@testing-library/react'
-import LivePreview from '@/app/components/LivePreview'
+import LivePreview from '@/components/LivePreview'
 
 // Mock fetch
 global.fetch = jest.fn()

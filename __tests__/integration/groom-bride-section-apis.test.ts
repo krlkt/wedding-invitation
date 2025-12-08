@@ -18,8 +18,8 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from '@jest/globals'
-import { db } from '@/app/lib/database'
-import { userAccounts } from '@/app/db/schema/users'
+import { db } from '@/lib/database'
+import { userAccounts } from '@/db/schema/users'
 import { eq } from 'drizzle-orm'
 
 // Helper to create authenticated fetch options

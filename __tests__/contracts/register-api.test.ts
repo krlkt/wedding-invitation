@@ -9,18 +9,18 @@
 import { NextRequest } from 'next/server'
 
 // Mock the auth module
-jest.mock('../../app/lib/auth', () => ({
+jest.mock('../../lib/auth', () => ({
   registerUser: jest.fn(),
 }))
 
 // Mock the wedding service module
-jest.mock('../../app/lib/wedding-service', () => ({
+jest.mock('../../lib/wedding-service', () => ({
   createWeddingConfiguration: jest.fn(),
 }))
 
 import { POST } from '@/app/api/auth/register/route'
-import { registerUser } from '../../app/lib/auth'
-import { createWeddingConfiguration } from '../../app/lib/wedding-service'
+import { registerUser } from '@/lib/auth'
+import { createWeddingConfiguration } from '@/lib/wedding-service'
 
 const mockRegisterUser = registerUser as jest.MockedFunction<typeof registerUser>
 const mockCreateWeddingConfiguration = createWeddingConfiguration as jest.MockedFunction<

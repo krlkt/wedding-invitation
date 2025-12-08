@@ -5,8 +5,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/app/lib/session'
-import { uploadBrideSectionPhoto, deleteBrideSectionPhoto } from '@/app/lib/file-service'
+import { requireAuth } from '@/lib/session'
+import { uploadBrideSectionPhoto, deleteBrideSectionPhoto } from '@/lib/file-service'
 
 export async function POST(request: NextRequest) {
   try {

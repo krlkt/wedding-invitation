@@ -5,9 +5,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/app/lib/session'
-import { getStartingSectionContent, updateStartingSectionContent } from '@/app/lib/content-service'
-import { startingSectionContentSchema } from '@/app/lib/validations/starting-section'
+import { requireAuth } from '@/lib/session'
+import { getStartingSectionContent, updateStartingSectionContent } from '@/lib/content-service'
+import { startingSectionContentSchema } from '@/lib/validations/starting-section'
 
 export async function GET(request: NextRequest) {
   try {

@@ -13,8 +13,8 @@ if (!process.env.DATABASE_AUTH_TOKEN) {
 }
 
 export default {
-  schema: './app/db/schema/*',
-  out: './app/db/migrations',
+  schema: './db/schema/*',
+  out: './db/migrations',
   dialect: 'turso',
   dbCredentials: {
     url: process.env.DATABASE_URL,

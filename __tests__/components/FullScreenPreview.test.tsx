@@ -4,7 +4,7 @@
  */
 
 import { render, screen } from '@testing-library/react'
-import FullScreenPreview from '@/app/components/preview/FullScreenPreview'
+import FullScreenPreview from '@/components/preview/FullScreenPreview'
 
 describe('FullScreenPreview Component', () => {
   it('should render wedding layout with configuration data', () => {

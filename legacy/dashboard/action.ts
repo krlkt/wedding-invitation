@@ -2,10 +2,10 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { query } from '@/app/db/client'
-import { RSVP, RSVPForm } from '@/app/models/rsvp'
+import { query } from '@/db/client'
+import { RSVP, RSVPForm } from '@/legacy/types/rsvp'
 
-import { Guest } from '@/app/models/guest'
+import { Guest } from '@/legacy/types/guest'
 
 const VALID_LOCATIONS = ['jakarta', 'bali', 'malang']
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || `https://oial.vercel.app`

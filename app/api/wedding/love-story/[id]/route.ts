@@ -6,8 +6,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import { updateLoveStorySegment, deleteLoveStorySegment } from '@/app/lib/content-service'
-import { requireAuth } from '@/app/lib/session'
+import { updateLoveStorySegment, deleteLoveStorySegment } from '@/lib/content-service'
+import { requireAuth } from '@/lib/session'
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {

@@ -4,8 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 
-import { getLocations, createLocation } from '@/app/lib/content-service'
-import { requireAuth } from '@/app/lib/session'
+import { getLocations, createLocation } from '@/lib/content-service'
+import { requireAuth } from '@/lib/session'
 
 export async function GET(request: NextRequest) {
   try {

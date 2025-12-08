@@ -12,9 +12,9 @@ import {
   getStartingSectionContent,
   getGroomSectionContent,
   getBrideSectionContent,
-} from '@/app/lib/content-service'
-import TemplateRenderer from '@/app/components/preview/TemplateRenderer'
-import type { PreviewData } from '@/app/components/preview/types'
+} from '@/lib/content-service'
+import TemplateRenderer from '@/components/preview/TemplateRenderer'
+import type { PreviewData } from '@/components/preview/types'
 import {
   getWeddingConfigById,
   getFeatureToggles,
@@ -24,7 +24,7 @@ import {
   getFAQItems,
   getDressCode,
   getBankDetails,
-} from '@/app/lib/wedding-service'
+} from '@/lib/wedding-service'
 
 async function getSession() {
   const cookieStore = await cookies()

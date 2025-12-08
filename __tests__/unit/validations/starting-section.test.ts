@@ -15,7 +15,7 @@ import {
   MAX_VIDEO_SIZE,
   ACCEPTED_IMAGE_TYPES,
   ACCEPTED_VIDEO_TYPES,
-} from '@/app/lib/validations/starting-section'
+} from '@/lib/validations/starting-section'
 
 describe('startingSectionContentSchema', () => {
   test('should validate content update with all fields', () => {
