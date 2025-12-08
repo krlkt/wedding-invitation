@@ -2,12 +2,12 @@ import { notFound } from 'next/navigation'
 
 import { Metadata } from 'next'
 
-import { Locations } from '../components/LocationComponent'
-import { query } from '../db/client'
-import { RSVP } from '../models/rsvp'
-import { Wish } from '../models/wish'
-import { GuestIdProvider } from '../utils/useGuestId'
-import { LocationProvider } from '../utils/useLocation'
+import { Locations } from '@/app/components/LocationComponent'
+import { query } from '@/app/db/client'
+import { RSVP } from '@/app/models/rsvp'
+import { Wish } from '@/app/models/wish'
+import { GuestIdProvider } from '@/app/utils/useGuestId'
+import { LocationProvider } from '@/app/utils/useLocation'
 
 import InvitationPage from './InvitationPage'
 import NotInGuestListPage from './NotInGuestListPage'

@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 
 import { SnackbarProvider as NotistackProvider } from 'notistack'
 import { SnackbarProvider } from '../context/SnackbarContext'
-import { Toaster } from '@/components/ui/sonner'
+import { Toaster } from '@/app/components/shadcn/sonner'
 
 import { useViewportHeight } from '../utils/useViewportHeight'
 

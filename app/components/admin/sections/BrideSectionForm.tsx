@@ -22,11 +22,11 @@ import { parsePhotos } from '@/app/lib/section-photos'
 import type { WeddingConfiguration } from '@/app/db/schema/weddings'
 import type { BrideSectionContent } from '@/app/db/schema/bride-section'
 import type { z } from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
-import { FileInput } from '@/components/ui/file-input'
+import { Button } from '@/app/components/shadcn/button'
+import { Input } from '@/app/components/shadcn/input'
+import { Label } from '@/app/components/shadcn/label'
+import { Checkbox } from '@/app/components/shadcn/checkbox'
+import { FileInput } from '@/app/components/shadcn/file-input'
 import { SectionFieldWrapper } from '@/app/components/admin/sections/SectionFieldWrapper'
 import {
   Dialog,
@@ -35,7 +35,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/app/components/shadcn/dialog'
 
 // Types
 type BrideSectionContentFormData = z.infer<typeof brideSectionContentSchema>

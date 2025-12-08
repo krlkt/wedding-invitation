@@ -10,11 +10,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 
-import { Accordion, AccordionContent, AccordionItem } from '@/components/ui/accordion'
+import { Accordion, AccordionContent, AccordionItem } from '@/app/components/shadcn/accordion'
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 import { ChevronDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
+import { Button } from '@/app/components/shadcn/button'
+import { Switch } from '@/app/components/shadcn/switch'
 
 import LivePreview from './LivePreview'
 import { StartingSectionForm } from './admin/sections/StartingSectionForm'
