@@ -6,9 +6,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
 import { useDrop } from 'react-dnd'
 
-import { Locations } from '../components/LocationComponent'
-import { Guest } from '../models/guest'
-import { Table } from '../models/table'
+import { Locations } from '@/app/components/LocationComponent'
+import { Guest } from '@/app/models/guest'
+import { Table } from '@/app/models/table'
 
 import { moveGuestToTable } from './actions'
 import { VirtualizedGuestList } from './VirtualizedGuestList'

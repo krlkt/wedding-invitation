@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack'
 import { useForm } from 'react-hook-form'
 
 import { Wish } from '@/app/models/wish'
-import { useGuestId } from '@/app/utils/useGuestId'
+import { useGuestId } from '@/app/hooks/useGuestId'
 
 import SubmitButton from '../SubmitButton'
 

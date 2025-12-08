@@ -9,7 +9,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 
 import InstagramIcon from '@/app/icons/InstagramIcon'
 import { useScrollContainer } from '@/app/utils/ScrollContainerContext'
-import { useWeddingData } from '@/app/utils/useWeddingData'
+import { useWeddingData } from '@/app/hooks/useWeddingData'
 import { parsePhotos } from '@/app/lib/section-photos'
 
 import Groom1 from '../../../public/images/groom/groom1.jpg'

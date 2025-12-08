@@ -6,7 +6,7 @@ import { SnackbarProvider as NotistackProvider } from 'notistack'
 import { SnackbarProvider } from '../context/SnackbarContext'
 import { Toaster } from '@/app/components/shadcn/sonner'
 
-import { useViewportHeight } from '../utils/useViewportHeight'
+import { useViewportHeight } from '../hooks/useViewportHeight'
 
 const Providers = ({ children }: { children: ReactNode }) => {
   useViewportHeight()

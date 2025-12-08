@@ -3,7 +3,7 @@ import Image from 'next/image'
 import './hero.css'
 import { motion } from 'framer-motion'
 
-import { useWeddingData } from '@/app/utils/useWeddingData'
+import { useWeddingData } from '@/app/hooks/useWeddingData'
 
 import { useEffect, useState } from 'react'
 

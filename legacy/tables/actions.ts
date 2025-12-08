@@ -2,10 +2,10 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { query } from '../db/client'
-import { Guest } from '../models/guest'
-import { RSVP } from '../models/rsvp'
-import { Table } from '../models/table'
+import { query } from '@/app/db/client'
+import { Guest } from '@/app/models/guest'
+import { RSVP } from '@/app/models/rsvp'
+import { Table } from '@/app/models/table'
 
 export const synchronizeGuests = async (location: string) => {
   // Fetch all RSVPs for the given location that are not marked as 'no'

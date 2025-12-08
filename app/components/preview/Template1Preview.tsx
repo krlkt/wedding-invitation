@@ -12,8 +12,8 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 
 import { ScrollContainerProvider } from '@/app/utils/ScrollContainerContext'
-import { LocationProvider } from '@/app/utils/useLocation'
-import { WeddingDataProvider } from '@/app/utils/useWeddingData'
+import { LocationProvider } from '@/app/hooks/useLocation'
+import { WeddingDataProvider } from '@/app/hooks/useWeddingData'
 
 import BorderedDiv from '../BorderedDiv'
 import DressCode from '../dresscode/DressCode'

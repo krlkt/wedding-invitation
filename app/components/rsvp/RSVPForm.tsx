@@ -11,11 +11,11 @@ import TextField from '@mui/material/TextField'
 import { useSnackbar } from 'notistack'
 import { Controller, useForm } from 'react-hook-form'
 
-import { addParticipant } from '@/app/dashboard/action'
+import { addParticipant } from '@/legacy/dashboard/action'
 import CheckIcon from '@/app/icons/CheckIcon'
 import CrossIcon from '@/app/icons/CrossIcon'
 import { RSVPForm } from '@/app/models/rsvp'
-import { useLocation } from '@/app/utils/useLocation'
+import { useLocation } from '@/app/hooks/useLocation'
 
 import Button from '../Button'
 import FadeIn from '../FadeIn'

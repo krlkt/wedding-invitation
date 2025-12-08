@@ -7,10 +7,10 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { Button, TextField, IconButton } from '@mui/material'
 
-import { Locations } from '../components/LocationComponent'
-import Modal from '../components/Modal'
-import { Table } from '../models/table'
-import { naturalSort } from '../utils/sort'
+import { Locations } from '@/app/components/LocationComponent'
+import Modal from '@/app/components/Modal'
+import { Table } from '@/app/models/table'
+import { naturalSort } from '@/app/utils/sort'
 
 import { createTable, updateTableName, updateTableMaxGuests, deleteTable } from './actions'
 
