@@ -25,11 +25,16 @@ import { StartingSectionForm } from './sections/StartingSectionForm'
 import { GroomSectionForm } from './sections/GroomSectionForm'
 import { BrideSectionForm } from './sections/BrideSectionForm'
 import { FAQForm } from './sections/FAQForm'
+import type {
+  WeddingConfigWithFeatures,
+  UseContentHandlersReturn,
+  UsePhotoUploadHandlersReturn,
+} from '@/lib/admin/types'
 
 interface FeaturesFormProps {
-  config: any
-  contentHandlers: any
-  photoHandlers: any
+  config: WeddingConfigWithFeatures
+  contentHandlers: UseContentHandlersReturn
+  photoHandlers: UsePhotoUploadHandlersReturn
   onRefreshPreview: () => void
   onLocalChange: (features: Record<string, boolean>) => void
   saving: boolean
@@ -141,14 +146,19 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
       // Save changed FAQ content
       if (changedFields.faqs.size > 0 && draftFAQs) {
         const savedIds = new Set(
-          (contentHandlers.faqSection.content ?? []).map((faq: FAQItem) => faq.id)
+          (contentHandlers.faqSection.content ?? [])
+            .map((faq: FAQItem) => faq.id)
+            .filter((id): id is string => id !== undefined)
         )
         const draftIds = new Set(
           draftFAQs
-            .filter((faq) => faq.id && faq.weddingConfigId !== 'TEMP')
-            .map((faq) => faq.id as string)
+            .filter(
+              (faq): faq is typeof faq & { id: string } =>
+                !!faq.id && faq.weddingConfigId !== 'TEMP'
+            )
+            .map((faq) => faq.id)
         )
-        const deletedIds = Array.from(savedIds).filter((id) => !draftIds.has(id as string))
+        const deletedIds = Array.from(savedIds).filter((id) => !draftIds.has(id))
 
         await contentHandlers.faqSection.update({
           updated: draftFAQs,

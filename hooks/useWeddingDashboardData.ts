@@ -10,9 +10,23 @@ import type { StartingSectionContent } from '@/db/schema/starting-section'
 import type { GroomSectionContent } from '@/db/schema/groom-section'
 import type { BrideSectionContent } from '@/db/schema/bride-section'
 import type { FAQItem } from '@/db/schema/content'
+import type { WeddingConfigWithFeatures, RefetchActions } from '@/lib/admin/types'
 
-export function useWeddingDashboardData() {
-  const [config, setConfig] = useState<any>(null)
+// Return type for this hook
+export interface UseWeddingDashboardDataReturn {
+  config: WeddingConfigWithFeatures | null
+  startingSectionContent: StartingSectionContent | null
+  groomSectionContent: GroomSectionContent | null
+  brideSectionContent: BrideSectionContent | null
+  faqSectionContent: FAQItem[] | null
+  loading: boolean
+  refreshTrigger: number
+  refetch: RefetchActions
+  triggerRefresh: () => void
+}
+
+export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
+  const [config, setConfig] = useState<WeddingConfigWithFeatures | null>(null)
   const [startingSectionContent, setStartingSectionContent] =
     useState<StartingSectionContent | null>(null)
   const [groomSectionContent, setGroomSectionContent] = useState<GroomSectionContent | null>(null)

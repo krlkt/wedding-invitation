@@ -8,7 +8,8 @@
       "Bash(npm test:*)",
       "Bash(wc:*)",
       "Bash(npx eslint:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm run lint)"
     ],
     "deny": [],
     "ask": []

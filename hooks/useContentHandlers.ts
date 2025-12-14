@@ -10,8 +10,52 @@ import type { StartingSectionContent } from '@/db/schema/starting-section'
 import type { GroomSectionContent } from '@/db/schema/groom-section'
 import type { BrideSectionContent } from '@/db/schema/bride-section'
 import type { FAQItem } from '@/db/schema/content'
-import { parsePhotos } from '@/lib/section-photos'
+import type { GroomBrideSectionPhoto } from '@/db/schema/section-photo-types'
+import { parsePhotos, stringifyPhotos } from '@/lib/section-photos'
 import { useSnackbar } from '@/context/SnackbarContext'
+import type { RefetchActions } from '@/lib/admin/types'
+
+// Input types for handlers (forms send data in different format than DB schema)
+type StartingSectionInput = Partial<Omit<StartingSectionContent, 'id' | 'createdAt' | 'updatedAt'>> & {
+  file?: File
+}
+
+type GroomSectionInput = Partial<Omit<GroomSectionContent, 'id' | 'createdAt' | 'updatedAt' | 'photos'>> & {
+  photos?: GroomBrideSectionPhoto[] | string | null
+}
+
+type BrideSectionInput = Partial<Omit<BrideSectionContent, 'id' | 'createdAt' | 'updatedAt' | 'photos'>> & {
+  photos?: GroomBrideSectionPhoto[] | string | null
+}
+
+// Section handler structure - generic interface for all section handlers
+interface SectionHandler<TContent, TInput = Partial<TContent>> {
+  content: TContent | null
+  update: (updates: TInput) => Promise<void>
+  refetch: () => Promise<void>
+}
+
+// FAQ section handler has a different update signature
+interface FAQSectionHandler {
+  content: FAQItem[] | null
+  update: (updates: { updated: Partial<FAQItem>[]; deleted: string[] }) => Promise<void>
+  refetch: () => Promise<void>
+}
+
+// Features handler structure
+interface FeaturesHandler {
+  toggle: (featureName: string, isEnabled: boolean) => Promise<void>
+  batchUpdate: (features: Record<string, boolean>) => Promise<void>
+}
+
+// Return type for this hook
+export interface UseContentHandlersReturn {
+  startingSection: SectionHandler<StartingSectionContent, StartingSectionInput>
+  groomSection: SectionHandler<GroomSectionContent, GroomSectionInput>
+  brideSection: SectionHandler<BrideSectionContent, BrideSectionInput>
+  faqSection: FAQSectionHandler
+  features: FeaturesHandler
+}
 
 interface UseContentHandlersOptions {
   startingSectionContent: StartingSectionContent | null
@@ -19,14 +63,7 @@ interface UseContentHandlersOptions {
   brideSectionContent: BrideSectionContent | null
   faqSectionContent: FAQItem[] | null
   setSaving: (saving: boolean) => void
-  refetch: {
-    all: () => Promise<void>
-    config: () => Promise<void>
-    startingSection: () => Promise<void>
-    groomSection: () => Promise<void>
-    brideSection: () => Promise<void>
-    faqs: () => Promise<void>
-  }
+  refetch: RefetchActions
   triggerRefresh: () => void
 }
 
@@ -38,14 +75,14 @@ export function useContentHandlers({
   setSaving,
   refetch,
   triggerRefresh,
-}: UseContentHandlersOptions) {
+}: UseContentHandlersOptions): UseContentHandlersReturn {
   const { showError } = useSnackbar()
 
   // Starting section handlers
   const startingSection = useMemo(
     () => ({
       content: startingSectionContent,
-      update: async (updates: any) => {
+      update: async (updates: StartingSectionInput) => {
         try {
           setSaving(true)
 
@@ -65,7 +102,7 @@ export function useContentHandlers({
           }
 
           // Update text content
-          const { _file, ...contentUpdates } = updates
+          const { file: _file, ...contentUpdates } = updates
           const response = await fetch('/api/wedding/starting-section', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -92,14 +129,18 @@ export function useContentHandlers({
   const groomSection = useMemo(
     () => ({
       content: groomSectionContent,
-      update: async (updates: any) => {
+      update: async (updates: GroomSectionInput) => {
         try {
           setSaving(true)
 
-          // Parse photos if it's a string (from draft/saved state)
-          const dataToSend = { ...updates }
-          if (dataToSend.photos && typeof dataToSend.photos === 'string') {
-            dataToSend.photos = parsePhotos(dataToSend.photos)
+          // Convert photos array to JSON string if present, or keep as-is if already string
+          const dataToSend: any = { ...updates }
+          if (updates.photos) {
+            if (Array.isArray(updates.photos)) {
+              dataToSend.photos = stringifyPhotos(updates.photos)
+            } else if (typeof updates.photos === 'string') {
+              dataToSend.photos = parsePhotos(updates.photos)
+            }
           }
 
           const response = await fetch('/api/wedding/groom-section', {
@@ -135,14 +176,18 @@ export function useContentHandlers({
   const brideSection = useMemo(
     () => ({
       content: brideSectionContent,
-      update: async (updates: any) => {
+      update: async (updates: BrideSectionInput) => {
         try {
           setSaving(true)
 
-          // Parse photos if it's a string (from draft/saved state)
-          const dataToSend = { ...updates }
-          if (dataToSend.photos && typeof dataToSend.photos === 'string') {
-            dataToSend.photos = parsePhotos(dataToSend.photos)
+          // Convert photos array to JSON string if present, or keep as-is if already string
+          const dataToSend: any = { ...updates }
+          if (updates.photos) {
+            if (Array.isArray(updates.photos)) {
+              dataToSend.photos = stringifyPhotos(updates.photos)
+            } else if (typeof updates.photos === 'string') {
+              dataToSend.photos = parsePhotos(updates.photos)
+            }
           }
 
           const response = await fetch('/api/wedding/bride-section', {
@@ -178,7 +223,7 @@ export function useContentHandlers({
   const faqSection = useMemo(
     () => ({
       content: faqSectionContent,
-      update: async (updates: any) => {
+      update: async (updates: { updated: Partial<FAQItem>[]; deleted: string[] }) => {
         try {
           setSaving(true)
 

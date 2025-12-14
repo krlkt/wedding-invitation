@@ -12,15 +12,38 @@ import type { BrideSectionContent } from '@/db/schema/bride-section'
 import { parsePhotos, stringifyPhotos, upsertPhoto } from '@/lib/section-photos'
 import { GroomBrideSectionPhoto } from '@/db/schema/section-photo-types'
 
+// Photo upload data types
+interface BackgroundUploadData {
+  backgroundFilename: string
+  backgroundOriginalName: string
+  backgroundType: 'image' | 'video'
+  backgroundMimeType: string
+  backgroundFileSize: number
+}
+
+interface PhotoUploadData {
+  filename: string
+  fileSize: number
+  mimeType: string
+}
+
+// Return type for this hook
+export interface UsePhotoUploadHandlersReturn {
+  handleBackgroundUpload: (backgroundData: BackgroundUploadData) => void
+  handleMonogramUpload: () => Promise<void>
+  handleGroomPhotoUpload: (slot: number, photoData: PhotoUploadData) => void
+  handleBridePhotoUpload: (slot: number, photoData: PhotoUploadData) => void
+}
+
 interface UsePhotoUploadHandlersOptions {
   draftStartingSection: Partial<StartingSectionContent> | undefined
-  setDraftStartingSection: (data: any) => void
+  setDraftStartingSection: (data: Partial<StartingSectionContent>) => void
   draftGroomSection: Partial<GroomSectionContent> | undefined
   groomSectionContent: GroomSectionContent | null
-  setDraftGroomSection: (data: any) => void
+  setDraftGroomSection: (data: Partial<GroomSectionContent>) => void
   draftBrideSection: Partial<BrideSectionContent> | undefined
   brideSectionContent: BrideSectionContent | null
-  setDraftBrideSection: (data: any) => void
+  setDraftBrideSection: (data: Partial<BrideSectionContent>) => void
   onRefresh: () => void
   refetchConfig: () => Promise<void>
 }
@@ -36,15 +59,9 @@ export function usePhotoUploadHandlers({
   setDraftBrideSection,
   onRefresh,
   refetchConfig,
-}: UsePhotoUploadHandlersOptions) {
+}: UsePhotoUploadHandlersOptions): UsePhotoUploadHandlersReturn {
   const handleBackgroundUpload = useCallback(
-    (backgroundData: {
-      backgroundFilename: string
-      backgroundOriginalName: string
-      backgroundType: 'image' | 'video'
-      backgroundMimeType: string
-      backgroundFileSize: number
-    }) => {
+    (backgroundData: BackgroundUploadData) => {
       // Update draft state with new background
       setDraftStartingSection({
         ...(draftStartingSection ?? {}),
@@ -64,7 +81,7 @@ export function usePhotoUploadHandlers({
   }, [refetchConfig, onRefresh])
 
   const handleGroomPhotoUpload = useCallback(
-    (photoSlot: number, photoData: { filename: string; fileSize: number; mimeType: string }) => {
+    (photoSlot: number, photoData: PhotoUploadData) => {
       // Get existing photos from draft or saved content
       const existingPhotosJson = draftGroomSection?.photos ?? groomSectionContent?.photos ?? '[]'
       const existingPhotos = parsePhotos(existingPhotosJson)
@@ -94,7 +111,7 @@ export function usePhotoUploadHandlers({
   )
 
   const handleBridePhotoUpload = useCallback(
-    (photoSlot: number, photoData: { filename: string; fileSize: number; mimeType: string }) => {
+    (photoSlot: number, photoData: PhotoUploadData) => {
       // Get existing photos from draft or saved content
       const existingPhotosJson = draftBrideSection?.photos ?? brideSectionContent?.photos ?? '[]'
       const existingPhotos = parsePhotos(existingPhotosJson)
