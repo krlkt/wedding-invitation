@@ -1,49 +1,49 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function RegisterForm() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
     groomName: '',
     brideName: '',
-  })
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
+    e.preventDefault();
+    setError('');
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match')
-      return
+      setError('Passwords do not match');
+      return;
     }
 
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters long')
-      return
+      setError('Password must be at least 8 characters long');
+      return;
     }
 
     if (!formData.groomName || !formData.brideName) {
-      setError('Please enter both groom and bride names')
-      return
+      setError('Please enter both groom and bride names');
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
       const res = await fetch('/api/auth/register', {
@@ -57,23 +57,23 @@ export default function RegisterForm() {
           groomName: formData.groomName,
           brideName: formData.brideName,
         }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (data.success) {
         // Registration successful, redirect to login
-        router.push('/login?registered=true')
+        router.push('/login?registered=true');
       } else {
-        setError(data.error || 'Registration failed')
+        setError(data.error || 'Registration failed');
       }
     } catch (err) {
-      console.error('Registration error:', err)
-      setError('An error occurred. Please try again.')
+      console.error('Registration error:', err);
+      setError('An error occurred. Please try again.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 px-4">
@@ -243,5 +243,5 @@ export default function RegisterForm() {
         </div>
       </div>
     </div>
-  )
+  );
 }

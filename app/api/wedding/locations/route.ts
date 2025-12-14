@@ -2,38 +2,38 @@
  * T047: Location API
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
-import { getLocations, createLocation } from '@/app/lib/content-service'
-import { requireAuth } from '@/app/lib/session'
+import { getLocations, createLocation } from '@/lib/content-service';
+import { requireAuth } from '@/lib/session';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth()
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
-      return session
+      return session;
     }
 
-    const locations = await getLocations(session.weddingConfigId)
+    const locations = await getLocations(session.weddingConfigId);
 
     return NextResponse.json({
       success: true,
       data: locations,
-    })
+    });
   } catch (error: any) {
-    console.error('Get locations error:', error)
-    return NextResponse.json({ success: false, error: 'Failed to get locations' }, { status: 500 })
+    console.error('Get locations error:', error);
+    return NextResponse.json({ success: false, error: 'Failed to get locations' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await requireAuth()
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
-      return session
+      return session;
     }
 
-    const body = await request.json()
+    const body = await request.json();
     const {
       locationIdentifier,
       name,
@@ -42,13 +42,13 @@ export async function POST(request: NextRequest) {
       ceremonyTime,
       receptionTime,
       order,
-    } = body
+    } = body;
 
     if (!locationIdentifier || !name || !address || order === undefined) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
         { status: 400 }
-      )
+      );
     }
 
     const location = await createLocation({
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       ceremonyTime,
       receptionTime,
       order,
-    })
+    });
 
     return NextResponse.json(
       {
@@ -68,12 +68,12 @@ export async function POST(request: NextRequest) {
         data: location,
       },
       { status: 201 }
-    )
+    );
   } catch (error: any) {
-    console.error('Create location error:', error)
+    console.error('Create location error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to create location' },
       { status: 500 }
-    )
+    );
   }
 }

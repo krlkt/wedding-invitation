@@ -25,26 +25,26 @@ This feature implements environment configuration management but does **not** re
 **Interface**:
 
 ```typescript
-export type AppEnvironment = 'development' | 'test' | 'production'
+export type AppEnvironment = 'development' | 'test' | 'production';
 
 export interface EnvironmentConfig {
   /** Current environment name */
-  environment: AppEnvironment
+  environment: AppEnvironment;
 
   /** Turso database connection URL */
-  databaseUrl: string
+  databaseUrl: string;
 
   /** Turso database authentication token */
-  databaseAuthToken: string
+  databaseAuthToken: string;
 
   /** Vercel's automatic environment variable (if deployed) */
-  vercelEnv?: 'production' | 'preview' | 'development'
+  vercelEnv?: 'production' | 'preview' | 'development';
 
   /** Whether this is the production environment */
-  isProduction: boolean
+  isProduction: boolean;
 
   /** Whether the database can be safely destroyed/recreated */
-  canDestroyDatabase: boolean
+  canDestroyDatabase: boolean;
 }
 ```
 
@@ -69,16 +69,16 @@ export interface EnvironmentConfig {
 **Usage Example**:
 
 ```typescript
-import { getConfig } from '@/app/lib/env-config'
+import { getConfig } from '@/app/lib/env-config';
 
-const config = getConfig()
+const config = getConfig();
 
 if (config.canDestroyDatabase) {
   // Safe to reset database in dev/test
-  await resetDatabase()
+  await resetDatabase();
 }
 
-console.log(`Running in ${config.environment} environment`)
+console.log(`Running in ${config.environment} environment`);
 ```
 
 ---
@@ -345,23 +345,23 @@ This ensures idempotency: Running migrations multiple times is safe.
 function validateConfig(config: EnvironmentConfig): void {
   // Database URL validation
   if (!config.databaseUrl.startsWith('libsql://') && !config.databaseUrl.startsWith('http://')) {
-    throw new Error('Invalid database URL format')
+    throw new Error('Invalid database URL format');
   }
 
   // Token validation (non-empty for remote DBs)
   if (config.databaseUrl.startsWith('libsql://') && !config.databaseAuthToken) {
-    throw new Error('Database auth token required for remote databases')
+    throw new Error('Database auth token required for remote databases');
   }
 
   // Production safety check
   if (config.isProduction && config.canDestroyDatabase) {
-    throw new Error('Production database cannot be marked as destroyable')
+    throw new Error('Production database cannot be marked as destroyable');
   }
 
   // Environment consistency
-  const envName = config.environment
+  const envName = config.environment;
   if (!['development', 'test', 'production'].includes(envName)) {
-    throw new Error(`Invalid environment: ${envName}`)
+    throw new Error(`Invalid environment: ${envName}`);
   }
 }
 ```

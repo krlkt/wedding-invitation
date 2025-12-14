@@ -87,11 +87,11 @@ Use Vercel's built-in environment variable system with automatic environment det
 
 ```typescript
 // Vercel automatically sets VERCEL_ENV
-const environment = process.env.VERCEL_ENV || 'development'
+const environment = process.env.VERCEL_ENV || 'development';
 
 // Map Vercel envs to our environment names
 const appEnv =
-  environment === 'production' ? 'production' : environment === 'preview' ? 'test' : 'development'
+  environment === 'production' ? 'production' : environment === 'preview' ? 'test' : 'development';
 ```
 
 **Configuration in Vercel Dashboard**:
@@ -164,7 +164,7 @@ git push origin feature-branch
 
 ```typescript
 // drizzle.config.ts
-import { defineConfig } from 'drizzle-kit'
+import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
   schema: './app/db/schema',
@@ -174,7 +174,7 @@ export default defineConfig({
     url: process.env.DATABASE_URL!,
     authToken: process.env.DATABASE_AUTH_TOKEN!,
   },
-})
+});
 ```
 
 ### Rationale
@@ -212,24 +212,24 @@ Use `process.env.VERCEL_ENV` as primary source with `APP_ENV` fallback for local
 
 ```typescript
 // app/lib/env-config.ts
-export type AppEnvironment = 'development' | 'test' | 'production'
+export type AppEnvironment = 'development' | 'test' | 'production';
 
 export function getEnvironment(): AppEnvironment {
   // Explicit override (for testing)
   if (process.env.APP_ENV) {
-    return process.env.APP_ENV as AppEnvironment
+    return process.env.APP_ENV as AppEnvironment;
   }
 
   // Vercel automatic detection
-  if (process.env.VERCEL_ENV === 'production') return 'production'
-  if (process.env.VERCEL_ENV === 'preview') return 'test'
+  if (process.env.VERCEL_ENV === 'production') return 'production';
+  if (process.env.VERCEL_ENV === 'preview') return 'test';
 
   // Default for local development
-  return 'development'
+  return 'development';
 }
 
 export function getConfig() {
-  const env = getEnvironment()
+  const env = getEnvironment();
 
   return {
     environment: env,
@@ -237,7 +237,7 @@ export function getConfig() {
     databaseAuthToken: process.env.DATABASE_AUTH_TOKEN!,
     isProduction: env === 'production',
     canDestroyDatabase: env !== 'production',
-  }
+  };
 }
 ```
 
@@ -283,19 +283,19 @@ Use Turso's server-side connection pooling; application maintains single connect
 
 ```typescript
 // app/db/index.ts
-import { drizzle } from 'drizzle-orm/libsql'
-import { createClient } from '@libsql/client'
-import { getConfig } from '@/app/lib/env-config'
+import { drizzle } from 'drizzle-orm/libsql';
+import { createClient } from '@libsql/client';
+import { getConfig } from '@/app/lib/env-config';
 
-const config = getConfig()
+const config = getConfig();
 
 // Single client per environment
 const client = createClient({
   url: config.databaseUrl,
   authToken: config.databaseAuthToken,
-})
+});
 
-export const db = drizzle(client)
+export const db = drizzle(client);
 ```
 
 **Turso Connection Pooling**:

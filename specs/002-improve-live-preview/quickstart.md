@@ -161,7 +161,7 @@ Preview: oial.vercel.app (shared domain)
 jest.mock('@/app/lib/wedding-service', () => ({
   ...jest.requireActual('@/app/lib/wedding-service'),
   isSubdomainAvailable: jest.fn().mockResolvedValue(false),
-}))
+}));
 
 // Attempt registration
 // Expected: Error after 5 retry attempts

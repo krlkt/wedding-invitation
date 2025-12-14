@@ -21,14 +21,14 @@
 
 ```typescript
 function generateSubdomain(groomName: string, brideName: string): string {
-  const combined = `${groomName.toLowerCase()}-${brideName.toLowerCase()}`
+  const combined = `${groomName.toLowerCase()}-${brideName.toLowerCase()}`;
   const cleaned = combined
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
-    .substring(0, 63) // DNS limit
-  const randomSuffix = Math.random().toString(36).substring(2, 6)
-  return `${cleaned}-${randomSuffix}`
+    .substring(0, 63); // DNS limit
+  const randomSuffix = Math.random().toString(36).substring(2, 6);
+  return `${cleaned}-${randomSuffix}`;
 }
 ```
 

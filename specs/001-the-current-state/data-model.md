@@ -18,11 +18,11 @@ All models defined using **Drizzle ORM schema** as the single source of truth:
 
 ```typescript
 interface UserAccount {
-  id: string // Primary key
-  email: string // Unique, authentication
-  passwordHash: string // Bcrypt hashed
-  createdAt: Date
-  updatedAt: Date
+  id: string; // Primary key
+  email: string; // Unique, authentication
+  passwordHash: string; // Bcrypt hashed
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
@@ -36,8 +36,8 @@ interface UserAccount {
 
 ```typescript
 // app/db/schema/users.ts
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { createId } from '@paralleldrive/cuid2'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { createId } from '@paralleldrive/cuid2';
 
 export const userAccounts = sqliteTable('user_accounts', {
   id: text('id')
@@ -51,34 +51,34 @@ export const userAccounts = sqliteTable('user_accounts', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type UserAccount = typeof userAccounts.$inferSelect
-export type NewUserAccount = typeof userAccounts.$inferInsert
+export type UserAccount = typeof userAccounts.$inferSelect;
+export type NewUserAccount = typeof userAccounts.$inferInsert;
 ```
 
 ### Wedding Configuration
 
 ```typescript
 interface WeddingConfiguration {
-  id: string // Primary key
-  userId: string // Foreign key to UserAccount
-  subdomain: string // Unique subdomain identifier
-  groomName: string
-  brideName: string
-  weddingDate: Date
-  monogramFilename?: string // Uploaded monogram image
-  monogramFileSize?: number
-  monogramMimeType?: string
-  groomFather?: string
-  groomMother?: string
-  brideFather?: string
-  brideMother?: string
-  instagramLink?: string
-  footerText?: string
-  isPublished: boolean // Draft vs Live state
-  createdAt: Date
-  updatedAt: Date
+  id: string; // Primary key
+  userId: string; // Foreign key to UserAccount
+  subdomain: string; // Unique subdomain identifier
+  groomName: string;
+  brideName: string;
+  weddingDate: Date;
+  monogramFilename?: string; // Uploaded monogram image
+  monogramFileSize?: number;
+  monogramMimeType?: string;
+  groomFather?: string;
+  groomMother?: string;
+  brideFather?: string;
+  brideMother?: string;
+  instagramLink?: string;
+  footerText?: string;
+  isPublished: boolean; // Draft vs Live state
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
@@ -98,12 +98,12 @@ interface WeddingConfiguration {
 
 ```typescript
 interface FeatureToggle {
-  id: string
-  weddingConfigId: string // Foreign key
-  featureName: FeatureType // Enum: love_story, rsvp, gallery, etc.
-  isEnabled: boolean
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  weddingConfigId: string; // Foreign key
+  featureName: FeatureType; // Enum: love_story, rsvp, gallery, etc.
+  isEnabled: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 enum FeatureType {
@@ -121,15 +121,15 @@ enum FeatureType {
 
 ```typescript
 interface LoveStorySegment {
-  id: string
-  weddingConfigId: string // Foreign key
-  title: string
-  description: string
-  date: Date
-  iconType: string // Reference to icon component
-  order: number // Display sequence
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  weddingConfigId: string; // Foreign key
+  title: string;
+  description: string;
+  date: Date;
+  iconType: string; // Reference to icon component
+  order: number; // Display sequence
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
@@ -143,17 +143,17 @@ interface LoveStorySegment {
 
 ```typescript
 interface LocationDetails {
-  id: string
-  weddingConfigId: string // Foreign key
-  locationIdentifier: string // URL path segment
-  name: string
-  address: string
-  googleMapsLink?: string
-  ceremonyTime?: string
-  receptionTime?: string
-  order: number // Display sequence
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  weddingConfigId: string; // Foreign key
+  locationIdentifier: string; // URL path segment
+  name: string;
+  address: string;
+  googleMapsLink?: string;
+  ceremonyTime?: string;
+  receptionTime?: string;
+  order: number; // Display sequence
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
@@ -167,16 +167,16 @@ interface LocationDetails {
 
 ```typescript
 interface GalleryItem {
-  id: string
-  weddingConfigId: string // Foreign key
-  filename: string
-  originalName: string
-  fileSize: number // Bytes
-  mimeType: string // image/jpeg, image/png, image/webp
-  order: number // Display sequence
-  alt?: string // Accessibility text
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  weddingConfigId: string; // Foreign key
+  filename: string;
+  originalName: string;
+  fileSize: number; // Bytes
+  mimeType: string; // image/jpeg, image/png, image/webp
+  order: number; // Display sequence
+  alt?: string; // Accessibility text
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
@@ -190,13 +190,13 @@ interface GalleryItem {
 
 ```typescript
 interface FAQItem {
-  id: string
-  weddingConfigId: string // Foreign key
-  question: string
-  answer: string
-  order: number // Display sequence
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  weddingConfigId: string; // Foreign key
+  question: string;
+  answer: string;
+  order: number; // Display sequence
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
@@ -204,15 +204,15 @@ interface FAQItem {
 
 ```typescript
 interface DressCode {
-  id: string
-  weddingConfigId: string // Foreign key (one-to-one)
-  title?: string
-  description?: string
-  photoFilename?: string // Optional dress code image
-  photoFileSize?: number
-  photoMimeType?: string
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  weddingConfigId: string; // Foreign key (one-to-one)
+  title?: string;
+  description?: string;
+  photoFilename?: string; // Optional dress code image
+  photoFileSize?: number;
+  photoMimeType?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
@@ -220,15 +220,15 @@ interface DressCode {
 
 ```typescript
 interface BankDetails {
-  id: string
-  weddingConfigId: string // Foreign key (one-to-one)
-  bankName?: string
-  accountName?: string
-  accountNumber?: string
-  routingNumber?: string
-  instructions?: string // Custom payment instructions
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  weddingConfigId: string; // Foreign key (one-to-one)
+  bankName?: string;
+  accountName?: string;
+  accountNumber?: string;
+  routingNumber?: string;
+  instructions?: string; // Custom payment instructions
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
@@ -240,17 +240,17 @@ interface BankDetails {
 
 ```typescript
 interface Guest {
-  id: string // MIGRATED: UUID primary key (was number)
-  rsvpId: string // MIGRATED: Foreign key to RSVP (was rsvp_id: number)
-  name: string // Existing
-  tableId: string | null // MIGRATED: Foreign key to Table (was table_id: number)
-  rsvpName: string // MIGRATED: camelCase (was rsvp_name)
-  checkedIn: boolean // MIGRATED: camelCase (was checked_in)
-  weddingConfigId: string // NEW: Foreign key for multi-tenancy
-  location: string // NEW: Location identifier for guest
-  whatsapp?: string // NEW: Contact information
-  createdAt: Date // NEW: Timestamp
-  updatedAt: Date // NEW: Timestamp
+  id: string; // MIGRATED: UUID primary key (was number)
+  rsvpId: string; // MIGRATED: Foreign key to RSVP (was rsvp_id: number)
+  name: string; // Existing
+  tableId: string | null; // MIGRATED: Foreign key to Table (was table_id: number)
+  rsvpName: string; // MIGRATED: camelCase (was rsvp_name)
+  checkedIn: boolean; // MIGRATED: camelCase (was checked_in)
+  weddingConfigId: string; // NEW: Foreign key for multi-tenancy
+  location: string; // NEW: Location identifier for guest
+  whatsapp?: string; // NEW: Contact information
+  createdAt: Date; // NEW: Timestamp
+  updatedAt: Date; // NEW: Timestamp
 }
 ```
 
@@ -258,21 +258,21 @@ interface Guest {
 
 ```typescript
 interface RSVP {
-  id: string // MIGRATED: UUID primary key (was number)
-  guestId: string // MIGRATED: Foreign key to Guest (derived from name matching)
-  name: string // Existing: Guest name
-  response: RSVPResponse // MIGRATED: Enum type (was attend: string)
-  attendeeCount: number // MIGRATED: camelCase (was guest_number)
-  maxGuests: number // MIGRATED: camelCase (was max_guests)
-  foodChoice: 'chicken' | 'lamb' | null // MIGRATED: camelCase (was food_choice)
-  notes: string // Existing: Additional notes
-  location: string // Existing: Event location
-  invitationLink: string // MIGRATED: camelCase (was link)
-  group?: string // Existing: Guest group
-  possiblyNotComing: boolean // MIGRATED: camelCase (was possibly_not_coming)
-  weddingConfigId: string // NEW: Foreign key for multi-tenancy
-  createdAt: Date // NEW: Timestamp
-  updatedAt: Date // NEW: Timestamp
+  id: string; // MIGRATED: UUID primary key (was number)
+  guestId: string; // MIGRATED: Foreign key to Guest (derived from name matching)
+  name: string; // Existing: Guest name
+  response: RSVPResponse; // MIGRATED: Enum type (was attend: string)
+  attendeeCount: number; // MIGRATED: camelCase (was guest_number)
+  maxGuests: number; // MIGRATED: camelCase (was max_guests)
+  foodChoice: 'chicken' | 'lamb' | null; // MIGRATED: camelCase (was food_choice)
+  notes: string; // Existing: Additional notes
+  location: string; // Existing: Event location
+  invitationLink: string; // MIGRATED: camelCase (was link)
+  group?: string; // Existing: Guest group
+  possiblyNotComing: boolean; // MIGRATED: camelCase (was possibly_not_coming)
+  weddingConfigId: string; // NEW: Foreign key for multi-tenancy
+  createdAt: Date; // NEW: Timestamp
+  updatedAt: Date; // NEW: Timestamp
 }
 
 enum RSVPResponse {
@@ -286,13 +286,13 @@ enum RSVPResponse {
 
 ```typescript
 interface Wish {
-  id: string // MIGRATED: UUID primary key (was number)
-  guestId: string // MIGRATED: Foreign key to Guest (was created_by_id: number)
-  name: string // Existing: Guest name
-  message: string // MIGRATED: Renamed for clarity (was wish)
-  weddingConfigId: string // NEW: Foreign key for multi-tenancy
-  createdAt: Date // MIGRATED: Proper Date type (was created_at: string)
-  updatedAt: Date // NEW: Timestamp
+  id: string; // MIGRATED: UUID primary key (was number)
+  guestId: string; // MIGRATED: Foreign key to Guest (was created_by_id: number)
+  name: string; // Existing: Guest name
+  message: string; // MIGRATED: Renamed for clarity (was wish)
+  weddingConfigId: string; // NEW: Foreign key for multi-tenancy
+  createdAt: Date; // MIGRATED: Proper Date type (was created_at: string)
+  updatedAt: Date; // NEW: Timestamp
 }
 ```
 
@@ -300,15 +300,15 @@ interface Wish {
 
 ```typescript
 interface Table {
-  id: string // MIGRATED: UUID primary key (was number)
-  name: string // Existing: Table name
-  tableNumber: number // NEW: Numeric identifier for display
-  capacity: number // MIGRATED: Renamed for clarity (was max_guests)
-  location: string // Existing: Event location
-  guestIds: string[] // MIGRATED: Array of Guest UUIDs (was guests: Guest[])
-  weddingConfigId: string // NEW: Foreign key for multi-tenancy
-  createdAt: Date // NEW: Timestamp
-  updatedAt: Date // NEW: Timestamp
+  id: string; // MIGRATED: UUID primary key (was number)
+  name: string; // Existing: Table name
+  tableNumber: number; // NEW: Numeric identifier for display
+  capacity: number; // MIGRATED: Renamed for clarity (was max_guests)
+  location: string; // Existing: Event location
+  guestIds: string[]; // MIGRATED: Array of Guest UUIDs (was guests: Guest[])
+  weddingConfigId: string; // NEW: Foreign key for multi-tenancy
+  createdAt: Date; // NEW: Timestamp
+  updatedAt: Date; // NEW: Timestamp
 }
 ```
 
@@ -316,12 +316,12 @@ interface Table {
 
 ```typescript
 interface Group {
-  id: string // MIGRATED: UUID primary key (was number)
-  name: string // Existing: Group name (e.g., "Mama", "Papa", "Karel", "Sab")
-  description?: string // NEW: Optional description for group purpose
-  weddingConfigId: string // NEW: Foreign key for multi-tenancy
-  createdAt: Date // NEW: Timestamp
-  updatedAt: Date // NEW: Timestamp
+  id: string; // MIGRATED: UUID primary key (was number)
+  name: string; // Existing: Group name (e.g., "Mama", "Papa", "Karel", "Sab")
+  description?: string; // NEW: Optional description for group purpose
+  weddingConfigId: string; // NEW: Foreign key for multi-tenancy
+  createdAt: Date; // NEW: Timestamp
+  updatedAt: Date; // NEW: Timestamp
 }
 ```
 

@@ -201,18 +201,18 @@ tests/
 
 ```typescript
 // Starting Section Content
-startingSectionGroomName: string | null // Editable groom name for display
-startingSectionBrideName: string | null // Editable bride name for display
-startingSectionShowParentInfo: boolean // Toggle for parent info display
-startingSectionGroomFatherName: string | null // X in "Son of X and Y"
-startingSectionGroomMotherName: string | null // Y in "Son of X and Y"
-startingSectionBrideFatherName: string | null // Z in "Daughter of Z and A"
-startingSectionBrideMotherName: string | null // A in "Daughter of Z and A"
-startingSectionShowWeddingDate: boolean // Toggle for wedding date display
-startingSectionBackgroundType: 'image' | 'video' | null // Background media type
-startingSectionBackgroundFilename: string | null // Stored filename
-startingSectionBackgroundFileSize: number | null // File size in bytes
-startingSectionBackgroundMimeType: string | null // MIME type
+startingSectionGroomName: string | null; // Editable groom name for display
+startingSectionBrideName: string | null; // Editable bride name for display
+startingSectionShowParentInfo: boolean; // Toggle for parent info display
+startingSectionGroomFatherName: string | null; // X in "Son of X and Y"
+startingSectionGroomMotherName: string | null; // Y in "Son of X and Y"
+startingSectionBrideFatherName: string | null; // Z in "Daughter of Z and A"
+startingSectionBrideMotherName: string | null; // A in "Daughter of Z and A"
+startingSectionShowWeddingDate: boolean; // Toggle for wedding date display
+startingSectionBackgroundType: 'image' | 'video' | null; // Background media type
+startingSectionBackgroundFilename: string | null; // Stored filename
+startingSectionBackgroundFileSize: number | null; // File size in bytes
+startingSectionBackgroundMimeType: string | null; // MIME type
 ```
 
 **Validation Rules**:

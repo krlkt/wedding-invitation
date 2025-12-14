@@ -41,8 +41,8 @@ order?: number;    // Display order (auto-assigned if not provided)
 
 ```typescript
 {
-  success: false
-  error: 'File too large' | 'Invalid file type' | 'No file provided' | 'Upload failed'
+  success: false;
+  error: 'File too large' | 'Invalid file type' | 'No file provided' | 'Upload failed';
 }
 ```
 
@@ -50,8 +50,8 @@ order?: number;    // Display order (auto-assigned if not provided)
 
 ```typescript
 {
-  success: false
-  error: 'File size exceeds 4MB limit'
+  success: false;
+  error: 'File size exceeds 4MB limit';
 }
 ```
 
@@ -106,7 +106,7 @@ order?: number;    // Display order (auto-assigned if not provided)
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
     // Updated gallery item object
   }
@@ -125,8 +125,8 @@ order?: number;    // Display order (auto-assigned if not provided)
 
 ```typescript
 {
-  success: true
-  message: 'Photo deleted successfully'
+  success: true;
+  message: 'Photo deleted successfully';
 }
 ```
 
@@ -144,20 +144,20 @@ order?: number;    // Display order (auto-assigned if not provided)
 
 ```typescript
 // FormData fields:
-file: File // Image file (JPEG/PNG/WebP, max 4MB)
+file: File; // Image file (JPEG/PNG/WebP, max 4MB)
 ```
 
 **Response (Success - 201)**:
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
-    photoFilename: string
-    photoFileSize: number
-    photoMimeType: string
-    photoUrl: string // URL for accessing the uploaded photo
-    updatedAt: string
+    photoFilename: string;
+    photoFileSize: number;
+    photoMimeType: string;
+    photoUrl: string; // URL for accessing the uploaded photo
+    updatedAt: string;
   }
 }
 ```
@@ -166,8 +166,8 @@ file: File // Image file (JPEG/PNG/WebP, max 4MB)
 
 ```typescript
 {
-  success: false
-  error: 'File too large' | 'Invalid file type' | 'No file provided' | 'Upload failed'
+  success: false;
+  error: 'File too large' | 'Invalid file type' | 'No file provided' | 'Upload failed';
 }
 ```
 
@@ -183,8 +183,8 @@ file: File // Image file (JPEG/PNG/WebP, max 4MB)
 
 ```typescript
 {
-  success: true
-  message: 'Dress code photo deleted'
+  success: true;
+  message: 'Dress code photo deleted';
 }
 ```
 

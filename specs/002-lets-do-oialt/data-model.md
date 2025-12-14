@@ -57,7 +57,7 @@ export type FeatureName =
   | 'prewedding_videos'
   | 'faqs'
   | 'dress_code'
-  | 'instagram_link'
+  | 'instagram_link';
 ```
 
 ### TemplateId
@@ -66,7 +66,7 @@ export type FeatureName =
 **Purpose**: Template identifier for future multi-template support
 
 ```typescript
-export type TemplateId = 'template-1' // Future: | 'template-2' | 'template-3'
+export type TemplateId = 'template-1'; // Future: | 'template-2' | 'template-3'
 ```
 
 ### PreviewWeddingConfig
@@ -76,19 +76,19 @@ export type TemplateId = 'template-1' // Future: | 'template-2' | 'template-3'
 
 ```typescript
 export interface PreviewWeddingConfig {
-  id: string
-  subdomain: string
-  groomName: string
-  brideName: string
-  weddingDate: Date
-  monogramFilename?: string | null
-  groomFather?: string | null
-  groomMother?: string | null
-  brideFather?: string | null
-  brideMother?: string | null
-  instagramLink?: string | null
-  footerText?: string | null
-  isPublished: boolean
+  id: string;
+  subdomain: string;
+  groomName: string;
+  brideName: string;
+  weddingDate: Date;
+  monogramFilename?: string | null;
+  groomFather?: string | null;
+  groomMother?: string | null;
+  brideFather?: string | null;
+  brideMother?: string | null;
+  instagramLink?: string | null;
+  footerText?: string | null;
+  isPublished: boolean;
 }
 ```
 
@@ -99,12 +99,12 @@ export interface PreviewWeddingConfig {
 
 ```typescript
 export interface PreviewContent {
-  loveStory?: LoveStoryItem[]
-  gallery?: GalleryPhoto[]
-  faqs?: FAQ[]
-  dressCode?: DressCode
-  locations?: Location[]
-  bankDetails?: BankDetail[]
+  loveStory?: LoveStoryItem[];
+  gallery?: GalleryPhoto[];
+  faqs?: FAQ[];
+  dressCode?: DressCode;
+  locations?: Location[];
+  bankDetails?: BankDetail[];
 }
 ```
 
@@ -115,12 +115,12 @@ export interface PreviewContent {
 
 ```typescript
 export interface LoveStoryItem {
-  id: string
-  weddingConfigId: string
-  date: string // e.g., "2018-05-15"
-  title: string
-  description: string
-  order: number
+  id: string;
+  weddingConfigId: string;
+  date: string; // e.g., "2018-05-15"
+  title: string;
+  description: string;
+  order: number;
 }
 ```
 
@@ -131,12 +131,12 @@ export interface LoveStoryItem {
 
 ```typescript
 export interface GalleryPhoto {
-  id: string
-  weddingConfigId: string
-  filename: string
-  url: string
-  order: number
-  createdAt: Date
+  id: string;
+  weddingConfigId: string;
+  filename: string;
+  url: string;
+  order: number;
+  createdAt: Date;
 }
 ```
 
@@ -147,11 +147,11 @@ export interface GalleryPhoto {
 
 ```typescript
 export interface FAQ {
-  id: string
-  weddingConfigId: string
-  question: string
-  answer: string
-  order: number
+  id: string;
+  weddingConfigId: string;
+  question: string;
+  answer: string;
+  order: number;
 }
 ```
 
@@ -162,11 +162,11 @@ export interface FAQ {
 
 ```typescript
 export interface DressCode {
-  id: string
-  weddingConfigId: string
-  description: string
-  photoFilename?: string | null
-  photoUrl?: string | null
+  id: string;
+  weddingConfigId: string;
+  description: string;
+  photoFilename?: string | null;
+  photoUrl?: string | null;
 }
 ```
 
@@ -177,13 +177,13 @@ export interface DressCode {
 
 ```typescript
 export interface Location {
-  id: string
-  weddingConfigId: string
-  type: 'ceremony' | 'reception'
-  name: string
-  address: string
-  dateTime: Date
-  mapsUrl?: string | null
+  id: string;
+  weddingConfigId: string;
+  type: 'ceremony' | 'reception';
+  name: string;
+  address: string;
+  dateTime: Date;
+  mapsUrl?: string | null;
 }
 ```
 
@@ -194,12 +194,12 @@ export interface Location {
 
 ```typescript
 export interface BankDetail {
-  id: string
-  weddingConfigId: string
-  bankName: string
-  accountName: string
-  accountNumber: string
-  order: number
+  id: string;
+  weddingConfigId: string;
+  bankName: string;
+  accountName: string;
+  accountNumber: string;
+  order: number;
 }
 ```
 
@@ -210,9 +210,9 @@ export interface BankDetail {
 
 ```typescript
 export interface PreviewConfig {
-  config: PreviewWeddingConfig
-  features: Record<FeatureName, boolean>
-  content: PreviewContent
+  config: PreviewWeddingConfig;
+  features: Record<FeatureName, boolean>;
+  content: PreviewContent;
 }
 ```
 
@@ -223,8 +223,8 @@ export interface PreviewConfig {
 
 ```typescript
 export interface TemplateProps {
-  config: PreviewConfig
-  templateId: TemplateId
+  config: PreviewConfig;
+  templateId: TemplateId;
 }
 ```
 
@@ -235,9 +235,9 @@ export interface TemplateProps {
 
 ```typescript
 export interface TemplateRendererProps {
-  templateId?: TemplateId
-  config: PreviewConfig
-  containerClassName?: string
+  templateId?: TemplateId;
+  config: PreviewConfig;
+  containerClassName?: string;
 }
 ```
 
@@ -248,7 +248,7 @@ export interface TemplateRendererProps {
 
 ```typescript
 export interface Template1PreviewProps {
-  config: PreviewConfig
+  config: PreviewConfig;
 }
 ```
 

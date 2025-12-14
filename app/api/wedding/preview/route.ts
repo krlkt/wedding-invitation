@@ -5,10 +5,10 @@
  * Returns wedding config, feature toggles, and all content in a single request.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
-import type { PreviewData } from '@/app/components/preview/types'
-import type { FeatureName } from '@/app/db/schema/features'
+import type { PreviewData } from '@/components/preview/types';
+import type { FeatureName } from '@/db/schema/features';
 import {
   getLoveStorySegments,
   getLocations,
@@ -19,38 +19,38 @@ import {
   getStartingSectionContent,
   getGroomSectionContent,
   getBrideSectionContent,
-} from '@/app/lib/content-service'
-import { getGalleryPhotos } from '@/app/lib/file-service'
-import { requireAuth } from '@/app/lib/session'
-import { getWeddingConfigById, getFeatureToggles } from '@/app/lib/wedding-service'
+} from '@/lib/content-service';
+import { getGalleryPhotos } from '@/lib/file-service';
+import { requireAuth } from '@/lib/session';
+import { getWeddingConfigById, getFeatureToggles } from '@/lib/wedding-service';
 
 export async function GET(request: NextRequest) {
   try {
     // Require authentication
-    const session = await requireAuth()
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
-      return session
+      return session;
     }
 
     // Get wedding configuration
-    const config = await getWeddingConfigById(session.weddingConfigId)
+    const config = await getWeddingConfigById(session.weddingConfigId);
 
     if (!config) {
       return NextResponse.json(
         { error: 'Not Found', message: 'Wedding configuration not found for this user' },
         { status: 404 }
-      )
+      );
     }
 
     // Get feature toggles
-    const toggles = await getFeatureToggles(config.id)
+    const toggles = await getFeatureToggles(config.id);
     const features = toggles.reduce(
       (acc, t) => {
-        acc[t.featureName] = t.isEnabled
-        return acc
+        acc[t.featureName] = t.isEnabled;
+        return acc;
       },
       {} as Record<FeatureName, boolean>
-    )
+    );
 
     // Fetch content based on enabled features (parallel execution)
     const [
@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
       getLocations(config.id), // Always fetch (needed for When & Where)
       getBankDetails(config.id), // Always fetch (needed for Gift section)
       features.wishes ? getWishes(config.id, 20) : Promise.resolve([]), // Limit to 20 for preview
-    ])
+    ]);
 
     // Fix Drizzle's timestamp multiplication for wishes
     // Database stores milliseconds (13 digits), but Drizzle multiplies by 1000
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
       ...wish,
       createdAt: new Date(Math.floor(wish.createdAt.getTime() / 1000)),
       updatedAt: new Date(Math.floor(wish.updatedAt.getTime() / 1000)),
-    }))
+    }));
 
     // Build response
     const data: PreviewData = {
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
         bankDetails,
         wishes,
       },
-    }
+    };
 
     return NextResponse.json(
       { data },
@@ -110,12 +110,12 @@ export async function GET(request: NextRequest) {
           'Cache-Control': 'private, max-age=30', // 30-second cache
         },
       }
-    )
+    );
   } catch (error: any) {
-    console.error('Preview API error:', error)
+    console.error('Preview API error:', error);
     return NextResponse.json(
       { error: 'Internal Server Error', message: 'Failed to fetch preview data' },
       { status: 500 }
-    )
+    );
   }
 }

@@ -120,15 +120,15 @@
 ```typescript
 // Add error handling for subdomain generation
 try {
-  const weddingConfig = await createWeddingConfiguration(userId, groomName, brideName)
+  const weddingConfig = await createWeddingConfiguration(userId, groomName, brideName);
 } catch (error: any) {
   if (error.message.includes('unique subdomain')) {
     return NextResponse.json(
       { success: false, error: 'Unable to generate unique subdomain. Please try again.' },
       { status: 400 }
-    )
+    );
   }
-  throw error
+  throw error;
 }
 ```
 

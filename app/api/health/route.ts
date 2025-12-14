@@ -4,22 +4,22 @@
  * Returns environment name, database status, and timestamp
  */
 
-import { NextResponse } from 'next/server'
-import { getConfig } from '@/app/lib/env-config'
+import { NextResponse } from 'next/server';
+import { getConfig } from '@/lib/env-config';
 
 export async function GET() {
   try {
     // Get environment configuration
-    const config = getConfig()
+    const config = getConfig();
 
     // Test database connection
-    let databaseStatus: 'connected' | 'error' = 'connected'
+    let databaseStatus: 'connected' | 'error' = 'connected';
     try {
-      const { query } = await import('@/app/db/client')
-      await query('SELECT 1')
+      const { query } = await import('@/db/client');
+      await query('SELECT 1');
     } catch (error) {
-      console.error('Database health check failed:', error)
-      databaseStatus = 'error'
+      console.error('Database health check failed:', error);
+      databaseStatus = 'error';
     }
 
     // Return health information
@@ -33,10 +33,10 @@ export async function GET() {
       {
         status: databaseStatus === 'connected' ? 200 : 500,
       }
-    )
+    );
   } catch (error) {
     // Handle any unexpected errors
-    console.error('Health endpoint error:', error)
+    console.error('Health endpoint error:', error);
 
     return NextResponse.json(
       {
@@ -49,6 +49,6 @@ export async function GET() {
       {
         status: 500,
       }
-    )
+    );
   }
 }

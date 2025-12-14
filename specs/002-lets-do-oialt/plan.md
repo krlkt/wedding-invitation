@@ -218,7 +218,7 @@ tests/
 **FeatureName**
 
 ```typescript
-;'love_story' | 'rsvp' | 'gallery' | 'prewedding_videos' | 'faqs' | 'dress_code' | 'instagram_link'
+'love_story' | 'rsvp' | 'gallery' | 'prewedding_videos' | 'faqs' | 'dress_code' | 'instagram_link';
 ```
 
 ### API Contracts → contracts/
@@ -255,9 +255,9 @@ Response: {
 
 ```typescript
 interface TemplateRendererProps {
-  templateId: 'template-1' | string
-  config: PreviewConfig
-  containerClassName?: string
+  templateId: 'template-1' | string;
+  config: PreviewConfig;
+  containerClassName?: string;
 }
 ```
 
@@ -265,7 +265,7 @@ interface TemplateRendererProps {
 
 ```typescript
 interface Template1PreviewProps {
-  config: PreviewConfig
+  config: PreviewConfig;
   // Inherits all section components from InvitationPage.tsx
 }
 ```

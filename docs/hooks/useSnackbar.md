@@ -5,21 +5,21 @@ Simple hook for showing toast notifications in your components.
 ## Basic Usage
 
 ```tsx
-import { useSnackbar } from '@/app/context/SnackbarContext'
+import { useSnackbar } from '@/app/context/SnackbarContext';
 
 function MyComponent() {
-  const { showSuccess, showWarning, showError } = useSnackbar()
+  const { showSuccess, showWarning, showError } = useSnackbar();
 
   const handleSave = async () => {
     try {
-      await saveData()
-      showSuccess('Data saved successfully!')
+      await saveData();
+      showSuccess('Data saved successfully!');
     } catch (error) {
-      showError('Failed to save data')
+      showError('Failed to save data');
     }
-  }
+  };
 
-  return <button onClick={handleSave}>Save</button>
+  return <button onClick={handleSave}>Save</button>;
 }
 ```
 
@@ -37,13 +37,13 @@ Shows a green success notification.
   - `persist` (boolean): If true, user must click close button
 
 ```tsx
-showSuccess('Changes saved!')
+showSuccess('Changes saved!');
 
 // Show for 5 seconds
-showSuccess('Changes saved!', { duration: 5000 })
+showSuccess('Changes saved!', { duration: 5000 });
 
 // Require user to close
-showSuccess('Important: Please review', { persist: true })
+showSuccess('Important: Please review', { persist: true });
 ```
 
 ### `showWarning(message, options?)`
@@ -58,13 +58,13 @@ Shows a yellow warning notification.
   - `persist` (boolean): If true, user must click close button
 
 ```tsx
-showWarning('Please review your input')
+showWarning('Please review your input');
 
 // Show for 8 seconds
-showWarning('Please review your input', { duration: 8000 })
+showWarning('Please review your input', { duration: 8000 });
 
 // Persistent warning
-showWarning('Action required!', { persist: true })
+showWarning('Action required!', { persist: true });
 ```
 
 ### `showError(message, options?)`
@@ -79,13 +79,13 @@ Shows a red error notification.
   - `persist` (boolean): If true, user must click close button
 
 ```tsx
-showError('Something went wrong')
+showError('Something went wrong');
 
 // Show for 10 seconds
-showError('Something went wrong', { duration: 10000 })
+showError('Something went wrong', { duration: 10000 });
 
 // Critical error that requires acknowledgment
-showError('Critical error occurred', { persist: true })
+showError('Critical error occurred', { persist: true });
 ```
 
 ## Common Patterns
@@ -95,12 +95,12 @@ showError('Critical error occurred', { persist: true })
 ```tsx
 const handleSubmit = async (data) => {
   try {
-    await submitForm(data)
-    showSuccess('Form submitted successfully!')
+    await submitForm(data);
+    showSuccess('Form submitted successfully!');
   } catch (error) {
-    showError('Failed to submit form. Please try again.')
+    showError('Failed to submit form. Please try again.');
   }
-}
+};
 ```
 
 ### API Errors
@@ -108,25 +108,25 @@ const handleSubmit = async (data) => {
 ```tsx
 const fetchData = async () => {
   try {
-    const response = await fetch('/api/data')
+    const response = await fetch('/api/data');
     if (!response.ok) {
-      showError('Failed to load data')
-      return
+      showError('Failed to load data');
+      return;
     }
-    showSuccess('Data loaded!')
+    showSuccess('Data loaded!');
   } catch (error) {
-    showError('Network error occurred')
+    showError('Network error occurred');
   }
-}
+};
 ```
 
 ### User Actions
 
 ```tsx
 const handleDelete = () => {
-  showWarning('Are you sure you want to delete this?')
+  showWarning('Are you sure you want to delete this?');
   // ... deletion logic
-}
+};
 ```
 
 ## Controlling Duration & Persistence
@@ -137,16 +137,16 @@ By default, notifications auto-dismiss after a few seconds. You can control the 
 
 ```tsx
 // Quick notification (2 seconds)
-showSuccess('Copied!', { duration: 2000 })
+showSuccess('Copied!', { duration: 2000 });
 
 // Standard notification - uses default
-showSuccess('File uploaded')
+showSuccess('File uploaded');
 
 // Important message (10 seconds)
-showError('Please read this carefully', { duration: 10000 })
+showError('Please read this carefully', { duration: 10000 });
 
 // Very long notification (30 seconds)
-showWarning('Session will expire soon', { duration: 30000 })
+showWarning('Session will expire soon', { duration: 30000 });
 ```
 
 ### Persistent Notifications
@@ -155,13 +155,13 @@ Force users to manually close important notifications:
 
 ```tsx
 // Critical error - user must acknowledge
-showError('Payment failed. Please contact support.', { persist: true })
+showError('Payment failed. Please contact support.', { persist: true });
 
 // Important action required
-showWarning('You have unsaved changes', { persist: true })
+showWarning('You have unsaved changes', { persist: true });
 
 // Confirmation that needs user acknowledgment
-showSuccess('Account created! Please verify your email.', { persist: true })
+showSuccess('Account created! Please verify your email.', { persist: true });
 ```
 
 ### When to Use Persist
@@ -200,16 +200,16 @@ showSuccess('Account created! Please verify your email.', { persist: true })
 
 ```tsx
 // Default (auto-dismiss)
-showSuccess('Done!')
+showSuccess('Done!');
 
 // Custom duration
-showError('Error occurred', { duration: 5000 })
+showError('Error occurred', { duration: 5000 });
 
 // Persistent (requires close)
-showWarning('Important!', { persist: true })
+showWarning('Important!', { persist: true });
 
 // Note: persist overrides duration
-showError('Critical!', { persist: true, duration: 1000 }) // duration ignored
+showError('Critical!', { persist: true, duration: 1000 }); // duration ignored
 ```
 
 ## Colors

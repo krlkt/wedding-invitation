@@ -4,21 +4,21 @@
 
 describe('Simple Testing Setup', () => {
   test('Jest is working', () => {
-    expect(1 + 1).toBe(2)
-  })
+    expect(1 + 1).toBe(2);
+  });
 
   test('TypeScript is working', () => {
     interface TestInterface {
-      name: string
-      age: number
+      name: string;
+      age: number;
     }
 
     const testObj: TestInterface = {
       name: 'Test User',
       age: 25,
-    }
+    };
 
-    expect(testObj.name).toBe('Test User')
-    expect(testObj.age).toBe(25)
-  })
-})
+    expect(testObj.name).toBe('Test User');
+    expect(testObj.age).toBe(25);
+  });
+});

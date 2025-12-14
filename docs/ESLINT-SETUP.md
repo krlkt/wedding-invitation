@@ -107,12 +107,12 @@ Run all checks: type-check + lint:strict + format check + tests
 ```typescript
 // ❌ Bad - error
 function example(param1: string, param2: string) {
-  return param1
+  return param1;
 }
 
 // ✅ Good - prefix unused with _
 function example(param1: string, _param2: string) {
-  return param1
+  return param1;
 }
 ```
 
@@ -120,17 +120,17 @@ function example(param1: string, _param2: string) {
 
 ```typescript
 // ❌ Bad - error
-const data: any = fetchData()
+const data: any = fetchData();
 
 // ✅ Good - proper typing
 interface UserData {
-  name: string
-  email: string
+  name: string;
+  email: string;
 }
-const data: UserData = fetchData()
+const data: UserData = fetchData();
 
 // ✅ Also good - unknown with type guard
-const data: unknown = fetchData()
+const data: unknown = fetchData();
 if (isUserData(data)) {
   // use data
 }
@@ -141,22 +141,22 @@ if (isUserData(data)) {
 ```typescript
 // ❌ Bad - error
 async function example() {
-  fetchData() // Promise not handled
+  fetchData(); // Promise not handled
 }
 
 // ✅ Good - await it
 async function example() {
-  await fetchData()
+  await fetchData();
 }
 
 // ✅ Also good - handle with .catch()
 async function example() {
-  fetchData().catch(console.error)
+  fetchData().catch(console.error);
 }
 
 // ✅ Or explicitly mark as ignored
 async function example() {
-  void fetchData()
+  void fetchData();
 }
 ```
 
@@ -164,22 +164,22 @@ async function example() {
 
 ```typescript
 // ❌ Bad - error
-import { useState } from 'react'
-import Link from 'next/link'
-import axios from 'axios'
-import { Button } from '@/components/Button'
-import { formatDate } from '../utils/date'
+import { useState } from 'react';
+import Link from 'next/link';
+import axios from 'axios';
+import { Button } from '@/components/Button';
+import { formatDate } from '../utils/date';
 
 // ✅ Good - properly ordered with blank lines
-import { useState } from 'react'
+import { useState } from 'react';
 
-import Link from 'next/link'
+import Link from 'next/link';
 
-import axios from 'axios'
+import axios from 'axios';
 
-import { Button } from '@/components/Button'
+import { Button } from '@/components/Button';
 
-import { formatDate } from '../utils/date'
+import { formatDate } from '../utils/date';
 ```
 
 Use `yarn lint:fix` to auto-fix import order!
@@ -296,7 +296,7 @@ If you have many existing errors:
 
    ```typescript
    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-   const data: any = legacyCode()
+   const data: any = legacyCode();
    ```
 
 4. **Don't commit disabled rules** - fix the code instead!

@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw'
+import { http, HttpResponse } from 'msw';
 
 // Mock data that matches your actual database structure
 const mockUserAccount = {
@@ -7,7 +7,7 @@ const mockUserAccount = {
   passwordHash: 'hashed_password',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-}
+};
 
 const mockWeddingConfig = {
   id: 'wedding_123',
@@ -26,7 +26,7 @@ const mockWeddingConfig = {
   isPublished: false,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-}
+};
 
 const mockRSVP = {
   id: 'rsvp_123',
@@ -43,12 +43,12 @@ const mockRSVP = {
   weddingConfigId: 'wedding_123',
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-}
+};
 
 export const handlers = [
   // Auth API endpoints
   http.post('/api/auth/register', async ({ request }) => {
-    const body = (await request.json()) as any
+    const body = (await request.json()) as any;
     return HttpResponse.json(
       {
         success: true,
@@ -59,11 +59,11 @@ export const handlers = [
         },
       },
       { status: 201 }
-    )
+    );
   }),
 
   http.post('/api/auth/login', async ({ request }) => {
-    const body = (await request.json()) as any
+    const body = (await request.json()) as any;
     if (body.email === 'test@example.com' && body.password === 'password123') {
       return HttpResponse.json({
         success: true,
@@ -72,7 +72,7 @@ export const handlers = [
           weddingConfigId: mockWeddingConfig.id,
           subdomain: mockWeddingConfig.subdomain,
         },
-      })
+      });
     }
     return HttpResponse.json(
       {
@@ -80,14 +80,14 @@ export const handlers = [
         error: 'Invalid email or password',
       },
       { status: 401 }
-    )
+    );
   }),
 
   http.post('/api/auth/logout', () => {
     return HttpResponse.json({
       success: true,
       message: 'Logged out successfully',
-    })
+    });
   }),
 
   http.get('/api/auth/session', () => {
@@ -98,7 +98,7 @@ export const handlers = [
         weddingConfigId: mockWeddingConfig.id,
         subdomain: mockWeddingConfig.subdomain,
       },
-    })
+    });
   }),
 
   // Wedding Configuration API endpoints
@@ -117,11 +117,11 @@ export const handlers = [
           instagram_link: true,
         },
       },
-    })
+    });
   }),
 
   http.put('/api/wedding/config', async ({ request }) => {
-    const body = (await request.json()) as any
+    const body = (await request.json()) as any;
     return HttpResponse.json({
       success: true,
       data: {
@@ -129,18 +129,18 @@ export const handlers = [
         ...body,
         updatedAt: new Date().toISOString(),
       },
-    })
+    });
   }),
 
   http.put('/api/wedding/config/features', async ({ request }) => {
-    const body = (await request.json()) as any
+    const body = (await request.json()) as any;
     return HttpResponse.json({
       success: true,
       data: {
         featureName: body.featureName,
         isEnabled: body.isEnabled,
       },
-    })
+    });
   }),
 
   http.post('/api/wedding/publish', () => {
@@ -151,7 +151,7 @@ export const handlers = [
         publishedAt: new Date().toISOString(),
         weddingUrl: `http://localhost:3000`,
       },
-    })
+    });
   }),
 
   http.post('/api/wedding/unpublish', () => {
@@ -161,16 +161,16 @@ export const handlers = [
         isPublished: false,
         unpublishedAt: new Date().toISOString(),
       },
-    })
+    });
   }),
 
   // RSVP endpoints (existing functionality)
   http.get('/api/rsvp', () => {
-    return HttpResponse.json([mockRSVP])
+    return HttpResponse.json([mockRSVP]);
   }),
 
   http.post('/api/rsvp', async ({ request }) => {
-    const body = (await request.json()) as any
+    const body = (await request.json()) as any;
     return HttpResponse.json(
       {
         ...mockRSVP,
@@ -178,7 +178,7 @@ export const handlers = [
         id: 'rsvp_' + Date.now(),
       },
       { status: 201 }
-    )
+    );
   }),
 
   // File upload endpoints
@@ -199,15 +199,15 @@ export const handlers = [
         },
       },
       { status: 201 }
-    )
+    );
   }),
 
   // Fallback for unhandled requests
   http.all('*', ({ request }) => {
-    console.warn(`Unhandled ${request.method} request to ${request.url}`)
+    console.warn(`Unhandled ${request.method} request to ${request.url}`);
     return HttpResponse.json(
       { error: `Unhandled API endpoint: ${request.method} ${request.url}` },
       { status: 404 }
-    )
+    );
   }),
-]
+];

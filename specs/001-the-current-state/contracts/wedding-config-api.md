@@ -44,8 +44,8 @@
 
 ```typescript
 {
-  success: false
-  error: 'Wedding configuration not found'
+  success: false;
+  error: 'Wedding configuration not found';
 }
 ```
 
@@ -78,7 +78,7 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
     // Updated wedding configuration object
     // Same structure as GET response
@@ -90,8 +90,8 @@
 
 ```typescript
 {
-  success: false
-  error: 'Invalid date format' | 'Instagram link invalid' | 'Validation error'
+  success: false;
+  error: 'Invalid date format' | 'Instagram link invalid' | 'Validation error';
 }
 ```
 
@@ -113,8 +113,8 @@
     'prewedding_videos' |
     'faqs' |
     'dress_code' |
-    'instagram_link'
-  isEnabled: boolean
+    'instagram_link';
+  isEnabled: boolean;
 }
 ```
 
@@ -122,10 +122,10 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
-    featureName: string
-    isEnabled: boolean
+    featureName: string;
+    isEnabled: boolean;
   }
 }
 ```
@@ -144,11 +144,11 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
-    isPublished: true
-    publishedAt: string // ISO timestamp
-    weddingUrl: string // Full subdomain URL
+    isPublished: true;
+    publishedAt: string; // ISO timestamp
+    weddingUrl: string; // Full subdomain URL
   }
 }
 ```
@@ -167,10 +167,10 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
-    isPublished: false
-    unpublishedAt: string // ISO timestamp
+    isPublished: false;
+    unpublishedAt: string; // ISO timestamp
   }
 }
 ```

@@ -338,18 +338,18 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 **Implementation**:
 
 ```typescript
-import { NextResponse } from 'next/server'
-import { getConfig } from '@/app/lib/env-config'
+import { NextResponse } from 'next/server';
+import { getConfig } from '@/app/lib/env-config';
 
 export async function GET() {
-  const config = getConfig()
+  const config = getConfig();
 
   return NextResponse.json({
     status: 'ok',
     environment: config.environment,
     database: config.databaseUrl ? 'connected' : 'error',
     timestamp: new Date().toISOString(),
-  })
+  });
 }
 ```
 

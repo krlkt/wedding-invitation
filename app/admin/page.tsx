@@ -5,29 +5,29 @@
  * Requires user to be logged in via session authentication.
  */
 
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-import { eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm';
 
-import ConfigDashboard from '@/app/components/ConfigDashboard'
-import LogoutButton from '@/app/components/LogoutButton'
-import { weddingConfigurations } from '@/app/db/schema'
-import { db } from '@/app/lib/database'
+import ConfigDashboard from '@/components/admin/ConfigDashboard';
+import LogoutButton from '@/components/LogoutButton';
+import { weddingConfigurations } from '@/db/schema';
+import { db } from '@/lib/database';
 
 async function getSession() {
-  const cookieStore = await cookies()
-  const sessionCookie = cookieStore.get('session')
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('session');
 
   if (!sessionCookie) {
-    return null
+    return null;
   }
 
   try {
-    const sessionData = JSON.parse(sessionCookie.value)
-    return sessionData
+    const sessionData = JSON.parse(sessionCookie.value);
+    return sessionData;
   } catch {
-    return null
+    return null;
   }
 }
 
@@ -36,21 +36,21 @@ async function getWeddingConfig(userId: string) {
     .select()
     .from(weddingConfigurations)
     .where(eq(weddingConfigurations.userId, userId))
-    .limit(1)
+    .limit(1);
 
-  return config
+  return config;
 }
 
 export default async function AdminDashboard() {
   // Check authentication
-  const session = await getSession()
+  const session = await getSession();
 
   if (!session?.userId) {
-    redirect('/login')
+    redirect('/login');
   }
 
   // Get user's wedding configuration
-  const weddingConfig = await getWeddingConfig(session.userId)
+  const weddingConfig = await getWeddingConfig(session.userId);
 
   if (!weddingConfig) {
     return (
@@ -64,7 +64,7 @@ export default async function AdminDashboard() {
           <LogoutButton fullWidth />
         </div>
       </div>
-    )
+    );
   }
 
   // Render the configuration dashboard
@@ -88,5 +88,5 @@ export default async function AdminDashboard() {
         <ConfigDashboard />
       </main>
     </div>
-  )
+  );
 }

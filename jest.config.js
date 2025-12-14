@@ -1,20 +1,22 @@
-const nextJest = require('next/jest')
+const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files
   dir: './',
-})
+});
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     '^@/app/(.*)$': '<rootDir>/app/$1',
-    '^@/components/(.*)$': '<rootDir>/app/components/$1',
-    '^@/models/(.*)$': '<rootDir>/app/models/$1',
-    '^@/lib/(.*)$': '<rootDir>/app/lib/$1',
-    '^@/db/(.*)$': '<rootDir>/app/db/$1',
-    '^@/utils/(.*)$': '<rootDir>/app/utils/$1',
+    '^@/components/(.*)$': '<rootDir>/components/$1',
+    '^@/types/(.*)$': '<rootDir>/types/$1',
+    '^@/lib/(.*)$': '<rootDir>/lib/$1',
+    '^@/db/(.*)$': '<rootDir>/db/$1',
+    '^@/hooks/(.*)$': '<rootDir>/hooks/$1',
+    '^@/context/(.*)$': '<rootDir>/context/$1',
+    '^@/config/(.*)$': '<rootDir>/config/$1',
   },
   testEnvironment: 'jsdom',
   // Transform ESM modules for MSW compatibility
@@ -49,7 +51,7 @@ const customJestConfig = {
       statements: 70,
     },
   },
-}
+};
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig)
+module.exports = createJestConfig(customJestConfig);
