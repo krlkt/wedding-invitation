@@ -4,21 +4,21 @@
  * DELETE /api/wedding/love-story/[id] - Delete segment
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
-import { updateLoveStorySegment, deleteLoveStorySegment } from '@/lib/content-service'
-import { requireAuth } from '@/lib/session'
+import { updateLoveStorySegment, deleteLoveStorySegment } from '@/lib/content-service';
+import { requireAuth } from '@/lib/session';
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await requireAuth()
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
-      return session
+      return session;
     }
 
-    const { id } = await params
-    const body = await request.json()
-    const { title, description, date, iconType, order } = body
+    const { id } = await params;
+    const body = await request.json();
+    const { title, description, date, iconType, order } = body;
 
     const updated = await updateLoveStorySegment(id, {
       title,
@@ -26,18 +26,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       date: date ? new Date(date) : undefined,
       iconType,
       order,
-    })
+    });
 
     return NextResponse.json({
       success: true,
       data: updated,
-    })
+    });
   } catch (error: any) {
-    console.error('Update love story error:', error)
+    console.error('Update love story error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to update love story segment' },
       { status: 500 }
-    )
+    );
   }
 }
 
@@ -46,23 +46,23 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await requireAuth()
+    const session = await requireAuth();
     if (session instanceof NextResponse) {
-      return session
+      return session;
     }
 
-    const { id } = await params
-    await deleteLoveStorySegment(id)
+    const { id } = await params;
+    await deleteLoveStorySegment(id);
 
     return NextResponse.json({
       success: true,
       message: 'Love story segment deleted',
-    })
+    });
   } catch (error: any) {
-    console.error('Delete love story error:', error)
+    console.error('Delete love story error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to delete love story segment' },
       { status: 500 }
-    )
+    );
   }
 }

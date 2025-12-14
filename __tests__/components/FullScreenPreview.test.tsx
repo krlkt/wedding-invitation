@@ -3,8 +3,8 @@
  * @jest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react'
-import FullScreenPreview from '@/components/preview/FullScreenPreview'
+import { render, screen } from '@testing-library/react';
+import FullScreenPreview from '@/components/preview/FullScreenPreview';
 
 describe('FullScreenPreview Component', () => {
   it('should render wedding layout with configuration data', () => {
@@ -21,10 +21,10 @@ describe('FullScreenPreview Component', () => {
       },
       instagramLink: null,
       footerText: null,
-    } as any
+    } as any;
 
-    render(<FullScreenPreview config={mockConfig} />)
+    render(<FullScreenPreview config={mockConfig} />);
 
-    expect(screen.getByText(/John & Mary/)).toBeInTheDocument()
-  })
-})
+    expect(screen.getByText(/John & Mary/)).toBeInTheDocument();
+  });
+});

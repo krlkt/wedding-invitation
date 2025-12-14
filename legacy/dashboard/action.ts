@@ -1,25 +1,25 @@
-'use server'
+'use server';
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath } from 'next/cache';
 
-import { query } from '@/db/client'
-import { RSVP, RSVPForm } from '@/legacy/types/rsvp'
+import { query } from '@/db/client';
+import { RSVP, RSVPForm } from '@/legacy/types/rsvp';
 
-import { Guest } from '@/legacy/types/guest'
+import { Guest } from '@/legacy/types/guest';
 
-const VALID_LOCATIONS = ['jakarta', 'bali', 'malang']
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || `https://oial.vercel.app`
+const VALID_LOCATIONS = ['jakarta', 'bali', 'malang'];
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || `https://oial.vercel.app`;
 
 export const updateLink = async (data: RSVPForm) => {
-  let participantId = data.id
+  let participantId = data.id;
 
   // get last inserted id of new participant
   if (!participantId) {
-    const { rows } = await query<{ id: number }>('SELECT last_insert_rowid() as id')
-    participantId = rows[0]?.id
+    const { rows } = await query<{ id: number }>('SELECT last_insert_rowid() as id');
+    participantId = rows[0]?.id;
   }
 
-  const link = `${BASE_URL}/${data.location}?to=${data.name?.trim().replace(/ /g, '+')}&id=${participantId}`
+  const link = `${BASE_URL}/${data.location}?to=${data.name?.trim().replace(/ /g, '+')}&id=${participantId}`;
 
   await query(
     `
@@ -31,28 +31,28 @@ export const updateLink = async (data: RSVPForm) => {
       link,
       id: participantId,
     }
-  )
-}
+  );
+};
 
 export const addParticipant = async (data: RSVPForm) => {
   // Validation
   if (!data.name || typeof data.name !== 'string' || data.name.trim() === '') {
-    throw new Error(`Invalid name in row: ${JSON.stringify(data)}`)
+    throw new Error(`Invalid name in row: ${JSON.stringify(data)}`);
   }
 
   if (!data.location || typeof data.location !== 'string') {
-    throw new Error(`Missing location in row: ${JSON.stringify(data)} for guest ${data.name}`)
+    throw new Error(`Missing location in row: ${JSON.stringify(data)} for guest ${data.name}`);
   }
 
-  const locations = data.location.split(',').map((loc) => loc.trim().toLowerCase())
-  const invalidLocations = locations.filter((loc) => !VALID_LOCATIONS.includes(loc))
+  const locations = data.location.split(',').map((loc) => loc.trim().toLowerCase());
+  const invalidLocations = locations.filter((loc) => !VALID_LOCATIONS.includes(loc));
 
   if (invalidLocations.length > 0) {
-    throw new Error(`Invalid location ${JSON.stringify(data)}`)
+    throw new Error(`Invalid location ${JSON.stringify(data)}`);
   }
 
   if (typeof data.max_guests !== 'number' || !data.max_guests || data.max_guests === 0) {
-    throw new Error(`Invalid max guests`)
+    throw new Error(`Invalid max guests`);
   }
 
   if (
@@ -60,21 +60,21 @@ export const addParticipant = async (data: RSVPForm) => {
     typeof data.guest_number === 'number' &&
     data.guest_number > data.max_guests
   ) {
-    throw new Error(`Maximal guest number was reached for row ${data}`)
+    throw new Error(`Maximal guest number was reached for row ${data}`);
   }
 
   if (data.location !== 'bali') {
-    data.food_choice = null
+    data.food_choice = null;
   }
 
-  let group = data.group
+  let group = data.group;
   if (data.id && group === undefined) {
     const { rows } = await query<{ group: string | undefined }>(
       'SELECT "group" FROM rsvp WHERE id = ?',
       [data.id]
-    )
+    );
     if (rows.length > 0) {
-      group = rows[0].group
+      group = rows[0].group;
     }
   }
 
@@ -105,83 +105,83 @@ export const addParticipant = async (data: RSVPForm) => {
       group: group ?? null,
       possibly_not_coming: data.possibly_not_coming ?? false,
     }
-  )
+  );
 
-  await updateLink(data)
+  await updateLink(data);
 
   // Synchronize guests
   const { rows: rsvps } = await query<RSVP>('SELECT * FROM rsvp WHERE name = ? AND location = ?', [
     data.name.trim(),
     data.location,
-  ])
-  const rsvp = rsvps[0]
+  ]);
+  const rsvp = rsvps[0];
 
   if (rsvp) {
     if (rsvp.attend?.toLowerCase() === 'no') {
-      await query('DELETE FROM guests WHERE rsvp_id = ?', [rsvp.id])
+      await query('DELETE FROM guests WHERE rsvp_id = ?', [rsvp.id]);
     } else {
       const { rows: existingGuests } = await query<Guest>(
         'SELECT * FROM guests WHERE rsvp_id = ?',
         [rsvp.id]
-      )
+      );
       const targetGuestCount =
-        rsvp.attend?.toLowerCase() === 'yes' ? rsvp.guest_number : rsvp.max_guests
-      const guestsToCreate = targetGuestCount - existingGuests.length
+        rsvp.attend?.toLowerCase() === 'yes' ? rsvp.guest_number : rsvp.max_guests;
+      const guestsToCreate = targetGuestCount - existingGuests.length;
 
       if (guestsToCreate > 0) {
         for (let i = 0; i < guestsToCreate; i++) {
           const guestName =
             existingGuests.length + i === 0
               ? rsvp.name
-              : `${rsvp.name} +${existingGuests.length + i}`
-          await query('INSERT INTO guests (rsvp_id, name) VALUES (?, ?)', [rsvp.id, guestName])
+              : `${rsvp.name} +${existingGuests.length + i}`;
+          await query('INSERT INTO guests (rsvp_id, name) VALUES (?, ?)', [rsvp.id, guestName]);
         }
       } else if (guestsToCreate < 0) {
-        const guestsToDelete = existingGuests.slice(guestsToCreate)
+        const guestsToDelete = existingGuests.slice(guestsToCreate);
         for (const guest of guestsToDelete) {
-          await query('DELETE FROM guests WHERE id = ?', [guest.id])
+          await query('DELETE FROM guests WHERE id = ?', [guest.id]);
         }
       }
     }
   }
 
   // Update UI
-  revalidatePath('/')
-}
+  revalidatePath('/');
+};
 
 export const getParticipants = async (location?: string) => {
-  let queryString = `SELECT * FROM rsvp`
-  const params: (string | number)[] = []
+  let queryString = `SELECT * FROM rsvp`;
+  const params: (string | number)[] = [];
 
   if (location) {
-    queryString += ` WHERE location = ?`
-    params.push(location)
+    queryString += ` WHERE location = ?`;
+    params.push(location);
   }
 
-  queryString += ` ORDER BY id DESC`
+  queryString += ` ORDER BY id DESC`;
 
-  const { rows } = await query<RSVP>(queryString, params)
+  const { rows } = await query<RSVP>(queryString, params);
   // Update UI
-  revalidatePath('/')
-  return rows
-}
+  revalidatePath('/');
+  return rows;
+};
 
 export const deleteParticipant = async (id: string) => {
-  await query(`DELETE FROM guests WHERE rsvp_id = ?`, [id])
-  await query(`DELETE FROM rsvp WHERE id = ?`, [id])
-  revalidatePath('/')
-}
+  await query(`DELETE FROM guests WHERE rsvp_id = ?`, [id]);
+  await query(`DELETE FROM rsvp WHERE id = ?`, [id]);
+  revalidatePath('/');
+};
 
 export const importDataFromExcel = async (rows: any[]) => {
-  const errors: string[] = []
-  let total = rows.length
+  const errors: string[] = [];
+  let total = rows.length;
 
   for (const row of rows) {
     try {
       if (row.group) {
         await query('INSERT INTO groups (name) VALUES ($name) ON CONFLICT(name) DO NOTHING', {
           name: row.group,
-        })
+        });
       }
 
       await addParticipant({
@@ -193,11 +193,11 @@ export const importDataFromExcel = async (rows: any[]) => {
         food_choice: row.food_choice ?? null,
         location: row.location,
         group: row.group ?? null,
-      })
+      });
     } catch (err: any) {
-      total--
-      console.error('Error:', err.message)
-      errors.push(err.message)
+      total--;
+      console.error('Error:', err.message);
+      errors.push(err.message);
     }
   }
 
@@ -206,9 +206,9 @@ export const importDataFromExcel = async (rows: any[]) => {
       `${total} participants of total ${rows.length} were added. \n Some rows were skipped:\n\n${errors.join(
         '\n'
       )}`
-    )
+    );
   }
-}
+};
 
 export const updatePossiblyNotComing = async (id: number, possibly_not_coming: boolean) => {
   await query(
@@ -221,6 +221,6 @@ export const updatePossiblyNotComing = async (id: number, possibly_not_coming: b
       possibly_not_coming,
       id,
     }
-  )
-  revalidatePath('/')
-}
+  );
+  revalidatePath('/');
+};

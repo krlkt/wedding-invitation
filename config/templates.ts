@@ -6,17 +6,17 @@
  */
 
 export interface TemplatePhotoRequirements {
-  min: number
-  max: number
-  recommended: number
+  min: number;
+  max: number;
+  recommended: number;
 }
 
 export interface TemplateConfig {
-  id: string
-  name: string
-  description: string
-  groomPhotos: TemplatePhotoRequirements
-  bridePhotos: TemplatePhotoRequirements
+  id: string;
+  name: string;
+  description: string;
+  groomPhotos: TemplatePhotoRequirements;
+  bridePhotos: TemplatePhotoRequirements;
 }
 
 /**
@@ -37,7 +37,7 @@ const template1: TemplateConfig = {
     max: 6,
     recommended: 6,
   },
-}
+};
 
 /**
  * Template 2: Minimal Single Photo (Placeholder for future)
@@ -57,7 +57,7 @@ const template2: TemplateConfig = {
     max: 1,
     recommended: 1,
   },
-}
+};
 
 /**
  * Template 3: Carousel Gallery (Placeholder for future)
@@ -77,7 +77,7 @@ const template3: TemplateConfig = {
     max: 8,
     recommended: 5,
   },
-}
+};
 
 /**
  * All available templates
@@ -86,23 +86,23 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
   'template-1': template1,
   'template-2': template2,
   'template-3': template3,
-}
+};
 
 /**
  * Get template configuration by ID
  */
 export function getTemplateConfig(templateId: string): TemplateConfig {
-  return TEMPLATES[templateId] ?? TEMPLATES['template-1']
+  return TEMPLATES[templateId] ?? TEMPLATES['template-1'];
 }
 
 /**
  * Get all available template IDs
  */
 export function getAvailableTemplateIds(): string[] {
-  return Object.keys(TEMPLATES)
+  return Object.keys(TEMPLATES);
 }
 
 /**
  * Default template (used when none specified)
  */
-export const DEFAULT_TEMPLATE_ID = 'template-1'
+export const DEFAULT_TEMPLATE_ID = 'template-1';

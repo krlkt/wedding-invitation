@@ -6,9 +6,9 @@
  * Feature 009: Starting Section Content Management
  */
 
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { createId } from '@paralleldrive/cuid2'
-import { weddingConfigurations } from './weddings'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { createId } from '@paralleldrive/cuid2';
+import { weddingConfigurations } from './weddings';
 
 export const startingSectionContent = sqliteTable('starting_section_content', {
   id: text('id')
@@ -47,8 +47,8 @@ export const startingSectionContent = sqliteTable('starting_section_content', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
 // TypeScript types inferred from schema
-export type StartingSectionContent = typeof startingSectionContent.$inferSelect
-export type NewStartingSectionContent = typeof startingSectionContent.$inferInsert
+export type StartingSectionContent = typeof startingSectionContent.$inferSelect;
+export type NewStartingSectionContent = typeof startingSectionContent.$inferInsert;

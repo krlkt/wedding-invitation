@@ -5,7 +5,7 @@
  * Handles CRUD operations for wedding configs, features, and publishing.
  */
 
-import { eq, and, asc } from 'drizzle-orm'
+import { eq, and, asc } from 'drizzle-orm';
 
 import {
   weddingConfigurations,
@@ -25,33 +25,33 @@ import {
   type FAQItem,
   type DressCode,
   type BankDetails,
-} from '@/db/schema'
+} from '@/db/schema';
 
-import { db } from './database'
+import { db } from './database';
 
 /**
  * Generate URL-safe subdomain from names
  */
 function generateSubdomain(groomName: string, brideName: string): string {
-  const combined = `${groomName.toLowerCase()}-${brideName.toLowerCase()}`
+  const combined = `${groomName.toLowerCase()}-${brideName.toLowerCase()}`;
   // Remove special characters, keep only alphanumeric and hyphens
   const cleaned = combined
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
-    .substring(0, 63) // DNS limit
+    .substring(0, 63); // DNS limit
 
   // Add random suffix to ensure uniqueness
-  const randomSuffix = Math.random().toString(36).substring(2, 6)
-  return `${cleaned}-${randomSuffix}`
+  const randomSuffix = Math.random().toString(36).substring(2, 6);
+  return `${cleaned}-${randomSuffix}`;
 }
 
 /**
  * Check if subdomain is already taken
  */
 export async function isSubdomainAvailable(subdomain: string): Promise<boolean> {
-  const existing = await getWeddingConfigBySubdomain(subdomain)
-  return !existing
+  const existing = await getWeddingConfigBySubdomain(subdomain);
+  return !existing;
 }
 
 /**
@@ -63,21 +63,21 @@ export async function createWeddingConfiguration(
   brideName: string
 ): Promise<WeddingConfiguration> {
   // Try to generate unique subdomain with retry logic
-  let subdomain: string
-  let attempts = 0
-  const maxAttempts = 5
+  let subdomain: string;
+  let attempts = 0;
+  const maxAttempts = 5;
 
   while (attempts < maxAttempts) {
-    subdomain = generateSubdomain(groomName, brideName)
-    const available = await isSubdomainAvailable(subdomain)
+    subdomain = generateSubdomain(groomName, brideName);
+    const available = await isSubdomainAvailable(subdomain);
 
     if (available) {
-      break
+      break;
     }
 
-    attempts++
+    attempts++;
     if (attempts >= maxAttempts) {
-      throw new Error('Unable to generate unique subdomain. Please try again.')
+      throw new Error('Unable to generate unique subdomain. Please try again.');
     }
   }
 
@@ -89,13 +89,13 @@ export async function createWeddingConfiguration(
     brideName,
     weddingDate: new Date(), // Default to today, user will update
     isPublished: false,
-  }
+  };
 
-  const [config] = await db.insert(weddingConfigurations).values(newConfig).returning()
+  const [config] = await db.insert(weddingConfigurations).values(newConfig).returning();
 
   // Create default feature toggles (all enabled by default)
   // Import all features from schema for consistency
-  const { FEATURE_NAMES } = await import('@/db/schema/features')
+  const { FEATURE_NAMES } = await import('@/db/schema/features');
 
   await db.insert(featureToggles).values(
     FEATURE_NAMES.map((featureName) => ({
@@ -103,9 +103,9 @@ export async function createWeddingConfiguration(
       featureName,
       isEnabled: true,
     }))
-  )
+  );
 
-  return config
+  return config;
 }
 
 /**
@@ -118,9 +118,9 @@ export async function getWeddingConfigByUserId(
     .select()
     .from(weddingConfigurations)
     .where(eq(weddingConfigurations.userId, userId))
-    .limit(1)
+    .limit(1);
 
-  return config || null
+  return config || null;
 }
 
 /**
@@ -133,9 +133,9 @@ export async function getWeddingConfigBySubdomain(
     .select()
     .from(weddingConfigurations)
     .where(eq(weddingConfigurations.subdomain, subdomain))
-    .limit(1)
+    .limit(1);
 
-  return config || null
+  return config || null;
 }
 
 /**
@@ -146,9 +146,9 @@ export async function getWeddingConfigById(configId: string): Promise<WeddingCon
     .select()
     .from(weddingConfigurations)
     .where(eq(weddingConfigurations.id, configId))
-    .limit(1)
+    .limit(1);
 
-  return config || null
+  return config || null;
 }
 
 /**
@@ -165,16 +165,19 @@ export async function updateWeddingConfiguration(
       updatedAt: new Date(),
     })
     .where(eq(weddingConfigurations.id, configId))
-    .returning()
+    .returning();
 
-  return updated
+  return updated;
 }
 
 /**
  * Get feature toggles for wedding configuration
  */
 export async function getFeatureToggles(weddingConfigId: string): Promise<FeatureToggle[]> {
-  return db.select().from(featureToggles).where(eq(featureToggles.weddingConfigId, weddingConfigId))
+  return db
+    .select()
+    .from(featureToggles)
+    .where(eq(featureToggles.weddingConfigId, weddingConfigId));
 }
 
 /**
@@ -186,7 +189,7 @@ export async function toggleFeature(
   isEnabled: boolean
 ): Promise<FeatureToggle> {
   // Import FeatureName type for validation
-  type FeatureName = (typeof import('@/db/schema/features').FEATURE_NAMES)[number]
+  type FeatureName = (typeof import('@/db/schema/features').FEATURE_NAMES)[number];
 
   // Check if feature toggle exists
   const [existing] = await db
@@ -198,7 +201,7 @@ export async function toggleFeature(
         eq(featureToggles.featureName, featureName as FeatureName)
       )
     )
-    .limit(1)
+    .limit(1);
 
   if (existing) {
     // Update existing toggle
@@ -209,9 +212,9 @@ export async function toggleFeature(
         updatedAt: new Date(),
       })
       .where(eq(featureToggles.id, existing.id))
-      .returning()
+      .returning();
 
-    return updated
+    return updated;
   }
   // Create new toggle
   const [created] = await db
@@ -221,23 +224,23 @@ export async function toggleFeature(
       featureName: featureName as FeatureName,
       isEnabled,
     })
-    .returning()
+    .returning();
 
-  return created
+  return created;
 }
 
 /**
  * Publish wedding configuration
  */
 export async function publishWeddingConfig(configId: string): Promise<WeddingConfiguration> {
-  return updateWeddingConfiguration(configId, { isPublished: true })
+  return updateWeddingConfiguration(configId, { isPublished: true });
 }
 
 /**
  * Unpublish wedding configuration
  */
 export async function unpublishWeddingConfig(configId: string): Promise<WeddingConfiguration> {
-  return updateWeddingConfiguration(configId, { isPublished: false })
+  return updateWeddingConfiguration(configId, { isPublished: false });
 }
 
 /**
@@ -248,7 +251,7 @@ export async function getLoveStorySegments(weddingConfigId: string): Promise<Lov
     .select()
     .from(loveStorySegments)
     .where(eq(loveStorySegments.weddingConfigId, weddingConfigId))
-    .orderBy(asc(loveStorySegments.order))
+    .orderBy(asc(loveStorySegments.order));
 }
 
 /**
@@ -259,7 +262,7 @@ export async function getLocationDetails(weddingConfigId: string): Promise<Locat
     .select()
     .from(locationDetails)
     .where(eq(locationDetails.weddingConfigId, weddingConfigId))
-    .orderBy(asc(locationDetails.order))
+    .orderBy(asc(locationDetails.order));
 }
 
 /**
@@ -270,7 +273,7 @@ export async function getGalleryItems(weddingConfigId: string): Promise<GalleryI
     .select()
     .from(galleryItems)
     .where(eq(galleryItems.weddingConfigId, weddingConfigId))
-    .orderBy(asc(galleryItems.order))
+    .orderBy(asc(galleryItems.order));
 }
 
 /**
@@ -281,7 +284,7 @@ export async function getFAQItems(weddingConfigId: string): Promise<FAQItem[]> {
     .select()
     .from(faqItems)
     .where(eq(faqItems.weddingConfigId, weddingConfigId))
-    .orderBy(asc(faqItems.order))
+    .orderBy(asc(faqItems.order));
 }
 
 /**
@@ -292,9 +295,9 @@ export async function getDressCode(weddingConfigId: string): Promise<DressCode |
     .select()
     .from(dressCodes)
     .where(eq(dressCodes.weddingConfigId, weddingConfigId))
-    .limit(1)
+    .limit(1);
 
-  return dressCode || null
+  return dressCode || null;
 }
 
 /**
@@ -305,7 +308,7 @@ export async function getBankDetails(weddingConfigId: string): Promise<BankDetai
     .select()
     .from(bankDetails)
     .where(eq(bankDetails.weddingConfigId, weddingConfigId))
-    .limit(1)
+    .limit(1);
 
-  return details || null
+  return details || null;
 }

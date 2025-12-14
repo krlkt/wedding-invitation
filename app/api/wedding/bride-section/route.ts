@@ -4,40 +4,40 @@
  * PUT /api/wedding/bride-section - Update bride section content
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/session'
-import { getBrideSectionContent, updateBrideSectionContent } from '@/lib/content-service'
-import { brideSectionContentSchema } from '@/lib/validations/bride-section'
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/session';
+import { getBrideSectionContent, updateBrideSectionContent } from '@/lib/content-service';
+import { brideSectionContentSchema } from '@/lib/validations/bride-section';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await requireAuth()
-    if (session instanceof NextResponse) return session
+    const session = await requireAuth();
+    if (session instanceof NextResponse) return session;
 
-    const content = await getBrideSectionContent(session.weddingConfigId)
+    const content = await getBrideSectionContent(session.weddingConfigId);
 
     return NextResponse.json({
       success: true,
       data: content,
-    })
+    });
   } catch (error) {
-    console.error('Get bride section content error:', error)
+    console.error('Get bride section content error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to get bride section content' },
       { status: 500 }
-    )
+    );
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
-    const session = await requireAuth()
-    if (session instanceof NextResponse) return session
+    const session = await requireAuth();
+    if (session instanceof NextResponse) return session;
 
-    const body = await request.json()
+    const body = await request.json();
 
     // Validate with Zod schema
-    const validation = brideSectionContentSchema.safeParse(body)
+    const validation = brideSectionContentSchema.safeParse(body);
 
     if (!validation.success) {
       return NextResponse.json(
@@ -47,26 +47,26 @@ export async function PUT(request: NextRequest) {
           details: validation.error.issues,
         },
         { status: 400 }
-      )
+      );
     }
 
     // Convert photos array to JSON string if present
     const dataToUpdate: any = {
       ...validation.data,
       ...(validation.data.photos && { photos: JSON.stringify(validation.data.photos) }),
-    }
+    };
 
-    const content = await updateBrideSectionContent(session.weddingConfigId, dataToUpdate)
+    const content = await updateBrideSectionContent(session.weddingConfigId, dataToUpdate);
 
     return NextResponse.json({
       success: true,
       data: content,
-    })
+    });
   } catch (error) {
-    console.error('Update bride section content error:', error)
+    console.error('Update bride section content error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to update bride section content' },
       { status: 500 }
-    )
+    );
   }
 }

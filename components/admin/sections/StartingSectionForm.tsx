@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Starting Section Form Component
@@ -10,23 +10,23 @@
  * - Background media (image/video)
  */
 
-import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
-import { useForm, useWatch } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { startingSectionContentSchema } from '@/lib/validations/starting-section'
-import { validateImageFile, validateMediaFile, formatFileSize } from '@/lib/media-validation'
-import { useDraft } from '@/context/DraftContext'
-import { useMediaUpload } from '@/hooks/useMediaUpload'
-import type { WeddingConfiguration } from '@/db/schema/weddings'
-import type { StartingSectionContent } from '@/db/schema/starting-section'
-import type { z } from 'zod'
-import { Button } from '@/components/shadcn/button'
-import { Input } from '@/components/shadcn/input'
-import { Label } from '@/components/shadcn/label'
-import { Checkbox } from '@/components/shadcn/checkbox'
-import { FileInput } from '@/components/shadcn/file-input'
-import { SectionFieldWrapper } from '@/components/admin/sections/SectionFieldWrapper'
+import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { startingSectionContentSchema } from '@/lib/validations/starting-section';
+import { validateImageFile, validateMediaFile, formatFileSize } from '@/lib/media-validation';
+import { useDraft } from '@/context/DraftContext';
+import { useMediaUpload } from '@/hooks/useMediaUpload';
+import type { WeddingConfiguration } from '@/db/schema/weddings';
+import type { StartingSectionContent } from '@/db/schema/starting-section';
+import type { z } from 'zod';
+import { Button } from '@/components/shadcn/button';
+import { Input } from '@/components/shadcn/input';
+import { Label } from '@/components/shadcn/label';
+import { Checkbox } from '@/components/shadcn/checkbox';
+import { FileInput } from '@/components/shadcn/file-input';
+import { SectionFieldWrapper } from '@/components/admin/sections/SectionFieldWrapper';
 import {
   Dialog,
   DialogContent,
@@ -34,28 +34,28 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/shadcn/dialog'
+} from '@/components/shadcn/dialog';
 
 // Types
-type StartingSectionContentFormData = z.infer<typeof startingSectionContentSchema>
+type StartingSectionContentFormData = z.infer<typeof startingSectionContentSchema>;
 
 interface StartingSectionFormProps {
-  weddingConfig: WeddingConfiguration
-  startingSectionContent: StartingSectionContent | null
-  onUpdate: (data: StartingSectionContentFormData & { file?: File }) => Promise<void>
-  onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void
+  weddingConfig: WeddingConfiguration;
+  startingSectionContent: StartingSectionContent | null;
+  onUpdate: (data: StartingSectionContentFormData & { file?: File }) => Promise<void>;
+  onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void;
   onBackgroundUpload?: (backgroundData: {
-    backgroundFilename: string
-    backgroundOriginalName: string
-    backgroundType: 'image' | 'video'
-    backgroundMimeType: string
-    backgroundFileSize: number
-  }) => void
+    backgroundFilename: string;
+    backgroundOriginalName: string;
+    backgroundType: 'image' | 'video';
+    backgroundMimeType: string;
+    backgroundFileSize: number;
+  }) => void;
   onMonogramUpload?: (monogramData: {
-    monogramFilename: string
-    monogramFileSize: number
-    monogramMimeType: string
-  }) => void
+    monogramFilename: string;
+    monogramFileSize: number;
+    monogramMimeType: string;
+  }) => void;
 }
 
 export function StartingSectionForm({
@@ -68,13 +68,13 @@ export function StartingSectionForm({
 }: StartingSectionFormProps) {
   // Use draft context
   const { draft: draftStartingSectionContent, setDraft: setDraftStartingSection } =
-    useDraft('startingSection')
+    useDraft('startingSection');
 
   // Background media upload
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
-  const [validationError, _setValidationError] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [validationError, _setValidationError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const backgroundUpload = useMediaUpload({
     apiEndpoint: '/api/wedding/starting-section/upload',
@@ -87,20 +87,20 @@ export function StartingSectionForm({
           backgroundType: result.data.mediaType,
           backgroundMimeType: selectedFile.type,
           backgroundFileSize: selectedFile.size,
-        })
+        });
       }
       // Clear selection
-      setSelectedFile(null)
+      setSelectedFile(null);
       if (fileInputRef.current) {
-        fileInputRef.current.value = ''
+        fileInputRef.current.value = '';
       }
     },
-  })
+  });
 
   // Monogram upload
-  const [selectedMonogramFile, setSelectedMonogramFile] = useState<File | null>(null)
-  const [showMonogramConfirmDialog, setShowMonogramConfirmDialog] = useState(false)
-  const monogramFileInputRef = useRef<HTMLInputElement>(null)
+  const [selectedMonogramFile, setSelectedMonogramFile] = useState<File | null>(null);
+  const [showMonogramConfirmDialog, setShowMonogramConfirmDialog] = useState(false);
+  const monogramFileInputRef = useRef<HTMLInputElement>(null);
 
   const monogramUpload = useMediaUpload({
     apiEndpoint: '/api/wedding/config/monogram',
@@ -111,19 +111,19 @@ export function StartingSectionForm({
           monogramFilename: result.data.monogramFilename,
           monogramFileSize: selectedMonogramFile.size,
           monogramMimeType: selectedMonogramFile.type,
-        })
+        });
       }
       // Clear selection
-      setSelectedMonogramFile(null)
+      setSelectedMonogramFile(null);
       if (monogramFileInputRef.current) {
-        monogramFileInputRef.current.value = ''
+        monogramFileInputRef.current.value = '';
       }
     },
-  })
+  });
 
   // Default placeholder text from basic info
-  const groomFullName = weddingConfig.groomName
-  const brideFullName = weddingConfig.brideName
+  const groomFullName = weddingConfig.groomName;
+  const brideFullName = weddingConfig.brideName;
 
   const { register, handleSubmit, watch, setValue, reset, control } =
     useForm<StartingSectionContentFormData>({
@@ -163,14 +163,14 @@ export function StartingSectionForm({
           startingSectionContent?.showWeddingDate ??
           true,
       },
-    })
+    });
 
   // Reset form when saved content changes (after save or discard refetch)
   // Always use SAVED values to prevent race condition with draft clearing
-  const prevStartingSectionContent = useRef(startingSectionContent)
+  const prevStartingSectionContent = useRef(startingSectionContent);
   useEffect(() => {
     if (prevStartingSectionContent.current !== startingSectionContent) {
-      prevStartingSectionContent.current = startingSectionContent
+      prevStartingSectionContent.current = startingSectionContent;
       reset({
         groomDisplayName: startingSectionContent?.groomDisplayName ?? null,
         brideDisplayName: startingSectionContent?.brideDisplayName ?? null,
@@ -180,16 +180,16 @@ export function StartingSectionForm({
         brideFatherName: startingSectionContent?.brideFatherName ?? null,
         brideMotherName: startingSectionContent?.brideMotherName ?? null,
         showWeddingDate: startingSectionContent?.showWeddingDate ?? true,
-      })
+      });
     }
-  }, [startingSectionContent, reset])
+  }, [startingSectionContent, reset]);
 
-  const showParentInfo = watch('showParentInfo')
-  const showWeddingDate = watch('showWeddingDate')
+  const showParentInfo = watch('showParentInfo');
+  const showWeddingDate = watch('showWeddingDate');
 
   // Auto-save form changes to draft with centralized change tracking
-  const formValues = useWatch({ control })
-  const [changedFieldsSet, setChangedFieldsSet] = useState<Set<string>>(new Set())
+  const formValues = useWatch({ control });
+  const [changedFieldsSet, setChangedFieldsSet] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const draft: Partial<StartingSectionContent> = {
@@ -201,10 +201,10 @@ export function StartingSectionForm({
       brideFatherName: formValues.brideFatherName ?? null,
       brideMotherName: formValues.brideMotherName ?? null,
       showWeddingDate: formValues.showWeddingDate ?? true,
-    }
+    };
 
     // Track which fields changed from saved state (centralized)
-    const newChangedFields = new Set<string>()
+    const newChangedFields = new Set<string>();
     const fields = [
       'groomDisplayName',
       'brideDisplayName',
@@ -214,106 +214,106 @@ export function StartingSectionForm({
       'brideFatherName',
       'brideMotherName',
       'showWeddingDate',
-    ] as const
+    ] as const;
 
     fields.forEach((field) => {
-      let defaultValue = null
+      let defaultValue = null;
       if (field === 'showWeddingDate') {
-        defaultValue = true
+        defaultValue = true;
       } else if (field === 'showParentInfo') {
-        defaultValue = false
+        defaultValue = false;
       }
 
-      const savedValue = startingSectionContent?.[field] ?? defaultValue
+      const savedValue = startingSectionContent?.[field] ?? defaultValue;
       if (draft[field] !== savedValue) {
-        newChangedFields.add(field)
+        newChangedFields.add(field);
       }
-    })
+    });
 
     // Update changed fields state
-    setChangedFieldsSet(newChangedFields)
+    setChangedFieldsSet(newChangedFields);
 
     // Update draft only if there are changes
     if (newChangedFields.size > 0) {
       // Merge: preserve media fields from prev, update form fields from draft
-      setDraftStartingSection((prev) => ({ ...(prev ?? {}), ...draft }))
+      setDraftStartingSection((prev) => ({ ...(prev ?? {}), ...draft }));
     } else {
-      setDraftStartingSection(undefined)
+      setDraftStartingSection(undefined);
     }
 
-    onChangeTracking?.(newChangedFields.size > 0, newChangedFields)
-  }, [formValues, startingSectionContent, setDraftStartingSection, onChangeTracking])
+    onChangeTracking?.(newChangedFields.size > 0, newChangedFields);
+  }, [formValues, startingSectionContent, setDraftStartingSection, onChangeTracking]);
 
   // Background file selection - validation handled by hook
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      setSelectedFile(file) // Just set the file, hook will validate on upload
+      setSelectedFile(file); // Just set the file, hook will validate on upload
     }
-  }
+  };
 
   // Upload button - check if replacement confirmation needed
   const handleUploadBackground = async () => {
-    if (!selectedFile) return
+    if (!selectedFile) return;
 
     // Don't upload if there's a validation error
-    if (validationError) return
+    if (validationError) return;
 
     // Show confirmation if replacing existing media
     if (
       draftStartingSectionContent?.backgroundFilename ||
       startingSectionContent?.backgroundFilename
     ) {
-      setShowConfirmDialog(true)
+      setShowConfirmDialog(true);
     } else {
-      await backgroundUpload.uploadMedia(selectedFile)
+      await backgroundUpload.uploadMedia(selectedFile);
     }
-  }
+  };
 
   // Confirm replacement and upload
   const handleConfirmReplacement = async () => {
-    setShowConfirmDialog(false)
+    setShowConfirmDialog(false);
     if (selectedFile && !validationError) {
-      await backgroundUpload.uploadMedia(selectedFile)
+      await backgroundUpload.uploadMedia(selectedFile);
     }
-  }
+  };
 
   // Monogram file selection - validation handled by upload hook
   const handleMonogramFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      setSelectedMonogramFile(file)
+      setSelectedMonogramFile(file);
     }
-  }
+  };
 
   // Monogram upload button - check if replacement confirmation needed
   const handleUploadMonogram = async () => {
-    if (!selectedMonogramFile) return
+    if (!selectedMonogramFile) return;
 
     // Show confirmation if replacing existing monogram
     if (weddingConfig.monogramFilename) {
-      setShowMonogramConfirmDialog(true)
+      setShowMonogramConfirmDialog(true);
     } else {
-      await monogramUpload.uploadMedia(selectedMonogramFile)
+      await monogramUpload.uploadMedia(selectedMonogramFile);
     }
-  }
+  };
 
   // Confirm replacement and upload
   const handleConfirmMonogramReplacement = async () => {
-    setShowMonogramConfirmDialog(false)
+    setShowMonogramConfirmDialog(false);
     if (selectedMonogramFile) {
-      await monogramUpload.uploadMedia(selectedMonogramFile)
+      await monogramUpload.uploadMedia(selectedMonogramFile);
     }
-  }
+  };
 
   // Form submission (media uploads are handled separately)
   const onSubmit = async (data: StartingSectionContentFormData) => {
     try {
-      await onUpdate(data)
+      await onUpdate(data);
     } catch (error) {
-      console.error('failed submitting form', error)
+      console.error('failed submitting form', error);
     }
-  }
+  };
 
   return (
     <>
@@ -627,5 +627,5 @@ export function StartingSectionForm({
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

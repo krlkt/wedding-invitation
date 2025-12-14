@@ -5,11 +5,11 @@
  * Used for form validation and server-side data validation.
  */
 
-import { z } from 'zod'
+import { z } from 'zod';
 
 // File size limits
-export const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10 MB
-export const MAX_VIDEO_SIZE = 50 * 1024 * 1024 // 50 MB
+export const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 MB
+export const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50 MB
 
 // Accepted file types
 export const ACCEPTED_IMAGE_TYPES = [
@@ -18,9 +18,9 @@ export const ACCEPTED_IMAGE_TYPES = [
   'image/png',
   'image/webp',
   'image/gif',
-] as const
+] as const;
 
-export const ACCEPTED_VIDEO_TYPES = ['video/mp4', 'video/webm'] as const
+export const ACCEPTED_VIDEO_TYPES = ['video/mp4', 'video/webm'] as const;
 
 /**
  * Schema for starting section content updates
@@ -52,7 +52,7 @@ export const startingSectionContentSchema = z.object({
   brideMotherName: z.string().nullable().optional(),
 
   showWeddingDate: z.boolean().optional(),
-})
+});
 
 /**
  * Schema for starting section media upload
@@ -65,20 +65,20 @@ export const startingSectionMediaSchema = z
       .any()
       .refine((val): val is File => {
         // Accept File instances or File-like objects (for testing)
-        return val && typeof val === 'object' && 'name' in val && 'size' in val && 'type' in val
+        return val && typeof val === 'object' && 'name' in val && 'size' in val && 'type' in val;
       }, 'File is required')
       .refine((file) => {
         // Check if file type is accepted
-        const allAcceptedTypes = [...ACCEPTED_IMAGE_TYPES, ...ACCEPTED_VIDEO_TYPES]
-        return allAcceptedTypes.includes(file.type)
+        const allAcceptedTypes = [...ACCEPTED_IMAGE_TYPES, ...ACCEPTED_VIDEO_TYPES];
+        return allAcceptedTypes.includes(file.type);
       }, 'File type not supported. Please upload a JPEG, PNG, WebP, GIF image or MP4, WebM video.'),
 
     replaceExisting: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
-    const file = data.file
-    const isImage = ACCEPTED_IMAGE_TYPES.includes(file.type)
-    const isVideo = ACCEPTED_VIDEO_TYPES.includes(file.type)
+    const file = data.file;
+    const isImage = ACCEPTED_IMAGE_TYPES.includes(file.type);
+    const isVideo = ACCEPTED_VIDEO_TYPES.includes(file.type);
 
     // Check image size
     if (isImage && file.size > MAX_IMAGE_SIZE) {
@@ -86,7 +86,7 @@ export const startingSectionMediaSchema = z
         code: z.ZodIssueCode.custom,
         path: ['file'],
         message: `Image size exceeds the maximum limit of 10 MB`,
-      })
+      });
     }
 
     // Check video size
@@ -95,9 +95,9 @@ export const startingSectionMediaSchema = z
         code: z.ZodIssueCode.custom,
         path: ['file'],
         message: `Video size exceeds the maximum limit of 50 MB`,
-      })
+      });
     }
-  })
+  });
 
-export type StartingSectionContentInput = z.infer<typeof startingSectionContentSchema>
-export type StartingSectionMediaInput = z.infer<typeof startingSectionMediaSchema>
+export type StartingSectionContentInput = z.infer<typeof startingSectionContentSchema>;
+export type StartingSectionMediaInput = z.infer<typeof startingSectionMediaSchema>;

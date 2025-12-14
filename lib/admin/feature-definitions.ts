@@ -5,13 +5,13 @@
  * Provides feature labels, descriptions, and configuration.
  */
 
-import { type FeatureName } from '@/db/schema/features'
+import { type FeatureName } from '@/db/schema/features';
 
 export interface FeatureDefinition {
-  name: FeatureName
-  label: string
-  description: string
-  hasContentForm: boolean
+  name: FeatureName;
+  label: string;
+  description: string;
+  hasContentForm: boolean;
 }
 
 export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
@@ -93,14 +93,14 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     description: 'Closing section with thank you message',
     hasContentForm: false,
   },
-] as const
+] as const;
 
 // Helper to get feature by name
 export function getFeatureDefinition(name: FeatureName): FeatureDefinition | undefined {
-  return FEATURE_DEFINITIONS.find((f) => f.name === name)
+  return FEATURE_DEFINITIONS.find((f) => f.name === name);
 }
 
 // Helper to check if feature has content form
 export function hasContentForm(name: FeatureName): boolean {
-  return getFeatureDefinition(name)?.hasContentForm ?? false
+  return getFeatureDefinition(name)?.hasContentForm ?? false;
 }

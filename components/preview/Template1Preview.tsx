@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Template 1 Preview Component
@@ -7,52 +7,52 @@
  * Shows/hides sections based on feature flags and displays empty states for missing content.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
-import { ScrollContainerProvider } from '@/context/ScrollContainerContext'
-import { LocationProvider } from '@/hooks/useLocation'
-import { WeddingDataProvider } from '@/hooks/useWeddingData'
+import { ScrollContainerProvider } from '@/context/ScrollContainerContext';
+import { LocationProvider } from '@/hooks/useLocation';
+import { WeddingDataProvider } from '@/hooks/useWeddingData';
 
-import BorderedDiv from '../BorderedDiv'
-import DressCode from '../dresscode/DressCode'
-import FadeIn from '../FadeIn'
-import FAQ from '../faq/FAQ'
-import ImageGallery from '../gallery/ImageGallery'
-import Gift from '../gift/Gift'
-import GrowIn from '../GrowIn'
-import Hero from '../hero/Hero'
-import LoaderScreen from '../LoaderScreen'
-import LocationComponent from '../LocationComponent'
-import YouTubeEmbed from '../prewedding/YoutubeEmbed'
-import RSVPForm from '../rsvp/RSVPForm'
-import SaveTheDate from '../save-the-date/SaveTheDate'
-import SaveTheDateOrnament from '../save-the-date/SaveTheDateOrnament'
-import SectionTitle from '../SectionTitle'
-import Timeline from '../timeline/Timeline'
-import Divider from '../wish/Divider'
-import Wishes from '../wish/Wishes'
-import Bride from '../zoomGridPhotos/Bride'
-import Groom from '../zoomGridPhotos/Groom'
+import BorderedDiv from '../BorderedDiv';
+import DressCode from '../dresscode/DressCode';
+import FadeIn from '../FadeIn';
+import FAQ from '../faq/FAQ';
+import ImageGallery from '../gallery/ImageGallery';
+import Gift from '../gift/Gift';
+import GrowIn from '../GrowIn';
+import Hero from '../hero/Hero';
+import LoaderScreen from '../LoaderScreen';
+import LocationComponent from '../LocationComponent';
+import YouTubeEmbed from '../prewedding/YoutubeEmbed';
+import RSVPForm from '../rsvp/RSVPForm';
+import SaveTheDate from '../save-the-date/SaveTheDate';
+import SaveTheDateOrnament from '../save-the-date/SaveTheDateOrnament';
+import SectionTitle from '../SectionTitle';
+import Timeline from '../timeline/Timeline';
+import Divider from '../wish/Divider';
+import Wishes from '../wish/Wishes';
+import Bride from '../zoomGridPhotos/Bride';
+import Groom from '../zoomGridPhotos/Groom';
 
-import EmptyState from './EmptyState'
+import EmptyState from './EmptyState';
 
-import type { TemplateProps } from './types'
+import type { TemplateProps } from './types';
 
 export default function Template1Preview({
   data,
   mode = 'fullscreen',
   scrollContainerRef,
 }: TemplateProps) {
-  const { config, features, content } = data
-  const isFullscreenMode = mode === 'fullscreen'
-  const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true)
+  const { config, features, content } = data;
+  const isFullscreenMode = mode === 'fullscreen';
+  const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true);
 
   // Use appropriate height based on mode
   // In embedded mode, use CSS custom property from container; in fullscreen use viewport height
-  const viewportHeightClass = isFullscreenMode ? 'h-dvh' : 'h-screen'
-  const viewportHeightStyle = !isFullscreenMode ? { height: 'var(--container-height)' } : undefined
+  const viewportHeightClass = isFullscreenMode ? 'h-dvh' : 'h-screen';
+  const viewportHeightStyle = !isFullscreenMode ? { height: 'var(--container-height)' } : undefined;
 
   // Mock RSVP for preview
   const mockRSVP = {
@@ -64,24 +64,24 @@ export default function Template1Preview({
     notes: '',
     createdAt: new Date(),
     updatedAt: new Date(),
-  }
+  };
 
   useEffect(() => {
     const handleFirstVisit = () => {
       // Add or remove 'locked' class based on loader visibility
       if (isLoaderScreenVisible) {
-        document.body.classList.add('locked')
+        document.body.classList.add('locked');
       } else {
-        document.body.classList.remove('locked')
+        document.body.classList.remove('locked');
       }
 
       // Remove loader screen after 4.5 seconds
       setTimeout(() => {
-        setIsLoaderScreenVisible(false)
-      }, 4500)
-    }
-    handleFirstVisit()
-  }, [isLoaderScreenVisible])
+        setIsLoaderScreenVisible(false);
+      }, 4500);
+    };
+    handleFirstVisit();
+  }, [isLoaderScreenVisible]);
 
   return (
     <>
@@ -151,9 +151,10 @@ export default function Template1Preview({
                     >
                       {/* Background Media - Use custom media if uploaded, otherwise default */}
                       {(() => {
-                        const customBackgroundFilename = content.startingSection?.backgroundFilename
-                        const hasCustomBackgroundFilename = !!customBackgroundFilename
-                        const backgroundType = content.startingSection?.backgroundType
+                        const customBackgroundFilename =
+                          content.startingSection?.backgroundFilename;
+                        const hasCustomBackgroundFilename = !!customBackgroundFilename;
+                        const backgroundType = content.startingSection?.backgroundType;
 
                         if (hasCustomBackgroundFilename && backgroundType === 'video') {
                           return (
@@ -169,7 +170,7 @@ export default function Template1Preview({
                                 type={content.startingSection?.backgroundMimeType ?? 'video/mp4'}
                               />
                             </video>
-                          )
+                          );
                         }
 
                         if (hasCustomBackgroundFilename && backgroundType === 'image') {
@@ -181,7 +182,7 @@ export default function Template1Preview({
                               className="absolute h-full w-full object-cover"
                               priority
                             />
-                          )
+                          );
                         }
 
                         // Default video if no custom media
@@ -195,7 +196,7 @@ export default function Template1Preview({
                           >
                             <source src="/hero.mp4" type="video/mp4" />
                           </video>
-                        )
+                        );
                       })()}
                       <Hero />
                     </section>
@@ -454,5 +455,5 @@ export default function Template1Preview({
         </ScrollContainerProvider>
       </WeddingDataProvider>
     </>
-  )
+  );
 }

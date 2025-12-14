@@ -12,5 +12,5 @@ const WishIcon = () => (
 
     <g id="Layer_1" />
   </svg>
-)
-export default WishIcon
+);
+export default WishIcon;

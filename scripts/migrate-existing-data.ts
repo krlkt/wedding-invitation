@@ -16,23 +16,23 @@
  * IMPORTANT: Run this AFTER applying the new schema with yarn db:push
  */
 
-import { db } from '../app/lib/database'
-import { sql } from 'drizzle-orm'
-import { createId } from '@paralleldrive/cuid2'
-import bcrypt from 'bcryptjs'
+import { db } from '../app/lib/database';
+import { sql } from 'drizzle-orm';
+import { createId } from '@paralleldrive/cuid2';
+import bcrypt from 'bcryptjs';
 
 // Default credentials for existing wedding
-const DEFAULT_EMAIL = 'karel@example.com'
-const DEFAULT_PASSWORD = 'temporaryPassword123' // Should be changed after migration
+const DEFAULT_EMAIL = 'karel@example.com';
+const DEFAULT_PASSWORD = 'temporaryPassword123'; // Should be changed after migration
 
 async function migrateExistingData() {
-  console.log('Starting data migration for Karel & Sabrina wedding...')
+  console.log('Starting data migration for Karel & Sabrina wedding...');
 
   try {
     // Step 1: Create user account
-    console.log('\n1. Creating user account...')
-    const userId = createId()
-    const passwordHash = await bcrypt.hash(DEFAULT_PASSWORD, 10)
+    console.log('\n1. Creating user account...');
+    const userId = createId();
+    const passwordHash = await bcrypt.hash(DEFAULT_PASSWORD, 10);
 
     await db.run(sql`
       INSERT INTO user_accounts (id, email, password_hash, created_at, updated_at)
@@ -43,12 +43,12 @@ async function migrateExistingData() {
         ${Date.now()},
         ${Date.now()}
       )
-    `)
-    console.log('✓ User account created')
+    `);
+    console.log('✓ User account created');
 
     // Step 2: Create wedding configuration
-    console.log('\n2. Creating wedding configuration...')
-    const weddingConfigId = createId()
+    console.log('\n2. Creating wedding configuration...');
+    const weddingConfigId = createId();
 
     await db.run(sql`
       INSERT INTO wedding_configurations (
@@ -66,11 +66,11 @@ async function migrateExistingData() {
         ${Date.now()},
         ${Date.now()}
       )
-    `)
-    console.log('✓ Wedding configuration created')
+    `);
+    console.log('✓ Wedding configuration created');
 
     // Step 3: Create default feature toggles
-    console.log('\n3. Creating feature toggles...')
+    console.log('\n3. Creating feature toggles...');
     const features = [
       'love_story',
       'rsvp',
@@ -79,7 +79,7 @@ async function migrateExistingData() {
       'faqs',
       'dress_code',
       'instagram_link',
-    ]
+    ];
     for (const feature of features) {
       await db.run(sql`
         INSERT INTO feature_toggles (id, wedding_config_id, feature_name, is_enabled, created_at, updated_at)
@@ -91,20 +91,20 @@ async function migrateExistingData() {
           ${Date.now()},
           ${Date.now()}
         )
-      `)
+      `);
     }
-    console.log('✓ Feature toggles created')
+    console.log('✓ Feature toggles created');
 
     // Step 4: Migrate RSVPs
-    console.log('\n4. Migrating RSVPs...')
-    const oldRsvps = await db.all(sql`SELECT * FROM rsvp`)
-    console.log(`Found ${oldRsvps.length} RSVPs to migrate`)
+    console.log('\n4. Migrating RSVPs...');
+    const oldRsvps = await db.all(sql`SELECT * FROM rsvp`);
+    console.log(`Found ${oldRsvps.length} RSVPs to migrate`);
 
-    const rsvpIdMap = new Map<number, string>() // Map old ID to new UUID
+    const rsvpIdMap = new Map<number, string>(); // Map old ID to new UUID
 
     for (const oldRsvp of oldRsvps) {
-      const newId = createId()
-      rsvpIdMap.set(oldRsvp.id, newId)
+      const newId = createId();
+      rsvpIdMap.set(oldRsvp.id, newId);
 
       await db.run(sql`
         INSERT INTO rsvps (
@@ -128,20 +128,20 @@ async function migrateExistingData() {
           ${Date.now()},
           ${Date.now()}
         )
-      `)
+      `);
     }
-    console.log(`✓ Migrated ${oldRsvps.length} RSVPs`)
+    console.log(`✓ Migrated ${oldRsvps.length} RSVPs`);
 
     // Step 5: Migrate Tables
-    console.log('\n5. Migrating tables...')
-    const oldTables = await db.all(sql`SELECT * FROM tables`)
-    console.log(`Found ${oldTables.length} tables to migrate`)
+    console.log('\n5. Migrating tables...');
+    const oldTables = await db.all(sql`SELECT * FROM tables`);
+    console.log(`Found ${oldTables.length} tables to migrate`);
 
-    const tableIdMap = new Map<number, string>()
+    const tableIdMap = new Map<number, string>();
 
     for (const oldTable of oldTables) {
-      const newId = createId()
-      tableIdMap.set(oldTable.id, newId)
+      const newId = createId();
+      tableIdMap.set(oldTable.id, newId);
 
       await db.run(sql`
         INSERT INTO tables (
@@ -158,22 +158,22 @@ async function migrateExistingData() {
           ${Date.now()},
           ${Date.now()}
         )
-      `)
+      `);
     }
-    console.log(`✓ Migrated ${oldTables.length} tables`)
+    console.log(`✓ Migrated ${oldTables.length} tables`);
 
     // Step 6: Migrate Guests
-    console.log('\n6. Migrating guests...')
-    const oldGuests = await db.all(sql`SELECT * FROM guest`)
-    console.log(`Found ${oldGuests.length} guests to migrate`)
+    console.log('\n6. Migrating guests...');
+    const oldGuests = await db.all(sql`SELECT * FROM guest`);
+    console.log(`Found ${oldGuests.length} guests to migrate`);
 
     for (const oldGuest of oldGuests) {
-      const newRsvpId = rsvpIdMap.get(oldGuest.rsvp_id)
-      const newTableId = oldGuest.table_id ? tableIdMap.get(oldGuest.table_id) : null
+      const newRsvpId = rsvpIdMap.get(oldGuest.rsvp_id);
+      const newTableId = oldGuest.table_id ? tableIdMap.get(oldGuest.table_id) : null;
 
       if (!newRsvpId) {
-        console.warn(`Skipping guest ${oldGuest.name} - no matching RSVP`)
-        continue
+        console.warn(`Skipping guest ${oldGuest.name} - no matching RSVP`);
+        continue;
       }
 
       await db.run(sql`
@@ -194,14 +194,14 @@ async function migrateExistingData() {
           ${Date.now()},
           ${Date.now()}
         )
-      `)
+      `);
     }
-    console.log(`✓ Migrated ${oldGuests.length} guests`)
+    console.log(`✓ Migrated ${oldGuests.length} guests`);
 
     // Step 7: Migrate Wishes
-    console.log('\n7. Migrating wishes...')
-    const oldWishes = await db.all(sql`SELECT * FROM wish`)
-    console.log(`Found ${oldWishes.length} wishes to migrate`)
+    console.log('\n7. Migrating wishes...');
+    const oldWishes = await db.all(sql`SELECT * FROM wish`);
+    console.log(`Found ${oldWishes.length} wishes to migrate`);
 
     for (const oldWish of oldWishes) {
       await db.run(sql`
@@ -218,14 +218,14 @@ async function migrateExistingData() {
           ${new Date(oldWish.created_at).getTime()},
           ${Date.now()}
         )
-      `)
+      `);
     }
-    console.log(`✓ Migrated ${oldWishes.length} wishes`)
+    console.log(`✓ Migrated ${oldWishes.length} wishes`);
 
     // Step 8: Migrate Groups
-    console.log('\n8. Migrating groups...')
-    const oldGroups = await db.all(sql`SELECT * FROM groups`)
-    console.log(`Found ${oldGroups.length} groups to migrate`)
+    console.log('\n8. Migrating groups...');
+    const oldGroups = await db.all(sql`SELECT * FROM groups`);
+    console.log(`Found ${oldGroups.length} groups to migrate`);
 
     for (const oldGroup of oldGroups) {
       await db.run(sql`
@@ -240,33 +240,33 @@ async function migrateExistingData() {
           ${Date.now()},
           ${Date.now()}
         )
-      `)
+      `);
     }
-    console.log(`✓ Migrated ${oldGroups.length} groups`)
+    console.log(`✓ Migrated ${oldGroups.length} groups`);
 
-    console.log('\n✅ Data migration complete!')
-    console.log('\nMigration Summary:')
-    console.log(`- User account: ${DEFAULT_EMAIL}`)
-    console.log(`- Wedding: karelabrina`)
-    console.log(`- RSVPs: ${oldRsvps.length}`)
-    console.log(`- Guests: ${oldGuests.length}`)
-    console.log(`- Tables: ${oldTables.length}`)
-    console.log(`- Wishes: ${oldWishes.length}`)
-    console.log(`- Groups: ${oldGroups.length}`)
-    console.log(`\nIMPORTANT: Change the default password after migration!`)
+    console.log('\n✅ Data migration complete!');
+    console.log('\nMigration Summary:');
+    console.log(`- User account: ${DEFAULT_EMAIL}`);
+    console.log(`- Wedding: karelabrina`);
+    console.log(`- RSVPs: ${oldRsvps.length}`);
+    console.log(`- Guests: ${oldGuests.length}`);
+    console.log(`- Tables: ${oldTables.length}`);
+    console.log(`- Wishes: ${oldWishes.length}`);
+    console.log(`- Groups: ${oldGroups.length}`);
+    console.log(`\nIMPORTANT: Change the default password after migration!`);
   } catch (error) {
-    console.error('Data migration failed:', error)
-    throw error
+    console.error('Data migration failed:', error);
+    throw error;
   }
 }
 
 // Run migration
 migrateExistingData()
   .then(() => {
-    console.log('Migration completed successfully')
-    process.exit(0)
+    console.log('Migration completed successfully');
+    process.exit(0);
   })
   .catch((error) => {
-    console.error('Migration failed:', error)
-    process.exit(1)
-  })
+    console.error('Migration failed:', error);
+    process.exit(1);
+  });

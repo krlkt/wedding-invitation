@@ -1,4 +1,4 @@
-import { query } from './client'
+import { query } from './client';
 
 export const createTablesTable = async () => {
   await query(`
@@ -8,8 +8,8 @@ export const createTablesTable = async () => {
             max_guests INTEGER NOT NULL,
             location TEXT NOT NULL
         );
-    `)
-}
+    `);
+};
 
 export const createGuestsTable = async () => {
   await query(`
@@ -22,5 +22,5 @@ export const createGuestsTable = async () => {
             FOREIGN KEY (rsvp_id) REFERENCES rsvp(id) ON DELETE CASCADE,
             FOREIGN KEY (table_id) REFERENCES tables(id) ON DELETE SET NULL
         );
-    `)
-}
+    `);
+};

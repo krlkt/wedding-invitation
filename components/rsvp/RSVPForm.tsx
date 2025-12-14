@@ -1,30 +1,30 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import Alert from '@mui/material/Alert'
-import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FormLabel from '@mui/material/FormLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
-import TextField from '@mui/material/TextField'
-import { useSnackbar } from 'notistack'
-import { Controller, useForm } from 'react-hook-form'
+import Alert from '@mui/material/Alert';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import TextField from '@mui/material/TextField';
+import { useSnackbar } from 'notistack';
+import { Controller, useForm } from 'react-hook-form';
 
-import { addParticipant } from '@/legacy/dashboard/action'
-import CheckIcon from '@/components/icons/CheckIcon'
-import CrossIcon from '@/components/icons/CrossIcon'
-import { RSVPForm } from '@/legacy/types/rsvp'
-import { useLocation } from '@/hooks/useLocation'
+import { addParticipant } from '@/legacy/dashboard/action';
+import CheckIcon from '@/components/icons/CheckIcon';
+import CrossIcon from '@/components/icons/CrossIcon';
+import { RSVPForm } from '@/legacy/types/rsvp';
+import { useLocation } from '@/hooks/useLocation';
 
-import Button from '../Button'
-import FadeIn from '../FadeIn'
-import SubmitButton from '../SubmitButton'
+import Button from '../Button';
+import FadeIn from '../FadeIn';
+import SubmitButton from '../SubmitButton';
 
 const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
-  const { enqueueSnackbar } = useSnackbar()
-  const [showForm, setShowForm] = useState<boolean>(!Boolean(rsvp?.attend))
-  const { location } = useLocation()
+  const { enqueueSnackbar } = useSnackbar();
+  const [showForm, setShowForm] = useState<boolean>(!Boolean(rsvp?.attend));
+  const { location } = useLocation();
 
   const {
     register,
@@ -41,22 +41,22 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
       location: rsvp.location,
       max_guests: rsvp.max_guests,
     },
-  })
+  });
   const onSubmit = async (data: any) => {
     try {
-      await addParticipant(data)
+      await addParticipant(data);
       enqueueSnackbar('Successfuly submitted the form. Thank you for submitting!', {
         variant: 'success',
-      })
-      setShowForm(false)
+      });
+      setShowForm(false);
     } catch (error) {
-      console.error('Error submitting form:', error)
-      enqueueSnackbar(`Error submitting form: ${error}`, { variant: 'error' })
+      console.error('Error submitting form:', error);
+      enqueueSnackbar(`Error submitting form: ${error}`, { variant: 'error' });
     }
-  }
+  };
   const handleChangeClick = () => {
-    setShowForm(true)
-  }
+    setShowForm(true);
+  };
 
   return !showForm ? (
     <div className="flex flex-col gap-4">
@@ -188,7 +188,7 @@ const RSVPFORM = ({ rsvp }: { rsvp: RSVPForm }) => {
         </form>
       </FadeIn>
     </>
-  )
-}
+  );
+};
 
-export default RSVPFORM
+export default RSVPFORM;

@@ -1,4 +1,4 @@
-import { secondaryColorHex } from '@/lib/constants'
+import { secondaryColorHex } from '@/lib/constants';
 
 const RingIcon = () => (
   <svg
@@ -19,5 +19,5 @@ const RingIcon = () => (
       fill={secondaryColorHex}
     />
   </svg>
-)
-export default RingIcon
+);
+export default RingIcon;

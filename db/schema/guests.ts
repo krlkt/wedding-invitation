@@ -5,10 +5,10 @@
  * Enhanced from existing database schema with UUID primary keys and proper relationships.
  */
 
-import { createId } from '@paralleldrive/cuid2'
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { createId } from '@paralleldrive/cuid2';
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
-import { weddingConfigurations } from './weddings'
+import { weddingConfigurations } from './weddings';
 
 // T029: RSVP Schema (Enhanced)
 // Note: RSVP (1) ←→ (many) Guest relationship
@@ -37,10 +37,10 @@ export const rsvps = sqliteTable('rsvps', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type RSVP = typeof rsvps.$inferSelect
-export type NewRSVP = typeof rsvps.$inferInsert
+export type RSVP = typeof rsvps.$inferSelect;
+export type NewRSVP = typeof rsvps.$inferInsert;
 
 // T030: Table Schema (Enhanced)
 export const tables = sqliteTable('tables', {
@@ -60,10 +60,10 @@ export const tables = sqliteTable('tables', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type Table = typeof tables.$inferSelect
-export type NewTable = typeof tables.$inferInsert
+export type Table = typeof tables.$inferSelect;
+export type NewTable = typeof tables.$inferInsert;
 
 // T028: Guest Schema (Enhanced)
 // Note: Guest (many) ←→ (1) RSVP relationship via rsvpId foreign key
@@ -89,10 +89,10 @@ export const guests = sqliteTable('guests', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type Guest = typeof guests.$inferSelect
-export type NewGuest = typeof guests.$inferInsert
+export type Guest = typeof guests.$inferSelect;
+export type NewGuest = typeof guests.$inferInsert;
 
 // Wish Schema (bonus - not in T028-T030 but logically belongs here)
 export const wishes = sqliteTable('wishes', {
@@ -111,7 +111,7 @@ export const wishes = sqliteTable('wishes', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type Wish = typeof wishes.$inferSelect
-export type NewWish = typeof wishes.$inferInsert
+export type Wish = typeof wishes.$inferSelect;
+export type NewWish = typeof wishes.$inferInsert;

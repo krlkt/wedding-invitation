@@ -205,12 +205,12 @@ README.md                          # UPDATED: Environment setup documentation
 
 ```typescript
 interface EnvironmentConfig {
-  name: 'development' | 'test' | 'production'
-  databaseUrl: string
-  databaseAuthToken: string
-  vercelEnv?: string
-  isProduction: boolean
-  canDestroyDatabase: boolean
+  name: 'development' | 'test' | 'production';
+  databaseUrl: string;
+  databaseAuthToken: string;
+  vercelEnv?: string;
+  isProduction: boolean;
+  canDestroyDatabase: boolean;
 }
 ```
 

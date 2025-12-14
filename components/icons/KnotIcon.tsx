@@ -7,5 +7,5 @@ const KnotIcon = () => (
       fill="black"
     />
   </svg>
-)
-export default KnotIcon
+);
+export default KnotIcon;

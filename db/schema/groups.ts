@@ -6,10 +6,10 @@
  * (e.g., "Mama" group for mother's friends, "Karel" for groom's contacts).
  */
 
-import { createId } from '@paralleldrive/cuid2'
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { createId } from '@paralleldrive/cuid2';
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
-import { weddingConfigurations } from './weddings'
+import { weddingConfigurations } from './weddings';
 
 export const groups = sqliteTable('groups', {
   id: text('id')
@@ -26,8 +26,8 @@ export const groups = sqliteTable('groups', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
 // TypeScript types inferred from schema
-export type Group = typeof groups.$inferSelect
-export type NewGroup = typeof groups.$inferInsert
+export type Group = typeof groups.$inferSelect;
+export type NewGroup = typeof groups.$inferInsert;

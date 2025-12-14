@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
-import { Gallery, Item } from 'react-photoswipe-gallery'
-import 'photoswipe/dist/photoswipe.css'
+import { Gallery, Item } from 'react-photoswipe-gallery';
+import 'photoswipe/dist/photoswipe.css';
 
 const images = [
   { src: '/images/gallery/gal1.jpg', width: 3900, height: 2600 },
@@ -92,20 +92,20 @@ const images = [
   { src: '/images/gallery/gal82.jpg', width: 2600, height: 3900 },
   { src: '/images/gallery/gal83.jpg', width: 3500, height: 2300 },
   { src: '/images/gallery/gal84.jpg', width: 3900, height: 2600 },
-]
+];
 
 export default function WeddingGallery() {
-  const [isPortrait, setIsPortrait] = useState(true)
+  const [isPortrait, setIsPortrait] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsPortrait(window.innerHeight > window.innerWidth)
-    }
+      setIsPortrait(window.innerHeight > window.innerWidth);
+    };
 
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div className="bg-white px-2 py-4 text-center">
@@ -139,5 +139,5 @@ export default function WeddingGallery() {
         </div>
       </Gallery>
     </div>
-  )
+  );
 }

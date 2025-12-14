@@ -5,18 +5,18 @@
  * Includes forms for basic settings, features, and content management.
  */
 
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/shadcn/button'
+import { useState } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/shadcn/button';
 
-import LivePreview from '../LivePreview'
-import FeaturesForm from './FeaturesForm'
-import { DraftProvider, useDraft } from '@/context/DraftContext'
-import { useWeddingDashboardData } from '@/hooks/useWeddingDashboardData'
-import { usePhotoUploadHandlers } from '@/hooks/usePhotoUploadHandlers'
-import { useContentHandlers } from '@/hooks/useContentHandlers'
+import LivePreview from '../LivePreview';
+import FeaturesForm from './FeaturesForm';
+import { DraftProvider, useDraft } from '@/context/DraftContext';
+import { useWeddingDashboardData } from '@/hooks/useWeddingDashboardData';
+import { usePhotoUploadHandlers } from '@/hooks/usePhotoUploadHandlers';
+import { useContentHandlers } from '@/hooks/useContentHandlers';
 
 export default function ConfigDashboard() {
   return (
@@ -25,19 +25,21 @@ export default function ConfigDashboard() {
         <ConfigDashboardContent />
       </div>
     </DraftProvider>
-  )
+  );
 }
 
 function ConfigDashboardContent() {
-  const [saving, setSaving] = useState(false)
-  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(undefined)
+  const [saving, setSaving] = useState(false);
+  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean> | undefined>(
+    undefined
+  );
 
   // Draft hooks
   const { draft: draftStartingSection, setDraft: setDraftStartingSection } =
-    useDraft('startingSection')
-  const { draft: draftGroomSection, setDraft: setDraftGroomSection } = useDraft('groomSection')
-  const { draft: draftBrideSection, setDraft: setDraftBrideSection } = useDraft('brideSection')
-  const { draft: draftFAQs } = useDraft('faqs')
+    useDraft('startingSection');
+  const { draft: draftGroomSection, setDraft: setDraftGroomSection } = useDraft('groomSection');
+  const { draft: draftBrideSection, setDraft: setDraftBrideSection } = useDraft('brideSection');
+  const { draft: draftFAQs } = useDraft('faqs');
 
   // Data fetching hook
   const {
@@ -50,7 +52,7 @@ function ConfigDashboardContent() {
     refreshTrigger,
     refetch,
     triggerRefresh,
-  } = useWeddingDashboardData()
+  } = useWeddingDashboardData();
 
   // Content handlers hook
   const contentHandlers = useContentHandlers({
@@ -61,7 +63,7 @@ function ConfigDashboardContent() {
     setSaving,
     refetch,
     triggerRefresh,
-  })
+  });
 
   // Photo upload handlers hook (replaces 4 photo handlers)
   const photoHandlers = usePhotoUploadHandlers({
@@ -75,7 +77,7 @@ function ConfigDashboardContent() {
     setDraftBrideSection,
     onRefresh: triggerRefresh,
     refetchConfig: refetch.config,
-  })
+  });
 
   if (loading) {
     return (
@@ -85,11 +87,11 @@ function ConfigDashboardContent() {
           <p className="mt-4 text-gray-600">Loading dashboard...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!config) {
-    return <div className="p-8 text-center">No configuration found</div>
+    return <div className="p-8 text-center">No configuration found</div>;
   }
 
   return (
@@ -133,5 +135,5 @@ function ConfigDashboardContent() {
         />
       </div>
     </>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { secondaryColorHex } from '@/lib/constants'
+import { secondaryColorHex } from '@/lib/constants';
 
 const BusIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -9,6 +9,6 @@ const BusIcon = () => (
       fill={secondaryColorHex}
     />
   </svg>
-)
+);
 
-export default BusIcon
+export default BusIcon;

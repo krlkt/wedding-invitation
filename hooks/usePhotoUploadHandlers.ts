@@ -5,47 +5,47 @@
  * Manages background, monogram, groom photos, and bride photos.
  */
 
-import { useCallback } from 'react'
-import type { StartingSectionContent } from '@/db/schema/starting-section'
-import type { GroomSectionContent } from '@/db/schema/groom-section'
-import type { BrideSectionContent } from '@/db/schema/bride-section'
-import { parsePhotos, stringifyPhotos, upsertPhoto } from '@/lib/section-photos'
-import { GroomBrideSectionPhoto } from '@/db/schema/section-photo-types'
+import { useCallback } from 'react';
+import type { StartingSectionContent } from '@/db/schema/starting-section';
+import type { GroomSectionContent } from '@/db/schema/groom-section';
+import type { BrideSectionContent } from '@/db/schema/bride-section';
+import { parsePhotos, stringifyPhotos, upsertPhoto } from '@/lib/section-photos';
+import { GroomBrideSectionPhoto } from '@/db/schema/section-photo-types';
 
 // Photo upload data types
 interface BackgroundUploadData {
-  backgroundFilename: string
-  backgroundOriginalName: string
-  backgroundType: 'image' | 'video'
-  backgroundMimeType: string
-  backgroundFileSize: number
+  backgroundFilename: string;
+  backgroundOriginalName: string;
+  backgroundType: 'image' | 'video';
+  backgroundMimeType: string;
+  backgroundFileSize: number;
 }
 
 interface PhotoUploadData {
-  filename: string
-  fileSize: number
-  mimeType: string
+  filename: string;
+  fileSize: number;
+  mimeType: string;
 }
 
 // Return type for this hook
 export interface UsePhotoUploadHandlersReturn {
-  handleBackgroundUpload: (backgroundData: BackgroundUploadData) => void
-  handleMonogramUpload: () => Promise<void>
-  handleGroomPhotoUpload: (slot: number, photoData: PhotoUploadData) => void
-  handleBridePhotoUpload: (slot: number, photoData: PhotoUploadData) => void
+  handleBackgroundUpload: (backgroundData: BackgroundUploadData) => void;
+  handleMonogramUpload: () => Promise<void>;
+  handleGroomPhotoUpload: (slot: number, photoData: PhotoUploadData) => void;
+  handleBridePhotoUpload: (slot: number, photoData: PhotoUploadData) => void;
 }
 
 interface UsePhotoUploadHandlersOptions {
-  draftStartingSection: Partial<StartingSectionContent> | undefined
-  setDraftStartingSection: (data: Partial<StartingSectionContent>) => void
-  draftGroomSection: Partial<GroomSectionContent> | undefined
-  groomSectionContent: GroomSectionContent | null
-  setDraftGroomSection: (data: Partial<GroomSectionContent>) => void
-  draftBrideSection: Partial<BrideSectionContent> | undefined
-  brideSectionContent: BrideSectionContent | null
-  setDraftBrideSection: (data: Partial<BrideSectionContent>) => void
-  onRefresh: () => void
-  refetchConfig: () => Promise<void>
+  draftStartingSection: Partial<StartingSectionContent> | undefined;
+  setDraftStartingSection: (data: Partial<StartingSectionContent>) => void;
+  draftGroomSection: Partial<GroomSectionContent> | undefined;
+  groomSectionContent: GroomSectionContent | null;
+  setDraftGroomSection: (data: Partial<GroomSectionContent>) => void;
+  draftBrideSection: Partial<BrideSectionContent> | undefined;
+  brideSectionContent: BrideSectionContent | null;
+  setDraftBrideSection: (data: Partial<BrideSectionContent>) => void;
+  onRefresh: () => void;
+  refetchConfig: () => Promise<void>;
 }
 
 export function usePhotoUploadHandlers({
@@ -66,25 +66,25 @@ export function usePhotoUploadHandlers({
       setDraftStartingSection({
         ...(draftStartingSection ?? {}),
         ...backgroundData,
-      })
+      });
       // Trigger preview refresh to show new background immediately
-      onRefresh()
+      onRefresh();
     },
     [draftStartingSection, setDraftStartingSection, onRefresh]
-  )
+  );
 
   const handleMonogramUpload = useCallback(async () => {
     // Monogram is saved to config, so refetch config to get updated monogram
-    await refetchConfig()
+    await refetchConfig();
     // Trigger preview refresh to show new monogram
-    onRefresh()
-  }, [refetchConfig, onRefresh])
+    onRefresh();
+  }, [refetchConfig, onRefresh]);
 
   const handleGroomPhotoUpload = useCallback(
     (photoSlot: number, photoData: PhotoUploadData) => {
       // Get existing photos from draft or saved content
-      const existingPhotosJson = draftGroomSection?.photos ?? groomSectionContent?.photos ?? '[]'
-      const existingPhotos = parsePhotos(existingPhotosJson)
+      const existingPhotosJson = draftGroomSection?.photos ?? groomSectionContent?.photos ?? '[]';
+      const existingPhotos = parsePhotos(existingPhotosJson);
 
       // Create new photo object
       const newPhoto: GroomBrideSectionPhoto = {
@@ -93,28 +93,28 @@ export function usePhotoUploadHandlers({
         mimeType: photoData.mimeType as any,
         slot: photoSlot,
         uploadedAt: new Date().toISOString(),
-      }
+      };
 
       // Upsert photo into array
-      const updatedPhotos = upsertPhoto(existingPhotos, newPhoto)
+      const updatedPhotos = upsertPhoto(existingPhotos, newPhoto);
 
       // Update draft state with new photos
       setDraftGroomSection({
         ...(draftGroomSection ?? {}),
         photos: stringifyPhotos(updatedPhotos),
-      })
+      });
 
       // Trigger preview refresh to show new photo immediately
-      onRefresh()
+      onRefresh();
     },
     [draftGroomSection, groomSectionContent, setDraftGroomSection, onRefresh]
-  )
+  );
 
   const handleBridePhotoUpload = useCallback(
     (photoSlot: number, photoData: PhotoUploadData) => {
       // Get existing photos from draft or saved content
-      const existingPhotosJson = draftBrideSection?.photos ?? brideSectionContent?.photos ?? '[]'
-      const existingPhotos = parsePhotos(existingPhotosJson)
+      const existingPhotosJson = draftBrideSection?.photos ?? brideSectionContent?.photos ?? '[]';
+      const existingPhotos = parsePhotos(existingPhotosJson);
 
       // Create new photo object
       const newPhoto: GroomBrideSectionPhoto = {
@@ -123,27 +123,27 @@ export function usePhotoUploadHandlers({
         mimeType: photoData.mimeType as any,
         slot: photoSlot,
         uploadedAt: new Date().toISOString(),
-      }
+      };
 
       // Upsert photo into array
-      const updatedPhotos = upsertPhoto(existingPhotos, newPhoto)
+      const updatedPhotos = upsertPhoto(existingPhotos, newPhoto);
 
       // Update draft state with new photos
       setDraftBrideSection({
         ...(draftBrideSection ?? {}),
         photos: stringifyPhotos(updatedPhotos),
-      })
+      });
 
       // Trigger preview refresh to show new photo immediately
-      onRefresh()
+      onRefresh();
     },
     [draftBrideSection, brideSectionContent, setDraftBrideSection, onRefresh]
-  )
+  );
 
   return {
     handleBackgroundUpload,
     handleMonogramUpload,
     handleGroomPhotoUpload,
     handleBridePhotoUpload,
-  }
+  };
 }

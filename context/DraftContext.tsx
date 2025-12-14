@@ -11,20 +11,20 @@
  * - Easy to add new sections
  */
 
-'use client'
+'use client';
 
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
-import type { StartingSectionContent } from '@/db/schema/starting-section'
-import type { GroomSectionContent } from '@/db/schema/groom-section'
-import type { BrideSectionContent } from '@/db/schema/bride-section'
-import { FAQItem } from '@/db/schema/content'
+import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import type { StartingSectionContent } from '@/db/schema/starting-section';
+import type { GroomSectionContent } from '@/db/schema/groom-section';
+import type { BrideSectionContent } from '@/db/schema/bride-section';
+import { FAQItem } from '@/db/schema/content';
 
 // Define all section draft types here as you build them
 export type DraftState = {
-  startingSection?: Partial<StartingSectionContent>
-  groomSection?: Partial<GroomSectionContent>
-  brideSection?: Partial<BrideSectionContent>
-  faqs?: Partial<FAQItem>[]
+  startingSection?: Partial<StartingSectionContent>;
+  groomSection?: Partial<GroomSectionContent>;
+  brideSection?: Partial<BrideSectionContent>;
+  faqs?: Partial<FAQItem>[];
   // Add more sections as you implement them:
   // loveStory?: Partial<LoveStoryContent>
   // locations?: Partial<LocationContent>
@@ -36,28 +36,28 @@ export type DraftState = {
   // gift?: Partial<GiftContent>
   // wishes?: Partial<WishesContent>
   // footer?: Partial<FooterContent>
-}
+};
 
 type DraftContextType = {
-  drafts: DraftState
+  drafts: DraftState;
   setDraft: <K extends keyof DraftState>(
     section: K,
     data: DraftState[K] | ((prev: DraftState[K]) => DraftState[K])
-  ) => void
-  clearDraft: (section: keyof DraftState) => void
-  clearAllDrafts: () => void
-  hasDraft: (section: keyof DraftState) => boolean
-  hasAnyDrafts: () => boolean
-}
+  ) => void;
+  clearDraft: (section: keyof DraftState) => void;
+  clearAllDrafts: () => void;
+  hasDraft: (section: keyof DraftState) => boolean;
+  hasAnyDrafts: () => boolean;
+};
 
-const DraftContext = createContext<DraftContextType | undefined>(undefined)
+const DraftContext = createContext<DraftContextType | undefined>(undefined);
 
 interface DraftProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export function DraftProvider({ children }: DraftProviderProps) {
-  const [drafts, setDrafts] = useState<DraftState>({})
+  const [drafts, setDrafts] = useState<DraftState>({});
 
   // Set draft for a specific section (supports functional updates)
   const setDraft = useCallback(
@@ -66,43 +66,43 @@ export function DraftProvider({ children }: DraftProviderProps) {
       data: DraftState[K] | ((prev: DraftState[K]) => DraftState[K])
     ) => {
       setDrafts((prev) => {
-        const currentValue = prev[section]
-        const newValue = typeof data === 'function' ? data(currentValue) : data
+        const currentValue = prev[section];
+        const newValue = typeof data === 'function' ? data(currentValue) : data;
         return {
           ...prev,
           [section]: newValue,
-        }
-      })
+        };
+      });
     },
     []
-  )
+  );
 
   // Clear draft for a specific section
   const clearDraft = useCallback((section: keyof DraftState) => {
     setDrafts((prev) => {
-      const next = { ...prev }
-      delete next[section]
-      return next
-    })
-  }, [])
+      const next = { ...prev };
+      delete next[section];
+      return next;
+    });
+  }, []);
 
   // Clear all drafts (useful for global "Discard All" or after publish)
   const clearAllDrafts = useCallback(() => {
-    setDrafts({})
-  }, [])
+    setDrafts({});
+  }, []);
 
   // Check if a specific section has unsaved changes
   const hasDraft = useCallback(
     (section: keyof DraftState) => {
-      return drafts[section] !== undefined && drafts[section] !== null
+      return drafts[section] !== undefined && drafts[section] !== null;
     },
     [drafts]
-  )
+  );
 
   // Check if any section has unsaved changes (for global warning)
   const hasAnyDrafts = useCallback(() => {
-    return Object.keys(drafts).length > 0
-  }, [drafts])
+    return Object.keys(drafts).length > 0;
+  }, [drafts]);
 
   return (
     <DraftContext.Provider
@@ -117,7 +117,7 @@ export function DraftProvider({ children }: DraftProviderProps) {
     >
       {children}
     </DraftContext.Provider>
-  )
+  );
 }
 
 /**
@@ -127,10 +127,10 @@ export function DraftProvider({ children }: DraftProviderProps) {
  * const { draft, setDraft, clearDraft, hasDraft } = useDraft('startingSection')
  */
 export function useDraft<K extends keyof DraftState>(section: K) {
-  const context = useContext(DraftContext)
+  const context = useContext(DraftContext);
 
   if (!context) {
-    throw new Error('useDraft must be used within a DraftProvider')
+    throw new Error('useDraft must be used within a DraftProvider');
   }
 
   const {
@@ -138,7 +138,7 @@ export function useDraft<K extends keyof DraftState>(section: K) {
     setDraft: setDraftGlobal,
     clearDraft: clearDraftGlobal,
     hasDraft: hasDraftGlobal,
-  } = context
+  } = context;
 
   return {
     draft: drafts[section],
@@ -149,7 +149,7 @@ export function useDraft<K extends keyof DraftState>(section: K) {
     ),
     clearDraft: useCallback(() => clearDraftGlobal(section), [section, clearDraftGlobal]),
     hasDraft: useCallback(() => hasDraftGlobal(section), [section, hasDraftGlobal]),
-  }
+  };
 }
 
 /**
@@ -160,15 +160,15 @@ export function useDraft<K extends keyof DraftState>(section: K) {
  * const { hasAnyDrafts, clearAllDrafts } = useGlobalDrafts()
  */
 export function useGlobalDrafts() {
-  const context = useContext(DraftContext)
+  const context = useContext(DraftContext);
 
   if (!context) {
-    throw new Error('useGlobalDrafts must be used within a DraftProvider')
+    throw new Error('useGlobalDrafts must be used within a DraftProvider');
   }
 
   return {
     hasAnyDrafts: context.hasAnyDrafts,
     clearAllDrafts: context.clearAllDrafts,
     drafts: context.drafts,
-  }
+  };
 }

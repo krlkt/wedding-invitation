@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Groom Section Form Component
@@ -10,24 +10,24 @@
  * - Photo gallery (up to 6 photos with sorting)
  */
 
-import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
-import { useForm, useWatch } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { groomSectionContentSchema } from '@/lib/validations/groom-section'
-import { validateImageFile, formatFileSize } from '@/lib/media-validation'
-import { useDraft } from '@/context/DraftContext'
-import { useMediaUpload } from '@/hooks/useMediaUpload'
-import { parsePhotos } from '@/lib/section-photos'
-import type { WeddingConfiguration } from '@/db/schema/weddings'
-import type { GroomSectionContent } from '@/db/schema/groom-section'
-import type { z } from 'zod'
-import { Button } from '@/components/shadcn/button'
-import { Input } from '@/components/shadcn/input'
-import { Label } from '@/components/shadcn/label'
-import { Checkbox } from '@/components/shadcn/checkbox'
-import { FileInput } from '@/components/shadcn/file-input'
-import { SectionFieldWrapper } from '@/components/admin/sections/SectionFieldWrapper'
+import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { groomSectionContentSchema } from '@/lib/validations/groom-section';
+import { validateImageFile, formatFileSize } from '@/lib/media-validation';
+import { useDraft } from '@/context/DraftContext';
+import { useMediaUpload } from '@/hooks/useMediaUpload';
+import { parsePhotos } from '@/lib/section-photos';
+import type { WeddingConfiguration } from '@/db/schema/weddings';
+import type { GroomSectionContent } from '@/db/schema/groom-section';
+import type { z } from 'zod';
+import { Button } from '@/components/shadcn/button';
+import { Input } from '@/components/shadcn/input';
+import { Label } from '@/components/shadcn/label';
+import { Checkbox } from '@/components/shadcn/checkbox';
+import { FileInput } from '@/components/shadcn/file-input';
+import { SectionFieldWrapper } from '@/components/admin/sections/SectionFieldWrapper';
 import {
   Dialog,
   DialogContent,
@@ -35,27 +35,27 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/shadcn/dialog'
+} from '@/components/shadcn/dialog';
 
 // Types
-type GroomSectionContentFormData = z.infer<typeof groomSectionContentSchema>
+type GroomSectionContentFormData = z.infer<typeof groomSectionContentSchema>;
 
 interface GroomSectionFormProps {
-  weddingConfig: WeddingConfiguration
-  groomSectionContent: GroomSectionContent | null
-  onUpdate: (data: GroomSectionContentFormData) => Promise<void>
-  onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void
+  weddingConfig: WeddingConfiguration;
+  groomSectionContent: GroomSectionContent | null;
+  onUpdate: (data: GroomSectionContentFormData) => Promise<void>;
+  onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void;
   onPhotoUpload?: (
     photoSlot: number,
     photoData: {
-      filename: string
-      fileSize: number
-      mimeType: string
+      filename: string;
+      fileSize: number;
+      mimeType: string;
     }
-  ) => void
+  ) => void;
 }
 
-type PhotoSlot = 1 | 2 | 3 | 4 | 5 | 6
+type PhotoSlot = 1 | 2 | 3 | 4 | 5 | 6;
 
 export function GroomSectionForm({
   weddingConfig,
@@ -66,11 +66,11 @@ export function GroomSectionForm({
 }: GroomSectionFormProps) {
   // Use draft context
   const { draft: draftGroomSectionContent, setDraft: setDraftGroomSection } =
-    useDraft('groomSection')
+    useDraft('groomSection');
 
   // Photo uploads state
-  const [selectedPhoto, setSelectedPhoto] = useState<{ slot: PhotoSlot; file: File } | null>(null)
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [selectedPhoto, setSelectedPhoto] = useState<{ slot: PhotoSlot; file: File } | null>(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const photoInputRefs = useRef<Record<PhotoSlot, HTMLInputElement | null>>({
     1: null,
     2: null,
@@ -78,7 +78,7 @@ export function GroomSectionForm({
     4: null,
     5: null,
     6: null,
-  })
+  });
 
   // Photo upload hook
   const photoUpload = useMediaUpload({
@@ -90,22 +90,22 @@ export function GroomSectionForm({
           filename: result.data.photo.filename,
           fileSize: result.data.photo.fileSize,
           mimeType: result.data.photo.mimeType,
-        })
+        });
       }
       // Clear selection
-      const slotToReset = selectedPhoto?.slot
-      setSelectedPhoto(null)
+      const slotToReset = selectedPhoto?.slot;
+      setSelectedPhoto(null);
       if (slotToReset) {
-        const inputRef = photoInputRefs.current[slotToReset]
+        const inputRef = photoInputRefs.current[slotToReset];
         if (inputRef) {
-          inputRef.value = ''
+          inputRef.value = '';
         }
       }
     },
-  })
+  });
 
   // Default placeholder text from basic info
-  const groomFullName = weddingConfig.groomName
+  const groomFullName = weddingConfig.groomName;
 
   const { register, handleSubmit, watch, setValue, reset, control } =
     useForm<GroomSectionContentFormData>({
@@ -129,13 +129,13 @@ export function GroomSectionForm({
         fatherName: draftGroomSectionContent?.fatherName ?? groomSectionContent?.fatherName ?? null,
         motherName: draftGroomSectionContent?.motherName ?? groomSectionContent?.motherName ?? null,
       },
-    })
+    });
 
   // Reset form when saved content changes (after save or discard refetch)
-  const prevGroomSectionContent = useRef(groomSectionContent)
+  const prevGroomSectionContent = useRef(groomSectionContent);
   useEffect(() => {
     if (prevGroomSectionContent.current !== groomSectionContent) {
-      prevGroomSectionContent.current = groomSectionContent
+      prevGroomSectionContent.current = groomSectionContent;
       reset({
         groomDisplayName: groomSectionContent?.groomDisplayName ?? null,
         showInstagramLink: groomSectionContent?.showInstagramLink ?? false,
@@ -143,16 +143,16 @@ export function GroomSectionForm({
         showParentInfo: groomSectionContent?.showParentInfo ?? false,
         fatherName: groomSectionContent?.fatherName ?? null,
         motherName: groomSectionContent?.motherName ?? null,
-      })
+      });
     }
-  }, [groomSectionContent, reset])
+  }, [groomSectionContent, reset]);
 
-  const showParentInfo = watch('showParentInfo')
-  const showInstagramLink = watch('showInstagramLink')
+  const showParentInfo = watch('showParentInfo');
+  const showInstagramLink = watch('showInstagramLink');
 
   // Auto-save form changes to draft with centralized change tracking
-  const formValues = useWatch({ control })
-  const [changedFieldsSet, setChangedFieldsSet] = useState<Set<string>>(new Set())
+  const formValues = useWatch({ control });
+  const [changedFieldsSet, setChangedFieldsSet] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const draft: Partial<GroomSectionContent> = {
@@ -162,10 +162,10 @@ export function GroomSectionForm({
       showParentInfo: formValues.showParentInfo ?? false,
       fatherName: formValues.fatherName ?? null,
       motherName: formValues.motherName ?? null,
-    }
+    };
 
     // Track which fields changed from saved state (centralized)
-    const newChangedFields = new Set<string>()
+    const newChangedFields = new Set<string>();
     const fields = [
       'groomDisplayName',
       'showInstagramLink',
@@ -173,115 +173,115 @@ export function GroomSectionForm({
       'showParentInfo',
       'fatherName',
       'motherName',
-    ] as const
+    ] as const;
 
     fields.forEach((field) => {
       const savedValue =
         groomSectionContent?.[field] ??
-        (field === 'showParentInfo' || field === 'showInstagramLink' ? false : null)
+        (field === 'showParentInfo' || field === 'showInstagramLink' ? false : null);
       if (draft[field] !== savedValue) {
-        newChangedFields.add(field)
+        newChangedFields.add(field);
       }
-    })
+    });
 
     // Update changed fields state
-    setChangedFieldsSet(newChangedFields)
+    setChangedFieldsSet(newChangedFields);
 
     // Update draft only if there are changes
     if (newChangedFields.size > 0) {
-      setDraftGroomSection((prev) => ({ ...(prev ?? {}), ...draft }))
+      setDraftGroomSection((prev) => ({ ...(prev ?? {}), ...draft }));
     } else {
-      setDraftGroomSection(undefined)
+      setDraftGroomSection(undefined);
     }
 
-    onChangeTracking?.(newChangedFields.size > 0, newChangedFields)
-  }, [formValues, groomSectionContent, setDraftGroomSection, onChangeTracking])
+    onChangeTracking?.(newChangedFields.size > 0, newChangedFields);
+  }, [formValues, groomSectionContent, setDraftGroomSection, onChangeTracking]);
 
   // Photo file selection - validation handled by hook
   const handlePhotoChange = (slot: PhotoSlot) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      setSelectedPhoto({ slot, file }) // Just set the file, hook will validate on upload
+      setSelectedPhoto({ slot, file }); // Just set the file, hook will validate on upload
     }
-  }
+  };
 
   // Upload button - check if replacement confirmation needed
   const handleUploadPhoto = async (slot: PhotoSlot) => {
-    if (selectedPhoto?.slot !== slot) return
+    if (selectedPhoto?.slot !== slot) return;
 
     // Check if photo exists in JSON array
-    const existingPhoto = getPhotoFilename(slot)
+    const existingPhoto = getPhotoFilename(slot);
     // Show confirmation if replacing existing photo
     if (existingPhoto) {
-      setShowConfirmDialog(true)
+      setShowConfirmDialog(true);
     } else {
       // Create FormData with file and slot
-      const formData = new FormData()
-      formData.append('file', selectedPhoto.file)
-      formData.append('slot', String(slot))
-      await photoUpload.uploadMedia(formData)
+      const formData = new FormData();
+      formData.append('file', selectedPhoto.file);
+      formData.append('slot', String(slot));
+      await photoUpload.uploadMedia(formData);
     }
-  }
+  };
 
   // Confirm replacement and upload
   const handleConfirmReplacement = async () => {
-    setShowConfirmDialog(false)
+    setShowConfirmDialog(false);
     if (selectedPhoto) {
-      const formData = new FormData()
-      formData.append('file', selectedPhoto.file)
-      formData.append('slot', String(selectedPhoto.slot))
-      await photoUpload.uploadMedia(formData)
+      const formData = new FormData();
+      formData.append('file', selectedPhoto.file);
+      formData.append('slot', String(selectedPhoto.slot));
+      await photoUpload.uploadMedia(formData);
     }
-  }
+  };
 
   // Form submission
   const onSubmit = async (data: GroomSectionContentFormData) => {
     try {
       // Include current photos (from draft or saved state) in the submission
       // Photos are managed separately via upload, so we need to preserve them
-      const photosJson = draftGroomSectionContent?.photos ?? groomSectionContent?.photos
+      const photosJson = draftGroomSectionContent?.photos ?? groomSectionContent?.photos;
 
       // Parse photos - handle both string (from DB) and array
-      let currentPhotos: any[] = []
+      let currentPhotos: any[] = [];
       if (photosJson) {
         if (typeof photosJson === 'string') {
-          currentPhotos = parsePhotos(photosJson)
+          currentPhotos = parsePhotos(photosJson);
         } else if (Array.isArray(photosJson)) {
-          currentPhotos = photosJson
+          currentPhotos = photosJson;
         }
       }
 
       const dataToSubmit = {
         ...data,
         ...(currentPhotos.length > 0 && { photos: currentPhotos }),
-      }
+      };
 
-      await onUpdate(dataToSubmit)
+      await onUpdate(dataToSubmit);
     } catch (error) {
-      console.error('failed submitting form', error)
+      console.error('failed submitting form', error);
     }
-  }
+  };
 
   // Helper to get photo filename from JSON array
   const getPhotoFilename = (slot: PhotoSlot): string | null => {
     // Try draft first, then saved
-    const photosJson = draftGroomSectionContent?.photos ?? groomSectionContent?.photos
-    if (!photosJson) return null
+    const photosJson = draftGroomSectionContent?.photos ?? groomSectionContent?.photos;
+    if (!photosJson) return null;
 
-    const photos = parsePhotos(photosJson)
-    const photo = photos.find((p) => p.slot === slot)
-    return photo?.filename ?? null
-  }
+    const photos = parsePhotos(photosJson);
+    const photo = photos.find((p) => p.slot === slot);
+    return photo?.filename ?? null;
+  };
 
   // Helper to get photo file size from JSON array
   const getPhotoFileSize = (slot: PhotoSlot): number | null => {
-    const photosJson = draftGroomSectionContent?.photos ?? groomSectionContent?.photos
-    if (!photosJson) return null
+    const photosJson = draftGroomSectionContent?.photos ?? groomSectionContent?.photos;
+    if (!photosJson) return null;
 
-    const photos = parsePhotos(photosJson)
-    const photo = photos.find((p) => p.slot === slot)
-    return photo?.fileSize ?? null
-  }
+    const photos = parsePhotos(photosJson);
+    const photo = photos.find((p) => p.slot === slot);
+    return photo?.fileSize ?? null;
+  };
 
   return (
     <>
@@ -393,9 +393,9 @@ export function GroomSectionForm({
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {([1, 2, 3, 4, 5, 6] as PhotoSlot[]).map((slot) => {
-              const photoFilename = getPhotoFilename(slot)
-              const photoFileSize = getPhotoFileSize(slot)
-              const isCurrentSelection = selectedPhoto?.slot === slot
+              const photoFilename = getPhotoFilename(slot);
+              const photoFileSize = getPhotoFileSize(slot);
+              const isCurrentSelection = selectedPhoto?.slot === slot;
 
               return (
                 <div key={slot} className="space-y-2 rounded-lg border p-4">
@@ -421,7 +421,7 @@ export function GroomSectionForm({
                   <div className="space-y-2">
                     <FileInput
                       ref={(el) => {
-                        photoInputRefs.current[slot] = el
+                        photoInputRefs.current[slot] = el;
                       }}
                       id={`groom-photo${slot}`}
                       accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
@@ -460,7 +460,7 @@ export function GroomSectionForm({
                     )}
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
 
@@ -486,5 +486,5 @@ export function GroomSectionForm({
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

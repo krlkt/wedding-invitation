@@ -1,33 +1,33 @@
-import { Client, createClient, InArgs } from '@libsql/client'
-import { getConfig } from '@/lib/env-config'
+import { Client, createClient, InArgs } from '@libsql/client';
+import { getConfig } from '@/lib/env-config';
 
-let client: Client
+let client: Client;
 
 const getDatabaseClient = () => {
-  const config = getConfig()
+  const config = getConfig();
 
   const client = createClient({
     url: config.databaseUrl,
     authToken: config.databaseAuthToken,
-  })
+  });
 
-  return client
-}
+  return client;
+};
 
-import { createGroupsTable } from './migrations'
+import { createGroupsTable } from './migrations';
 
 const initializeClient = () => {
   if (!client) {
-    client = getDatabaseClient()
-    createGroupsTable()
+    client = getDatabaseClient();
+    createGroupsTable();
   }
-  return client
-}
+  return client;
+};
 
-type DBRows<T> = { rows: T[] }
+type DBRows<T> = { rows: T[] };
 
 export async function query<T>(sql: string, args?: InArgs): Promise<DBRows<T>> {
-  const client = initializeClient()
-  const result = args ? await client.execute({ sql, args }) : await client.execute(sql)
-  return { rows: result.rows as T[] }
+  const client = initializeClient();
+  const result = args ? await client.execute({ sql, args }) : await client.execute(sql);
+  return { rows: result.rows as T[] };
 }

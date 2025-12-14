@@ -1,6 +1,6 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
-import FadeIn from '../FadeIn'
+import FadeIn from '../FadeIn';
 
 const DressCode = () => (
   <div className="w-full max-w-[650px] space-y-8 p-2 px-4 text-center">
@@ -14,7 +14,7 @@ const DressCode = () => (
       <MenWomenSection sex="men" />
     </FadeIn>
   </div>
-)
+);
 
 const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
   <div className={`relative flex w-full items-center gap-3 ${sex === 'men' && 'flex-row-reverse'}`}>
@@ -52,5 +52,5 @@ const MenWomenSection = ({ sex }: { sex: 'men' | 'women' }) => (
       />
     </div>
   </div>
-)
-export default DressCode
+);
+export default DressCode;

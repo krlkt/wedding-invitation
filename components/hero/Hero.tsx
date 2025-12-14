@@ -1,57 +1,57 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
-import './hero.css'
-import { motion } from 'framer-motion'
+import './hero.css';
+import { motion } from 'framer-motion';
 
-import { useWeddingData } from '@/hooks/useWeddingData'
+import { useWeddingData } from '@/hooks/useWeddingData';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 const Hero = () => {
-  const { config, startingSection } = useWeddingData()
+  const { config, startingSection } = useWeddingData();
 
   // Use display names from starting section, fallback to basic names from config
-  const groomDisplayName = startingSection?.groomDisplayName || config.groomName
-  const brideDisplayName = startingSection?.brideDisplayName || config.brideName
+  const groomDisplayName = startingSection?.groomDisplayName || config.groomName;
+  const brideDisplayName = startingSection?.brideDisplayName || config.brideName;
 
   // Show wedding date if enabled in starting section (default true)
-  const showWeddingDate = startingSection?.showWeddingDate !== false
+  const showWeddingDate = startingSection?.showWeddingDate !== false;
 
   // Format wedding date
   const formattedDate = new Date(config.weddingDate).toLocaleDateString('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
-  })
+  });
 
   // Show parent info if enabled
-  const showParentInfo = startingSection?.showParentInfo === true
-  const hasGroomParents = startingSection?.groomFatherName || startingSection?.groomMotherName
-  const hasBrideParents = startingSection?.brideFatherName || startingSection?.brideMotherName
+  const showParentInfo = startingSection?.showParentInfo === true;
+  const hasGroomParents = startingSection?.groomFatherName || startingSection?.groomMotherName;
+  const hasBrideParents = startingSection?.brideFatherName || startingSection?.brideMotherName;
 
   // Dynamic text sizing based on name length - use smallest size for both names
   const getNameTextSizePriority = (name: string): number => {
-    const length = name.length
-    if (length <= 12) return 4 // text-5xl
-    if (length <= 18) return 3 // text-4xl
-    if (length <= 25) return 2 // text-3xl
-    return 1 // text-2xl
-  }
+    const length = name.length;
+    if (length <= 12) return 4; // text-5xl
+    if (length <= 18) return 3; // text-4xl
+    if (length <= 25) return 2; // text-3xl
+    return 1; // text-2xl
+  };
 
-  const groomPriority = getNameTextSizePriority(groomDisplayName)
-  const bridePriority = getNameTextSizePriority(brideDisplayName)
+  const groomPriority = getNameTextSizePriority(groomDisplayName);
+  const bridePriority = getNameTextSizePriority(brideDisplayName);
 
   // Use the smaller size (lower priority number) for both names
-  const textSizePriority = Math.min(groomPriority, bridePriority)
+  const textSizePriority = Math.min(groomPriority, bridePriority);
 
   const getTextSizeClass = (priority: number): string => {
-    if (priority >= 4) return 'text-5xl'
-    if (priority >= 3) return 'text-4xl'
-    if (priority >= 2) return 'text-3xl'
-    return 'text-2xl'
-  }
+    if (priority >= 4) return 'text-5xl';
+    if (priority >= 3) return 'text-4xl';
+    if (priority >= 2) return 'text-3xl';
+    return 'text-2xl';
+  };
 
-  const nameTextSize = getTextSizeClass(textSizePriority)
+  const nameTextSize = getTextSizeClass(textSizePriority);
 
   return (
     <div className="hero-background flex h-full w-full grow flex-col items-center justify-center text-center">
@@ -92,21 +92,21 @@ const Hero = () => {
       </div>
       <ScrollDownText />
     </div>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;
 
 const ScrollDownText = () => {
-  const [showPrompt, setShowPrompt] = useState(false)
+  const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowPrompt(true)
-    }, 10000) // 10 seconds
+      setShowPrompt(true);
+    }, 10000); // 10 seconds
 
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   return showPrompt ? (
     <motion.div
@@ -122,5 +122,5 @@ const ScrollDownText = () => {
     >
       ↓ Scroll Down ↓
     </motion.div>
-  ) : null
-}
+  ) : null;
+};

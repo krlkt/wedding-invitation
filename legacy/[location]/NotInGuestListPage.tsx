@@ -6,5 +6,5 @@ export default function UnidentifiedPerson() {
       </h2>
       <p>You might be at the wrong wedding location?</p>
     </div>
-  )
+  );
 }

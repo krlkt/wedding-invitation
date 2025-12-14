@@ -10,10 +10,10 @@
  * - Bank Details
  */
 
-import { createId } from '@paralleldrive/cuid2'
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { createId } from '@paralleldrive/cuid2';
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
-import { weddingConfigurations } from './weddings'
+import { weddingConfigurations } from './weddings';
 
 // T022: Love Story Segment Schema
 export const loveStorySegments = sqliteTable('love_story_segments', {
@@ -34,10 +34,10 @@ export const loveStorySegments = sqliteTable('love_story_segments', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type LoveStorySegment = typeof loveStorySegments.$inferSelect
-export type NewLoveStorySegment = typeof loveStorySegments.$inferInsert
+export type LoveStorySegment = typeof loveStorySegments.$inferSelect;
+export type NewLoveStorySegment = typeof loveStorySegments.$inferInsert;
 
 // T023: Location Details Schema
 export const locationDetails = sqliteTable('location_details', {
@@ -60,10 +60,10 @@ export const locationDetails = sqliteTable('location_details', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type LocationDetails = typeof locationDetails.$inferSelect
-export type NewLocationDetails = typeof locationDetails.$inferInsert
+export type LocationDetails = typeof locationDetails.$inferSelect;
+export type NewLocationDetails = typeof locationDetails.$inferInsert;
 
 // T024: Gallery Item Schema
 export const galleryItems = sqliteTable('gallery_items', {
@@ -85,10 +85,10 @@ export const galleryItems = sqliteTable('gallery_items', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type GalleryItem = typeof galleryItems.$inferSelect
-export type NewGalleryItem = typeof galleryItems.$inferInsert
+export type GalleryItem = typeof galleryItems.$inferSelect;
+export type NewGalleryItem = typeof galleryItems.$inferInsert;
 
 // T025: FAQ Item Schema
 export const faqItems = sqliteTable('faq_items', {
@@ -107,10 +107,10 @@ export const faqItems = sqliteTable('faq_items', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type FAQItem = typeof faqItems.$inferSelect
-export type NewFAQItem = typeof faqItems.$inferInsert
+export type FAQItem = typeof faqItems.$inferSelect;
+export type NewFAQItem = typeof faqItems.$inferInsert;
 
 // T026: Dress Code Schema
 export const dressCodes = sqliteTable('dress_codes', {
@@ -132,10 +132,10 @@ export const dressCodes = sqliteTable('dress_codes', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type DressCode = typeof dressCodes.$inferSelect
-export type NewDressCode = typeof dressCodes.$inferInsert
+export type DressCode = typeof dressCodes.$inferSelect;
+export type NewDressCode = typeof dressCodes.$inferInsert;
 
 // T027: Bank Details Schema
 export const bankDetails = sqliteTable('bank_details', {
@@ -157,7 +157,7 @@ export const bankDetails = sqliteTable('bank_details', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
-export type BankDetails = typeof bankDetails.$inferSelect
-export type NewBankDetails = typeof bankDetails.$inferInsert
+export type BankDetails = typeof bankDetails.$inferSelect;
+export type NewBankDetails = typeof bankDetails.$inferInsert;

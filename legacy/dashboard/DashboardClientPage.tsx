@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import '../globals.css'
-import { useEffect, useState } from 'react'
+import '../globals.css';
+import { useEffect, useState } from 'react';
 
 import {
   TextField,
@@ -22,13 +22,13 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   Switch,
-} from '@mui/material'
-import { DataGrid, GridColDef, GridRowsProp, GridActionsCellItem } from '@mui/x-data-grid'
-import { useSnackbar } from 'notistack'
-import * as XLSX from 'xlsx'
+} from '@mui/material';
+import { DataGrid, GridColDef, GridRowsProp, GridActionsCellItem } from '@mui/x-data-grid';
+import { useSnackbar } from 'notistack';
+import * as XLSX from 'xlsx';
 
-import { Locations } from '@/components/LocationComponent'
-import { RSVP, RSVPForm } from '@/legacy/types/rsvp'
+import { Locations } from '@/components/LocationComponent';
+import { RSVP, RSVPForm } from '@/legacy/types/rsvp';
 
 import {
   addParticipant,
@@ -36,25 +36,25 @@ import {
   deleteParticipant,
   importDataFromExcel,
   updatePossiblyNotComing,
-} from './action'
+} from './action';
 
 interface Group {
-  id: number
-  name: string
+  id: number;
+  name: string;
 }
 
 const DashboardClientPage = ({
   initialData,
   location,
 }: {
-  initialData: RSVP[]
-  location?: Locations
+  initialData: RSVP[];
+  location?: Locations;
 }) => {
-  const { enqueueSnackbar } = useSnackbar()
-  const [data, setData] = useState<RSVP[]>(initialData)
-  const [isImporting, setIsImporting] = useState(false)
-  const [groups, setGroups] = useState<Group[]>([])
-  const [newGroupName, setNewGroupName] = useState('')
+  const { enqueueSnackbar } = useSnackbar();
+  const [data, setData] = useState<RSVP[]>(initialData);
+  const [isImporting, setIsImporting] = useState(false);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [newGroupName, setNewGroupName] = useState('');
   const [form, setForm] = useState<RSVPForm>({
     name: '',
     attend: undefined,
@@ -63,25 +63,25 @@ const DashboardClientPage = ({
     notes: undefined,
     location: 'jakarta',
     link: '',
-  })
+  });
 
   const fetchGroups = async () => {
-    const response = await fetch('/api/groups')
-    const data = await response.json()
-    setGroups(data)
-  }
+    const response = await fetch('/api/groups');
+    const data = await response.json();
+    setGroups(data);
+  };
 
   useEffect(() => {
-    fetchGroups()
-  }, [])
+    fetchGroups();
+  }, []);
 
   const fetchData = async () => {
-    const participants = await getParticipants(location)
-    setData(participants)
-  }
+    const participants = await getParticipants(location);
+    setData(participants);
+  };
 
   const addRow = async (data: RSVPForm) => {
-    await addParticipant(data)
+    await addParticipant(data);
     setForm({
       name: '',
       attend: undefined,
@@ -91,60 +91,60 @@ const DashboardClientPage = ({
       location: 'jakarta',
       link: '',
       group: undefined,
-    })
-    fetchData()
-  }
+    });
+    fetchData();
+  };
 
   const deleteRow = async (id: string) => {
-    await deleteParticipant(id)
-    fetchData()
-  }
+    await deleteParticipant(id);
+    fetchData();
+  };
 
   const processRowUpdate = async (newRow: RSVP, oldRow: RSVP) => {
     try {
-      await addParticipant(newRow)
-      fetchData()
-      return newRow
+      await addParticipant(newRow);
+      fetchData();
+      return newRow;
     } catch (error) {
-      console.error('Update failed:', error)
-      return oldRow
+      console.error('Update failed:', error);
+      return oldRow;
     }
-  }
+  };
 
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (!file) {
-      return
+      return;
     }
 
-    setIsImporting(true)
+    setIsImporting(true);
 
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onload = async (evt) => {
-      const bstr = evt.target?.result
-      const wb = XLSX.read(bstr, { type: 'binary' })
-      const wsname = wb.SheetNames[0]
-      const ws = wb.Sheets[wsname]
-      const data: any[] = XLSX.utils.sheet_to_json(ws, { raw: true })
+      const bstr = evt.target?.result;
+      const wb = XLSX.read(bstr, { type: 'binary' });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const data: any[] = XLSX.utils.sheet_to_json(ws, { raw: true });
 
       try {
-        await importDataFromExcel(data)
+        await importDataFromExcel(data);
       } catch (e: any) {
-        const errorMessage = e?.message || 'Unknown error occurred during import.'
-        enqueueSnackbar(`${errorMessage}`, { variant: 'warning', persist: true })
-        setIsImporting(false)
-        fetchData()
-        return
+        const errorMessage = e?.message || 'Unknown error occurred during import.';
+        enqueueSnackbar(`${errorMessage}`, { variant: 'warning', persist: true });
+        setIsImporting(false);
+        fetchData();
+        return;
       }
 
       enqueueSnackbar(`${data.length} participants were successfully imported!`, {
         variant: 'success',
-      })
-      setIsImporting(false)
-      fetchData()
-    }
-    reader.readAsBinaryString(file)
-  }
+      });
+      setIsImporting(false);
+      fetchData();
+    };
+    reader.readAsBinaryString(file);
+  };
 
   const handleAddGroup = async () => {
     await fetch('/api/groups', {
@@ -153,10 +153,10 @@ const DashboardClientPage = ({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ name: newGroupName }),
-    })
-    setNewGroupName('')
-    fetchGroups()
-  }
+    });
+    setNewGroupName('');
+    fetchGroups();
+  };
 
   const handleDeleteGroup = async (id: number) => {
     await fetch('/api/groups', {
@@ -165,9 +165,9 @@ const DashboardClientPage = ({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id }),
-    })
-    fetchGroups()
-  }
+    });
+    fetchGroups();
+  };
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -196,8 +196,8 @@ const DashboardClientPage = ({
       width: 300,
       editable: false,
       renderCell: (params) => {
-        const link = params.value || ''
-        return <LinkCell link={link} />
+        const link = params.value || '';
+        return <LinkCell link={link} />;
       },
     },
     { field: 'notes', headerName: 'Notes', width: 200, editable: true },
@@ -210,8 +210,8 @@ const DashboardClientPage = ({
         <Switch
           checked={params.value ?? false}
           onChange={async (e) => {
-            await updatePossiblyNotComing(params.id as number, e.target.checked)
-            fetchData()
+            await updatePossiblyNotComing(params.id as number, e.target.checked);
+            fetchData();
           }}
         />
       ),
@@ -228,7 +228,7 @@ const DashboardClientPage = ({
           options={groups.map((group) => group.name)}
           value={params.value}
           onChange={(event, newValue) => {
-            params.api.setEditCellValue({ id: params.id, field: params.field, value: newValue })
+            params.api.setEditCellValue({ id: params.id, field: params.field, value: newValue });
           }}
           renderInput={(props) => <TextField {...props} />}
           style={{ width: '100%' }}
@@ -260,22 +260,22 @@ const DashboardClientPage = ({
         />,
       ],
     },
-  ]
+  ];
 
   const filteredColumns = columns.filter((col) => {
     if (location === 'jakarta') {
-      return col.field !== 'notes' && col.field !== 'food_choice'
+      return col.field !== 'notes' && col.field !== 'food_choice';
     }
     if (location === 'malang') {
-      return col.field !== 'notes' && col.field !== 'food_choice'
+      return col.field !== 'notes' && col.field !== 'food_choice';
     }
     if (location === 'bali') {
-      return col.field !== 'group'
+      return col.field !== 'group';
     }
-    return true
-  })
+    return true;
+  });
 
-  const rows: GridRowsProp<RSVP> = data
+  const rows: GridRowsProp<RSVP> = data;
 
   return (
     <Box p={2}>
@@ -455,13 +455,13 @@ const DashboardClientPage = ({
         </Box>
       )}
     </Box>
-  )
-}
+  );
+};
 
-export default DashboardClientPage
+export default DashboardClientPage;
 
 const LinkCell = ({ link }: { link: string }) => {
-  const [hovered, setHovered] = useState(false)
+  const [hovered, setHovered] = useState(false);
 
   return (
     <Tooltip
@@ -522,5 +522,5 @@ const LinkCell = ({ link }: { link: string }) => {
         )}
       </div>
     </Tooltip>
-  )
-}
+  );
+};

@@ -1,6 +1,6 @@
-import { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren } from 'react';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
 const BlurryOverlay: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -20,7 +20,7 @@ const BlurryOverlay: FC<PropsWithChildren> = ({ children }) => {
       {/* Content */}
       {children}
     </div>
-  )
-}
+  );
+};
 
-export default BlurryOverlay
+export default BlurryOverlay;

@@ -17,37 +17,37 @@
  * - Only re-renders when isChanged, value, or validationSchema changes
  */
 
-import { ReactNode, useMemo, memo } from 'react'
-import { type ZodType } from 'zod'
-import { getFieldContainerClasses, validateField } from '@/lib/field-validation'
+import { ReactNode, useMemo, memo } from 'react';
+import { type ZodType } from 'zod';
+import { getFieldContainerClasses, validateField } from '@/lib/field-validation';
 
 interface SectionFieldWrapperProps {
   /**
    * Whether the field has changed from saved value
    * Should come from centralized change tracking in parent form
    */
-  isChanged: boolean
+  isChanged: boolean;
 
   /**
    * Current value of the field (for validation)
    */
-  value: any
+  value: any;
 
   /**
    * Optional Zod schema for real-time validation
    * If provided, will validate the field and show error messages
    */
-  validationSchema?: ZodType<any>
+  validationSchema?: ZodType<any>;
 
   /**
    * Children to render (typically Input, Textarea, etc.)
    */
-  children: ReactNode
+  children: ReactNode;
 
   /**
    * Optional custom error message to override Zod validation
    */
-  customError?: string
+  customError?: string;
 }
 
 /**
@@ -70,24 +70,24 @@ export const SectionFieldWrapper = memo(
     const validation = useMemo(
       () => (validationSchema ? validateField(value, validationSchema) : { valid: true }),
       [value, validationSchema]
-    )
+    );
 
     // Use custom error if provided, otherwise use validation error
-    const hasError = customError ? true : !validation.valid
-    const errorMessage = customError ?? validation.error
+    const hasError = customError ? true : !validation.valid;
+    const errorMessage = customError ?? validation.error;
 
     // Determine field state based on isChanged (from parent) and error state
-    let fieldState: 'error' | 'changed' | 'pristine'
+    let fieldState: 'error' | 'changed' | 'pristine';
 
     if (hasError) {
-      fieldState = 'error'
+      fieldState = 'error';
     } else if (isChanged) {
-      fieldState = 'changed'
+      fieldState = 'changed';
     } else {
-      fieldState = 'pristine'
+      fieldState = 'pristine';
     }
 
-    const containerClasses = getFieldContainerClasses(fieldState, hasError)
+    const containerClasses = getFieldContainerClasses(fieldState, hasError);
 
     return (
       <div className={containerClasses}>
@@ -96,8 +96,8 @@ export const SectionFieldWrapper = memo(
           <p className="text-sm font-medium text-red-600">{errorMessage}</p>
         )}
       </div>
-    )
+    );
   }
-)
+);
 
-SectionFieldWrapper.displayName = 'SectionFieldWrapper'
+SectionFieldWrapper.displayName = 'SectionFieldWrapper';

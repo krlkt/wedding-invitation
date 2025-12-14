@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import { FC, useState } from 'react'
+import { FC, useState } from 'react';
 
-import { Locations } from '@/components/LocationComponent'
-import Modal from '@/components/Modal'
-import { Guest } from '@/legacy/types/guest'
-import { Table } from '@/legacy/types/table'
+import { Locations } from '@/components/LocationComponent';
+import Modal from '@/components/Modal';
+import { Guest } from '@/legacy/types/guest';
+import { Table } from '@/legacy/types/table';
 
-import { moveGuestToTable } from './actions'
+import { moveGuestToTable } from './actions';
 
 interface MoveGuestModalProps {
-  guest: Guest
-  tables: Table[]
-  location: Locations
-  onClose: () => void
+  guest: Guest;
+  tables: Table[];
+  location: Locations;
+  onClose: () => void;
 }
 
 export const MoveGuestModal: FC<MoveGuestModalProps> = ({ guest, tables, location, onClose }) => {
-  const [selectedTable, setSelectedTable] = useState<number | null>(guest.table_id)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedTable, setSelectedTable] = useState<number | null>(guest.table_id);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleMoveGuest = async () => {
-    await moveGuestToTable(guest.id, selectedTable, location)
-    onClose()
-  }
+    await moveGuestToTable(guest.id, selectedTable, location);
+    onClose();
+  };
 
   const filteredTables = tables.filter((table) =>
     table.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  );
 
   return (
     <Modal open onClose={onClose}>
@@ -70,5 +70,5 @@ export const MoveGuestModal: FC<MoveGuestModalProps> = ({ guest, tables, locatio
         </button>
       </div>
     </Modal>
-  )
-}
+  );
+};

@@ -1,6 +1,6 @@
-import { FC, PropsWithChildren, useEffect, useState } from 'react'
+import { FC, PropsWithChildren, useEffect, useState } from 'react';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
 const backgroundImagesSrc = [
   '/images/unopened/cycle1.jpg',
@@ -9,35 +9,35 @@ const backgroundImagesSrc = [
   '/images/unopened/cycle4.jpg',
   '/images/unopened/cycle5.jpg',
   '/images/unopened/cycle6.jpg',
-]
+];
 
 const CycleBackground: FC<PropsWithChildren> = ({ children }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [previousImageIndex, setPreviousImageIndex] = useState<number | null>(null)
-  const [isFading, setIsFading] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [previousImageIndex, setPreviousImageIndex] = useState<number | null>(null);
+  const [isFading, setIsFading] = useState(false);
 
   // Preload images
   useEffect(() => {
     backgroundImagesSrc.forEach((src) => {
-      const img = new window.Image()
-      img.src = src
-    })
-  }, [])
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, []);
 
   // Cycle images
   useEffect(() => {
     const timer = setInterval(() => {
-      setIsFading(true)
-      setPreviousImageIndex(currentImageIndex)
-      setCurrentImageIndex((prev) => (prev + 1) % backgroundImagesSrc.length)
-    }, 4000)
-    return () => clearInterval(timer)
-  }, [currentImageIndex])
+      setIsFading(true);
+      setPreviousImageIndex(currentImageIndex);
+      setCurrentImageIndex((prev) => (prev + 1) % backgroundImagesSrc.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [currentImageIndex]);
 
   const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.classList.add('animateImage')
-    setIsFading(false)
-  }
+    e.currentTarget.classList.add('animateImage');
+    setIsFading(false);
+  };
 
   return (
     <section
@@ -73,7 +73,7 @@ const CycleBackground: FC<PropsWithChildren> = ({ children }) => {
       </div>
       {children}
     </section>
-  )
-}
+  );
+};
 
-export default CycleBackground
+export default CycleBackground;

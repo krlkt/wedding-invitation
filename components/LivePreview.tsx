@@ -7,26 +7,26 @@
  * (this is an exception because we need to poll for config changes in the dashboard)
  */
 
-'use client'
+'use client';
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react';
 
-import TemplateRenderer from './preview/TemplateRenderer'
+import TemplateRenderer from './preview/TemplateRenderer';
 
-import type { PreviewData } from './preview/types'
-import type { StartingSectionContent } from '@/db/schema/starting-section'
-import type { GroomSectionContent } from '@/db/schema/groom-section'
-import type { BrideSectionContent } from '@/db/schema/bride-section'
-import type { FAQItem } from '../db/schema/content'
+import type { PreviewData } from './preview/types';
+import type { StartingSectionContent } from '@/db/schema/starting-section';
+import type { GroomSectionContent } from '@/db/schema/groom-section';
+import type { BrideSectionContent } from '@/db/schema/bride-section';
+import type { FAQItem } from '../db/schema/content';
 
 interface LivePreviewProps {
-  weddingConfigId: string
-  refreshTrigger?: number // Increment to force refresh
-  draftFeatures?: Record<string, boolean> // Draft features from local state
-  draftStartingSection?: Partial<StartingSectionContent> // Draft starting section from local state
-  draftGroomSection?: Partial<GroomSectionContent> // Draft groom section from local state
-  draftBrideSection?: Partial<BrideSectionContent> // Draft bride section from local state
-  draftFAQs?: Partial<FAQItem>[]
+  weddingConfigId: string;
+  refreshTrigger?: number; // Increment to force refresh
+  draftFeatures?: Record<string, boolean>; // Draft features from local state
+  draftStartingSection?: Partial<StartingSectionContent>; // Draft starting section from local state
+  draftGroomSection?: Partial<GroomSectionContent>; // Draft groom section from local state
+  draftBrideSection?: Partial<BrideSectionContent>; // Draft bride section from local state
+  draftFAQs?: Partial<FAQItem>[];
 }
 
 export default function LivePreview({
@@ -38,67 +38,67 @@ export default function LivePreview({
   draftBrideSection,
   draftFAQs,
 }: LivePreviewProps) {
-  const [previewData, setPreviewData] = useState<PreviewData | null>(null)
-  const [displayData, setDisplayData] = useState<PreviewData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [containerHeight, setContainerHeight] = useState<number | null>(null)
-  const savedScrollPosition = useRef<number>(0)
-  const shouldRestoreScroll = useRef<boolean>(false)
+  const [previewData, setPreviewData] = useState<PreviewData | null>(null);
+  const [displayData, setDisplayData] = useState<PreviewData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = useState<number | null>(null);
+  const savedScrollPosition = useRef<number>(0);
+  const shouldRestoreScroll = useRef<boolean>(false);
 
   // Measure container height and set CSS variable
   useEffect(() => {
     const updateHeight = () => {
       if (scrollContainerRef.current) {
-        const height = scrollContainerRef.current.clientHeight
-        setContainerHeight(height)
+        const height = scrollContainerRef.current.clientHeight;
+        setContainerHeight(height);
       }
-    }
+    };
 
     // Use setTimeout to ensure the container is rendered and has dimensions
-    const timer = setTimeout(updateHeight, 100)
+    const timer = setTimeout(updateHeight, 100);
 
-    window.addEventListener('resize', updateHeight)
+    window.addEventListener('resize', updateHeight);
     return () => {
-      clearTimeout(timer)
-      window.removeEventListener('resize', updateHeight)
-    }
-  }, [previewData])
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateHeight);
+    };
+  }, [previewData]);
 
   useEffect(() => {
     async function fetchPreview() {
       try {
         // Save current scroll position before fetching and mark that we should restore it
         if (scrollContainerRef.current) {
-          savedScrollPosition.current = scrollContainerRef.current.scrollTop
-          shouldRestoreScroll.current = true
+          savedScrollPosition.current = scrollContainerRef.current.scrollTop;
+          shouldRestoreScroll.current = true;
         }
 
-        setLoading(true)
-        setError(null)
+        setLoading(true);
+        setError(null);
         // Add timestamp to bust Next.js cache
         const response = await fetch(`/api/wedding/preview`, {
           cache: 'no-store',
-        })
+        });
 
         if (response.ok) {
-          const { data } = await response.json()
-          setPreviewData(data)
+          const { data } = await response.json();
+          setPreviewData(data);
         } else {
-          const errorData = await response.json()
-          setError(errorData.message ?? 'Failed to load preview')
+          const errorData = await response.json();
+          setError(errorData.message ?? 'Failed to load preview');
         }
       } catch (err) {
-        console.error('Failed to fetch preview:', err)
-        setError('Failed to load preview')
+        console.error('Failed to fetch preview:', err);
+        setError('Failed to load preview');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    void fetchPreview()
-  }, [weddingConfigId, refreshTrigger])
+    void fetchPreview();
+  }, [weddingConfigId, refreshTrigger]);
 
   // Merge draft features and section content with preview data for immediate feedback
   useEffect(() => {
@@ -108,21 +108,21 @@ export default function LivePreview({
             ...(previewData.content.startingSection ?? {}),
             ...draftStartingSection,
           } as StartingSectionContent)
-        : previewData.content.startingSection
+        : previewData.content.startingSection;
 
       const mergedGroomSection = draftGroomSection
         ? ({
             ...(previewData.content.groomSection ?? {}),
             ...draftGroomSection,
           } as GroomSectionContent)
-        : previewData.content.groomSection
+        : previewData.content.groomSection;
 
       const mergedBrideSection = draftBrideSection
         ? ({
             ...(previewData.content.brideSection ?? {}),
             ...draftBrideSection,
           } as BrideSectionContent)
-        : previewData.content.brideSection
+        : previewData.content.brideSection;
 
       setDisplayData({
         ...previewData,
@@ -139,7 +139,7 @@ export default function LivePreview({
           groomSection: mergedGroomSection,
           brideSection: mergedBrideSection,
         },
-      })
+      });
     }
   }, [
     previewData,
@@ -148,7 +148,7 @@ export default function LivePreview({
     draftGroomSection,
     draftBrideSection,
     draftFAQs,
-  ])
+  ]);
 
   // Restore scroll position only after fetch operations, not on every draft change
   useEffect(() => {
@@ -161,13 +161,13 @@ export default function LivePreview({
       // Use requestAnimationFrame to ensure DOM has updated
       requestAnimationFrame(() => {
         if (scrollContainerRef.current) {
-          scrollContainerRef.current.scrollTop = savedScrollPosition.current
+          scrollContainerRef.current.scrollTop = savedScrollPosition.current;
           // Reset the flag after restoring
-          shouldRestoreScroll.current = false
+          shouldRestoreScroll.current = false;
         }
-      })
+      });
     }
-  }, [displayData])
+  }, [displayData]);
 
   if (loading) {
     return (
@@ -177,7 +177,7 @@ export default function LivePreview({
           <p className="mt-2 text-sm text-gray-600">Loading preview...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -193,7 +193,7 @@ export default function LivePreview({
           </button>
         </div>
       </div>
-    )
+    );
   }
 
   if (!displayData) {
@@ -201,7 +201,7 @@ export default function LivePreview({
       <div className="flex h-full items-center justify-center bg-gray-50">
         <p className="text-gray-500">No preview data available</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -243,5 +243,5 @@ export default function LivePreview({
         </div>
       </div>
     </div>
-  )
+  );
 }

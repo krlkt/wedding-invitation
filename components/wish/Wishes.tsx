@@ -1,34 +1,34 @@
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Wish } from '@/legacy/types/wish'
+import { Wish } from '@/legacy/types/wish';
 
-import BubbleText from './BubbleText'
+import BubbleText from './BubbleText';
 
-import './wishes.css'
-import Button from '../Button'
+import './wishes.css';
+import Button from '../Button';
 
-import { useTransition } from 'react'
+import { useTransition } from 'react';
 
-import FadeIn from '../FadeIn'
+import FadeIn from '../FadeIn';
 
 const Wishes = ({
   wishes,
 }: {
-  wishes: { wishes: Array<Wish>; wishPage: number; totalPages: number }
+  wishes: { wishes: Array<Wish>; wishPage: number; totalPages: number };
 }) => {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [isPending, startTransition] = useTransition()
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
-  const { wishes: wishArray, wishPage, totalPages } = wishes
+  const { wishes: wishArray, wishPage, totalPages } = wishes;
 
   const goToPage = (page: number) => {
     startTransition(() => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set('page', page.toString())
-      router.replace(`?${params.toString()}`, { scroll: false })
-    })
-  }
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', page.toString());
+      router.replace(`?${params.toString()}`, { scroll: false });
+    });
+  };
 
   return (
     <FadeIn className="space-y-4">
@@ -62,7 +62,7 @@ const Wishes = ({
         </Button>
       </div>
     </FadeIn>
-  )
-}
+  );
+};
 
-export default Wishes
+export default Wishes;

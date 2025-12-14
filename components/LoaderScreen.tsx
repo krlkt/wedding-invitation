@@ -1,11 +1,11 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface LoaderScreenProps {
-  isVisible: boolean
-  groomName?: string
-  brideName?: string
+  isVisible: boolean;
+  groomName?: string;
+  brideName?: string;
 }
 const LoaderScreen: FC<LoaderScreenProps> = ({
   isVisible,
@@ -49,7 +49,7 @@ const LoaderScreen: FC<LoaderScreenProps> = ({
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default LoaderScreen
+export default LoaderScreen;

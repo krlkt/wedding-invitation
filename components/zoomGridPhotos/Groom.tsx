@@ -1,99 +1,99 @@
-'use client'
+'use client';
 
-import './zoomGridPhotos.css'
-import { useRef, useState, useEffect, useMemo } from 'react'
+import './zoomGridPhotos.css';
+import { useRef, useState, useEffect, useMemo } from 'react';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion';
 
-import InstagramIcon from '@/components/icons/InstagramIcon'
-import { useScrollContainer } from '@/context/ScrollContainerContext'
-import { useWeddingData } from '@/hooks/useWeddingData'
-import { parsePhotos } from '@/lib/section-photos'
+import InstagramIcon from '@/components/icons/InstagramIcon';
+import { useScrollContainer } from '@/context/ScrollContainerContext';
+import { useWeddingData } from '@/hooks/useWeddingData';
+import { parsePhotos } from '@/lib/section-photos';
 
-import Groom1 from '../../public/images/groom/groom1.jpg'
-import Groom2 from '../../public/images/groom/groom2.jpg'
-import Groom3 from '../../public/images/groom/groom3.jpg'
-import Groom4 from '../../public/images/groom/groom4.jpg'
-import Groom5 from '../../public/images/groom/groom5.jpg'
-import Groom6 from '../../public/images/groom/groom6.jpg'
+import Groom1 from '../../public/images/groom/groom1.jpg';
+import Groom2 from '../../public/images/groom/groom2.jpg';
+import Groom3 from '../../public/images/groom/groom3.jpg';
+import Groom4 from '../../public/images/groom/groom4.jpg';
+import Groom5 from '../../public/images/groom/groom5.jpg';
+import Groom6 from '../../public/images/groom/groom6.jpg';
 
 // Default photos (fallback) - defined outside component to avoid re-creation
-const defaultPhotos = [Groom1, Groom2, Groom3, Groom4, Groom5, Groom6]
+const defaultPhotos = [Groom1, Groom2, Groom3, Groom4, Groom5, Groom6];
 
 const Groom = () => {
   // Get wedding data from context
-  const { config, features, groomSection } = useWeddingData()
+  const { config, features, groomSection } = useWeddingData();
 
   // Get scroll container from context (for embedded previews)
-  const { containerRef, isEmbedded } = useScrollContainer()
+  const { containerRef, isEmbedded } = useScrollContainer();
 
   // Measure container height for embedded mode
-  const [containerHeight, setContainerHeight] = useState<number | null>(null)
+  const [containerHeight, setContainerHeight] = useState<number | null>(null);
 
   useEffect(() => {
     if (!isEmbedded || !containerRef?.current) {
-      return
+      return;
     }
 
     const updateHeight = () => {
       if (containerRef?.current) {
-        const height = containerRef.current.clientHeight
+        const height = containerRef.current.clientHeight;
         if (height) {
-          setContainerHeight(height)
+          setContainerHeight(height);
         }
       }
-    }
+    };
 
-    updateHeight()
-    window.addEventListener('resize', updateHeight)
-    return () => window.removeEventListener('resize', updateHeight)
-  }, [isEmbedded, containerRef])
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, [isEmbedded, containerRef]);
 
   // Zoom animation
-  const zoomAnimationContainer = useRef<HTMLDivElement>(null)
+  const zoomAnimationContainer = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: zoomAnimationContainer,
     offset: ['start start', 'end end'],
     container: containerRef, // Use container if provided, otherwise defaults to window
     layoutEffect: false, // Use useEffect instead of useLayoutEffect for better SSR compatibility
-  })
+  });
 
-  const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4.15])
-  const scale5 = useTransform(scrollYProgress, [0, 0.8], [1, 5])
-  const scale6 = useTransform(scrollYProgress, [0, 0.8], [1, 6])
-  const scale8 = useTransform(scrollYProgress, [0, 0.8], [1, 8])
-  const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9])
-  const textOpacityGroom = useTransform(scrollYProgress, [0.3, 0.8], [0, 1])
-  const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1])
+  const scale4 = useTransform(scrollYProgress, [0, 0.8], [1, 4.15]);
+  const scale5 = useTransform(scrollYProgress, [0, 0.8], [1, 5]);
+  const scale6 = useTransform(scrollYProgress, [0, 0.8], [1, 6]);
+  const scale8 = useTransform(scrollYProgress, [0, 0.8], [1, 8]);
+  const scale9 = useTransform(scrollYProgress, [0, 0.8], [1, 9]);
+  const textOpacityGroom = useTransform(scrollYProgress, [0.3, 0.8], [0, 1]);
+  const textOpacityParent = useTransform(scrollYProgress, [0.5, 0.9], [0, 1]);
 
   // Use measured container height for embedded mode, viewport height for fullscreen
-  const stickyHeightValue = isEmbedded && containerHeight ? `${containerHeight}px` : ''
-  const containerHeightValue = isEmbedded && containerHeight ? `${containerHeight * 3}px` : ''
+  const stickyHeightValue = isEmbedded && containerHeight ? `${containerHeight}px` : '';
+  const containerHeightValue = isEmbedded && containerHeight ? `${containerHeight * 3}px` : '';
 
-  const stickyHeightClass = isEmbedded ? '' : 'h-dvh'
-  const containerHeightClass = isEmbedded ? '' : 'h-[calc(var(--vh)*300)]'
+  const stickyHeightClass = isEmbedded ? '' : 'h-dvh';
+  const containerHeightClass = isEmbedded ? '' : 'h-[calc(var(--vh)*300)]';
 
   // Build ordered photos from groomSection or use defaults
   const orderedPhotos = useMemo(() => {
-    if (!groomSection?.photos) return defaultPhotos
+    if (!groomSection?.photos) return defaultPhotos;
 
     // Parse JSON photos array
-    const uploadedPhotos = parsePhotos(groomSection.photos)
+    const uploadedPhotos = parsePhotos(groomSection.photos);
 
     // If no photos uploaded, use defaults
-    if (uploadedPhotos.length === 0) return defaultPhotos
+    if (uploadedPhotos.length === 0) return defaultPhotos;
 
     // Map uploaded photos to slots, fill missing with defaults
     const photos = Array.from({ length: 6 }, (_, i) => {
-      const slot = i + 1
-      const uploadedPhoto = uploadedPhotos.find((p) => p.slot === slot)
-      return uploadedPhoto?.filename ?? defaultPhotos[i]
-    })
+      const slot = i + 1;
+      const uploadedPhoto = uploadedPhotos.find((p) => p.slot === slot);
+      return uploadedPhoto?.filename ?? defaultPhotos[i];
+    });
 
-    return photos
-  }, [groomSection])
+    return photos;
+  }, [groomSection]);
 
   const pictures = [
     {
@@ -120,7 +120,7 @@ const Groom = () => {
       src: orderedPhotos[5],
       scale: scale9,
     },
-  ]
+  ];
 
   return (
     // Container for zoom scroll animation
@@ -135,7 +135,7 @@ const Groom = () => {
       >
         {pictures.map(({ scale, src }, index) => {
           // Check if src is a static import (has blurDataURL) or a URL string
-          const isStaticImport = typeof src === 'object' && 'src' in src
+          const isStaticImport = typeof src === 'object' && 'src' in src;
 
           return (
             // Element container div to make sure everything has the same layout
@@ -150,7 +150,7 @@ const Groom = () => {
                 />
               </div>
             </motion.div>
-          )
+          );
         })}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
           <motion.div style={{ opacity: textOpacityGroom }} className="h-[230px] w-[340px]">
@@ -206,7 +206,7 @@ const Groom = () => {
         <motion.div style={{ opacity: textOpacityParent }} className="groom-text-overlay" />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Groom
+export default Groom;

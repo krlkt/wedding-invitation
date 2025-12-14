@@ -1,13 +1,13 @@
-'use client'
-import { FC, PropsWithChildren } from 'react'
+'use client';
+import { FC, PropsWithChildren } from 'react';
 
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
 interface ButtonProps {
-  onClick?: () => void
-  alternateBackground?: boolean
-  type?: 'button' | 'submit' | 'reset'
-  disabled?: boolean
+  onClick?: () => void;
+  alternateBackground?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 const Button: FC<PropsWithChildren<ButtonProps>> = ({
   onClick,
@@ -27,7 +27,7 @@ const Button: FC<PropsWithChildren<ButtonProps>> = ({
     >
       {children}
     </motion.button>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

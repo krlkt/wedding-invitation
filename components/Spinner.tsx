@@ -22,5 +22,5 @@ const Spinner = () => (
       className="text-gray-900"
     />
   </svg>
-)
-export default Spinner
+);
+export default Spinner;

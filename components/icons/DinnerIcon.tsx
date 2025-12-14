@@ -46,6 +46,6 @@ const DinnerIcon = () => (
       </g>
     </g>
   </svg>
-)
+);
 
-export default DinnerIcon
+export default DinnerIcon;

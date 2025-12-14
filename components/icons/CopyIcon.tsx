@@ -10,6 +10,6 @@ const CopyIcon = () => (
       </g>
     </g>
   </svg>
-)
+);
 
-export default CopyIcon
+export default CopyIcon;

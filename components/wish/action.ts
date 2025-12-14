@@ -1,9 +1,9 @@
-'use server'
+'use server';
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath } from 'next/cache';
 
-import { query } from '@/db/client'
-import { Wish } from '@/legacy/types/wish'
+import { query } from '@/db/client';
+import { Wish } from '@/legacy/types/wish';
 
 export const addWish = async (data: Wish) => {
   await query(
@@ -13,8 +13,8 @@ export const addWish = async (data: Wish) => {
       wish: data.wish,
       created_by_id: data.created_by_id,
     }
-  )
+  );
 
   // Update UI
-  revalidatePath('/')
-}
+  revalidatePath('/');
+};

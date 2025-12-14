@@ -3,11 +3,11 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/shadcn/accordion'
-import type { FAQItem } from '@/db/schema/content'
+} from '@/components/shadcn/accordion';
+import type { FAQItem } from '@/db/schema/content';
 
 interface FAQProps {
-  faqs: Partial<FAQItem>[]
+  faqs: Partial<FAQItem>[];
 }
 
 const FAQ = ({ faqs }: FAQProps) => (
@@ -33,6 +33,6 @@ const FAQ = ({ faqs }: FAQProps) => (
         </Accordion>
       ))}
   </div>
-)
+);
 
-export default FAQ
+export default FAQ;

@@ -10,9 +10,9 @@
  * Used by both groom and bride section content
  */
 export interface GroomBrideSectionPhoto {
-  filename: string
-  fileSize: number
-  mimeType: string
-  slot: number // Which slot/position (1-based)
-  uploadedAt: string // ISO timestamp
+  filename: string;
+  fileSize: number;
+  mimeType: string;
+  slot: number; // Which slot/position (1-based)
+  uploadedAt: string; // ISO timestamp
 }

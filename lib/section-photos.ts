@@ -5,19 +5,19 @@
  * Handles JSON parsing, manipulation, and serialization.
  */
 
-import type { GroomBrideSectionPhoto } from '@/db/schema'
+import type { GroomBrideSectionPhoto } from '@/db/schema';
 
 /**
  * Parse photos JSON string from database
  */
 export function parsePhotos(photosJson: string | null | undefined): GroomBrideSectionPhoto[] {
-  if (!photosJson) return []
+  if (!photosJson) return [];
 
   try {
-    const parsed = JSON.parse(photosJson)
-    return Array.isArray(parsed) ? parsed : []
+    const parsed = JSON.parse(photosJson);
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return []
+    return [];
   }
 }
 
@@ -25,7 +25,7 @@ export function parsePhotos(photosJson: string | null | undefined): GroomBrideSe
  * Stringify photos array for database storage
  */
 export function stringifyPhotos(photos: GroomBrideSectionPhoto[]): string {
-  return JSON.stringify(photos)
+  return JSON.stringify(photos);
 }
 
 /**
@@ -35,17 +35,17 @@ export function upsertPhoto(
   photos: GroomBrideSectionPhoto[],
   newPhoto: GroomBrideSectionPhoto
 ): GroomBrideSectionPhoto[] {
-  const existingIndex = photos.findIndex((p) => p.slot === newPhoto.slot)
+  const existingIndex = photos.findIndex((p) => p.slot === newPhoto.slot);
 
   if (existingIndex >= 0) {
     // Replace existing photo at this slot
-    const updated = [...photos]
-    updated[existingIndex] = newPhoto
-    return updated
+    const updated = [...photos];
+    updated[existingIndex] = newPhoto;
+    return updated;
   }
 
   // Add new photo
-  return [...photos, newPhoto].sort((a, b) => a.slot - b.slot)
+  return [...photos, newPhoto].sort((a, b) => a.slot - b.slot);
 }
 
 /**
@@ -55,7 +55,7 @@ export function removePhoto(
   photos: GroomBrideSectionPhoto[],
   slot: number
 ): GroomBrideSectionPhoto[] {
-  return photos.filter((p) => p.slot !== slot)
+  return photos.filter((p) => p.slot !== slot);
 }
 
 /**
@@ -65,7 +65,7 @@ export function getPhotoBySlot(
   photos: GroomBrideSectionPhoto[],
   slot: number
 ): GroomBrideSectionPhoto | null {
-  return photos.find((p) => p.slot === slot) ?? null
+  return photos.find((p) => p.slot === slot) ?? null;
 }
 
 /**
@@ -78,26 +78,26 @@ export function reorderPhotos(
   newOrder: number[]
 ): GroomBrideSectionPhoto[] {
   // Create a map of old slot -> photo
-  const photoMap = new Map(photos.map((p) => [p.slot, p]))
+  const photoMap = new Map(photos.map((p) => [p.slot, p]));
 
   // Build new array with updated slot numbers
   return newOrder.map((oldSlot, index) => {
-    const photo = photoMap.get(oldSlot)
+    const photo = photoMap.get(oldSlot);
     if (!photo) {
-      throw new Error(`Photo with slot ${oldSlot} not found`)
+      throw new Error(`Photo with slot ${oldSlot} not found`);
     }
     return {
       ...photo,
       slot: index + 1, // New slot is position in array (1-based)
-    }
-  })
+    };
+  });
 }
 
 /**
  * Get photos sorted by slot number
  */
 export function getSortedPhotos(photos: GroomBrideSectionPhoto[]): GroomBrideSectionPhoto[] {
-  return [...photos].sort((a, b) => a.slot - b.slot)
+  return [...photos].sort((a, b) => a.slot - b.slot);
 }
 
 /**
@@ -108,21 +108,21 @@ export function validatePhotoCount(
   min: number,
   max: number
 ): { valid: boolean; error?: string } {
-  const count = photos.length
+  const count = photos.length;
 
   if (count < min) {
     return {
       valid: false,
       error: `Minimum ${min} photo${min > 1 ? 's' : ''} required (currently ${count})`,
-    }
+    };
   }
 
   if (count > max) {
     return {
       valid: false,
       error: `Maximum ${max} photo${max > 1 ? 's' : ''} allowed (currently ${count})`,
-    }
+    };
   }
 
-  return { valid: true }
+  return { valid: true };
 }

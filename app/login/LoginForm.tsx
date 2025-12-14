@@ -1,46 +1,46 @@
-'use client'
+'use client';
 
-import { useState, Suspense } from 'react'
+import { useState, Suspense } from 'react';
 
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 function LoginFormContent() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (data.success) {
-        const redirect = searchParams.get('redirect') || '/admin'
-        router.push(redirect)
-        router.refresh()
+        const redirect = searchParams.get('redirect') || '/admin';
+        router.push(redirect);
+        router.refresh();
         // Keep loading state true during redirect
       } else {
-        setError(data.error || 'Login failed')
-        setLoading(false)
+        setError(data.error || 'Login failed');
+        setLoading(false);
       }
     } catch (_err) {
-      setError('Network error. Please try again.')
-      setLoading(false)
+      setError('Network error. Please try again.');
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-50 to-blue-50 px-4">
@@ -105,7 +105,7 @@ function LoginFormContent() {
         </form>
       </div>
     </div>
-  )
+  );
 }
 
 export default function LoginForm() {
@@ -113,5 +113,5 @@ export default function LoginForm() {
     <Suspense fallback={<div>Loading...</div>}>
       <LoginFormContent />
     </Suspense>
-  )
+  );
 }

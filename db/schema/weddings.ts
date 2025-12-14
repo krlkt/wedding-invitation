@@ -5,10 +5,10 @@
  * Core multi-tenant entity with one-to-one relationship to UserAccount.
  */
 
-import { createId } from '@paralleldrive/cuid2'
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { createId } from '@paralleldrive/cuid2';
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
-import { userAccounts } from './users'
+import { userAccounts } from './users';
 
 export const weddingConfigurations = sqliteTable('wedding_configurations', {
   id: text('id')
@@ -43,8 +43,8 @@ export const weddingConfigurations = sqliteTable('wedding_configurations', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
 // TypeScript types inferred from schema
-export type WeddingConfiguration = typeof weddingConfigurations.$inferSelect
-export type NewWeddingConfiguration = typeof weddingConfigurations.$inferInsert
+export type WeddingConfiguration = typeof weddingConfigurations.$inferSelect;
+export type NewWeddingConfiguration = typeof weddingConfigurations.$inferInsert;

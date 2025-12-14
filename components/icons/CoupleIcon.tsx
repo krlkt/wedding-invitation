@@ -1,4 +1,4 @@
-import { secondaryColorHex } from '@/lib/constants'
+import { secondaryColorHex } from '@/lib/constants';
 
 const CoupleIcon = () => (
   <svg
@@ -47,6 +47,6 @@ const CoupleIcon = () => (
       </g>
     </g>
   </svg>
-)
+);
 
-export default CoupleIcon
+export default CoupleIcon;

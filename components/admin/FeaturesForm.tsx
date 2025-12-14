@@ -5,39 +5,39 @@
  * Uses accordion UI to toggle features and configure their content.
  */
 
-'use client'
+'use client';
 
-import { useState, useEffect, useCallback, FC } from 'react'
-import { Accordion, AccordionContent, AccordionItem } from '@/components/shadcn/accordion'
-import * as AccordionPrimitive from '@radix-ui/react-accordion'
-import { ChevronDown } from 'lucide-react'
-import { Switch } from '@/components/shadcn/switch'
+import { useState, useEffect, useCallback, FC } from 'react';
+import { Accordion, AccordionContent, AccordionItem } from '@/components/shadcn/accordion';
+import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { ChevronDown } from 'lucide-react';
+import { Switch } from '@/components/shadcn/switch';
 
-import { useDraft } from '@/context/DraftContext'
-import { useSnackbar } from '@/context/SnackbarContext'
-import { useChangeTracking } from '@/hooks/useChangeTracking'
-import { FEATURE_DEFINITIONS } from '@/lib/admin/feature-definitions'
-import { updateChangedFieldsSet } from '@/lib/field-validation'
-import type { FAQItem } from '@/db/schema/content'
+import { useDraft } from '@/context/DraftContext';
+import { useSnackbar } from '@/context/SnackbarContext';
+import { useChangeTracking } from '@/hooks/useChangeTracking';
+import { FEATURE_DEFINITIONS } from '@/lib/admin/feature-definitions';
+import { updateChangedFieldsSet } from '@/lib/field-validation';
+import type { FAQItem } from '@/db/schema/content';
 
-import { UnsavedChangesBar } from './UnsavedChangesBar'
-import { StartingSectionForm } from './sections/StartingSectionForm'
-import { GroomSectionForm } from './sections/GroomSectionForm'
-import { BrideSectionForm } from './sections/BrideSectionForm'
-import { FAQForm } from './sections/FAQForm'
+import { UnsavedChangesBar } from './UnsavedChangesBar';
+import { StartingSectionForm } from './sections/StartingSectionForm';
+import { GroomSectionForm } from './sections/GroomSectionForm';
+import { BrideSectionForm } from './sections/BrideSectionForm';
+import { FAQForm } from './sections/FAQForm';
 import type {
   WeddingConfigWithFeatures,
   UseContentHandlersReturn,
   UsePhotoUploadHandlersReturn,
-} from '@/lib/admin/types'
+} from '@/lib/admin/types';
 
 interface FeaturesFormProps {
-  config: WeddingConfigWithFeatures
-  contentHandlers: UseContentHandlersReturn
-  photoHandlers: UsePhotoUploadHandlersReturn
-  onRefreshPreview: () => void
-  onLocalChange: (features: Record<string, boolean>) => void
-  saving: boolean
+  config: WeddingConfigWithFeatures;
+  contentHandlers: UseContentHandlersReturn;
+  photoHandlers: UsePhotoUploadHandlersReturn;
+  onRefreshPreview: () => void;
+  onLocalChange: (features: Record<string, boolean>) => void;
+  saving: boolean;
 }
 
 const FeaturesForm: FC<FeaturesFormProps> = ({
@@ -50,10 +50,10 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
 }) => {
   // Draft hooks
   const { draft: draftStartingSection, clearDraft: clearStartingSectionDraft } =
-    useDraft('startingSection')
-  const { draft: draftGroomSection, clearDraft: clearGroomSectionDraft } = useDraft('groomSection')
-  const { draft: draftBrideSection, clearDraft: clearBrideSectionDraft } = useDraft('brideSection')
-  const { draft: draftFAQs, clearDraft: clearFAQsDraft } = useDraft('faqs')
+    useDraft('startingSection');
+  const { draft: draftGroomSection, clearDraft: clearGroomSectionDraft } = useDraft('groomSection');
+  const { draft: draftBrideSection, clearDraft: clearBrideSectionDraft } = useDraft('brideSection');
+  const { draft: draftFAQs, clearDraft: clearFAQsDraft } = useDraft('faqs');
 
   // Change tracking hook
   const {
@@ -63,43 +63,43 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
     setChangedFields,
     clearAllChanges,
     clearSectionChanges,
-  } = useChangeTracking()
+  } = useChangeTracking();
 
   // Local state
-  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features)
-  const { showSuccess, showError } = useSnackbar()
+  const [draftFeatures, setDraftFeatures] = useState<Record<string, boolean>>(config.features);
+  const { showSuccess, showError } = useSnackbar();
 
   // Features from constants (no hardcoding)
-  const features = FEATURE_DEFINITIONS
+  const features = FEATURE_DEFINITIONS;
 
   // Update draft state when config changes (after save)
   useEffect(() => {
-    setDraftFeatures(config.features)
-    clearSectionChanges('features')
-  }, [config.features, clearSectionChanges])
+    setDraftFeatures(config.features);
+    clearSectionChanges('features');
+  }, [config.features, clearSectionChanges]);
 
   // Clear changed fields when section content changes (after save or discard)
   useEffect(() => {
-    clearSectionChanges('startingSection')
-  }, [contentHandlers.startingSection.content, clearSectionChanges])
+    clearSectionChanges('startingSection');
+  }, [contentHandlers.startingSection.content, clearSectionChanges]);
 
   useEffect(() => {
-    clearSectionChanges('groomSection')
-  }, [contentHandlers.groomSection.content, clearSectionChanges])
+    clearSectionChanges('groomSection');
+  }, [contentHandlers.groomSection.content, clearSectionChanges]);
 
   useEffect(() => {
-    clearSectionChanges('brideSection')
-  }, [contentHandlers.brideSection.content, clearSectionChanges])
+    clearSectionChanges('brideSection');
+  }, [contentHandlers.brideSection.content, clearSectionChanges]);
 
   useEffect(() => {
-    clearSectionChanges('faqs')
-  }, [contentHandlers.faqSection.content, clearSectionChanges])
+    clearSectionChanges('faqs');
+  }, [contentHandlers.faqSection.content, clearSectionChanges]);
 
   // Simplified handlers
   const handleToggle = (featureName: string) => {
-    const newValue = !draftFeatures[featureName]
-    const newDraft = { ...draftFeatures, [featureName]: newValue }
-    setDraftFeatures(newDraft)
+    const newValue = !draftFeatures[featureName];
+    const newDraft = { ...draftFeatures, [featureName]: newValue };
+    setDraftFeatures(newDraft);
 
     setChangedFields.features(
       updateChangedFieldsSet(
@@ -108,39 +108,39 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
         config.features[featureName],
         changedFields.features
       )
-    )
+    );
 
     // Update parent component for LivePreview
-    onLocalChange(newDraft)
-  }
+    onLocalChange(newDraft);
+  };
 
   async function handleSave() {
     try {
       // Save changed features
       if (changedFields.features.size > 0) {
-        const featuresToUpdate: Record<string, boolean> = {}
+        const featuresToUpdate: Record<string, boolean> = {};
         changedFields.features.forEach((featureName) => {
-          featuresToUpdate[featureName] = draftFeatures[featureName]
-        })
-        await contentHandlers.features.batchUpdate(featuresToUpdate)
+          featuresToUpdate[featureName] = draftFeatures[featureName];
+        });
+        await contentHandlers.features.batchUpdate(featuresToUpdate);
       }
 
       // Save changed starting section content
       if (changedFields.startingSection.size > 0 && draftStartingSection) {
-        await contentHandlers.startingSection.update(draftStartingSection)
-        clearStartingSectionDraft()
+        await contentHandlers.startingSection.update(draftStartingSection);
+        clearStartingSectionDraft();
       }
 
       // Save changed groom section content
       if (changedFields.groomSection.size > 0 && draftGroomSection) {
-        await contentHandlers.groomSection.update(draftGroomSection)
-        clearGroomSectionDraft()
+        await contentHandlers.groomSection.update(draftGroomSection);
+        clearGroomSectionDraft();
       }
 
       // Save changed bride section content
       if (changedFields.brideSection.size > 0 && draftBrideSection) {
-        await contentHandlers.brideSection.update(draftBrideSection)
-        clearBrideSectionDraft()
+        await contentHandlers.brideSection.update(draftBrideSection);
+        clearBrideSectionDraft();
       }
 
       // Save changed FAQ content
@@ -149,7 +149,7 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
           (contentHandlers.faqSection.content ?? [])
             .map((faq: FAQItem) => faq.id)
             .filter((id): id is string => id !== undefined)
-        )
+        );
         const draftIds = new Set(
           draftFAQs
             .filter(
@@ -157,75 +157,75 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
                 !!faq.id && faq.weddingConfigId !== 'TEMP'
             )
             .map((faq) => faq.id)
-        )
-        const deletedIds = Array.from(savedIds).filter((id) => !draftIds.has(id))
+        );
+        const deletedIds = Array.from(savedIds).filter((id) => !draftIds.has(id));
 
         await contentHandlers.faqSection.update({
           updated: draftFAQs,
           deleted: deletedIds,
-        })
-        clearFAQsDraft()
+        });
+        clearFAQsDraft();
       }
 
-      showSuccess('Changes has been saved')
+      showSuccess('Changes has been saved');
     } catch (error) {
-      showError(error instanceof Error ? error.message : 'Failed to save changes')
+      showError(error instanceof Error ? error.message : 'Failed to save changes');
     }
 
-    onRefreshPreview()
+    onRefreshPreview();
   }
 
   const handleDiscard = async () => {
-    setDraftFeatures(config.features)
-    clearAllChanges()
+    setDraftFeatures(config.features);
+    clearAllChanges();
 
     // Update parent component for LivePreview
-    onLocalChange(config.features)
+    onLocalChange(config.features);
 
-    clearStartingSectionDraft()
-    clearGroomSectionDraft()
-    clearBrideSectionDraft()
-    clearFAQsDraft()
+    clearStartingSectionDraft();
+    clearGroomSectionDraft();
+    clearBrideSectionDraft();
+    clearFAQsDraft();
 
     await Promise.all([
       contentHandlers.startingSection.refetch(),
       contentHandlers.groomSection.refetch(),
       contentHandlers.brideSection.refetch(),
       contentHandlers.faqSection.refetch(),
-    ])
+    ]);
 
     // Trigger preview refresh to show discarded changes
-    onRefreshPreview()
-  }
+    onRefreshPreview();
+  };
 
   // Simplified change tracking callbacks (no manual Set management)
   const handleStartingSectionChange = useCallback(
     (hasChanges: boolean, fields: Set<string>) => {
-      setChangedFields.startingSection(fields)
+      setChangedFields.startingSection(fields);
     },
     [setChangedFields]
-  )
+  );
 
   const handleGroomSectionChange = useCallback(
     (hasChanges: boolean, fields: Set<string>) => {
-      setChangedFields.groomSection(fields)
+      setChangedFields.groomSection(fields);
     },
     [setChangedFields]
-  )
+  );
 
   const handleBrideSectionChange = useCallback(
     (hasChanges: boolean, fields: Set<string>) => {
-      setChangedFields.brideSection(fields)
+      setChangedFields.brideSection(fields);
     },
     [setChangedFields]
-  )
+  );
 
   const handleFAQSectionChange = useCallback(
     (hasChanges: boolean, fields: Set<string>) => {
-      setChangedFields.faqs(fields)
+      setChangedFields.faqs(fields);
     },
     [setChangedFields]
-  )
+  );
 
   // Render feature content (cleaner with contentHandlers)
   const renderFeatureContent = useCallback(
@@ -241,7 +241,7 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
               onBackgroundUpload={photoHandlers.handleBackgroundUpload}
               onMonogramUpload={photoHandlers.handleMonogramUpload}
             />
-          )
+          );
 
         case 'groom_and_bride':
           return (
@@ -267,7 +267,7 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
                 />
               </div>
             </div>
-          )
+          );
 
         case 'faqs':
           return (
@@ -276,12 +276,12 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
               faqSectionContent={contentHandlers.faqSection.content}
               onChangeTracking={handleFAQSectionChange}
             />
-          )
+          );
 
         default:
           return (
             <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
-          )
+          );
       }
     },
     [
@@ -293,14 +293,14 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
       handleBrideSectionChange,
       handleFAQSectionChange,
     ]
-  )
+  );
 
   return (
     <>
       <div className="flex-1 overflow-y-auto p-6">
         <Accordion type="multiple" className="space-y-2">
           {features.map((feature) => {
-            const isChanged = changedFields.features.has(feature.name)
+            const isChanged = changedFields.features.has(feature.name);
             return (
               <AccordionItem
                 key={feature.name}
@@ -333,7 +333,7 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
                   {renderFeatureContent(feature.name)}
                 </AccordionContent>
               </AccordionItem>
-            )
+            );
           })}
         </Accordion>
       </div>
@@ -347,7 +347,7 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default FeaturesForm
+export default FeaturesForm;

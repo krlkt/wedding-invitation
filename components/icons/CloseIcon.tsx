@@ -22,6 +22,6 @@ const CloseIcon = () => (
       strokeLinejoin="round"
     />
   </svg>
-)
+);
 
-export default CloseIcon
+export default CloseIcon;

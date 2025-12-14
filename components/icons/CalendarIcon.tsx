@@ -8,6 +8,6 @@ const CalendarIcon = () => (
       strokeLinejoin="round"
     />
   </svg>
-)
+);
 
-export default CalendarIcon
+export default CalendarIcon;

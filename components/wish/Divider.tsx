@@ -1,4 +1,4 @@
-import WishIcon from '@/components/icons/WishIcon'
+import WishIcon from '@/components/icons/WishIcon';
 
 const Divider = () => (
   <div className="flex items-center gap-4">
@@ -8,6 +8,6 @@ const Divider = () => (
     </div>
     <div className="my-2 h-[0.5px] w-full bg-primary-main" />
   </div>
-)
+);
 
-export default Divider
+export default Divider;

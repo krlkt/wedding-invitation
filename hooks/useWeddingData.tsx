@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { createContext, useContext } from 'react'
+import { createContext, useContext } from 'react';
 import type {
   WeddingConfiguration,
   StartingSectionContent,
   GroomSectionContent,
   BrideSectionContent,
   FAQItem,
-} from '@/db/schema'
-import type { FeatureName } from '@/db/schema/features'
+} from '@/db/schema';
+import type { FeatureName } from '@/db/schema/features';
 
 /**
  * Wedding Data Context
@@ -18,15 +18,15 @@ import type { FeatureName } from '@/db/schema/features'
  */
 
 interface WeddingDataContextValue {
-  config: WeddingConfiguration
-  features: Record<FeatureName, boolean>
-  startingSection?: StartingSectionContent | null
-  faqs?: Partial<FAQItem>[] | null
-  groomSection?: GroomSectionContent | null
-  brideSection?: BrideSectionContent | null
+  config: WeddingConfiguration;
+  features: Record<FeatureName, boolean>;
+  startingSection?: StartingSectionContent | null;
+  faqs?: Partial<FAQItem>[] | null;
+  groomSection?: GroomSectionContent | null;
+  brideSection?: BrideSectionContent | null;
 }
 
-const WeddingDataContext = createContext<WeddingDataContextValue | null>(null)
+const WeddingDataContext = createContext<WeddingDataContextValue | null>(null);
 
 export function WeddingDataProvider({
   children,
@@ -37,13 +37,13 @@ export function WeddingDataProvider({
   groomSection,
   brideSection,
 }: {
-  children: React.ReactNode
-  config: WeddingConfiguration
-  features: Record<FeatureName, boolean>
-  startingSection?: StartingSectionContent | null
-  faqs?: Partial<FAQItem>[] | null
-  groomSection?: GroomSectionContent | null
-  brideSection?: BrideSectionContent | null
+  children: React.ReactNode;
+  config: WeddingConfiguration;
+  features: Record<FeatureName, boolean>;
+  startingSection?: StartingSectionContent | null;
+  faqs?: Partial<FAQItem>[] | null;
+  groomSection?: GroomSectionContent | null;
+  brideSection?: BrideSectionContent | null;
 }) {
   return (
     <WeddingDataContext.Provider
@@ -51,13 +51,13 @@ export function WeddingDataProvider({
     >
       {children}
     </WeddingDataContext.Provider>
-  )
+  );
 }
 
 export function useWeddingData() {
-  const context = useContext(WeddingDataContext)
+  const context = useContext(WeddingDataContext);
   if (!context) {
-    throw new Error('useWeddingData must be used within WeddingDataProvider')
+    throw new Error('useWeddingData must be used within WeddingDataProvider');
   }
-  return context
+  return context;
 }

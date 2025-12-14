@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { useRef } from 'react'
+import { useRef } from 'react';
 
 // @ts-ignore splide problem
-import { Splide, SplideSlide } from '@splidejs/react-splide'
+import { Splide, SplideSlide } from '@splidejs/react-splide';
 
-import type { Splide as SplideInstance } from '@splidejs/splide'
+import type { Splide as SplideInstance } from '@splidejs/splide';
 
-import { Gallery, Item } from 'react-photoswipe-gallery'
+import { Gallery, Item } from 'react-photoswipe-gallery';
 
-import '@splidejs/react-splide/css'
-import 'photoswipe/dist/photoswipe.css'
-import './image-gallery.css'
-import FadeIn from '../FadeIn'
+import '@splidejs/react-splide/css';
+import 'photoswipe/dist/photoswipe.css';
+import './image-gallery.css';
+import FadeIn from '../FadeIn';
 
 const images = [
   {
@@ -65,11 +65,11 @@ const images = [
     width: 1500,
     height: 750,
   },
-]
+];
 
 export default function ImageGallery() {
-  const mainRef = useRef<SplideInstance | null>(null)
-  const thumbsRef = useRef<SplideInstance | null>(null)
+  const mainRef = useRef<SplideInstance | null>(null);
+  const thumbsRef = useRef<SplideInstance | null>(null);
 
   return (
     <Gallery>
@@ -86,10 +86,10 @@ export default function ImageGallery() {
                 cover: true,
               }}
               onMounted={(splide: SplideInstance) => {
-                mainRef.current = splide
+                mainRef.current = splide;
               }}
               onMove={(_: SplideInstance, newIndex: number) => {
-                thumbsRef.current?.go(newIndex)
+                thumbsRef.current?.go(newIndex);
               }}
               aria-label="Main image slider"
               className="mb-4 w-full"
@@ -133,17 +133,17 @@ export default function ImageGallery() {
               arrows: true,
             }}
             onMounted={(splide: SplideInstance) => {
-              thumbsRef.current = splide
+              thumbsRef.current = splide;
               // Sync main slider when slider is moved
               splide.on('moved', (newIndex) => {
                 if (mainRef.current && mainRef.current.index !== newIndex) {
-                  mainRef.current.go(newIndex)
+                  mainRef.current.go(newIndex);
                 }
-              })
+              });
               splide.on('click', () => {
-                const index = splide.index
-                mainRef.current?.go(index)
-              })
+                const index = splide.index;
+                mainRef.current?.go(index);
+              });
             }}
             aria-label="Image slider"
             className="h-full w-full"
@@ -163,5 +163,5 @@ export default function ImageGallery() {
         </FadeIn>
       </div>
     </Gallery>
-  )
+  );
 }

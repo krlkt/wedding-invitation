@@ -5,59 +5,59 @@
  * Fetches wedding data by subdomain and displays customized content.
  */
 
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
-import { WeddingConfiguration } from '@/db/schema'
+import { WeddingConfiguration } from '@/db/schema';
 
 interface WeddingLayoutProps {
-  subdomain?: string
-  config?: WeddingData
-  children?: React.ReactNode
+  subdomain?: string;
+  config?: WeddingData;
+  children?: React.ReactNode;
 }
 
 interface WeddingData extends WeddingConfiguration {
-  features: Record<string, boolean>
+  features: Record<string, boolean>;
 }
 
 export default function WeddingLayout({ subdomain, config, children }: WeddingLayoutProps) {
-  const [wedding, setWedding] = useState<WeddingData | null>(config || null)
-  const [loading, setLoading] = useState(!config)
-  const [error, setError] = useState<string | null>(null)
+  const [wedding, setWedding] = useState<WeddingData | null>(config || null);
+  const [loading, setLoading] = useState(!config);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // If config is provided directly, skip fetching
     if (config) {
-      setWedding(config)
-      setLoading(false)
-      return
+      setWedding(config);
+      setLoading(false);
+      return;
     }
 
     async function fetchWedding() {
       try {
         // Fetch wedding configuration by subdomain
-        const response = await fetch(`/api/wedding/config?subdomain=${subdomain}`)
+        const response = await fetch(`/api/wedding/config?subdomain=${subdomain}`);
 
         if (!response.ok) {
-          throw new Error('Wedding not found')
+          throw new Error('Wedding not found');
         }
 
-        const data = await response.json()
-        setWedding(data.data)
+        const data = await response.json();
+        setWedding(data.data);
       } catch (err: any) {
-        setError(err.message)
+        setError(err.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
     if (subdomain) {
-      fetchWedding()
+      fetchWedding();
     }
-  }, [subdomain, config])
+  }, [subdomain, config]);
 
   if (loading) {
     return (
@@ -67,7 +67,7 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
           <p className="mt-4 text-gray-600">Loading wedding invitation...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (error || !wedding) {
@@ -78,7 +78,7 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
           <p className="text-gray-600">{error || 'This wedding invitation does not exist.'}</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!wedding.isPublished) {
@@ -89,7 +89,7 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
           <p className="text-gray-600">This wedding invitation is not yet published.</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -196,5 +196,5 @@ export default function WeddingLayout({ subdomain, config, children }: WeddingLa
         </p>
       </footer>
     </div>
-  )
+  );
 }

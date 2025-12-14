@@ -11,7 +11,7 @@ export const fadeInVariants = {
       ease: 'easeOut',
     },
   },
-}
+};
 
 export const growInVariants = {
   initial: {
@@ -26,7 +26,7 @@ export const growInVariants = {
       ease: 'easeOut',
     },
   },
-}
+};
 
 export const fadeInFromLeft = {
   initial: {
@@ -41,7 +41,7 @@ export const fadeInFromLeft = {
       ease: 'easeOut',
     },
   },
-}
+};
 
 export const fadeInFromRight = {
   initial: {
@@ -56,7 +56,7 @@ export const fadeInFromRight = {
       ease: 'easeOut',
     },
   },
-}
+};
 
 export const Stagger = {
   containerVariants: {
@@ -74,7 +74,7 @@ export const Stagger = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
   },
-}
+};
 
 export const rotateAnimation = (degArray: Array<number>, delay?: number) => ({
   rotate: degArray,
@@ -84,4 +84,4 @@ export const rotateAnimation = (degArray: Array<number>, delay?: number) => ({
     ease: 'easeOut',
     delay,
   },
-})
+});

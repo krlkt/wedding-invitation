@@ -8,6 +8,6 @@ const DownIcon = () => (
       strokeLinejoin="round"
     />
   </svg>
-)
+);
 
-export default DownIcon
+export default DownIcon;

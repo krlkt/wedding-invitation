@@ -1,6 +1,6 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
 const Timeline = () => (
   <div id="love-story-container" className="relative flex flex-col gap-4">
@@ -37,15 +37,15 @@ const Timeline = () => (
       content="Karel planned with friends to surprise Sabrina for an unforgetable proposal"
     />
   </div>
-)
+);
 
-export default Timeline
+export default Timeline;
 
 interface TimelineItemProps {
-  title: string
-  date: string
-  content: string
-  imgSrc: string
+  title: string;
+  date: string;
+  content: string;
+  imgSrc: string;
 }
 const TimelineItem: FC<TimelineItemProps> = ({ title, date, content, imgSrc }) => (
   <div className="flex gap-2">
@@ -72,4 +72,4 @@ const TimelineItem: FC<TimelineItemProps> = ({ title, date, content, imgSrc }) =
       </div>
     </div>
   </div>
-)
+);

@@ -5,10 +5,10 @@
  * Used for form validation and server-side data validation.
  */
 
-import { z } from 'zod'
+import { z } from 'zod';
 
 // File size limits
-export const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10 MB
+export const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 // Accepted file types
 export const ACCEPTED_IMAGE_TYPES = [
@@ -17,7 +17,7 @@ export const ACCEPTED_IMAGE_TYPES = [
   'image/png',
   'image/webp',
   'image/gif',
-] as const
+] as const;
 
 /**
  * Schema for individual photo object in JSON array
@@ -28,7 +28,7 @@ export const sectionPhotoObjectSchema = z.object({
   mimeType: z.enum(ACCEPTED_IMAGE_TYPES),
   slot: z.number().int().positive(),
   uploadedAt: z.string().datetime(),
-})
+});
 
 /**
  * Schema for groom section content updates
@@ -55,8 +55,8 @@ export const groomSectionContentSchema = z.object({
     .string()
     .refine(
       (val) => {
-        if (!val) return true // Optional field
-        return /^https?:\/\/(www\.)?instagram\.com\/.+/.test(val)
+        if (!val) return true; // Optional field
+        return /^https?:\/\/(www\.)?instagram\.com\/.+/.test(val);
       },
       { message: 'Must be a valid Instagram URL' }
     )
@@ -64,7 +64,7 @@ export const groomSectionContentSchema = z.object({
     .optional(),
 
   photos: z.array(sectionPhotoObjectSchema).optional(),
-})
+});
 
 /**
  * Schema for groom section photo upload
@@ -77,16 +77,16 @@ export const groomSectionPhotoSchema = z.object({
     .any()
     .refine((val): val is File => {
       // Accept File instances or File-like objects (for testing)
-      return val && typeof val === 'object' && 'name' in val && 'size' in val && 'type' in val
+      return val && typeof val === 'object' && 'name' in val && 'size' in val && 'type' in val;
     }, 'File is required')
     .refine((file) => {
       // Check if file type is accepted
-      return ACCEPTED_IMAGE_TYPES.includes(file.type)
+      return ACCEPTED_IMAGE_TYPES.includes(file.type);
     }, 'File type not supported. Please upload a JPEG, PNG, WebP, or GIF image.')
     .refine(
       (file) => {
         // Check file size
-        return file.size <= MAX_IMAGE_SIZE
+        return file.size <= MAX_IMAGE_SIZE;
       },
       {
         message: 'Image size exceeds the maximum limit of 10 MB',
@@ -96,7 +96,7 @@ export const groomSectionPhotoSchema = z.object({
   photoSlot: z.number().int().positive(), // Now a number, not enum
 
   replaceExisting: z.boolean().optional(),
-})
+});
 
-export type GroomSectionContentInput = z.infer<typeof groomSectionContentSchema>
-export type GroomSectionPhotoInput = z.infer<typeof groomSectionPhotoSchema>
+export type GroomSectionContentInput = z.infer<typeof groomSectionContentSchema>;
+export type GroomSectionPhotoInput = z.infer<typeof groomSectionPhotoSchema>;

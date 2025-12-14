@@ -5,8 +5,8 @@
  * Single source of truth for user account data structure.
  */
 
-import { createId } from '@paralleldrive/cuid2'
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { createId } from '@paralleldrive/cuid2';
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
 export const userAccounts = sqliteTable('user_accounts', {
   id: text('id')
@@ -20,8 +20,8 @@ export const userAccounts = sqliteTable('user_accounts', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
 // TypeScript types inferred from schema
-export type UserAccount = typeof userAccounts.$inferSelect
-export type NewUserAccount = typeof userAccounts.$inferInsert
+export type UserAccount = typeof userAccounts.$inferSelect;
+export type NewUserAccount = typeof userAccounts.$inferInsert;

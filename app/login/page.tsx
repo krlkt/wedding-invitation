@@ -1,31 +1,31 @@
-import { redirect } from 'next/navigation'
-import { cookies } from 'next/headers'
-import LoginForm from './LoginForm'
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import LoginForm from './LoginForm';
 
 async function getSession() {
-  const cookieStore = await cookies()
-  const sessionCookie = cookieStore.get('session')
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('session');
 
   if (!sessionCookie) {
-    return null
+    return null;
   }
 
   try {
-    const sessionData = JSON.parse(sessionCookie.value)
-    return sessionData
+    const sessionData = JSON.parse(sessionCookie.value);
+    return sessionData;
   } catch {
-    return null
+    return null;
   }
 }
 
 export default async function AdminLoginPage() {
   // Check if user is already authenticated
-  const session = await getSession()
+  const session = await getSession();
 
   if (session?.userId) {
     // User is already logged in, redirect to admin
-    redirect('/admin')
+    redirect('/admin');
   }
 
-  return <LoginForm />
+  return <LoginForm />;
 }

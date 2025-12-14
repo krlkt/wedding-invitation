@@ -5,6 +5,6 @@ const NavigationIcon = () => (
       <path d="M48,24A12,12,0,1,0,60,36,12.0157,12.0157,0,0,0,48,24Z" />
     </g>
   </svg>
-)
+);
 
-export default NavigationIcon
+export default NavigationIcon;

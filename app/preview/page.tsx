@@ -4,17 +4,17 @@
  * Full-screen preview of wedding site for authenticated users
  */
 
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 import {
   getWishes,
   getStartingSectionContent,
   getGroomSectionContent,
   getBrideSectionContent,
-} from '@/lib/content-service'
-import TemplateRenderer from '@/components/preview/TemplateRenderer'
-import type { PreviewData } from '@/components/preview/types'
+} from '@/lib/content-service';
+import TemplateRenderer from '@/components/preview/TemplateRenderer';
+import type { PreviewData } from '@/components/preview/types';
 import {
   getWeddingConfigById,
   getFeatureToggles,
@@ -24,34 +24,34 @@ import {
   getFAQItems,
   getDressCode,
   getBankDetails,
-} from '@/lib/wedding-service'
+} from '@/lib/wedding-service';
 
 async function getSession() {
-  const cookieStore = await cookies()
-  const sessionCookie = cookieStore.get('session')
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('session');
 
   if (!sessionCookie) {
-    return null
+    return null;
   }
 
   try {
-    const sessionData = JSON.parse(sessionCookie.value)
-    return sessionData
+    const sessionData = JSON.parse(sessionCookie.value);
+    return sessionData;
   } catch {
-    return null
+    return null;
   }
 }
 
 export default async function AdminPreviewPage() {
   // Check authentication
-  const session = await getSession()
+  const session = await getSession();
 
   if (!session?.weddingConfigId) {
-    redirect('/login')
+    redirect('/login');
   }
 
   // Fetch wedding configuration
-  const config = await getWeddingConfigById(session.weddingConfigId)
+  const config = await getWeddingConfigById(session.weddingConfigId);
 
   if (!config) {
     return (
@@ -61,7 +61,7 @@ export default async function AdminPreviewPage() {
           <p className="text-gray-600">Unable to load your wedding configuration.</p>
         </div>
       </div>
-    )
+    );
   }
 
   // Fetch all data in parallel
@@ -89,7 +89,7 @@ export default async function AdminPreviewPage() {
     getDressCode(config.id),
     getBankDetails(config.id),
     getWishes(config.id, 20),
-  ])
+  ]);
 
   // Fix Drizzle's timestamp multiplication for wishes
   // Database stores milliseconds (13 digits), but Drizzle multiplies by 1000
@@ -97,16 +97,16 @@ export default async function AdminPreviewPage() {
     ...wish,
     createdAt: new Date(Math.floor(wish.createdAt.getTime() / 1000)),
     updatedAt: new Date(Math.floor(wish.updatedAt.getTime() / 1000)),
-  }))
+  }));
 
   // Convert features array to map
   const featuresMap = features.reduce(
     (acc, f) => {
-      acc[f.featureName] = f.isEnabled
-      return acc
+      acc[f.featureName] = f.isEnabled;
+      return acc;
     },
     {} as Record<string, boolean>
-  )
+  );
 
   // Structure data according to PreviewData interface
   const previewData: PreviewData = {
@@ -124,11 +124,11 @@ export default async function AdminPreviewPage() {
       bankDetails: bankDetailsData,
       wishes,
     },
-  }
+  };
 
   return (
     <div className="min-h-screen bg-white">
       <TemplateRenderer data={previewData} />
     </div>
-  )
+  );
 }

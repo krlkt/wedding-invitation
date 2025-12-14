@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { ReactNode } from 'react'
+import { ReactNode } from 'react';
 
-import { SnackbarProvider as NotistackProvider } from 'notistack'
-import { SnackbarProvider } from '../context/SnackbarContext'
-import { Toaster } from '@/components/shadcn/sonner'
+import { SnackbarProvider as NotistackProvider } from 'notistack';
+import { SnackbarProvider } from '../context/SnackbarContext';
+import { Toaster } from '@/components/shadcn/sonner';
 
-import { useViewportHeight } from '../hooks/useViewportHeight'
+import { useViewportHeight } from '../hooks/useViewportHeight';
 
 const Providers = ({ children }: { children: ReactNode }) => {
-  useViewportHeight()
+  useViewportHeight();
 
   return (
     <SnackbarProvider>
@@ -18,7 +18,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
         <Toaster />
       </NotistackProvider>
     </SnackbarProvider>
-  )
-}
+  );
+};
 
-export default Providers
+export default Providers;

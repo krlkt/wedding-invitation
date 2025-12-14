@@ -1,4 +1,4 @@
-import { query } from './client'
+import { query } from './client';
 
 export const createGroupsTable = async () => {
   await query(`
@@ -6,5 +6,5 @@ export const createGroupsTable = async () => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL UNIQUE
         );
-    `)
-}
+    `);
+};

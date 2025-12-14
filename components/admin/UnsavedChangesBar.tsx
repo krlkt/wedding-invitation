@@ -6,10 +6,10 @@
  */
 
 interface UnsavedChangesBarProps {
-  totalChanges: number
-  onSave: () => Promise<void>
-  onDiscard: () => Promise<void>
-  saving: boolean
+  totalChanges: number;
+  onSave: () => Promise<void>;
+  onDiscard: () => Promise<void>;
+  saving: boolean;
 }
 
 export function UnsavedChangesBar({
@@ -55,5 +55,5 @@ export function UnsavedChangesBar({
         </div>
       </div>
     </div>
-  )
+  );
 }

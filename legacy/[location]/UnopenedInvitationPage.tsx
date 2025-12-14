@@ -1,19 +1,19 @@
-'use client'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-import Button from '@/components/Button'
-import CycleBackground from '@/components/CycleBackground'
-import { createQueryString } from '@/lib/link'
+import Button from '@/components/Button';
+import CycleBackground from '@/components/CycleBackground';
+import { createQueryString } from '@/lib/link';
 
 export default function UnopenedInvitationPage({
   guestName,
   id,
 }: {
-  guestName: string
-  id: number
+  guestName: string;
+  id: number;
 }) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <CycleBackground>
@@ -31,5 +31,5 @@ export default function UnopenedInvitationPage({
         <Button>Open invitation</Button>
       </Link>
     </CycleBackground>
-  )
+  );
 }

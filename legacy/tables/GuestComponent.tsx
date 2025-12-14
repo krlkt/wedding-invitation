@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { useRef, useState } from 'react'
+import { useRef, useState } from 'react';
 
-import OpenWithIcon from '@mui/icons-material/OpenWith'
-import { IconButton, Switch } from '@mui/material'
-import { useDrag } from 'react-dnd'
+import OpenWithIcon from '@mui/icons-material/OpenWith';
+import { IconButton, Switch } from '@mui/material';
+import { useDrag } from 'react-dnd';
 
-import { Locations } from '@/components/LocationComponent'
-import { Guest } from '@/legacy/types/guest'
-import { Table } from '@/legacy/types/table'
+import { Locations } from '@/components/LocationComponent';
+import { Guest } from '@/legacy/types/guest';
+import { Table } from '@/legacy/types/table';
 
-import { updateGuestName, updateGuestCheckinStatus } from './actions'
+import { updateGuestName, updateGuestCheckinStatus } from './actions';
 
 interface GuestComponentProps {
-  guest: Guest
-  tables: Table[]
-  location: Locations
-  onOpenMoveModal: (guest: Guest) => void
-  tableSearchTerm: string
+  guest: Guest;
+  tables: Table[];
+  location: Locations;
+  onOpenMoveModal: (guest: Guest) => void;
+  tableSearchTerm: string;
 }
 
 export const GuestComponent = ({
@@ -26,37 +26,37 @@ export const GuestComponent = ({
   onOpenMoveModal,
   tableSearchTerm,
 }: GuestComponentProps) => {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'guest',
     item: { id: guest.id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
-  }))
+  }));
 
-  drag(ref)
+  drag(ref);
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [name, setName] = useState(guest.name)
-  const [isChecked, setIsChecked] = useState(guest.checked_in)
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState(guest.name);
+  const [isChecked, setIsChecked] = useState(guest.checked_in);
 
   const handleNameChange = async () => {
-    await updateGuestName(guest.id, name, location)
-    setIsEditing(false)
-  }
+    await updateGuestName(guest.id, name, location);
+    setIsEditing(false);
+  };
 
   const handleCheckinToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newCheckedState = e.target.checked
-    setIsChecked(newCheckedState)
-    await updateGuestCheckinStatus(guest.id, newCheckedState, location)
-  }
+    const newCheckedState = e.target.checked;
+    setIsChecked(newCheckedState);
+    await updateGuestCheckinStatus(guest.id, newCheckedState, location);
+  };
 
   const getHighlightedText = (text: string, highlight: string) => {
     if (!highlight) {
-      return <span>{text}</span>
+      return <span>{text}</span>;
     }
-    const parts = text.split(new RegExp(`(${highlight})`, 'gi'))
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
     return (
       <span>
         {parts.map((part, i) =>
@@ -69,8 +69,8 @@ export const GuestComponent = ({
           )
         )}
       </span>
-    )
-  }
+    );
+  };
 
   return (
     <div ref={ref} className={`rounded-md p-1 shadow-md ${isDragging ? 'opacity-50' : 'bg-white'}`}>
@@ -98,5 +98,5 @@ export const GuestComponent = ({
         </IconButton>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -4,5 +4,5 @@ export default function UnidentifiedPerson() {
       <h2 className="text-2xl font-bold">We can&#39;t identify you 😖</h2>
       <p>Please try another link</p>
     </div>
-  )
+  );
 }

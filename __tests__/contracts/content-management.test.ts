@@ -10,7 +10,7 @@
  */
 
 describe('Content Management API Contract Tests', () => {
-  const baseUrl = 'http://localhost:3000'
+  const baseUrl = 'http://localhost:3000';
 
   // Helper function to simulate authenticated requests
   const makeAuthenticatedRequest = async (endpoint: string, options: RequestInit = {}) => {
@@ -21,20 +21,20 @@ describe('Content Management API Contract Tests', () => {
         // TODO: Add authentication headers when session management is implemented
         ...options.headers,
       },
-    })
-  }
+    });
+  };
 
   describe('Love Story API', () => {
     describe('GET /api/wedding/love-story', () => {
-      const endpoint = '/api/wedding/love-story'
+      const endpoint = '/api/wedding/love-story';
 
       it('should return 200 with array of love story segments', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'GET',
-        })
+        });
 
         if (response.status === 200) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: expect.arrayContaining([
@@ -49,20 +49,20 @@ describe('Content Management API Contract Tests', () => {
                 updatedAt: expect.any(String),
               }),
             ]),
-          })
+          });
 
           // Validate date formats
           if (data.data.length > 0) {
-            expect(new Date(data.data[0].date)).toBeInstanceOf(Date)
-            expect(new Date(data.data[0].createdAt)).toBeInstanceOf(Date)
-            expect(new Date(data.data[0].updatedAt)).toBeInstanceOf(Date)
+            expect(new Date(data.data[0].date)).toBeInstanceOf(Date);
+            expect(new Date(data.data[0].createdAt)).toBeInstanceOf(Date);
+            expect(new Date(data.data[0].updatedAt)).toBeInstanceOf(Date);
           }
         }
-      })
-    })
+      });
+    });
 
     describe('POST /api/wedding/love-story', () => {
-      const endpoint = '/api/wedding/love-story'
+      const endpoint = '/api/wedding/love-story';
 
       it('should create love story segment and return 201', async () => {
         const createRequest = {
@@ -71,15 +71,15 @@ describe('Content Management API Contract Tests', () => {
           date: '2020-01-15T00:00:00.000Z',
           iconType: 'heart',
           order: 1,
-        }
+        };
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
           body: JSON.stringify(createRequest),
-        })
+        });
 
         if (response.status === 201) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: {
@@ -92,28 +92,28 @@ describe('Content Management API Contract Tests', () => {
               createdAt: expect.any(String),
               updatedAt: expect.any(String),
             },
-          })
+          });
         }
-      })
-    })
+      });
+    });
 
     describe('PUT /api/wedding/love-story/[id]', () => {
       it('should update love story segment and return 200', async () => {
-        const segmentId = 'test-segment-id'
-        const endpoint = `/api/wedding/love-story/${segmentId}`
+        const segmentId = 'test-segment-id';
+        const endpoint = `/api/wedding/love-story/${segmentId}`;
         const updateRequest = {
           title: 'Updated Meeting',
           description: 'Updated description...',
           order: 2,
-        }
+        };
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'PUT',
           body: JSON.stringify(updateRequest),
-        })
+        });
 
         if (response.status === 200) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: expect.objectContaining({
@@ -121,42 +121,42 @@ describe('Content Management API Contract Tests', () => {
               description: 'Updated description...',
               order: 2,
             }),
-          })
+          });
         }
-      })
-    })
+      });
+    });
 
     describe('DELETE /api/wedding/love-story/[id]', () => {
       it('should delete love story segment and return 200', async () => {
-        const segmentId = 'test-segment-id'
-        const endpoint = `/api/wedding/love-story/${segmentId}`
+        const segmentId = 'test-segment-id';
+        const endpoint = `/api/wedding/love-story/${segmentId}`;
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'DELETE',
-        })
+        });
 
         if (response.status === 200) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             message: 'Love story segment deleted',
-          })
+          });
         }
-      })
-    })
-  })
+      });
+    });
+  });
 
   describe('Location API', () => {
     describe('GET /api/wedding/locations', () => {
-      const endpoint = '/api/wedding/locations'
+      const endpoint = '/api/wedding/locations';
 
       it('should return 200 with array of locations', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'GET',
-        })
+        });
 
         if (response.status === 200) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: expect.arrayContaining([
@@ -170,13 +170,13 @@ describe('Content Management API Contract Tests', () => {
                 updatedAt: expect.any(String),
               }),
             ]),
-          })
+          });
         }
-      })
-    })
+      });
+    });
 
     describe('POST /api/wedding/locations', () => {
-      const endpoint = '/api/wedding/locations'
+      const endpoint = '/api/wedding/locations';
 
       it('should create location and return 201', async () => {
         const createRequest = {
@@ -187,15 +187,15 @@ describe('Content Management API Contract Tests', () => {
           ceremonyTime: '15:00',
           receptionTime: '18:00',
           order: 1,
-        }
+        };
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
           body: JSON.stringify(createRequest),
-        })
+        });
 
         if (response.status === 201) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: expect.objectContaining({
@@ -207,23 +207,23 @@ describe('Content Management API Contract Tests', () => {
               receptionTime: '18:00',
               order: 1,
             }),
-          })
+          });
         }
-      })
-    })
-  })
+      });
+    });
+  });
 
   describe('FAQ API', () => {
     describe('GET /api/wedding/faqs', () => {
-      const endpoint = '/api/wedding/faqs'
+      const endpoint = '/api/wedding/faqs';
 
       it('should return 200 with array of FAQ items', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'GET',
-        })
+        });
 
         if (response.status === 200) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: expect.arrayContaining([
@@ -236,28 +236,28 @@ describe('Content Management API Contract Tests', () => {
                 updatedAt: expect.any(String),
               }),
             ]),
-          })
+          });
         }
-      })
-    })
+      });
+    });
 
     describe('POST /api/wedding/faqs', () => {
-      const endpoint = '/api/wedding/faqs'
+      const endpoint = '/api/wedding/faqs';
 
       it('should create FAQ item and return 201', async () => {
         const createRequest = {
           question: 'What should I wear?',
           answer: 'Semi-formal attire is recommended.',
           order: 1,
-        }
+        };
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'POST',
           body: JSON.stringify(createRequest),
-        })
+        });
 
         if (response.status === 201) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: expect.objectContaining({
@@ -265,23 +265,23 @@ describe('Content Management API Contract Tests', () => {
               answer: 'Semi-formal attire is recommended.',
               order: 1,
             }),
-          })
+          });
         }
-      })
-    })
-  })
+      });
+    });
+  });
 
   describe('Bank Details API', () => {
     describe('GET /api/wedding/bank-details', () => {
-      const endpoint = '/api/wedding/bank-details'
+      const endpoint = '/api/wedding/bank-details';
 
       it('should return 200 with bank details', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'GET',
-        })
+        });
 
         if (response.status === 200) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: {
@@ -290,13 +290,13 @@ describe('Content Management API Contract Tests', () => {
               updatedAt: expect.any(String),
               // Optional fields: bankName, accountName, accountNumber, routingNumber, instructions
             },
-          })
+          });
         }
-      })
-    })
+      });
+    });
 
     describe('PUT /api/wedding/bank-details', () => {
-      const endpoint = '/api/wedding/bank-details'
+      const endpoint = '/api/wedding/bank-details';
 
       it('should update bank details and return 200', async () => {
         const updateRequest = {
@@ -305,15 +305,15 @@ describe('Content Management API Contract Tests', () => {
           accountNumber: '1234567890',
           routingNumber: '987654321',
           instructions: 'Please include names in memo',
-        }
+        };
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'PUT',
           body: JSON.stringify(updateRequest),
-        })
+        });
 
         if (response.status === 200) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: expect.objectContaining({
@@ -323,23 +323,23 @@ describe('Content Management API Contract Tests', () => {
               routingNumber: '987654321',
               instructions: 'Please include names in memo',
             }),
-          })
+          });
         }
-      })
-    })
-  })
+      });
+    });
+  });
 
   describe('Dress Code API', () => {
     describe('GET /api/wedding/dress-code', () => {
-      const endpoint = '/api/wedding/dress-code'
+      const endpoint = '/api/wedding/dress-code';
 
       it('should return 200 with dress code information', async () => {
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'GET',
-        })
+        });
 
         if (response.status === 200) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: {
@@ -348,32 +348,32 @@ describe('Content Management API Contract Tests', () => {
               updatedAt: expect.any(String),
               // Optional fields: title, description, photoFilename, photoUrl
             },
-          })
+          });
 
           // If photoUrl exists, validate it's a URL
           if (data.data.photoUrl) {
-            expect(data.data.photoUrl).toMatch(/^https?:\/\/.+/)
+            expect(data.data.photoUrl).toMatch(/^https?:\/\/.+/);
           }
         }
-      })
-    })
+      });
+    });
 
     describe('PUT /api/wedding/dress-code', () => {
-      const endpoint = '/api/wedding/dress-code'
+      const endpoint = '/api/wedding/dress-code';
 
       it('should update dress code and return 200', async () => {
         const updateRequest = {
           title: 'Garden Party Attire',
           description: 'Semi-formal dress recommended. Avoid stiletto heels for outdoor ceremony.',
-        }
+        };
 
         const response = await makeAuthenticatedRequest(endpoint, {
           method: 'PUT',
           body: JSON.stringify(updateRequest),
-        })
+        });
 
         if (response.status === 200) {
-          const data = await response.json()
+          const data = await response.json();
           expect(data).toMatchObject({
             success: true,
             data: expect.objectContaining({
@@ -381,9 +381,9 @@ describe('Content Management API Contract Tests', () => {
               description:
                 'Semi-formal dress recommended. Avoid stiletto heels for outdoor ceremony.',
             }),
-          })
+          });
         }
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});

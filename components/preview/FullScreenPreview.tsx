@@ -5,14 +5,14 @@
  * Follows Constitution Principle VII: receives data from Server Component
  */
 
-'use client'
+'use client';
 
-import type { WeddingConfiguration } from '@/db/schema'
+import type { WeddingConfiguration } from '@/db/schema';
 
-import WeddingLayout from '../WeddingLayout'
+import WeddingLayout from '../WeddingLayout';
 
 interface FullScreenPreviewProps {
-  config: WeddingConfiguration & { features: Record<string, boolean> }
+  config: WeddingConfiguration & { features: Record<string, boolean> };
 }
 
 export default function FullScreenPreview({ config }: FullScreenPreviewProps) {
@@ -21,8 +21,8 @@ export default function FullScreenPreview({ config }: FullScreenPreviewProps) {
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <p className="text-gray-500">No configuration found</p>
       </div>
-    )
+    );
   }
 
-  return <WeddingLayout config={config} />
+  return <WeddingLayout config={config} />;
 }

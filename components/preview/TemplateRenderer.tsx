@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Template Renderer Component
@@ -8,23 +8,23 @@
  * Future templates can be added to the TEMPLATES registry.
  */
 
-import Template1Preview from './Template1Preview'
+import Template1Preview from './Template1Preview';
 
-import type { TemplateProps, TemplateId } from './types'
+import type { TemplateProps, TemplateId } from './types';
 
 const TEMPLATES = {
   'template-1': Template1Preview,
   // Future templates can be added here:
   // 'template-2': Template2Preview,
   // 'template-3': Template3Preview,
-} as const
+} as const;
 
 interface TemplateRendererProps {
-  templateId?: TemplateId
-  data: TemplateProps['data']
-  containerClassName?: string
-  mode?: 'fullscreen' | 'embedded'
-  scrollContainerRef?: React.RefObject<HTMLElement>
+  templateId?: TemplateId;
+  data: TemplateProps['data'];
+  containerClassName?: string;
+  mode?: 'fullscreen' | 'embedded';
+  scrollContainerRef?: React.RefObject<HTMLElement>;
 }
 
 export default function TemplateRenderer({
@@ -34,19 +34,19 @@ export default function TemplateRenderer({
   mode = 'fullscreen',
   scrollContainerRef,
 }: TemplateRendererProps) {
-  const TemplateComponent = TEMPLATES[templateId]
+  const TemplateComponent = TEMPLATES[templateId];
 
   if (!TemplateComponent) {
     return (
       <div className="flex h-full items-center justify-center bg-gray-50">
         <p className="text-gray-500">Template &quot;{templateId}&quot; not found</p>
       </div>
-    )
+    );
   }
 
   return (
     <div className={containerClassName}>
       <TemplateComponent data={data} mode={mode} scrollContainerRef={scrollContainerRef} />
     </div>
-  )
+  );
 }

@@ -43,12 +43,12 @@
 **Implementation Pattern**:
 
 ```typescript
-'use server'
+'use server';
 export async function uploadBackgroundMedia(formData: FormData) {
-  const file = formData.get('file') as File
+  const file = formData.get('file') as File;
   // Validate, save, update DB
-  revalidatePath('/admin')
-  return { success: true, data: { filename, fileSize, mimeType } }
+  revalidatePath('/admin');
+  return { success: true, data: { filename, fileSize, mimeType } };
 }
 ```
 
@@ -148,14 +148,14 @@ public/
 **Implementation Pattern**:
 
 ```typescript
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { startingSectionSchema } from '@/lib/validations/starting-section'
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { startingSectionSchema } from '@/lib/validations/starting-section';
 
 const form = useForm({
   resolver: zodResolver(startingSectionSchema),
   defaultValues: { groomName: config.groomName || '' },
-})
+});
 ```
 
 **References**:

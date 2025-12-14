@@ -1,24 +1,24 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
-import DinnerIcon from './icons/DinnerIcon'
-import NavigationIcon from './icons/NavigationIcon'
+import DinnerIcon from './icons/DinnerIcon';
+import NavigationIcon from './icons/NavigationIcon';
 
-import Button from './Button'
-import FadeIn from './FadeIn'
-import GrowIn from './GrowIn'
+import Button from './Button';
+import FadeIn from './FadeIn';
+import GrowIn from './GrowIn';
 
 export const locations = {
   bali: 'bali',
   jakarta: 'jakarta',
   malang: 'malang',
-}
+};
 
-export type Locations = keyof typeof locations
+export type Locations = keyof typeof locations;
 
 interface LocationProps {
-  location: Locations
+  location: Locations;
 }
 
 const LocationComponent: FC<LocationProps> = ({ location }) => (
@@ -78,6 +78,6 @@ const LocationComponent: FC<LocationProps> = ({ location }) => (
       <Image src="/images/ornaments/frame/orn_frame.png" alt="Ornament Flower" fill />
     </GrowIn>
   </div>
-)
+);
 
-export default LocationComponent
+export default LocationComponent;

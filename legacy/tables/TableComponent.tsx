@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react';
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material'
-import { useDrop } from 'react-dnd'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mui/material';
+import { useDrop } from 'react-dnd';
 
-import { Locations } from '@/components/LocationComponent'
-import { Guest } from '@/legacy/types/guest'
-import { Table } from '@/legacy/types/table'
+import { Locations } from '@/components/LocationComponent';
+import { Guest } from '@/legacy/types/guest';
+import { Table } from '@/legacy/types/table';
 
-import { moveGuestToTable } from './actions'
-import { VirtualizedGuestList } from './VirtualizedGuestList'
+import { moveGuestToTable } from './actions';
+import { VirtualizedGuestList } from './VirtualizedGuestList';
 
 interface TableComponentProps {
-  table: Table
-  tables: Table[]
-  location: Locations
-  onOpenMoveModal: (guest: Guest) => void
-  tableSearchTerm: string
+  table: Table;
+  tables: Table[];
+  location: Locations;
+  onOpenMoveModal: (guest: Guest) => void;
+  tableSearchTerm: string;
 }
 
 export const TableComponent = ({
@@ -28,34 +28,34 @@ export const TableComponent = ({
   onOpenMoveModal,
   tableSearchTerm,
 }: TableComponentProps) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const [expanded, setExpanded] = useState(false)
+  const ref = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (tableSearchTerm.length > 0) {
-      setExpanded(true)
+      setExpanded(true);
     } else {
-      setExpanded(false)
+      setExpanded(false);
     }
-  }, [tableSearchTerm])
+  }, [tableSearchTerm]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'guest',
     drop: async (item: { id: number }) => {
-      await moveGuestToTable(item.id, table.id, location)
+      await moveGuestToTable(item.id, table.id, location);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
-  }))
+  }));
 
-  drop(ref)
+  drop(ref);
 
   const getHighlightedText = (text: string, highlight: string) => {
     if (!highlight) {
-      return <span>{text}</span>
+      return <span>{text}</span>;
     }
-    const parts = text.split(new RegExp(`(${highlight})`, 'gi'))
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
     return (
       <span>
         {parts.map((part, i) =>
@@ -68,8 +68,8 @@ export const TableComponent = ({
           )
         )}
       </span>
-    )
-  }
+    );
+  };
 
   return (
     <div ref={ref} className="min-w-[16rem] rounded-lg">
@@ -116,5 +116,5 @@ export const TableComponent = ({
         </AccordionDetails>
       </Accordion>
     </div>
-  )
-}
+  );
+};

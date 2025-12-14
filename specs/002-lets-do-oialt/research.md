@@ -318,16 +318,16 @@ const mockRSVP = {
 // Memoized section components
 const LoveStorySection = React.memo(({ items }: Props) => {
   /* ... */
-})
+});
 const GallerySection = React.memo(({ photos }: Props) => {
   /* ... */
-})
+});
 
 // Debounced refresh in LivePreview
 const debouncedRefresh = useMemo(
   () => debounce(() => setRefreshTrigger((prev) => prev + 1), 300),
   []
-)
+);
 ```
 
 ### Alternatives Considered

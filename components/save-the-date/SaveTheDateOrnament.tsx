@@ -1,8 +1,8 @@
-import { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren } from 'react';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
 const variants = {
   wiggle: {
@@ -21,7 +21,7 @@ const variants = {
       ease: 'easeInOut',
     },
   },
-}
+};
 
 const SaveTheDateOrnament = ({ downward = false }: { downward?: boolean }) => (
   <>
@@ -73,7 +73,7 @@ const SaveTheDateOrnament = ({ downward = false }: { downward?: boolean }) => (
       className={`absolute -left-4 w-[55%] ${downward ? '-top-4' : '-bottom-4'} ${downward && 'rotate-180'}`}
     />
   </>
-)
+);
 
 export const Wiggle: FC<PropsWithChildren<{ className?: string; downward?: boolean }>> = ({
   children,
@@ -88,6 +88,6 @@ export const Wiggle: FC<PropsWithChildren<{ className?: string; downward?: boole
   >
     {children}
   </motion.div>
-)
+);
 
-export default SaveTheDateOrnament
+export default SaveTheDateOrnament;

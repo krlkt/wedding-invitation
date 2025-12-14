@@ -5,7 +5,7 @@
  * Used for form validation and server-side data validation.
  */
 
-import { z } from 'zod'
+import { z } from 'zod';
 
 /**
  * Schema for FAQ item creation and updates
@@ -27,7 +27,7 @@ export const faqItemSchema = z.object({
     .optional(),
 
   order: z.number().int().positive('Order must be a positive integer').optional(),
-})
+});
 
 /**
  * Schema for creating a new FAQ item (all fields required)
@@ -44,8 +44,8 @@ export const createFaqItemSchema = z.object({
     .max(2000, 'Answer must not exceed 2000 characters'),
 
   order: z.number().int().positive('Order must be a positive integer'),
-})
+});
 
-export const faqItemsArraySchema = faqItemSchema.array()
+export const faqItemsArraySchema = faqItemSchema.array();
 
-export type CreateFaqItemInput = z.infer<typeof createFaqItemSchema>
+export type CreateFaqItemInput = z.infer<typeof createFaqItemSchema>;

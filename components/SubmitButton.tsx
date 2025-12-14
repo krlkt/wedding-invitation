@@ -1,10 +1,10 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
-import Button from './Button'
-import Spinner from './Spinner'
+import Button from './Button';
+import Spinner from './Spinner';
 
 interface SubmitButtonProps {
-  isSubmitting: boolean
+  isSubmitting: boolean;
 }
 
 const SubmitButton: FC<SubmitButtonProps> = ({ isSubmitting }) => (
@@ -16,6 +16,6 @@ const SubmitButton: FC<SubmitButtonProps> = ({ isSubmitting }) => (
       </div>
     )}
   </Button>
-)
+);
 
-export default SubmitButton
+export default SubmitButton;

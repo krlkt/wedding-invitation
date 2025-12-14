@@ -11,18 +11,18 @@
  * - Accepts forwarded refs
  */
 
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+import * as React from 'react';
+import { cn } from '@/lib/utils';
 
 export interface FileInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /** Optional function to format file size display */
-  formatFileSize?: (bytes: number) => string
+  formatFileSize?: (bytes: number) => string;
   /** File that has been selected */
-  selectedFile?: File | null
+  selectedFile?: File | null;
   /** Custom placeholder text when no file is selected */
-  placeholder?: string
+  placeholder?: string;
   /** Show file size inline */
-  showFileSize?: boolean
+  showFileSize?: boolean;
 }
 
 const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
@@ -39,8 +39,8 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
     },
     ref
   ) => {
-    const generatedId = React.useId()
-    const inputId = id || generatedId
+    const generatedId = React.useId();
+    const inputId = id || generatedId;
 
     return (
       <div className={cn('relative w-full', className)}>
@@ -90,10 +90,10 @@ const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
           </div>
         </label>
       </div>
-    )
+    );
   }
-)
+);
 
-FileInput.displayName = 'FileInput'
+FileInput.displayName = 'FileInput';
 
-export { FileInput }
+export { FileInput };

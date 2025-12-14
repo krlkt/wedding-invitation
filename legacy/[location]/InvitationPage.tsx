@@ -1,41 +1,41 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
-import Lenis from 'lenis'
+import Lenis from 'lenis';
 
-import BorderedDiv from '@/components/BorderedDiv'
-import Button from '@/components/Button'
-import DressCode from '@/components/dresscode/DressCode'
-import FadeIn from '@/components/FadeIn'
-import FAQ from '@/components/faq/FAQ'
-import ImageGallery from '@/components/gallery/ImageGallery'
-import Gift from '@/components/gift/Gift'
-import Hero from '@/components/hero/Hero'
-import LoaderScreen from '@/components/LoaderScreen'
-import LocationComponent, { Locations } from '@/components/LocationComponent'
-import Music from '@/components/Music'
-import 'photoswipe/style.css'
-import YouTubeEmbed from '@/components/prewedding/YoutubeEmbed'
-import RSVPFORM from '@/components/rsvp/RSVPForm'
-import SaveTheDate from '@/components/save-the-date/SaveTheDate'
-import SaveTheDateOrnament from '@/components/save-the-date/SaveTheDateOrnament'
-import SectionTitle from '@/components/SectionTitle'
-import Timeline from '@/components/timeline/Timeline'
-import Divider from '@/components/wish/Divider'
-import Wishes from '@/components/wish/Wishes'
-import WishForm from '@/components/wish/WishForm'
-import Bride from '@/components/zoomGridPhotos/Bride'
-import Groom from '@/components/zoomGridPhotos/Groom'
-import { RSVP } from '@/legacy/types/rsvp'
-import { Wish } from '@/legacy/types/wish'
+import BorderedDiv from '@/components/BorderedDiv';
+import Button from '@/components/Button';
+import DressCode from '@/components/dresscode/DressCode';
+import FadeIn from '@/components/FadeIn';
+import FAQ from '@/components/faq/FAQ';
+import ImageGallery from '@/components/gallery/ImageGallery';
+import Gift from '@/components/gift/Gift';
+import Hero from '@/components/hero/Hero';
+import LoaderScreen from '@/components/LoaderScreen';
+import LocationComponent, { Locations } from '@/components/LocationComponent';
+import Music from '@/components/Music';
+import 'photoswipe/style.css';
+import YouTubeEmbed from '@/components/prewedding/YoutubeEmbed';
+import RSVPFORM from '@/components/rsvp/RSVPForm';
+import SaveTheDate from '@/components/save-the-date/SaveTheDate';
+import SaveTheDateOrnament from '@/components/save-the-date/SaveTheDateOrnament';
+import SectionTitle from '@/components/SectionTitle';
+import Timeline from '@/components/timeline/Timeline';
+import Divider from '@/components/wish/Divider';
+import Wishes from '@/components/wish/Wishes';
+import WishForm from '@/components/wish/WishForm';
+import Bride from '@/components/zoomGridPhotos/Bride';
+import Groom from '@/components/zoomGridPhotos/Groom';
+import { RSVP } from '@/legacy/types/rsvp';
+import { Wish } from '@/legacy/types/wish';
 
-import Image from 'next/image'
+import Image from 'next/image';
 
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
-import { rotateAnimation } from '@/lib/animation'
-import GrowIn from '@/components/GrowIn'
+import { rotateAnimation } from '@/lib/animation';
+import GrowIn from '@/components/GrowIn';
 
 export default function InvitationPage({
   location,
@@ -43,48 +43,48 @@ export default function InvitationPage({
   guestName,
   rsvp,
 }: {
-  location: Locations
-  wishes: { wishes: Array<Wish>; wishPage: number; totalPages: number }
-  guestName: string
-  rsvp: RSVP
+  location: Locations;
+  wishes: { wishes: Array<Wish>; wishPage: number; totalPages: number };
+  guestName: string;
+  rsvp: RSVP;
 }) {
-  const isMalang = location === 'malang'
-  const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true)
+  const isMalang = location === 'malang';
+  const [isLoaderScreenVisible, setIsLoaderScreenVisible] = useState<boolean>(true);
 
   // use lenis smooth scroll on page
   useEffect(() => {
     const lenis = new Lenis({
       wheelMultiplier: 2,
-    })
+    });
 
     function raf(time: any) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf)
-  }, [])
+    requestAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
     const handleFirstVisit = () => {
       // Add or remove 'locked' class based on loader visibility
       if (isLoaderScreenVisible) {
-        document.body.classList.add('locked')
+        document.body.classList.add('locked');
       } else {
-        document.body.classList.remove('locked')
+        document.body.classList.remove('locked');
       }
 
       // Remove loader screen after 4.5 seconds
       setTimeout(() => {
-        setIsLoaderScreenVisible(false)
-      }, 4500)
+        setIsLoaderScreenVisible(false);
+      }, 4500);
 
       // Play music
-      const music = document.getElementById('music') as HTMLAudioElement
-      music?.play()
-    }
-    handleFirstVisit()
-  }, [isLoaderScreenVisible])
+      const music = document.getElementById('music') as HTMLAudioElement;
+      music?.play();
+    };
+    handleFirstVisit();
+  }, [isLoaderScreenVisible]);
 
   return (
     <>
@@ -376,5 +376,5 @@ export default function InvitationPage({
         {/* Update values for jakarta and malang */}
       </main>
     </>
-  )
+  );
 }

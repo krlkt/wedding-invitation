@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
 const FlowerWithBranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
   const variants = {
@@ -26,7 +26,7 @@ const FlowerWithBranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
         ease: 'easeInOut',
       },
     },
-  }
+  };
 
   return (
     <motion.svg
@@ -101,7 +101,7 @@ const FlowerWithBranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
         />
       </g>
     </motion.svg>
-  )
-}
+  );
+};
 
-export default FlowerWithBranchIcon
+export default FlowerWithBranchIcon;

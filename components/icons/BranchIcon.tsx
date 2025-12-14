@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
 const BranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
   const variants = {
@@ -26,7 +26,7 @@ const BranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
         ease: 'easeInOut',
       },
     },
-  }
+  };
 
   return (
     <motion.svg
@@ -107,7 +107,7 @@ const BranchIcon = ({ fromLeft }: { fromLeft: boolean }) => {
         </g>
       </g>
     </motion.svg>
-  )
-}
+  );
+};
 
-export default BranchIcon
+export default BranchIcon;

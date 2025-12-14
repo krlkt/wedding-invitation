@@ -1,9 +1,9 @@
-'use server'
+'use server';
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath } from 'next/cache';
 
-import { query } from '@/db/client'
-import { RSVP } from '@/legacy/types/rsvp'
+import { query } from '@/db/client';
+import { RSVP } from '@/legacy/types/rsvp';
 
 export const addRSVP = async (data: RSVP) => {
   await query(
@@ -15,8 +15,8 @@ export const addRSVP = async (data: RSVP) => {
       guest_number: data.guest_number,
       notes: data.notes,
     }
-  )
+  );
 
   // Update UI
-  revalidatePath('/')
-}
+  revalidatePath('/');
+};

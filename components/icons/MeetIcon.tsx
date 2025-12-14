@@ -1,4 +1,4 @@
-import { secondaryColorHex } from '@/lib/constants'
+import { secondaryColorHex } from '@/lib/constants';
 
 const MeetIcon = () => (
   <svg
@@ -46,6 +46,6 @@ const MeetIcon = () => (
     </g>
     <rect x="38.8" y="70.8" width="50.6" height="6" />
   </svg>
-)
+);
 
-export default MeetIcon
+export default MeetIcon;

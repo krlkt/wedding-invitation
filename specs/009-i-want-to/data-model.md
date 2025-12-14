@@ -33,7 +33,7 @@ export const weddingConfigurations = sqliteTable('wedding_configurations', {
   brideFather: text('bride_father'),
   brideMother: text('bride_mother'),
   // ... other existing fields
-})
+});
 ```
 
 ### New Fields (Starting Section)
@@ -67,39 +67,39 @@ startingSectionBackgroundMimeType: text('starting_section_background_mime_type')
 ```typescript
 export interface WeddingConfiguration {
   // Existing fields
-  id: string
-  userId: string
-  subdomain: string
-  groomName: string
-  brideName: string
-  weddingDate: Date
-  groomFather: string | null
-  groomMother: string | null
-  brideFather: string | null
-  brideMother: string | null
-  groomsInstagramLink: string | null
-  brideInstagramLink: string | null
-  footerText: string | null
-  monogramFilename: string | null
-  monogramFileSize: number | null
-  monogramMimeType: string | null
-  isPublished: boolean
-  createdAt: Date
-  updatedAt: Date
+  id: string;
+  userId: string;
+  subdomain: string;
+  groomName: string;
+  brideName: string;
+  weddingDate: Date;
+  groomFather: string | null;
+  groomMother: string | null;
+  brideFather: string | null;
+  brideMother: string | null;
+  groomsInstagramLink: string | null;
+  brideInstagramLink: string | null;
+  footerText: string | null;
+  monogramFilename: string | null;
+  monogramFileSize: number | null;
+  monogramMimeType: string | null;
+  isPublished: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 
   // New: Starting Section fields
-  startingSectionGroomName: string | null
-  startingSectionBrideName: string | null
-  startingSectionShowParentInfo: boolean
-  startingSectionGroomFatherName: string | null
-  startingSectionGroomMotherName: string | null
-  startingSectionBrideFatherName: string | null
-  startingSectionBrideMotherName: string | null
-  startingSectionShowWeddingDate: boolean
-  startingSectionBackgroundType: 'image' | 'video' | null
-  startingSectionBackgroundFilename: string | null
-  startingSectionBackgroundFileSize: number | null
-  startingSectionBackgroundMimeType: string | null
+  startingSectionGroomName: string | null;
+  startingSectionBrideName: string | null;
+  startingSectionShowParentInfo: boolean;
+  startingSectionGroomFatherName: string | null;
+  startingSectionGroomMotherName: string | null;
+  startingSectionBrideFatherName: string | null;
+  startingSectionBrideMotherName: string | null;
+  startingSectionShowWeddingDate: boolean;
+  startingSectionBackgroundType: 'image' | 'video' | null;
+  startingSectionBackgroundFilename: string | null;
+  startingSectionBackgroundFileSize: number | null;
+  startingSectionBackgroundMimeType: string | null;
 }
 ```
 
@@ -159,57 +159,57 @@ export interface WeddingConfiguration {
 
 ```typescript
 // migrations/XXXX_add_starting_section_fields.ts
-import { sql } from 'drizzle-orm'
+import { sql } from 'drizzle-orm';
 
 export async function up(db) {
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_groom_name TEXT;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_bride_name TEXT;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_show_parent_info INTEGER DEFAULT 0;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_groom_father_name TEXT;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_groom_mother_name TEXT;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_bride_father_name TEXT;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_bride_mother_name TEXT;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_show_wedding_date INTEGER DEFAULT 1;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_background_type TEXT;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_background_filename TEXT;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_background_file_size INTEGER;
-  `)
+  `);
   await db.run(sql`
     ALTER TABLE wedding_configurations
     ADD COLUMN starting_section_background_mime_type TEXT;
-  `)
+  `);
 }
 
 export async function down(db) {
@@ -225,15 +225,15 @@ export async function down(db) {
 
 ```typescript
 // app/admin/page.tsx
-import { db } from '@/app/lib/database'
-import { weddingConfigurations } from '@/app/db/schema'
-import { eq } from 'drizzle-orm'
+import { db } from '@/app/lib/database';
+import { weddingConfigurations } from '@/app/db/schema';
+import { eq } from 'drizzle-orm';
 
 const [config] = await db
   .select()
   .from(weddingConfigurations)
   .where(eq(weddingConfigurations.userId, session.userId))
-  .limit(1)
+  .limit(1);
 
 // All starting section fields available on config object
 // config.startingSectionGroomName, etc.
@@ -243,10 +243,10 @@ const [config] = await db
 
 ```typescript
 // Server Action
-'use server'
+'use server';
 export async function updateStartingSection(data: StartingSectionUpdate) {
-  const session = await getSession()
-  if (!session) throw new Error('Unauthorized')
+  const session = await getSession();
+  if (!session) throw new Error('Unauthorized');
 
   await db
     .update(weddingConfigurations)
@@ -261,10 +261,10 @@ export async function updateStartingSection(data: StartingSectionUpdate) {
       startingSectionShowWeddingDate: data.showWeddingDate,
       updatedAt: new Date(),
     })
-    .where(eq(weddingConfigurations.userId, session.userId))
+    .where(eq(weddingConfigurations.userId, session.userId));
 
-  revalidatePath('/admin')
-  return { success: true }
+  revalidatePath('/admin');
+  return { success: true };
 }
 ```
 
@@ -272,7 +272,7 @@ export async function updateStartingSection(data: StartingSectionUpdate) {
 
 ```typescript
 // lib/validations/starting-section.ts
-import { z } from 'zod'
+import { z } from 'zod';
 
 export const startingSectionContentSchema = z.object({
   groomName: z.string().max(100).optional().nullable(),
@@ -283,30 +283,30 @@ export const startingSectionContentSchema = z.object({
   brideFatherName: z.string().max(100).optional().nullable(),
   brideMotherName: z.string().max(100).optional().nullable(),
   showWeddingDate: z.boolean().optional(),
-})
+});
 
-const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10 MB
-const MAX_VIDEO_SIZE = 50 * 1024 * 1024 // 50 MB
-const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-const ACCEPTED_VIDEO_TYPES = ['video/mp4', 'video/webm']
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50 MB
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const ACCEPTED_VIDEO_TYPES = ['video/mp4', 'video/webm'];
 
 export const startingSectionMediaSchema = z.object({
   file: z.instanceof(File).refine(
     (file) => {
       if (ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-        return file.size <= MAX_IMAGE_SIZE
+        return file.size <= MAX_IMAGE_SIZE;
       }
       if (ACCEPTED_VIDEO_TYPES.includes(file.type)) {
-        return file.size <= MAX_VIDEO_SIZE
+        return file.size <= MAX_VIDEO_SIZE;
       }
-      return false
+      return false;
     },
     {
       message: 'Invalid file type or size exceeded (10MB for images, 50MB for videos)',
     }
   ),
   replaceExisting: z.boolean().optional(),
-})
+});
 ```
 
 ## Relationships

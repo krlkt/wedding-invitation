@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const CrossIcon = () => (
   <svg
@@ -11,6 +11,6 @@ const CrossIcon = () => (
     <path d="M0 0h24v24H0z" fill="none" />
     <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
   </svg>
-)
+);
 
-export default CrossIcon
+export default CrossIcon;

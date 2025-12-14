@@ -1,37 +1,37 @@
-'use client'
+'use client';
 
-import { FC, useRef, useState } from 'react'
+import { FC, useRef, useState } from 'react';
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
-import CloseIcon from '@mui/icons-material/Close'
-import { Button, TextField, IconButton } from '@mui/material'
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
-import { DndProvider, useDrop } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import CloseIcon from '@mui/icons-material/Close';
+import { Button, TextField, IconButton } from '@mui/material';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { DndProvider, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import { Locations } from '@/components/LocationComponent'
-import { Guest } from '@/legacy/types/guest'
-import { Table } from '@/legacy/types/table'
-import { naturalSort } from '@/lib/sort'
+import { Locations } from '@/components/LocationComponent';
+import { Guest } from '@/legacy/types/guest';
+import { Table } from '@/legacy/types/table';
+import { naturalSort } from '@/lib/sort';
 
-import { moveGuestToTable, synchronizeGuests } from './actions'
-import { ManageTablesModal } from './ManageTablesModal'
-import { MoveGuestModal } from './MoveGuestModal'
-import { TableComponent } from './TableComponent'
-import { VirtualizedGuestList } from './VirtualizedGuestList'
+import { moveGuestToTable, synchronizeGuests } from './actions';
+import { ManageTablesModal } from './ManageTablesModal';
+import { MoveGuestModal } from './MoveGuestModal';
+import { TableComponent } from './TableComponent';
+import { VirtualizedGuestList } from './VirtualizedGuestList';
 
 interface TableManagementClientPageProps {
-  initialTables: Table[]
-  initialUnassignedGuests: Guest[]
-  location: Locations
+  initialTables: Table[];
+  initialUnassignedGuests: Guest[];
+  location: Locations;
 }
 
 interface TableManagementLayoutProps {
-  tables: Table[]
-  unassignedGuests: Guest[]
-  location: Locations
+  tables: Table[];
+  unassignedGuests: Guest[];
+  location: Locations;
 }
 
 const TableManagementLayout: FC<TableManagementLayoutProps> = ({
@@ -39,65 +39,65 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
   unassignedGuests,
   location,
 }) => {
-  const router = useRouter()
-  const ref = useRef<HTMLDivElement>(null)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [tableSearchTerm, setTableSearchTerm] = useState('')
-  const [movingGuest, setMovingGuest] = useState<Guest | null>(null)
-  const [isUnassignedGuestsOpen, setIsUnassignedGuestsOpen] = useState(true)
-  const [isSyncing, setIsSyncing] = useState(false)
-  const [isManageTablesModalOpen, setIsManageTablesModalOpen] = useState(false)
+  const router = useRouter();
+  const ref = useRef<HTMLDivElement>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [tableSearchTerm, setTableSearchTerm] = useState('');
+  const [movingGuest, setMovingGuest] = useState<Guest | null>(null);
+  const [isUnassignedGuestsOpen, setIsUnassignedGuestsOpen] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isManageTablesModalOpen, setIsManageTablesModalOpen] = useState(false);
 
-  const sortedTables = [...tables].sort((a, b) => naturalSort(a.name, b.name))
+  const sortedTables = [...tables].sort((a, b) => naturalSort(a.name, b.name));
 
   const filteredUnassignedGuests = unassignedGuests.filter((guest) =>
     guest.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  );
 
   const filteredTables = sortedTables.filter((table) => {
     if (tableSearchTerm.trim() === '') {
-      return true
+      return true;
     }
-    const searchTerm = tableSearchTerm.toLowerCase()
-    const tableNameMatch = table.name.toLowerCase().includes(searchTerm)
+    const searchTerm = tableSearchTerm.toLowerCase();
+    const tableNameMatch = table.name.toLowerCase().includes(searchTerm);
     const guestNameMatch = table.guests.some((guest) =>
       guest.name.toLowerCase().includes(searchTerm)
-    )
-    return tableNameMatch || guestNameMatch
-  })
+    );
+    return tableNameMatch || guestNameMatch;
+  });
 
-  const handleOpenMoveModal = (guest: Guest) => setMovingGuest(guest)
+  const handleOpenMoveModal = (guest: Guest) => setMovingGuest(guest);
   const handleCloseMoveModal = () => {
-    setMovingGuest(null)
-    router.refresh()
-  }
+    setMovingGuest(null);
+    router.refresh();
+  };
 
   const handleExportPdf = () => {
-    const doc = new jsPDF()
+    const doc = new jsPDF();
     const data = sortedTables.flatMap((table) =>
       table.guests.map((guest) => [table.name, guest.name])
-    )
+    );
 
     autoTable(doc, {
       head: [['Table Name', 'Guest Name']],
       body: data,
-    })
+    });
 
-    doc.save(`tables-${location}.pdf`)
-  }
+    doc.save(`tables-${location}.pdf`);
+  };
 
   const [{ isOver: isOverUnassigned }, dropUnassigned] = useDrop(() => ({
     accept: 'guest',
     drop: async (item: { id: number }) => {
-      await moveGuestToTable(item.id, null, location)
-      router.refresh()
+      await moveGuestToTable(item.id, null, location);
+      router.refresh();
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
-  }))
+  }));
 
-  dropUnassigned(ref)
+  dropUnassigned(ref);
 
   return (
     <div className="p-4">
@@ -124,10 +124,10 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
           <Button
             variant="contained"
             onClick={async () => {
-              setIsSyncing(true)
-              await synchronizeGuests(location)
-              router.refresh()
-              setIsSyncing(false)
+              setIsSyncing(true);
+              await synchronizeGuests(location);
+              router.refresh();
+              setIsSyncing(false);
             }}
             disabled={isSyncing}
           >
@@ -216,8 +216,8 @@ const TableManagementLayout: FC<TableManagementLayoutProps> = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const TableManagementClientPage = ({
   initialTables,
@@ -232,7 +232,7 @@ const TableManagementClientPage = ({
         location={location}
       />
     </DndProvider>
-  )
-}
+  );
+};
 
-export default TableManagementClientPage
+export default TableManagementClientPage;

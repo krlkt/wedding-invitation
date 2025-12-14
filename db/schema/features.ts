@@ -5,10 +5,10 @@
  * Allows users to enable/disable optional features like love story, gallery, etc.
  */
 
-import { createId } from '@paralleldrive/cuid2'
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
+import { createId } from '@paralleldrive/cuid2';
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
-import { weddingConfigurations } from './weddings'
+import { weddingConfigurations } from './weddings';
 
 // Feature names enum - single source of truth
 export const FEATURE_NAMES = [
@@ -25,10 +25,10 @@ export const FEATURE_NAMES = [
   'dress_code',
   'wishes',
   'footer',
-] as const
+] as const;
 
 // TypeScript type derived from the enum
-export type FeatureName = (typeof FEATURE_NAMES)[number]
+export type FeatureName = (typeof FEATURE_NAMES)[number];
 
 export const featureToggles = sqliteTable('feature_toggles', {
   id: text('id')
@@ -47,8 +47,8 @@ export const featureToggles = sqliteTable('feature_toggles', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
 // TypeScript types inferred from schema
-export type FeatureToggle = typeof featureToggles.$inferSelect
-export type NewFeatureToggle = typeof featureToggles.$inferInsert
+export type FeatureToggle = typeof featureToggles.$inferSelect;
+export type NewFeatureToggle = typeof featureToggles.$inferInsert;

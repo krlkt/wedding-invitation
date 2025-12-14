@@ -1,6 +1,6 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
-import KnotIcon from '../icons/KnotIcon'
+import KnotIcon from '../icons/KnotIcon';
 
 const Hero = () => (
   <div className="relative h-dvh w-full">
@@ -40,6 +40,6 @@ const Hero = () => (
       <p className="absolute bottom-4 text-sm">&darr; Scroll down to find out more! &darr;</p>
     </div>
   </div>
-)
+);
 
-export default Hero
+export default Hero;

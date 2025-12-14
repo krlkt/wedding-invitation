@@ -6,10 +6,10 @@
  * Supports groom personal information and photo gallery.
  */
 
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core'
-import { createId } from '@paralleldrive/cuid2'
-import { weddingConfigurations } from './weddings'
-import { GroomBrideSectionPhoto } from './section-photo-types'
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { createId } from '@paralleldrive/cuid2';
+import { weddingConfigurations } from './weddings';
+import { GroomBrideSectionPhoto } from './section-photo-types';
 
 export const groomSectionContent = sqliteTable('groom_section_content', {
   id: text('id')
@@ -43,13 +43,13 @@ export const groomSectionContent = sqliteTable('groom_section_content', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .$onUpdateFn(() => new Date())
     .notNull(),
-})
+});
 
 // TypeScript types inferred from schema
-export type GroomSectionContent = typeof groomSectionContent.$inferSelect
-export type NewGroomSectionContent = typeof groomSectionContent.$inferInsert
+export type GroomSectionContent = typeof groomSectionContent.$inferSelect;
+export type NewGroomSectionContent = typeof groomSectionContent.$inferInsert;
 
 // Helper type with parsed photos
 export type GroomSectionContentWithPhotos = Omit<GroomSectionContent, 'photos'> & {
-  photos: GroomBrideSectionPhoto[]
-}
+  photos: GroomBrideSectionPhoto[];
+};

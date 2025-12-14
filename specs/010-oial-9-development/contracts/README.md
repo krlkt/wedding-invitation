@@ -24,18 +24,18 @@ While no new endpoints are created, one existing endpoint will be enhanced to ex
 
 ```typescript
 // app/api/health/route.ts
-import { NextResponse } from 'next/server'
-import { getConfig } from '@/app/lib/env-config'
+import { NextResponse } from 'next/server';
+import { getConfig } from '@/app/lib/env-config';
 
 export async function GET() {
-  const config = getConfig()
+  const config = getConfig();
 
   return NextResponse.json({
     status: 'ok',
     environment: config.environment,
     database: config.databaseUrl ? 'connected' : 'error',
     timestamp: new Date().toISOString(),
-  })
+  });
 }
 ```
 
@@ -118,32 +118,32 @@ While not traditional API contracts, this feature establishes patterns for datab
 
 ```typescript
 // app/db/index.ts
-import { drizzle } from 'drizzle-orm/libsql'
-import { createClient } from '@libsql/client'
-import { getConfig } from '@/app/lib/env-config'
+import { drizzle } from 'drizzle-orm/libsql';
+import { createClient } from '@libsql/client';
+import { getConfig } from '@/app/lib/env-config';
 
 // Environment-aware database connection
 export function getDatabaseClient() {
-  const config = getConfig()
+  const config = getConfig();
 
   const client = createClient({
     url: config.databaseUrl,
     authToken: config.databaseAuthToken,
-  })
+  });
 
-  return drizzle(client)
+  return drizzle(client);
 }
 
-export const db = getDatabaseClient()
+export const db = getDatabaseClient();
 ```
 
 **Usage** (Server Components, API Routes, Server Actions):
 
 ```typescript
-import { db } from '@/app/db'
+import { db } from '@/app/db';
 
 // Automatically uses correct database based on environment
-const users = await db.select().from(usersTable)
+const users = await db.select().from(usersTable);
 ```
 
 **Environment Resolution**:
@@ -168,23 +168,23 @@ Since there are no new API endpoints, contract tests for this feature focus on:
 // __tests__/contracts/environment-detection.test.ts
 describe('Environment Detection Contract', () => {
   it('should detect development environment from env vars', () => {
-    process.env.APP_ENV = 'development'
-    const config = getConfig()
-    expect(config.environment).toBe('development')
-  })
+    process.env.APP_ENV = 'development';
+    const config = getConfig();
+    expect(config.environment).toBe('development');
+  });
 
   it('should detect test environment from Vercel preview', () => {
-    process.env.VERCEL_ENV = 'preview'
-    const config = getConfig()
-    expect(config.environment).toBe('test')
-  })
+    process.env.VERCEL_ENV = 'preview';
+    const config = getConfig();
+    expect(config.environment).toBe('test');
+  });
 
   it('should detect production environment from Vercel production', () => {
-    process.env.VERCEL_ENV = 'production'
-    const config = getConfig()
-    expect(config.environment).toBe('production')
-  })
-})
+    process.env.VERCEL_ENV = 'production';
+    const config = getConfig();
+    expect(config.environment).toBe('production');
+  });
+});
 ```
 
 ### 2. Database Connection Contracts
@@ -195,29 +195,29 @@ describe('Environment Detection Contract', () => {
 // __tests__/contracts/database-connection.test.ts
 describe('Database Connection Contract', () => {
   it('should connect to development database in dev environment', () => {
-    process.env.APP_ENV = 'development'
-    process.env.DATABASE_URL = 'libsql://wedding-dev.turso.io'
+    process.env.APP_ENV = 'development';
+    process.env.DATABASE_URL = 'libsql://wedding-dev.turso.io';
 
-    const config = getConfig()
-    expect(config.databaseUrl).toContain('wedding-dev')
-  })
+    const config = getConfig();
+    expect(config.databaseUrl).toContain('wedding-dev');
+  });
 
   it('should connect to test database in test environment', () => {
-    process.env.APP_ENV = 'test'
-    process.env.DATABASE_URL = 'libsql://wedding-test.turso.io'
+    process.env.APP_ENV = 'test';
+    process.env.DATABASE_URL = 'libsql://wedding-test.turso.io';
 
-    const config = getConfig()
-    expect(config.databaseUrl).toContain('wedding-test')
-  })
+    const config = getConfig();
+    expect(config.databaseUrl).toContain('wedding-test');
+  });
 
   it('should connect to production database in production environment', () => {
-    process.env.VERCEL_ENV = 'production'
-    process.env.DATABASE_URL = 'libsql://wedding-prod.turso.io'
+    process.env.VERCEL_ENV = 'production';
+    process.env.DATABASE_URL = 'libsql://wedding-prod.turso.io';
 
-    const config = getConfig()
-    expect(config.databaseUrl).toContain('wedding-prod')
-  })
-})
+    const config = getConfig();
+    expect(config.databaseUrl).toContain('wedding-prod');
+  });
+});
 ```
 
 ### 3. Health Endpoint Contract
@@ -228,18 +228,18 @@ describe('Database Connection Contract', () => {
 // __tests__/contracts/health-endpoint.test.ts
 describe('Health Endpoint Contract', () => {
   it('GET /api/health returns environment information', async () => {
-    const response = await fetch('http://localhost:3000/api/health')
-    const data = await response.json()
+    const response = await fetch('http://localhost:3000/api/health');
+    const data = await response.json();
 
-    expect(response.status).toBe(200)
+    expect(response.status).toBe(200);
     expect(data).toMatchObject({
       status: 'ok',
       environment: expect.stringMatching(/^(development|test|production)$/),
       database: expect.stringMatching(/^(connected|error)$/),
       timestamp: expect.any(String),
-    })
-  })
-})
+    });
+  });
+});
 ```
 
 ---

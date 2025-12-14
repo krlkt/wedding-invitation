@@ -1,13 +1,13 @@
-import { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren } from 'react';
 
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion';
 
-import CloseIcon from './icons/CloseIcon'
-import './modal.css'
+import CloseIcon from './icons/CloseIcon';
+import './modal.css';
 
 interface ModalProps {
-  open: boolean
-  onClose: () => void
+  open: boolean;
+  onClose: () => void;
 }
 
 const modalSlide = {
@@ -22,7 +22,7 @@ const modalSlide = {
     x: 'calc(100% + 100px)',
     transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
   },
-}
+};
 const Modal: FC<PropsWithChildren<ModalProps>> = ({ children, open, onClose }) => {
   return (
     <AnimatePresence mode="wait">
@@ -48,18 +48,18 @@ const Modal: FC<PropsWithChildren<ModalProps>> = ({ children, open, onClose }) =
         </div>
       ) : null}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default Modal
+export default Modal;
 
 const Curve = () => {
   const initialPath = `M100 0 L200 0 L200 ${window.innerHeight} L100 ${window.innerHeight} Q-100 ${
     window.innerHeight / 2
-  } 100 0`
+  } 100 0`;
   const targetPath = `M100 0 L200 0 L200 ${window.innerHeight} L100 ${window.innerHeight} Q100 ${
     window.innerHeight / 2
-  } 100 0`
+  } 100 0`;
 
   const curve = {
     initial: {
@@ -73,11 +73,11 @@ const Curve = () => {
       d: initialPath,
       transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
     },
-  }
+  };
 
   return (
     <svg className="svgCurve">
       <motion.path variants={curve} initial="initial" animate="enter" exit="exit" />
     </svg>
-  )
-}
+  );
+};

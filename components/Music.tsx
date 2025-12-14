@@ -1,59 +1,59 @@
-'use client'
-import { useCallback, useEffect, useRef, useState } from 'react'
+'use client';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 
-import MusicIcon from './icons/MusicIcon'
-import PauseIcon from './icons/PauseIcon'
+import MusicIcon from './icons/MusicIcon';
+import PauseIcon from './icons/PauseIcon';
 
 const Music = () => {
-  const audio = useRef<HTMLAudioElement>(null)
-  const [playMusic, setPlayMusic] = useState(false)
-  const [showIcon, setShowIcon] = useState(true)
-  const lastScrollYRef = useRef(0)
-  const { scrollY } = useScroll()
+  const audio = useRef<HTMLAudioElement>(null);
+  const [playMusic, setPlayMusic] = useState(false);
+  const [showIcon, setShowIcon] = useState(true);
+  const lastScrollYRef = useRef(0);
+  const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
-    const prev = lastScrollYRef.current
+    const prev = lastScrollYRef.current;
 
     if (latest < prev) {
-      setShowIcon(true) // scrolling up
+      setShowIcon(true); // scrolling up
     } else {
-      setShowIcon(false) // scrolling down
+      setShowIcon(false); // scrolling down
     }
 
-    lastScrollYRef.current = latest
-  })
+    lastScrollYRef.current = latest;
+  });
 
   const handleMusicClick = useCallback(() => {
     if (audio.current?.paused) {
       audio.current?.play().catch(() => {
-        setPlayMusic(false)
-      })
+        setPlayMusic(false);
+      });
     } else {
-      audio.current?.pause()
+      audio.current?.pause();
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const audioElement = audio.current
+    const audioElement = audio.current;
     if (!audioElement) {
-      return
+      return;
     }
 
-    const onPlay = () => setPlayMusic(true)
-    const onPause = () => setPlayMusic(false)
+    const onPlay = () => setPlayMusic(true);
+    const onPause = () => setPlayMusic(false);
 
-    audioElement.addEventListener('play', onPlay)
-    audioElement.addEventListener('pause', onPause)
+    audioElement.addEventListener('play', onPlay);
+    audioElement.addEventListener('pause', onPause);
 
-    setPlayMusic(!audioElement.paused)
+    setPlayMusic(!audioElement.paused);
 
     return () => {
-      audioElement.removeEventListener('play', onPlay)
-      audioElement.removeEventListener('pause', onPause)
-    }
-  }, [])
+      audioElement.removeEventListener('play', onPlay);
+      audioElement.removeEventListener('pause', onPause);
+    };
+  }, []);
 
   return (
     <>
@@ -81,7 +81,7 @@ const Music = () => {
         )}
       </AnimatePresence>
     </>
-  )
-}
+  );
+};
 
-export default Music
+export default Music;

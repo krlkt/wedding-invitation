@@ -1,19 +1,19 @@
-import TextField from '@mui/material/TextField'
-import { useSnackbar } from 'notistack'
-import { useForm } from 'react-hook-form'
+import TextField from '@mui/material/TextField';
+import { useSnackbar } from 'notistack';
+import { useForm } from 'react-hook-form';
 
-import { Wish } from '@/legacy/types/wish'
-import { useGuestId } from '@/hooks/useGuestId'
+import { Wish } from '@/legacy/types/wish';
+import { useGuestId } from '@/hooks/useGuestId';
 
-import SubmitButton from '../SubmitButton'
+import SubmitButton from '../SubmitButton';
 
-import { addWish } from './action'
+import { addWish } from './action';
 
-type WishFormType = Omit<Wish, 'created_at'>
+type WishFormType = Omit<Wish, 'created_at'>;
 
 const WishForm = ({ guestName }: { guestName: string }) => {
-  const { enqueueSnackbar } = useSnackbar()
-  const { id } = useGuestId()
+  const { enqueueSnackbar } = useSnackbar();
+  const { id } = useGuestId();
 
   const {
     register,
@@ -25,17 +25,17 @@ const WishForm = ({ guestName }: { guestName: string }) => {
       name: guestName,
       created_by_id: id,
     },
-  })
+  });
   const onSubmit = async (data: any) => {
     try {
-      await addWish(data)
-      reset() // Reset the form fields after successful submission
-      enqueueSnackbar('Thank you for your wishes! 💕', { variant: 'success' })
+      await addWish(data);
+      reset(); // Reset the form fields after successful submission
+      enqueueSnackbar('Thank you for your wishes! 💕', { variant: 'success' });
     } catch (error) {
-      console.error('Error submitting form:', error)
-      enqueueSnackbar(`Error submitting form: ${error}`, { variant: 'error' })
+      console.error('Error submitting form:', error);
+      enqueueSnackbar(`Error submitting form: ${error}`, { variant: 'error' });
     }
-  }
+  };
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
@@ -57,7 +57,7 @@ const WishForm = ({ guestName }: { guestName: string }) => {
         <SubmitButton isSubmitting={isSubmitting} />
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default WishForm
+export default WishForm;

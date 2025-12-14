@@ -5,26 +5,26 @@
  * Handles user registration, login, and session management.
  */
 
-import bcrypt from 'bcryptjs'
-import { eq } from 'drizzle-orm'
+import bcrypt from 'bcryptjs';
+import { eq } from 'drizzle-orm';
 
-import { userAccounts, type NewUserAccount } from '@/db/schema'
+import { userAccounts, type NewUserAccount } from '@/db/schema';
 
-import { db } from './database'
+import { db } from './database';
 
 /**
  * Register a new user account
  */
 export async function registerUser(email: string, password: string): Promise<{ userId: string }> {
   // Validate email format
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    throw new Error('Invalid email format')
+    throw new Error('Invalid email format');
   }
 
   // Validate password length
   if (password.length < 8) {
-    throw new Error('Password too short')
+    throw new Error('Password too short');
   }
 
   // Check if email already exists
@@ -32,24 +32,24 @@ export async function registerUser(email: string, password: string): Promise<{ u
     .select()
     .from(userAccounts)
     .where(eq(userAccounts.email, email))
-    .limit(1)
+    .limit(1);
 
   if (existingUser.length > 0) {
-    throw new Error('Email already registered')
+    throw new Error('Email already registered');
   }
 
   // Hash password
-  const passwordHash = await bcrypt.hash(password, 10)
+  const passwordHash = await bcrypt.hash(password, 10);
 
   // Create user account
   const newUser: NewUserAccount = {
     email,
     passwordHash,
-  }
+  };
 
-  const [user] = await db.insert(userAccounts).values(newUser).returning()
+  const [user] = await db.insert(userAccounts).values(newUser).returning();
 
-  return { userId: user.id }
+  return { userId: user.id };
 }
 
 /**
@@ -60,23 +60,23 @@ export async function authenticateUser(
   password: string
 ): Promise<{ userId: string; email: string } | null> {
   // Find user by email
-  const [user] = await db.select().from(userAccounts).where(eq(userAccounts.email, email)).limit(1)
+  const [user] = await db.select().from(userAccounts).where(eq(userAccounts.email, email)).limit(1);
 
   if (!user) {
-    return null
+    return null;
   }
 
   // Verify password
-  const isValid = await bcrypt.compare(password, user.passwordHash)
+  const isValid = await bcrypt.compare(password, user.passwordHash);
 
   if (!isValid) {
-    return null
+    return null;
   }
 
   return {
     userId: user.id,
     email: user.email,
-  }
+  };
 }
 
 /**
@@ -92,9 +92,9 @@ export async function getUserById(userId: string) {
     })
     .from(userAccounts)
     .where(eq(userAccounts.id, userId))
-    .limit(1)
+    .limit(1);
 
-  return user || null
+  return user || null;
 }
 
 /**
@@ -110,7 +110,7 @@ export async function getUserByEmail(email: string) {
     })
     .from(userAccounts)
     .where(eq(userAccounts.email, email))
-    .limit(1)
+    .limit(1);
 
-  return user || null
+  return user || null;
 }

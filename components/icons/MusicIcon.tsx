@@ -16,7 +16,7 @@ const MusicIcon = () => {
         </g>
       </g>
     </svg>
-  )
-}
+  );
+};
 
-export default MusicIcon
+export default MusicIcon;

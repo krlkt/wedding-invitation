@@ -1,23 +1,23 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
-import GiftIcon from '../icons/GiftIcon'
-import Button from '../Button'
-import Modal from '../Modal'
+import GiftIcon from '../icons/GiftIcon';
+import Button from '../Button';
+import Modal from '../Modal';
 
-import './gift.css'
-import { useState } from 'react'
+import './gift.css';
+import { useState } from 'react';
 
-import FadeIn from '../FadeIn'
+import FadeIn from '../FadeIn';
 
 const Gift = () => {
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <div className="flex flex-col gap-4">
       <Modal
         open={open}
         onClose={() => {
-          setOpen(false)
+          setOpen(false);
         }}
       >
         <div className="flex h-full w-full -translate-y-20 flex-col items-center justify-center gap-8 p-4">
@@ -82,7 +82,7 @@ const Gift = () => {
         </Button>
       </FadeIn>
     </div>
-  )
-}
+  );
+};
 
-export default Gift
+export default Gift;

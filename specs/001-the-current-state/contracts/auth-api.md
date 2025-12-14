@@ -8,10 +8,10 @@
 
 ```typescript
 {
-  email: string // Valid email format, unique
-  password: string // Minimum 8 characters
-  groomName: string // Required for initial wedding config
-  brideName: string // Required for initial wedding config
+  email: string; // Valid email format, unique
+  password: string; // Minimum 8 characters
+  groomName: string; // Required for initial wedding config
+  brideName: string; // Required for initial wedding config
 }
 ```
 
@@ -19,11 +19,11 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
-    userId: string
-    weddingConfigId: string
-    subdomain: string // Auto-generated from names
+    userId: string;
+    weddingConfigId: string;
+    subdomain: string; // Auto-generated from names
   }
 }
 ```
@@ -32,11 +32,11 @@
 
 ```typescript
 {
-  success: false
+  success: false;
   error: 'Email already registered' |
     'Invalid email format' |
     'Password too short' |
-    'Names required'
+    'Names required';
 }
 ```
 
@@ -50,8 +50,8 @@
 
 ```typescript
 {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 ```
 
@@ -59,11 +59,11 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
-    userId: string
-    weddingConfigId: string
-    subdomain: string
+    userId: string;
+    weddingConfigId: string;
+    subdomain: string;
   }
 }
 ```
@@ -72,8 +72,8 @@
 
 ```typescript
 {
-  success: false
-  error: 'Invalid email or password'
+  success: false;
+  error: 'Invalid email or password';
 }
 ```
 
@@ -89,8 +89,8 @@
 
 ```typescript
 {
-  success: true
-  message: 'Logged out successfully'
+  success: true;
+  message: 'Logged out successfully';
 }
 ```
 
@@ -106,11 +106,11 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
-    userId: string
-    weddingConfigId: string
-    subdomain: string
+    userId: string;
+    weddingConfigId: string;
+    subdomain: string;
   }
 }
 ```
@@ -119,7 +119,7 @@
 
 ```typescript
 {
-  success: false
-  error: 'Not authenticated'
+  success: false;
+  error: 'Not authenticated';
 }
 ```

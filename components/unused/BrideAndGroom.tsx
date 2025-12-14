@@ -1,6 +1,6 @@
-import InstagramIcon from '@/components/icons/InstagramIcon'
+import InstagramIcon from '@/components/icons/InstagramIcon';
 
-import Avatar from '../Avatar'
+import Avatar from '../Avatar';
 
 const BrideAndGroom = () => (
   <>
@@ -42,6 +42,6 @@ const BrideAndGroom = () => (
       </div>
     </div>
   </>
-)
+);
 
-export default BrideAndGroom
+export default BrideAndGroom;

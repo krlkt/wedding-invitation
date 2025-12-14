@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import React from 'react'
+import React from 'react';
 
-import Head from 'next/head'
-import Image from 'next/image'
+import Head from 'next/head';
+import Image from 'next/image';
 
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
-import hero1 from '@/public/images/hero/hero-1.jpg'
-import hero2 from '@/public/images/hero/hero-2.webp'
-import hero3 from '@/public/images/hero/hero-3.jpeg'
-import heroBackground from '@/public/images/hero/hero-background.webp'
+import hero1 from '@/public/images/hero/hero-1.jpg';
+import hero2 from '@/public/images/hero/hero-2.webp';
+import hero3 from '@/public/images/hero/hero-3.jpeg';
+import heroBackground from '@/public/images/hero/hero-background.webp';
 
-import logo from '../public/images/logo/oial.png'
+import logo from '../public/images/logo/oial.png';
 
 const features = [
   {
@@ -27,7 +27,7 @@ const features = [
     title: 'Beautiful Templates',
     desc: 'Choose from a collection of elegant, professionally designed templates.',
   },
-]
+];
 
 const steps = [
   {
@@ -45,7 +45,7 @@ const steps = [
     title: 'Celebrate',
     desc: 'Enjoy the big day while your guests RSVP easily online.',
   },
-]
+];
 
 const Home: React.FC = () => {
   return (
@@ -259,7 +259,7 @@ const Home: React.FC = () => {
         </footer>
       </main>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

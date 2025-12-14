@@ -57,9 +57,9 @@ Preview Session (Conceptual)
 ```typescript
 // Session structure (existing)
 {
-  userId: string
-  weddingConfigId: string
-  email: string
+  userId: string;
+  weddingConfigId: string;
+  email: string;
 }
 ```
 
@@ -148,9 +148,9 @@ async function isSubdomainAvailable(subdomain: string): Promise<boolean> {
     .select()
     .from(weddingConfigurations)
     .where(eq(weddingConfigurations.subdomain, subdomain))
-    .limit(1)
+    .limit(1);
 
-  return existing.length === 0
+  return existing.length === 0;
 }
 ```
 
@@ -172,19 +172,19 @@ async function createWeddingConfiguration(
   brideName: string
 ): Promise<WeddingConfiguration> {
   // NEW: Retry loop for subdomain uniqueness
-  let subdomain: string
-  let attempts = 0
-  const maxAttempts = 5
+  let subdomain: string;
+  let attempts = 0;
+  const maxAttempts = 5;
 
   while (attempts < maxAttempts) {
-    subdomain = generateSubdomain(groomName, brideName)
-    const available = await isSubdomainAvailable(subdomain)
-    if (available) break
-    attempts++
+    subdomain = generateSubdomain(groomName, brideName);
+    const available = await isSubdomainAvailable(subdomain);
+    if (available) break;
+    attempts++;
   }
 
   if (attempts >= maxAttempts) {
-    throw new Error('Unable to generate unique subdomain. Please try again.')
+    throw new Error('Unable to generate unique subdomain. Please try again.');
   }
 
   // Existing creation logic...

@@ -6,14 +6,14 @@
  * with auto-calculated values for unsaved changes state.
  */
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo } from 'react';
 
 export interface ChangeTrackingState {
-  features: Set<string>
-  startingSection: Set<string>
-  groomSection: Set<string>
-  brideSection: Set<string>
-  faqs: Set<string>
+  features: Set<string>;
+  startingSection: Set<string>;
+  groomSection: Set<string>;
+  brideSection: Set<string>;
+  faqs: Set<string>;
 }
 
 export function useChangeTracking() {
@@ -23,7 +23,7 @@ export function useChangeTracking() {
     groomSection: new Set(),
     brideSection: new Set(),
     faqs: new Set(),
-  })
+  });
 
   // Setters for each section
   const setChangedFields = useMemo(
@@ -39,16 +39,16 @@ export function useChangeTracking() {
       faqs: (fields: Set<string>) => setChangedFieldsState((prev) => ({ ...prev, faqs: fields })),
     }),
     []
-  )
+  );
 
   // Auto-calculated values
   const hasUnsavedChanges = useMemo(() => {
-    return Object.values(changedFields).some((set) => set.size > 0)
-  }, [changedFields])
+    return Object.values(changedFields).some((set) => set.size > 0);
+  }, [changedFields]);
 
   const totalChanges = useMemo(() => {
-    return Object.values(changedFields).reduce((sum, set) => sum + set.size, 0)
-  }, [changedFields])
+    return Object.values(changedFields).reduce((sum, set) => sum + set.size, 0);
+  }, [changedFields]);
 
   // Clear all changes
   const clearAllChanges = useCallback(() => {
@@ -58,13 +58,13 @@ export function useChangeTracking() {
       groomSection: new Set(),
       brideSection: new Set(),
       faqs: new Set(),
-    })
-  }, [])
+    });
+  }, []);
 
   // Clear specific section changes
   const clearSectionChanges = useCallback((section: keyof ChangeTrackingState) => {
-    setChangedFieldsState((prev) => ({ ...prev, [section]: new Set() }))
-  }, [])
+    setChangedFieldsState((prev) => ({ ...prev, [section]: new Set() }));
+  }, []);
 
   return {
     changedFields,
@@ -73,5 +73,5 @@ export function useChangeTracking() {
     setChangedFields,
     clearAllChanges,
     clearSectionChanges,
-  }
+  };
 }

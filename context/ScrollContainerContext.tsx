@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { createContext, useContext, RefObject } from 'react'
+import { createContext, useContext, RefObject } from 'react';
 
 /**
  * ScrollContainer Context
@@ -11,28 +11,28 @@ import { createContext, useContext, RefObject } from 'react'
  */
 
 interface ScrollContainerContextValue {
-  containerRef?: RefObject<HTMLElement>
-  isEmbedded?: boolean // Track if we're in embedded mode
+  containerRef?: RefObject<HTMLElement>;
+  isEmbedded?: boolean; // Track if we're in embedded mode
 }
 
-const ScrollContainerContext = createContext<ScrollContainerContextValue>({})
+const ScrollContainerContext = createContext<ScrollContainerContextValue>({});
 
 export function ScrollContainerProvider({
   children,
   containerRef,
   isEmbedded = false,
 }: {
-  children: React.ReactNode
-  containerRef?: RefObject<HTMLElement>
-  isEmbedded?: boolean
+  children: React.ReactNode;
+  containerRef?: RefObject<HTMLElement>;
+  isEmbedded?: boolean;
 }) {
   return (
     <ScrollContainerContext.Provider value={{ containerRef, isEmbedded }}>
       {children}
     </ScrollContainerContext.Provider>
-  )
+  );
 }
 
 export function useScrollContainer() {
-  return useContext(ScrollContainerContext)
+  return useContext(ScrollContainerContext);
 }

@@ -1,51 +1,51 @@
-'use client'
+'use client';
 
-import React, { createContext, useContext, ReactNode } from 'react'
-import { toast } from 'sonner'
+import React, { createContext, useContext, ReactNode } from 'react';
+import { toast } from 'sonner';
 
 interface SnackbarOptions {
-  duration?: number
+  duration?: number;
   /** If true, toast will not auto-dismiss and user must click close button */
-  persist?: boolean
+  persist?: boolean;
 }
 
 interface SnackbarContextValue {
-  showSuccess: (message: string, options?: SnackbarOptions) => void
-  showWarning: (message: string, options?: SnackbarOptions) => void
-  showError: (message: string, options?: SnackbarOptions) => void
+  showSuccess: (message: string, options?: SnackbarOptions) => void;
+  showWarning: (message: string, options?: SnackbarOptions) => void;
+  showError: (message: string, options?: SnackbarOptions) => void;
 }
 
-const SnackbarContext = createContext<SnackbarContextValue | undefined>(undefined)
+const SnackbarContext = createContext<SnackbarContextValue | undefined>(undefined);
 
 export function SnackbarProvider({ children }: { children: ReactNode }) {
   const showSuccess = (message: string, options?: SnackbarOptions) => {
     toast.success(message, {
       duration: options?.persist ? Infinity : options?.duration,
       closeButton: !!options?.persist,
-    })
-  }
+    });
+  };
 
   const showWarning = (message: string, options?: SnackbarOptions) => {
     toast.warning(message, {
       duration: options?.persist ? Infinity : options?.duration,
       closeButton: !!options?.persist,
-    })
-  }
+    });
+  };
 
   const showError = (message: string, options?: SnackbarOptions) => {
     toast.error(message, {
       duration: options?.persist ? Infinity : options?.duration,
       closeButton: !!options?.persist,
-    })
-  }
+    });
+  };
 
   const value: SnackbarContextValue = {
     showSuccess,
     showWarning,
     showError,
-  }
+  };
 
-  return <SnackbarContext.Provider value={value}>{children}</SnackbarContext.Provider>
+  return <SnackbarContext.Provider value={value}>{children}</SnackbarContext.Provider>;
 }
 
 /**
@@ -72,9 +72,9 @@ export function SnackbarProvider({ children }: { children: ReactNode }) {
  * ```
  */
 export function useSnackbar() {
-  const context = useContext(SnackbarContext)
+  const context = useContext(SnackbarContext);
   if (context === undefined) {
-    throw new Error('useSnackbar must be used within a SnackbarProvider')
+    throw new Error('useSnackbar must be used within a SnackbarProvider');
   }
-  return context
+  return context;
 }

@@ -10,7 +10,7 @@ const PauseIcon = () => {
         fill="#1C274C"
       />
     </svg>
-  )
-}
+  );
+};
 
-export default PauseIcon
+export default PauseIcon;

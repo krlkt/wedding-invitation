@@ -1,13 +1,13 @@
-import { FC, HTMLAttributes, PropsWithChildren } from 'react'
+import { FC, HTMLAttributes, PropsWithChildren } from 'react';
 
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
-import { fadeInFromLeft, fadeInFromRight, fadeInVariants } from '@/lib/animation'
+import { fadeInFromLeft, fadeInFromRight, fadeInVariants } from '@/lib/animation';
 
 const FadeIn: FC<
   PropsWithChildren<{
-    className?: HTMLAttributes<HTMLDivElement>['className']
-    from?: 'left' | 'right' | 'bottom'
+    className?: HTMLAttributes<HTMLDivElement>['className'];
+    from?: 'left' | 'right' | 'bottom';
   }>
 > = ({ children, from = 'bottom', ...props }) => (
   <motion.div
@@ -21,6 +21,6 @@ const FadeIn: FC<
   >
     {children}
   </motion.div>
-)
+);
 
-export default FadeIn
+export default FadeIn;

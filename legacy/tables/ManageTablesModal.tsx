@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import { FC, useState } from 'react'
+import { FC, useState } from 'react';
 
-import AddIcon from '@mui/icons-material/Add'
-import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
-import { Button, TextField, IconButton } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { Button, TextField, IconButton } from '@mui/material';
 
-import { Locations } from '@/components/LocationComponent'
-import Modal from '@/components/Modal'
-import { Table } from '@/legacy/types/table'
-import { naturalSort } from '@/lib/sort'
+import { Locations } from '@/components/LocationComponent';
+import Modal from '@/components/Modal';
+import { Table } from '@/legacy/types/table';
+import { naturalSort } from '@/lib/sort';
 
-import { createTable, updateTableName, updateTableMaxGuests, deleteTable } from './actions'
+import { createTable, updateTableName, updateTableMaxGuests, deleteTable } from './actions';
 
 interface ManageTablesModalProps {
-  open: boolean
-  onClose: () => void
-  tables: Table[]
-  location: Locations
+  open: boolean;
+  onClose: () => void;
+  tables: Table[];
+  location: Locations;
 }
 
 export const ManageTablesModal: FC<ManageTablesModalProps> = ({
@@ -27,37 +27,37 @@ export const ManageTablesModal: FC<ManageTablesModalProps> = ({
   tables,
   location,
 }) => {
-  const [newTableName, setNewTableName] = useState('')
-  const [newTableMaxGuests, setNewTableMaxGuests] = useState(10)
-  const [editingTableId, setEditingTableId] = useState<number | null>(null)
-  const [editingTableName, setEditingTableName] = useState('')
-  const [editingTableMaxGuests, setEditingTableMaxGuests] = useState(0)
+  const [newTableName, setNewTableName] = useState('');
+  const [newTableMaxGuests, setNewTableMaxGuests] = useState(10);
+  const [editingTableId, setEditingTableId] = useState<number | null>(null);
+  const [editingTableName, setEditingTableName] = useState('');
+  const [editingTableMaxGuests, setEditingTableMaxGuests] = useState(0);
 
   const handleCreateTable = async () => {
-    await createTable(newTableName, newTableMaxGuests, location)
-    setNewTableName('')
-    setNewTableMaxGuests(10)
-  }
+    await createTable(newTableName, newTableMaxGuests, location);
+    setNewTableName('');
+    setNewTableMaxGuests(10);
+  };
 
   const handleEdit = (table: Table) => {
-    setEditingTableId(table.id)
-    setEditingTableName(table.name)
-    setEditingTableMaxGuests(table.max_guests)
-  }
+    setEditingTableId(table.id);
+    setEditingTableName(table.name);
+    setEditingTableMaxGuests(table.max_guests);
+  };
 
   const handleCancelEdit = () => {
-    setEditingTableId(null)
-    setEditingTableName('')
-    setEditingTableMaxGuests(0)
-  }
+    setEditingTableId(null);
+    setEditingTableName('');
+    setEditingTableMaxGuests(0);
+  };
 
   const handleSave = async (tableId: number) => {
-    await updateTableName(tableId, editingTableName, location)
-    await updateTableMaxGuests(tableId, editingTableMaxGuests, location)
-    handleCancelEdit()
-  }
+    await updateTableName(tableId, editingTableName, location);
+    await updateTableMaxGuests(tableId, editingTableMaxGuests, location);
+    handleCancelEdit();
+  };
 
-  const sortedTables = [...tables].sort((a, b) => naturalSort(a.name, b.name))
+  const sortedTables = [...tables].sort((a, b) => naturalSort(a.name, b.name));
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -134,5 +134,5 @@ export const ManageTablesModal: FC<ManageTablesModalProps> = ({
         </div>
       </div>
     </Modal>
-  )
-}
+  );
+};

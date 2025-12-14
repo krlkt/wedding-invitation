@@ -1,13 +1,13 @@
-import { FC } from 'react'
+import { FC } from 'react';
 
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
-import { fadeInVariants } from '@/lib/animation'
+import { fadeInVariants } from '@/lib/animation';
 
 interface SectionTitleProps {
-  title: string
-  color?: 'primary' | 'secondary'
-  size?: 'large' | 'medium'
+  title: string;
+  color?: 'primary' | 'secondary';
+  size?: 'large' | 'medium';
 }
 
 const SectionTitle: FC<SectionTitleProps> = ({ title, color = 'primary', size = 'large' }) => (
@@ -22,6 +22,6 @@ const SectionTitle: FC<SectionTitleProps> = ({ title, color = 'primary', size = 
   >
     {title}
   </motion.h2>
-)
+);
 
-export default SectionTitle
+export default SectionTitle;

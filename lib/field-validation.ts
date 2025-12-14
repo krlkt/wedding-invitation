@@ -5,12 +5,12 @@
  * Uses Zod schemas for validation to maintain DRY principle.
  */
 
-import { type ZodType } from 'zod'
+import { type ZodType } from 'zod';
 
 /**
  * Field state for validation and change tracking
  */
-export type FieldState = 'pristine' | 'changed' | 'error'
+export type FieldState = 'pristine' | 'changed' | 'error';
 
 /**
  * Get CSS classes for field highlighting based on state
@@ -20,24 +20,24 @@ export type FieldState = 'pristine' | 'changed' | 'error'
  */
 export function getFieldHighlightClasses(state: FieldState, hasError: boolean = false): string {
   if (hasError || state === 'error') {
-    return 'bg-red-50 p-2 ring-2 ring-red-500'
+    return 'bg-red-50 p-2 ring-2 ring-red-500';
   }
 
   if (state === 'changed') {
-    return 'p-2 ring-2 ring-yellow-400 bg-yellow-50'
+    return 'p-2 ring-2 ring-yellow-400 bg-yellow-50';
   }
 
-  return ''
+  return '';
 }
 
 /**
  * Get container classes with transition for smooth visual feedback
  */
 export function getFieldContainerClasses(state: FieldState, hasError: boolean = false): string {
-  const baseClasses = 'space-y-2 rounded-lg transition-all'
-  const highlightClasses = getFieldHighlightClasses(state, hasError)
+  const baseClasses = 'space-y-2 rounded-lg transition-all';
+  const highlightClasses = getFieldHighlightClasses(state, hasError);
 
-  return `${baseClasses} ${highlightClasses}`.trim()
+  return `${baseClasses} ${highlightClasses}`.trim();
 }
 
 /**
@@ -52,21 +52,21 @@ export function validateField<T>(
   value: T,
   schema: ZodType<T>
 ): {
-  valid: boolean
-  error?: string
+  valid: boolean;
+  error?: string;
 } {
-  const result = schema.safeParse(value)
+  const result = schema.safeParse(value);
 
   if (result.success) {
-    return { valid: true }
+    return { valid: true };
   }
 
   // Get the first error message
-  const firstError = result.error.issues[0]
+  const firstError = result.error.issues[0];
   return {
     valid: false,
     error: firstError?.message ?? 'Invalid value',
-  }
+  };
 }
 
 /**
@@ -78,18 +78,18 @@ export function getFieldState(
   hasError: boolean = false
 ): FieldState {
   if (hasError) {
-    return 'error'
+    return 'error';
   }
 
   // Normalize null/undefined/empty for comparison
-  const normalizedCurrent = currentValue ?? null
-  const normalizedSaved = savedValue ?? null
+  const normalizedCurrent = currentValue ?? null;
+  const normalizedSaved = savedValue ?? null;
 
   if (normalizedCurrent !== normalizedSaved) {
-    return 'changed'
+    return 'changed';
   }
 
-  return 'pristine'
+  return 'pristine';
 }
 
 /**
@@ -108,17 +108,17 @@ export function updateChangedFieldsSet(
   savedValue: any,
   currentChangedSet: Set<string>
 ): Set<string> {
-  const newSet = new Set(currentChangedSet)
+  const newSet = new Set(currentChangedSet);
 
   // Normalize values for comparison
-  const normalizedDraft = draftValue ?? null
-  const normalizedSaved = savedValue ?? null
+  const normalizedDraft = draftValue ?? null;
+  const normalizedSaved = savedValue ?? null;
 
   if (normalizedDraft !== normalizedSaved) {
-    newSet.add(fieldName)
+    newSet.add(fieldName);
   } else {
-    newSet.delete(fieldName)
+    newSet.delete(fieldName);
   }
 
-  return newSet
+  return newSet;
 }

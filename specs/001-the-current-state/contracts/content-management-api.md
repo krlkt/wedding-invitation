@@ -38,11 +38,11 @@
 
 ```typescript
 {
-  title: string
-  description: string
-  date: string // ISO date
-  iconType: string
-  order: number
+  title: string;
+  description: string;
+  date: string; // ISO date
+  iconType: string;
+  order: number;
 }
 ```
 
@@ -50,16 +50,16 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
-    id: string
-    title: string
-    description: string
-    date: string
-    iconType: string
-    order: number
-    createdAt: string
-    updatedAt: string
+    id: string;
+    title: string;
+    description: string;
+    date: string;
+    iconType: string;
+    order: number;
+    createdAt: string;
+    updatedAt: string;
   }
 }
 ```
@@ -86,7 +86,7 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
     // Updated love story segment
   }
@@ -103,8 +103,8 @@
 
 ```typescript
 {
-  success: true
-  message: 'Love story segment deleted'
+  success: true;
+  message: 'Love story segment deleted';
 }
 ```
 
@@ -164,7 +164,7 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
     // Created location object
   }
@@ -209,9 +209,9 @@
 
 ```typescript
 {
-  question: string
-  answer: string
-  order: number
+  question: string;
+  answer: string;
+  order: number;
 }
 ```
 
@@ -219,7 +219,7 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
     // Created FAQ object
   }
@@ -276,7 +276,7 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
     // Updated bank details object
   }
@@ -329,7 +329,7 @@
 
 ```typescript
 {
-  success: true
+  success: true;
   data: {
     // Updated dress code object
   }

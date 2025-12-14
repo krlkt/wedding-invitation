@@ -323,7 +323,7 @@ This shouldn't happen in CI/CD. If it does:
 3. **Verify in browser console:**
 
    ```javascript
-   console.log(process.env.NEXT_PUBLIC_DATABASE_URL)
+   console.log(process.env.NEXT_PUBLIC_DATABASE_URL);
    // Should be: undefined
    ```
 

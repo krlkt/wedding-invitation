@@ -10,5 +10,5 @@ export default function YouTubeEmbed({ videoId }: { videoId: string }) {
         loading="lazy"
       />
     </div>
-  )
+  );
 }

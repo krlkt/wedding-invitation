@@ -1,8 +1,8 @@
-import { FC, HTMLAttributes, PropsWithChildren } from 'react'
+import { FC, HTMLAttributes, PropsWithChildren } from 'react';
 
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
-import { growInVariants } from '@/lib/animation'
+import { growInVariants } from '@/lib/animation';
 
 const GrowIn: FC<
   PropsWithChildren<{ className?: HTMLAttributes<HTMLDivElement>['className'] }>
@@ -16,6 +16,6 @@ const GrowIn: FC<
   >
     {children}
   </motion.div>
-)
+);
 
-export default GrowIn
+export default GrowIn;

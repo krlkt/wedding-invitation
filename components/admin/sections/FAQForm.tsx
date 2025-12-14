@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * FAQ Section Form Component
@@ -11,44 +11,44 @@
  * - Change tracking without manual state
  */
 
-import { useEffect, useRef } from 'react'
-import { useForm, useFieldArray, useWatch } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { createFaqItemSchema } from '@/lib/validations/faq-section'
-import { useDraft } from '@/context/DraftContext'
-import type { FAQItem } from '@/db/schema/content'
-import { z } from 'zod'
-import { Button } from '@/components/shadcn/button'
-import { Input } from '@/components/shadcn/input'
-import { Label } from '@/components/shadcn/label'
-import { Textarea } from '@/components/shadcn/textarea'
-import { SectionFieldWrapper } from '@/components/admin/sections/SectionFieldWrapper'
-import { Trash2, Plus } from 'lucide-react'
-import type { WeddingConfiguration } from '@/db/schema/weddings'
+import { useEffect, useRef } from 'react';
+import { useForm, useFieldArray, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createFaqItemSchema } from '@/lib/validations/faq-section';
+import { useDraft } from '@/context/DraftContext';
+import type { FAQItem } from '@/db/schema/content';
+import { z } from 'zod';
+import { Button } from '@/components/shadcn/button';
+import { Input } from '@/components/shadcn/input';
+import { Label } from '@/components/shadcn/label';
+import { Textarea } from '@/components/shadcn/textarea';
+import { SectionFieldWrapper } from '@/components/admin/sections/SectionFieldWrapper';
+import { Trash2, Plus } from 'lucide-react';
+import type { WeddingConfiguration } from '@/db/schema/weddings';
 
 // Form schema for the entire FAQ list
 const faqFormSchema = z.object({
   faqs: z.array(createFaqItemSchema),
-})
+});
 
-type FAQFormData = z.infer<typeof faqFormSchema>
+type FAQFormData = z.infer<typeof faqFormSchema>;
 
 interface FAQFormProps {
-  weddingConfig: WeddingConfiguration
-  faqSectionContent: FAQItem[] | null
-  onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void
+  weddingConfig: WeddingConfiguration;
+  faqSectionContent: FAQItem[] | null;
+  onChangeTracking?: (hasChanges: boolean, changedFields: Set<string>) => void;
 }
 
 export function FAQForm({ faqSectionContent, onChangeTracking }: FAQFormProps) {
   // Use draft context
-  const { draft: draftFAQs, setDraft: setDraftFAQs } = useDraft('faqs')
+  const { draft: draftFAQs, setDraft: setDraftFAQs } = useDraft('faqs');
 
   // Initialize form data from draft or saved content
   const initialFaqs = (draftFAQs ?? faqSectionContent ?? []).map((faq) => ({
     question: faq.question ?? '',
     answer: faq.answer ?? '',
     order: faq.order ?? 1,
-  }))
+  }));
 
   // Single form managing entire FAQ list
   const { register, control, reset } = useForm<FAQFormData>({
@@ -56,75 +56,75 @@ export function FAQForm({ faqSectionContent, onChangeTracking }: FAQFormProps) {
     defaultValues: {
       faqs: initialFaqs,
     },
-  })
+  });
 
   // useFieldArray for managing FAQ items
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'faqs',
-  })
+  });
 
   // Reset form when saved content changes (after save or discard)
-  const prevFaqSectionContent = useRef(faqSectionContent)
+  const prevFaqSectionContent = useRef(faqSectionContent);
   useEffect(() => {
     if (prevFaqSectionContent.current !== faqSectionContent) {
-      prevFaqSectionContent.current = faqSectionContent
+      prevFaqSectionContent.current = faqSectionContent;
       const resetFaqs = (faqSectionContent ?? []).map((faq) => ({
         question: faq.question,
         answer: faq.answer,
         order: faq.order,
-      }))
-      reset({ faqs: resetFaqs })
+      }));
+      reset({ faqs: resetFaqs });
     }
-  }, [faqSectionContent, reset])
+  }, [faqSectionContent, reset]);
 
   // Watch all form values for change tracking
   const watchedFaqs = useWatch({
     control,
     name: 'faqs',
-  })
+  });
 
   // Auto-save to draft and track changes
   useEffect(() => {
-    if (!watchedFaqs) return
+    if (!watchedFaqs) return;
 
-    const savedFaqs = faqSectionContent ?? []
+    const savedFaqs = faqSectionContent ?? [];
 
     // Normalize values for comparison (treat null, undefined, and empty string as equivalent)
-    const normalizeValue = (val: string | null | undefined) => val?.trim() ?? ''
+    const normalizeValue = (val: string | null | undefined) => val?.trim() ?? '';
 
     // Convert watched values to draft format (only if we have actual content)
     const hasContent = watchedFaqs.some(
       (faq) => normalizeValue(faq?.question) || normalizeValue(faq?.answer)
-    )
+    );
 
     if (!hasContent && savedFaqs.length === 0) {
       // No content and nothing saved - clear draft
-      setDraftFAQs(undefined)
-      onChangeTracking?.(false, new Set())
-      return
+      setDraftFAQs(undefined);
+      onChangeTracking?.(false, new Set());
+      return;
     }
 
     // Detect changes by comparing with saved content (before building draft)
-    let hasChanges = watchedFaqs.length !== savedFaqs.length
+    let hasChanges = watchedFaqs.length !== savedFaqs.length;
 
     if (!hasChanges && savedFaqs.length > 0) {
       // Check if any FAQ item changed (normalized comparison)
       hasChanges = watchedFaqs.some((watchedFaq, index) => {
-        const savedFaq = savedFaqs[index]
-        if (!savedFaq) return true
+        const savedFaq = savedFaqs[index];
+        if (!savedFaq) return true;
         return (
           normalizeValue(watchedFaq?.question) !== normalizeValue(savedFaq.question) ||
           normalizeValue(watchedFaq?.answer) !== normalizeValue(savedFaq.answer) ||
           (watchedFaq?.order ?? index + 1) !== savedFaq.order
-        )
-      })
+        );
+      });
     }
 
     // Only build and set draft if there are actual changes
     if (hasChanges) {
       const draft: Partial<FAQItem>[] = watchedFaqs.map((faq, index) => {
-        const savedFaq = savedFaqs[index]
+        const savedFaq = savedFaqs[index];
         return {
           id: savedFaq?.id ?? crypto.randomUUID(),
           question: faq?.question ?? '',
@@ -133,32 +133,32 @@ export function FAQForm({ faqSectionContent, onChangeTracking }: FAQFormProps) {
           weddingConfigId: savedFaq?.weddingConfigId ?? 'TEMP',
           createdAt: savedFaq?.createdAt ?? new Date(),
           updatedAt: new Date(),
-        }
-      })
-      setDraftFAQs(draft)
+        };
+      });
+      setDraftFAQs(draft);
     } else {
-      setDraftFAQs(undefined)
+      setDraftFAQs(undefined);
     }
 
     // Notify parent about changes
-    const changedFields = hasChanges ? new Set(['faqs']) : new Set<string>()
-    onChangeTracking?.(hasChanges, changedFields)
-  }, [watchedFaqs, faqSectionContent, setDraftFAQs, onChangeTracking])
+    const changedFields = hasChanges ? new Set(['faqs']) : new Set<string>();
+    onChangeTracking?.(hasChanges, changedFields);
+  }, [watchedFaqs, faqSectionContent, setDraftFAQs, onChangeTracking]);
 
   // Add new FAQ item
   const handleAddFaq = () => {
-    const newOrder = fields.length + 1
+    const newOrder = fields.length + 1;
     append({
       question: '',
       answer: '',
       order: newOrder,
-    })
-  }
+    });
+  };
 
   // Remove FAQ item (hard delete, no undo)
   const handleRemoveFaq = (index: number) => {
-    remove(index)
-  }
+    remove(index);
+  };
 
   return (
     <div className="space-y-6">
@@ -170,17 +170,17 @@ export function FAQForm({ faqSectionContent, onChangeTracking }: FAQFormProps) {
 
         <ul className="space-y-3">
           {fields.map((field, index) => {
-            const watchedFaq = watchedFaqs?.[index]
-            const savedFaq = faqSectionContent?.[index]
+            const watchedFaq = watchedFaqs?.[index];
+            const savedFaq = faqSectionContent?.[index];
 
             // Normalize values for comparison
-            const normalizeValue = (val: string | null | undefined) => val?.trim() ?? ''
+            const normalizeValue = (val: string | null | undefined) => val?.trim() ?? '';
 
             // Determine if this item has changes
             const hasChanges =
               !savedFaq ||
               normalizeValue(watchedFaq?.question) !== normalizeValue(savedFaq.question) ||
-              normalizeValue(watchedFaq?.answer) !== normalizeValue(savedFaq.answer)
+              normalizeValue(watchedFaq?.answer) !== normalizeValue(savedFaq.answer);
 
             return (
               <li
@@ -239,7 +239,7 @@ export function FAQForm({ faqSectionContent, onChangeTracking }: FAQFormProps) {
                   </div>
                 </div>
               </li>
-            )
+            );
           })}
         </ul>
       </div>
@@ -251,5 +251,5 @@ export function FAQForm({ faqSectionContent, onChangeTracking }: FAQFormProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode } from 'react';
 
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
-import CatIcon from '@/components/icons/CatIcon'
-import { fadeInVariants } from '@/lib/animation'
+import CatIcon from '@/components/icons/CatIcon';
+import { fadeInVariants } from '@/lib/animation';
 
-import BusIcon from '../icons/BusIcon'
-import CoupleIcon from '../icons/CoupleIcon'
-import MeetIcon from '../icons/MeetIcon'
-import RingIcon from '../icons/RingIcon'
+import BusIcon from '../icons/BusIcon';
+import CoupleIcon from '../icons/CoupleIcon';
+import MeetIcon from '../icons/MeetIcon';
+import RingIcon from '../icons/RingIcon';
 
 const timelineData = [
   {
@@ -54,10 +54,10 @@ const timelineData = [
     description:
       'Karel planned with friends to surprise Sabrina for an unforgettable camping proposal',
   },
-]
+];
 
 const Timeline = () => {
-  const isLeft = (index: number) => index % 2 === 0
+  const isLeft = (index: number) => index % 2 === 0;
   return (
     <div>
       {timelineData.map(({ icon, title, date, description }, index) => (
@@ -71,15 +71,15 @@ const Timeline = () => {
         />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default Timeline
+export default Timeline;
 
 interface RowProps extends ParagraphProps {
-  icon: ReactNode
+  icon: ReactNode;
   // Whether the description paragraph should be on the left side
-  leftSide: boolean
+  leftSide: boolean;
 }
 
 const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
@@ -87,7 +87,7 @@ const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
     <div className={`min-w-28 max-w-40 text-secondary-main ${!leftSide && 'justify-self-end'}`}>
       {icon}
     </div>
-  )
+  );
 
   return (
     <motion.div
@@ -117,14 +117,14 @@ const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
         <Paragraph title={title} date={date} description={description} leftSide={leftSide} />
       )}
     </motion.div>
-  )
-}
+  );
+};
 
 interface ParagraphProps {
-  title: string
-  date: string | ReactNode
-  description: string
-  leftSide: boolean
+  title: string;
+  date: string | ReactNode;
+  description: string;
+  leftSide: boolean;
 }
 const Paragraph: FC<ParagraphProps> = ({ title, date, description, leftSide }) => (
   <div className={`flex flex-col gap-1 py-2 font-serif text-sm ${leftSide && 'text-right'}`}>
@@ -132,4 +132,4 @@ const Paragraph: FC<ParagraphProps> = ({ title, date, description, leftSide }) =
     <p className="text-lg font-semibold">{date}</p>
     <p className="leading-4">{description}</p>
   </div>
-)
+);

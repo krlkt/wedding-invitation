@@ -1,4 +1,4 @@
-import { secondaryColorHex } from '@/lib/constants'
+import { secondaryColorHex } from '@/lib/constants';
 
 const CatIcon = () => (
   <svg
@@ -42,5 +42,5 @@ const CatIcon = () => (
       />
     </g>
   </svg>
-)
-export default CatIcon
+);
+export default CatIcon;

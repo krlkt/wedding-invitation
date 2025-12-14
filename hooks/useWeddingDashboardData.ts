@@ -5,112 +5,112 @@
  * Manages config, section content, and provides refetch actions.
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import type { StartingSectionContent } from '@/db/schema/starting-section'
-import type { GroomSectionContent } from '@/db/schema/groom-section'
-import type { BrideSectionContent } from '@/db/schema/bride-section'
-import type { FAQItem } from '@/db/schema/content'
-import type { WeddingConfigWithFeatures, RefetchActions } from '@/lib/admin/types'
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import type { StartingSectionContent } from '@/db/schema/starting-section';
+import type { GroomSectionContent } from '@/db/schema/groom-section';
+import type { BrideSectionContent } from '@/db/schema/bride-section';
+import type { FAQItem } from '@/db/schema/content';
+import type { WeddingConfigWithFeatures, RefetchActions } from '@/lib/admin/types';
 
 // Return type for this hook
 export interface UseWeddingDashboardDataReturn {
-  config: WeddingConfigWithFeatures | null
-  startingSectionContent: StartingSectionContent | null
-  groomSectionContent: GroomSectionContent | null
-  brideSectionContent: BrideSectionContent | null
-  faqSectionContent: FAQItem[] | null
-  loading: boolean
-  refreshTrigger: number
-  refetch: RefetchActions
-  triggerRefresh: () => void
+  config: WeddingConfigWithFeatures | null;
+  startingSectionContent: StartingSectionContent | null;
+  groomSectionContent: GroomSectionContent | null;
+  brideSectionContent: BrideSectionContent | null;
+  faqSectionContent: FAQItem[] | null;
+  loading: boolean;
+  refreshTrigger: number;
+  refetch: RefetchActions;
+  triggerRefresh: () => void;
 }
 
 export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
-  const [config, setConfig] = useState<WeddingConfigWithFeatures | null>(null)
+  const [config, setConfig] = useState<WeddingConfigWithFeatures | null>(null);
   const [startingSectionContent, setStartingSectionContent] =
-    useState<StartingSectionContent | null>(null)
-  const [groomSectionContent, setGroomSectionContent] = useState<GroomSectionContent | null>(null)
-  const [brideSectionContent, setBrideSectionContent] = useState<BrideSectionContent | null>(null)
-  const [faqSectionContent, setFAQSectionContent] = useState<FAQItem[] | null>(null)
+    useState<StartingSectionContent | null>(null);
+  const [groomSectionContent, setGroomSectionContent] = useState<GroomSectionContent | null>(null);
+  const [brideSectionContent, setBrideSectionContent] = useState<BrideSectionContent | null>(null);
+  const [faqSectionContent, setFAQSectionContent] = useState<FAQItem[] | null>(null);
 
-  const [loading, setLoading] = useState(true)
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const [loading, setLoading] = useState(true);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // WIP: session check on dashboard load or time interval or user action?
   const checkSession = async () => {
     try {
-      const res = await fetch('/api/auth/session')
-      const data = await res.json()
+      const res = await fetch('/api/auth/session');
+      const data = await res.json();
       if (!data.success) {
-        window.location.href = '/login'
+        window.location.href = '/login';
       }
     } catch (err) {
-      console.error('Session check failed', err)
-      window.location.href = '/login'
+      console.error('Session check failed', err);
+      window.location.href = '/login';
     }
-  }
+  };
 
   const fetchConfig = useCallback(async () => {
     try {
-      const response = await fetch('/api/wedding/config')
+      const response = await fetch('/api/wedding/config');
       if (response.ok) {
-        const data = await response.json()
-        setConfig(data.data)
+        const data = await response.json();
+        setConfig(data.data);
       }
     } catch (error) {
-      console.error('Failed to fetch config:', error)
+      console.error('Failed to fetch config:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  }, []);
 
   const fetchStartingSection = useCallback(async () => {
     try {
-      const response = await fetch('/api/wedding/starting-section')
+      const response = await fetch('/api/wedding/starting-section');
       if (response.ok) {
-        const data = await response.json()
-        setStartingSectionContent(data.data)
+        const data = await response.json();
+        setStartingSectionContent(data.data);
       }
     } catch (error) {
-      console.error('Failed to fetch starting section content:', error)
+      console.error('Failed to fetch starting section content:', error);
     }
-  }, [])
+  }, []);
 
   const fetchGroomSection = useCallback(async () => {
     try {
-      const response = await fetch('/api/wedding/groom-section')
+      const response = await fetch('/api/wedding/groom-section');
       if (response.ok) {
-        const data = await response.json()
-        setGroomSectionContent(data.data)
+        const data = await response.json();
+        setGroomSectionContent(data.data);
       }
     } catch (error) {
-      console.error('Failed to fetch groom section content:', error)
+      console.error('Failed to fetch groom section content:', error);
     }
-  }, [])
+  }, []);
 
   const fetchBrideSection = useCallback(async () => {
     try {
-      const response = await fetch('/api/wedding/bride-section')
+      const response = await fetch('/api/wedding/bride-section');
       if (response.ok) {
-        const data = await response.json()
-        setBrideSectionContent(data.data)
+        const data = await response.json();
+        setBrideSectionContent(data.data);
       }
     } catch (error) {
-      console.error('Failed to fetch bride section content:', error)
+      console.error('Failed to fetch bride section content:', error);
     }
-  }, [])
+  }, []);
 
   const fetchFaqs = useCallback(async () => {
     try {
-      const res = await fetch('/api/wedding/faqs')
+      const res = await fetch('/api/wedding/faqs');
       if (res.ok) {
-        const data = await res.json()
-        setFAQSectionContent(data.data)
+        const data = await res.json();
+        setFAQSectionContent(data.data);
       }
     } catch (err) {
-      console.error('Error fetching FAQs', err)
+      console.error('Error fetching FAQs', err);
     }
-  }, [])
+  }, []);
 
   // Grouped refetch actions
   const refetch = useMemo(
@@ -122,7 +122,7 @@ export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
           fetchGroomSection(),
           fetchBrideSection(),
           fetchFaqs(),
-        ])
+        ]);
       },
       config: fetchConfig,
       startingSection: fetchStartingSection,
@@ -131,22 +131,22 @@ export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
       faqs: fetchFaqs,
     }),
     [fetchConfig, fetchStartingSection, fetchGroomSection, fetchBrideSection, fetchFaqs]
-  )
+  );
 
   const triggerRefresh = useCallback(() => {
-    setRefreshTrigger((prev) => prev + 1)
-  }, [])
+    setRefreshTrigger((prev) => prev + 1);
+  }, []);
 
   // Initialize data on mount
   useEffect(() => {
-    ;(async () => {
-      await checkSession()
-      await refetch.all()
+    (async () => {
+      await checkSession();
+      await refetch.all();
     })().catch((error) => {
-      console.error('Initialization error:', error)
-    })
+      console.error('Initialization error:', error);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return {
     config,
@@ -158,5 +158,5 @@ export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
     refreshTrigger,
     refetch,
     triggerRefresh,
-  }
+  };
 }

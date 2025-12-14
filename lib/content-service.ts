@@ -5,7 +5,7 @@
  * Handles love story, locations, FAQs, bank details, and dress code content.
  */
 
-import { eq, desc } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm';
 
 import {
   loveStorySegments,
@@ -26,17 +26,17 @@ import {
   type NewStartingSectionContent,
   type NewGroomSectionContent,
   type NewBrideSectionContent,
-} from '@/db/schema'
+} from '@/db/schema';
 
-import { db } from './database'
+import { db } from './database';
 
 // ============================================================================
 // Love Story Management
 // ============================================================================
 
 export async function createLoveStorySegment(data: NewLoveStorySegment) {
-  const [segment] = await db.insert(loveStorySegments).values(data).returning()
-  return segment
+  const [segment] = await db.insert(loveStorySegments).values(data).returning();
+  return segment;
 }
 
 export async function getLoveStorySegments(weddingConfigId: string) {
@@ -44,7 +44,7 @@ export async function getLoveStorySegments(weddingConfigId: string) {
     .select()
     .from(loveStorySegments)
     .where(eq(loveStorySegments.weddingConfigId, weddingConfigId))
-    .orderBy(loveStorySegments.order)
+    .orderBy(loveStorySegments.order);
 }
 
 export async function updateLoveStorySegment(
@@ -58,13 +58,13 @@ export async function updateLoveStorySegment(
       updatedAt: new Date(),
     })
     .where(eq(loveStorySegments.id, segmentId))
-    .returning()
+    .returning();
 
-  return updated
+  return updated;
 }
 
 export async function deleteLoveStorySegment(segmentId: string) {
-  await db.delete(loveStorySegments).where(eq(loveStorySegments.id, segmentId))
+  await db.delete(loveStorySegments).where(eq(loveStorySegments.id, segmentId));
 }
 
 // ============================================================================
@@ -72,8 +72,8 @@ export async function deleteLoveStorySegment(segmentId: string) {
 // ============================================================================
 
 export async function createLocation(data: NewLocationDetails) {
-  const [location] = await db.insert(locationDetails).values(data).returning()
-  return location
+  const [location] = await db.insert(locationDetails).values(data).returning();
+  return location;
 }
 
 export async function getLocations(weddingConfigId: string) {
@@ -81,7 +81,7 @@ export async function getLocations(weddingConfigId: string) {
     .select()
     .from(locationDetails)
     .where(eq(locationDetails.weddingConfigId, weddingConfigId))
-    .orderBy(locationDetails.order)
+    .orderBy(locationDetails.order);
 }
 
 export async function updateLocation(
@@ -95,13 +95,13 @@ export async function updateLocation(
       updatedAt: new Date(),
     })
     .where(eq(locationDetails.id, locationId))
-    .returning()
+    .returning();
 
-  return updated
+  return updated;
 }
 
 export async function deleteLocation(locationId: string) {
-  await db.delete(locationDetails).where(eq(locationDetails.id, locationId))
+  await db.delete(locationDetails).where(eq(locationDetails.id, locationId));
 }
 
 // ============================================================================
@@ -109,8 +109,8 @@ export async function deleteLocation(locationId: string) {
 // ============================================================================
 
 export async function createFAQ(data: NewFAQItem) {
-  const [faq] = await db.insert(faqItems).values(data).returning()
-  return faq
+  const [faq] = await db.insert(faqItems).values(data).returning();
+  return faq;
 }
 
 export async function getFAQs(weddingConfigId: string) {
@@ -118,13 +118,13 @@ export async function getFAQs(weddingConfigId: string) {
     .select()
     .from(faqItems)
     .where(eq(faqItems.weddingConfigId, weddingConfigId))
-    .orderBy(faqItems.order)
+    .orderBy(faqItems.order);
 }
 
 export async function getFAQById(faqId: string) {
-  const [faq] = await db.select().from(faqItems).where(eq(faqItems.id, faqId)).limit(1)
+  const [faq] = await db.select().from(faqItems).where(eq(faqItems.id, faqId)).limit(1);
 
-  return faq || null
+  return faq || null;
 }
 
 export async function updateFAQ(
@@ -138,13 +138,13 @@ export async function updateFAQ(
       updatedAt: new Date(),
     })
     .where(eq(faqItems.id, faqId))
-    .returning()
+    .returning();
 
-  return updated
+  return updated;
 }
 
 export async function deleteFAQ(faqId: string) {
-  await db.delete(faqItems).where(eq(faqItems.id, faqId))
+  await db.delete(faqItems).where(eq(faqItems.id, faqId));
 }
 
 // ============================================================================
@@ -156,9 +156,9 @@ export async function getBankDetails(weddingConfigId: string) {
     .select()
     .from(bankDetails)
     .where(eq(bankDetails.weddingConfigId, weddingConfigId))
-    .limit(1)
+    .limit(1);
 
-  return details || null
+  return details || null;
 }
 
 export async function updateBankDetails(
@@ -166,7 +166,7 @@ export async function updateBankDetails(
   data: Omit<NewBankDetails, 'weddingConfigId'>
 ) {
   // Check if bank details exist
-  const existing = await getBankDetails(weddingConfigId)
+  const existing = await getBankDetails(weddingConfigId);
 
   if (existing) {
     // Update existing
@@ -177,9 +177,9 @@ export async function updateBankDetails(
         updatedAt: new Date(),
       })
       .where(eq(bankDetails.id, existing.id))
-      .returning()
+      .returning();
 
-    return updated
+    return updated;
   }
   // Create new
   const [created] = await db
@@ -188,9 +188,9 @@ export async function updateBankDetails(
       ...data,
       weddingConfigId,
     })
-    .returning()
+    .returning();
 
-  return created
+  return created;
 }
 
 // ============================================================================
@@ -202,9 +202,9 @@ export async function getDressCode(weddingConfigId: string) {
     .select()
     .from(dressCodes)
     .where(eq(dressCodes.weddingConfigId, weddingConfigId))
-    .limit(1)
+    .limit(1);
 
-  return dressCode || null
+  return dressCode || null;
 }
 
 export async function updateDressCode(
@@ -212,7 +212,7 @@ export async function updateDressCode(
   data: Partial<Omit<NewDressCode, 'weddingConfigId'>>
 ) {
   // Check if dress code exists
-  const existing = await getDressCode(weddingConfigId)
+  const existing = await getDressCode(weddingConfigId);
 
   if (existing) {
     // Update existing
@@ -223,9 +223,9 @@ export async function updateDressCode(
         updatedAt: new Date(),
       })
       .where(eq(dressCodes.id, existing.id))
-      .returning()
+      .returning();
 
-    return updated
+    return updated;
   }
   // Create new
   const [created] = await db
@@ -234,9 +234,9 @@ export async function updateDressCode(
       ...data,
       weddingConfigId,
     })
-    .returning()
+    .returning();
 
-  return created
+  return created;
 }
 
 // ============================================================================
@@ -244,8 +244,8 @@ export async function updateDressCode(
 // ============================================================================
 
 export async function createWish(data: NewWish) {
-  const [wish] = await db.insert(wishes).values(data).returning()
-  return wish
+  const [wish] = await db.insert(wishes).values(data).returning();
+  return wish;
 }
 
 export async function getWishes(weddingConfigId: string, limit: number = 50) {
@@ -254,11 +254,11 @@ export async function getWishes(weddingConfigId: string, limit: number = 50) {
     .from(wishes)
     .where(eq(wishes.weddingConfigId, weddingConfigId))
     .orderBy(desc(wishes.createdAt))
-    .limit(limit)
+    .limit(limit);
 }
 
 export async function deleteWish(wishId: string) {
-  await db.delete(wishes).where(eq(wishes.id, wishId))
+  await db.delete(wishes).where(eq(wishes.id, wishId));
 }
 
 // ============================================================================
@@ -270,9 +270,9 @@ export async function getStartingSectionContent(weddingConfigId: string) {
     .select()
     .from(startingSectionContent)
     .where(eq(startingSectionContent.weddingConfigId, weddingConfigId))
-    .limit(1)
+    .limit(1);
 
-  return content || null
+  return content || null;
 }
 
 export async function updateStartingSectionContent(
@@ -280,7 +280,7 @@ export async function updateStartingSectionContent(
   data: Partial<Omit<NewStartingSectionContent, 'weddingConfigId'>>
 ) {
   // Check if starting section content exists
-  const existing = await getStartingSectionContent(weddingConfigId)
+  const existing = await getStartingSectionContent(weddingConfigId);
 
   if (existing) {
     // Update existing
@@ -291,9 +291,9 @@ export async function updateStartingSectionContent(
         updatedAt: new Date(),
       })
       .where(eq(startingSectionContent.id, existing.id))
-      .returning()
+      .returning();
 
-    return updated
+    return updated;
   }
 
   // Create new
@@ -303,9 +303,9 @@ export async function updateStartingSectionContent(
       ...data,
       weddingConfigId,
     })
-    .returning()
+    .returning();
 
-  return created
+  return created;
 }
 
 // ============================================================================
@@ -317,9 +317,9 @@ export async function getGroomSectionContent(weddingConfigId: string) {
     .select()
     .from(groomSectionContent)
     .where(eq(groomSectionContent.weddingConfigId, weddingConfigId))
-    .limit(1)
+    .limit(1);
 
-  return content ?? null
+  return content ?? null;
 }
 
 export async function updateGroomSectionContent(
@@ -327,7 +327,7 @@ export async function updateGroomSectionContent(
   data: Partial<Omit<NewGroomSectionContent, 'weddingConfigId'>>
 ) {
   // Check if groom section content exists
-  const existing = await getGroomSectionContent(weddingConfigId)
+  const existing = await getGroomSectionContent(weddingConfigId);
 
   if (existing) {
     // Update existing
@@ -338,9 +338,9 @@ export async function updateGroomSectionContent(
         updatedAt: new Date(),
       })
       .where(eq(groomSectionContent.id, existing.id))
-      .returning()
+      .returning();
 
-    return updated
+    return updated;
   }
 
   // Create new
@@ -350,9 +350,9 @@ export async function updateGroomSectionContent(
       ...data,
       weddingConfigId,
     })
-    .returning()
+    .returning();
 
-  return created
+  return created;
 }
 
 // ============================================================================
@@ -364,9 +364,9 @@ export async function getBrideSectionContent(weddingConfigId: string) {
     .select()
     .from(brideSectionContent)
     .where(eq(brideSectionContent.weddingConfigId, weddingConfigId))
-    .limit(1)
+    .limit(1);
 
-  return content ?? null
+  return content ?? null;
 }
 
 export async function updateBrideSectionContent(
@@ -374,7 +374,7 @@ export async function updateBrideSectionContent(
   data: Partial<Omit<NewBrideSectionContent, 'weddingConfigId'>>
 ) {
   // Check if bride section content exists
-  const existing = await getBrideSectionContent(weddingConfigId)
+  const existing = await getBrideSectionContent(weddingConfigId);
 
   if (existing) {
     // Update existing
@@ -385,9 +385,9 @@ export async function updateBrideSectionContent(
         updatedAt: new Date(),
       })
       .where(eq(brideSectionContent.id, existing.id))
-      .returning()
+      .returning();
 
-    return updated
+    return updated;
   }
 
   // Create new
@@ -397,7 +397,7 @@ export async function updateBrideSectionContent(
       ...data,
       weddingConfigId,
     })
-    .returning()
+    .returning();
 
-  return created
+  return created;
 }

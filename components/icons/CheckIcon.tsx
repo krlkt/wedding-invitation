@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const CheckIcon = () => (
   <svg
@@ -11,6 +11,6 @@ const CheckIcon = () => (
     <path d="M0 0h24v24H0z" fill="none" />
     <path d="M9 16.17L4.83 12 3.41 13.41 9 19l12-12-1.41-1.41z" />
   </svg>
-)
+);
 
-export default CheckIcon
+export default CheckIcon;
