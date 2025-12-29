@@ -7,11 +7,14 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 
 import { eq } from 'drizzle-orm';
 
 import ConfigDashboard from '@/components/admin/ConfigDashboard';
+import { AppBar } from '@/components/admin/AppBar';
 import LogoutButton from '@/components/LogoutButton';
+import { Button } from '@/components/shadcn/button';
 import { weddingConfigurations } from '@/db/schema';
 import { db } from '@/lib/database';
 
@@ -70,19 +73,17 @@ export default async function AdminDashboard() {
   // Render the configuration dashboard
   return (
     <div className="flex h-full flex-col">
-      <header className="flex-shrink-0 border-b border-gray-200 bg-white shadow-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              {weddingConfig.groomName} & {weddingConfig.brideName}
-            </h1>
-            <p className="text-sm text-gray-500">
-              {weddingConfig.subdomain}.oial-wedding.com (coming soon)
-            </p>
-          </div>
-          <LogoutButton />
-        </div>
-      </header>
+      <AppBar
+        title={`${weddingConfig.groomName} & ${weddingConfig.brideName}`}
+        subtitle={`${weddingConfig.subdomain}.oial-wedding.com (coming soon)`}
+        actions={
+          <Button asChild>
+            <Link href="/preview" target="_blank">
+              View Live Site
+            </Link>
+          </Button>
+        }
+      />
 
       <main className="flex-1 overflow-hidden">
         <ConfigDashboard />

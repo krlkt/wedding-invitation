@@ -8,8 +8,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/shadcn/button';
 
 import LivePreview from '../LivePreview';
 import FeaturesForm from './FeaturesForm';
@@ -98,20 +96,6 @@ function ConfigDashboardContent() {
     <>
       {/* Left Panel - Configuration */}
       <div className="flex w-1/2 flex-col overflow-y-auto border-r bg-white">
-        <div className="sticky top-0 z-10 border-b bg-white">
-          <div className="p-6">
-            <div className="mb-2 flex items-center justify-between">
-              <h1 className="text-2xl font-bold">Wedding Configuration</h1>
-              <Button asChild>
-                <Link href="/preview" target="_blank">
-                  View Live Site
-                </Link>
-              </Button>
-            </div>
-            <p className="text-sm text-gray-600">{config.subdomain}.oial-wedding.com</p>
-          </div>
-        </div>
-
         <FeaturesForm
           config={config}
           contentHandlers={contentHandlers}

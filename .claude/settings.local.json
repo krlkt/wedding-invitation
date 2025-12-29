@@ -9,7 +9,12 @@
       "Bash(wc:*)",
       "Bash(npx eslint:*)",
       "Bash(npx tsc:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(tree:*)",
+      "Bash(cat:*)",
+      "Bash(npx shadcn@latest:*)",
+      "WebSearch",
+      "WebFetch(domain:ui.shadcn.com)"
     ],
     "deny": [],
     "ask": []
