@@ -17,7 +17,7 @@ const FAQ = ({ faqs }: FAQProps) => (
       .map(({ id, question, answer }) => (
         <Accordion
           type="single"
-          key={id!}
+          key={id}
           collapsible
           className="w-full overflow-hidden rounded-lg border text-base"
         >
