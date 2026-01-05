@@ -1,73 +1,28 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, memo } from 'react';
 
 import { motion } from 'framer-motion';
 
-import CatIcon from '@/components/icons/CatIcon';
 import { fadeInVariants } from '@/lib/animation';
+import type { LoveStorySegment } from '@/db/schema/content';
+import { getIconComponentForPreview, type IconType } from '@/lib/icon-mapping';
 
-import BusIcon from '../icons/BusIcon';
-import CoupleIcon from '../icons/CoupleIcon';
-import MeetIcon from '../icons/MeetIcon';
-import RingIcon from '../icons/RingIcon';
+interface TimelineProps {
+  segments: LoveStorySegment[];
+}
 
-const timelineData = [
-  {
-    icon: <MeetIcon />,
-    title: 'First Met',
-    date: 'September 2019',
-    description:
-      'Karel was on a vacation visiting his best friend in Berlin, where he met Sabrina for the first time in a sport hall',
-  },
-  {
-    icon: <BusIcon />,
-    title: 'First Date',
-    date: 'October 2019',
-    description:
-      'Karel traveled to Berlin from Trier by Bus (12 hours) to meet Sabrina and have their first date',
-  },
-  {
-    icon: <CoupleIcon />,
-    title: 'Official Relationship',
-    date: (
-      <>
-        February 2<sup>nd</sup>, 2020
-      </>
-    ),
-    description:
-      'They were on a vacation to Prague, where they made their relationship official <3',
-  },
-  {
-    icon: <CatIcon />,
-    title: 'Kyupie and Mayo Arrives',
-    date: 'July & October 2023',
-    description:
-      'They decided to buy their first kitten - Kyupie, and 3 months later their second kitten - Mayo. They have brought so much happiness to the couple and choosing them was the best decision they ever made',
-  },
-  {
-    icon: <RingIcon />,
-    title: 'The Proposal',
-    date: (
-      <>
-        August 13<sup>th</sup>, 2024
-      </>
-    ),
-    description:
-      'Karel planned with friends to surprise Sabrina for an unforgettable camping proposal',
-  },
-];
-
-const Timeline = () => {
+const Timeline: FC<TimelineProps> = ({ segments }) => {
   const isLeft = (index: number) => index % 2 === 0;
+
   return (
     <div>
-      {timelineData.map(({ icon, title, date, description }, index) => (
+      {segments.map((segment, index) => (
         <Row
-          key={index}
-          icon={icon}
+          key={segment.id}
+          icon={getIconComponentForPreview(segment.iconType as IconType)}
           leftSide={isLeft(index)}
-          title={title}
-          date={date}
-          description={description}
+          title={segment.title}
+          date={segment.date}
+          description={segment.description}
         />
       ))}
     </div>
@@ -82,9 +37,11 @@ interface RowProps extends ParagraphProps {
   leftSide: boolean;
 }
 
-const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
+const Row: FC<RowProps> = memo(({ title, date, description, icon, leftSide }) => {
   const wrappedIcon = (
-    <div className={`min-w-28 max-w-40 text-secondary-main ${!leftSide && 'justify-self-end'}`}>
+    <div
+      className={`w-full min-w-20 max-w-24 text-secondary-main ${!leftSide && 'justify-self-end'}`}
+    >
       {icon}
     </div>
   );
@@ -118,7 +75,9 @@ const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
       )}
     </motion.div>
   );
-};
+});
+
+Row.displayName = 'Row';
 
 interface ParagraphProps {
   title: string;

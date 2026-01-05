@@ -1,15 +1,7 @@
-const TableIcon = ({
-  width = '24',
-  color = 'currentColor',
-}: {
-  width?: string;
-  color?: string;
-}) => (
+const TableIcon = ({ color = 'currentColor' }: { color?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    width={width}
-    height={width}
     fill="none"
     stroke={color}
     strokeWidth="2"

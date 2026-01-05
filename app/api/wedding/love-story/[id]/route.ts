@@ -23,7 +23,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const updated = await updateLoveStorySegment(id, {
       title,
       description,
-      date: date ? new Date(date) : undefined,
+      date,
       iconType,
       order,
     });

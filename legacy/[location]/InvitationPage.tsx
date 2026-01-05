@@ -144,7 +144,7 @@ export default function InvitationPage({
               id="love-story"
             >
               <SectionTitle title="Love Story" color="secondary" />
-              <Timeline />
+              <Timeline segments={[]} />
             </section>
           )}
           {/* When and where */}
@@ -191,7 +191,7 @@ export default function InvitationPage({
               id="love-story"
             >
               <SectionTitle title="Love Story" color="secondary" />
-              <Timeline />
+              <Timeline segments={[]} />
             </section>
           )}
           {/* Photo gallery */}

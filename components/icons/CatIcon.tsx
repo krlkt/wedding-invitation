@@ -1,14 +1,10 @@
-import { secondaryColorHex } from '@/lib/constants';
-
 const CatIcon = () => (
   <svg
-    fill={secondaryColorHex}
+    fill="currentColor"
     version="1.1"
     id="Capa_1"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 297 297"
-    width="80%"
-    height="80%"
   >
     <g>
       <path

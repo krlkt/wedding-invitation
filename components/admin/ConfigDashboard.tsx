@@ -38,6 +38,7 @@ function ConfigDashboardContent() {
   const { draft: draftGroomSection, setDraft: setDraftGroomSection } = useDraft('groomSection');
   const { draft: draftBrideSection, setDraft: setDraftBrideSection } = useDraft('brideSection');
   const { draft: draftFAQs } = useDraft('faqs');
+  const { draft: draftLoveStory } = useDraft('loveStory');
 
   // Data fetching hook
   const {
@@ -46,6 +47,7 @@ function ConfigDashboardContent() {
     groomSectionContent,
     brideSectionContent,
     faqSectionContent,
+    loveStoryContent,
     loading,
     refreshTrigger,
     refetch,
@@ -58,6 +60,7 @@ function ConfigDashboardContent() {
     groomSectionContent,
     brideSectionContent,
     faqSectionContent,
+    loveStoryContent,
     setSaving,
     refetch,
     triggerRefresh,
@@ -116,6 +119,7 @@ function ConfigDashboardContent() {
           draftGroomSection={draftGroomSection}
           draftBrideSection={draftBrideSection}
           draftFAQs={draftFAQs}
+          draftLoveStory={draftLoveStory}
         />
       </div>
     </>

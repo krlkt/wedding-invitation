@@ -25,7 +25,7 @@ export const loveStorySegments = sqliteTable('love_story_segments', {
     .references(() => weddingConfigurations.id, { onDelete: 'cascade' }),
   title: text('title').notNull(),
   description: text('description').notNull(),
-  date: integer('date', { mode: 'timestamp' }).notNull(),
+  date: text('date').notNull(),
   iconType: text('icon_type').notNull(),
   order: integer('order').notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' })
