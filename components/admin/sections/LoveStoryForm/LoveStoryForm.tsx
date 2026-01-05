@@ -131,10 +131,11 @@ export function LoveStoryForm({ loveStoryContent, onChangeTracking }: LoveStoryF
 
     // Only build and set draft if there are actual changes
     if (hasChanges) {
-      const draft: Partial<LoveStorySegment>[] = watchedSegments.map((seg, index) => {
+      const draft: Partial<LoveStorySegment>[] = fields.map((field, index) => {
+        const seg = watchedSegments[index];
         const savedSeg = savedSegments[index];
         return {
-          id: savedSeg?.id ?? crypto.randomUUID(),
+          id: savedSeg?.id ?? field.id, // Use stable field.id instead of crypto.randomUUID()
           title: seg?.title ?? '',
           description: seg?.description ?? '',
           date: seg?.date ?? '',
@@ -153,7 +154,7 @@ export function LoveStoryForm({ loveStoryContent, onChangeTracking }: LoveStoryF
     // Notify parent about changes
     const changedFields = hasChanges ? new Set(['loveStory']) : new Set<string>();
     onChangeTracking?.(hasChanges, changedFields);
-  }, [watchedSegments, loveStoryContent, setDraftSegments, onChangeTracking]);
+  }, [watchedSegments, loveStoryContent, setDraftSegments, onChangeTracking, fields]);
 
   // Add new segment
   const handleAddSegment = () => {

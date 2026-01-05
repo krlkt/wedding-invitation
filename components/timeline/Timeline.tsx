@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, memo } from 'react';
 
 import { motion } from 'framer-motion';
 
@@ -37,7 +37,7 @@ interface RowProps extends ParagraphProps {
   leftSide: boolean;
 }
 
-const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
+const Row: FC<RowProps> = memo(({ title, date, description, icon, leftSide }) => {
   const wrappedIcon = (
     <div
       className={`w-full min-w-20 max-w-24 text-secondary-main ${!leftSide && 'justify-self-end'}`}
@@ -75,7 +75,9 @@ const Row: FC<RowProps> = ({ title, date, description, icon, leftSide }) => {
       )}
     </motion.div>
   );
-};
+});
+
+Row.displayName = 'Row';
 
 interface ParagraphProps {
   title: string;
