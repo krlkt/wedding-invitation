@@ -1,5 +1,5 @@
 const CopyIcon = () => (
-  <svg width="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg">
     <desc>Created with Sketch.</desc>
     <g id="🔍-Product-Icons" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
       <g id="ic_fluent_copy_24_regular" fill="#212121" fill-rule="nonzero">

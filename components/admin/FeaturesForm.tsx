@@ -25,6 +25,7 @@ import { StartingSectionForm } from './sections/StartingSectionForm';
 import { GroomSectionForm } from './sections/GroomSectionForm';
 import { BrideSectionForm } from './sections/BrideSectionForm';
 import { FAQForm } from './sections/FAQForm';
+import { LoveStoryForm } from './sections/LoveStoryForm/LoveStoryForm';
 import type {
   WeddingConfigWithFeatures,
   UseContentHandlersReturn,
@@ -54,6 +55,7 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
   const { draft: draftGroomSection, clearDraft: clearGroomSectionDraft } = useDraft('groomSection');
   const { draft: draftBrideSection, clearDraft: clearBrideSectionDraft } = useDraft('brideSection');
   const { draft: draftFAQs, clearDraft: clearFAQsDraft } = useDraft('faqs');
+  const { draft: draftLoveStory, clearDraft: clearLoveStoryDraft } = useDraft('loveStory');
 
   // Change tracking hook
   const {
@@ -94,6 +96,10 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
   useEffect(() => {
     clearSectionChanges('faqs');
   }, [contentHandlers.faqSection.content, clearSectionChanges]);
+
+  useEffect(() => {
+    clearSectionChanges('loveStory');
+  }, [contentHandlers.loveStorySection.content, clearSectionChanges]);
 
   // Simplified handlers
   const handleToggle = (featureName: string) => {
@@ -167,6 +173,30 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
         clearFAQsDraft();
       }
 
+      // Save changed love story content
+      if (changedFields.loveStory.size > 0 && draftLoveStory) {
+        const savedIds = new Set(
+          (contentHandlers.loveStorySection.content ?? [])
+            .map((seg) => seg.id)
+            .filter((id): id is string => id !== undefined)
+        );
+        const draftIds = new Set(
+          draftLoveStory
+            .filter((seg) => !!seg.id && seg.weddingConfigId !== 'TEMP')
+            .map((seg) => {
+              if (!seg.id) throw new Error('Segment id is missing!');
+              return seg.id;
+            })
+        );
+        const deletedIds = Array.from(savedIds).filter((id) => !draftIds.has(id));
+
+        await contentHandlers.loveStorySection.update({
+          updated: draftLoveStory,
+          deleted: deletedIds,
+        });
+        clearLoveStoryDraft();
+      }
+
       showSuccess('Changes has been saved');
     } catch (error) {
       showError(error instanceof Error ? error.message : 'Failed to save changes');
@@ -186,12 +216,14 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
     clearGroomSectionDraft();
     clearBrideSectionDraft();
     clearFAQsDraft();
+    clearLoveStoryDraft();
 
     await Promise.all([
       contentHandlers.startingSection.refetch(),
       contentHandlers.groomSection.refetch(),
       contentHandlers.brideSection.refetch(),
       contentHandlers.faqSection.refetch(),
+      contentHandlers.loveStorySection.refetch(),
     ]);
 
     // Trigger preview refresh to show discarded changes
@@ -223,6 +255,13 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
   const handleFAQSectionChange = useCallback(
     (hasChanges: boolean, fields: Set<string>) => {
       setChangedFields.faqs(fields);
+    },
+    [setChangedFields]
+  );
+
+  const handleLoveStoryChange = useCallback(
+    (hasChanges: boolean, fields: Set<string>) => {
+      setChangedFields.loveStory(fields);
     },
     [setChangedFields]
   );
@@ -278,6 +317,15 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
             />
           );
 
+        case 'love_story':
+          return (
+            <LoveStoryForm
+              weddingConfig={config}
+              loveStoryContent={contentHandlers.loveStorySection.content}
+              onChangeTracking={handleLoveStoryChange}
+            />
+          );
+
         default:
           return (
             <div className="text-sm italic text-gray-500">Content configuration coming soon...</div>
@@ -292,6 +340,7 @@ const FeaturesForm: FC<FeaturesFormProps> = ({
       handleGroomSectionChange,
       handleBrideSectionChange,
       handleFAQSectionChange,
+      handleLoveStoryChange,
     ]
   );
 

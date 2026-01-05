@@ -31,7 +31,7 @@ export const FEATURE_DEFINITIONS: FeatureDefinition[] = [
     name: 'love_story',
     label: 'Love Story',
     description: 'Timeline of your relationship',
-    hasContentForm: false,
+    hasContentForm: true,
   },
   {
     name: 'save_the_date',

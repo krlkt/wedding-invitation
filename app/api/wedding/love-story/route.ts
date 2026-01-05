@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       weddingConfigId: session.weddingConfigId,
       title,
       description,
-      date: new Date(date),
+      date,
       iconType,
       order,
     });

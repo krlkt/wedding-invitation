@@ -22,6 +22,7 @@ export interface RefetchActions {
   groomSection: () => Promise<void>;
   brideSection: () => Promise<void>;
   faqs: () => Promise<void>;
+  loveStory: () => Promise<void>;
 }
 
 // Hook return type for useContentHandlers

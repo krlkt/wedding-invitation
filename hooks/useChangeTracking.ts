@@ -14,6 +14,7 @@ export interface ChangeTrackingState {
   groomSection: Set<string>;
   brideSection: Set<string>;
   faqs: Set<string>;
+  loveStory: Set<string>;
 }
 
 export function useChangeTracking() {
@@ -23,6 +24,7 @@ export function useChangeTracking() {
     groomSection: new Set(),
     brideSection: new Set(),
     faqs: new Set(),
+    loveStory: new Set(),
   });
 
   // Setters for each section
@@ -37,6 +39,8 @@ export function useChangeTracking() {
       brideSection: (fields: Set<string>) =>
         setChangedFieldsState((prev) => ({ ...prev, brideSection: fields })),
       faqs: (fields: Set<string>) => setChangedFieldsState((prev) => ({ ...prev, faqs: fields })),
+      loveStory: (fields: Set<string>) =>
+        setChangedFieldsState((prev) => ({ ...prev, loveStory: fields })),
     }),
     []
   );
@@ -58,6 +62,7 @@ export function useChangeTracking() {
       groomSection: new Set(),
       brideSection: new Set(),
       faqs: new Set(),
+      loveStory: new Set(),
     });
   }, []);
 

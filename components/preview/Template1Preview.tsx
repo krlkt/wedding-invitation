@@ -219,7 +219,7 @@ export default function Template1Preview({
                   >
                     <SectionTitle title="Love Story" color="secondary" />
                     {content.loveStory.length > 0 ? (
-                      <Timeline />
+                      <Timeline segments={content.loveStory} />
                     ) : (
                       <EmptyState
                         message="Add your love story timeline in the Love Story section"

@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import type { StartingSectionContent } from '@/db/schema/starting-section';
 import type { GroomSectionContent } from '@/db/schema/groom-section';
 import type { BrideSectionContent } from '@/db/schema/bride-section';
-import type { FAQItem } from '@/db/schema/content';
+import type { FAQItem, LoveStorySegment } from '@/db/schema/content';
 import type { GroomBrideSectionPhoto } from '@/db/schema/section-photo-types';
 import { parsePhotos, stringifyPhotos } from '@/lib/section-photos';
 import { useSnackbar } from '@/context/SnackbarContext';
@@ -48,6 +48,13 @@ interface FAQSectionHandler {
   refetch: () => Promise<void>;
 }
 
+// Love Story section handler (similar to FAQ)
+interface LoveStorySectionHandler {
+  content: LoveStorySegment[] | null;
+  update: (updates: { updated: Partial<LoveStorySegment>[]; deleted: string[] }) => Promise<void>;
+  refetch: () => Promise<void>;
+}
+
 // Features handler structure
 interface FeaturesHandler {
   toggle: (featureName: string, isEnabled: boolean) => Promise<void>;
@@ -60,6 +67,7 @@ export interface UseContentHandlersReturn {
   groomSection: SectionHandler<GroomSectionContent, GroomSectionInput>;
   brideSection: SectionHandler<BrideSectionContent, BrideSectionInput>;
   faqSection: FAQSectionHandler;
+  loveStorySection: LoveStorySectionHandler;
   features: FeaturesHandler;
 }
 
@@ -68,6 +76,7 @@ interface UseContentHandlersOptions {
   groomSectionContent: GroomSectionContent | null;
   brideSectionContent: BrideSectionContent | null;
   faqSectionContent: FAQItem[] | null;
+  loveStoryContent: LoveStorySegment[] | null;
   setSaving: (saving: boolean) => void;
   refetch: RefetchActions;
   triggerRefresh: () => void;
@@ -78,6 +87,7 @@ export function useContentHandlers({
   groomSectionContent,
   brideSectionContent,
   faqSectionContent,
+  loveStoryContent,
   setSaving,
   refetch,
   triggerRefresh,
@@ -262,6 +272,43 @@ export function useContentHandlers({
     [faqSectionContent, refetch, setSaving, showError, triggerRefresh]
   );
 
+  // Love Story section handlers
+  const loveStorySection = useMemo(
+    () => ({
+      content: loveStoryContent,
+      update: async (updates: { updated: Partial<LoveStorySegment>[]; deleted: string[] }) => {
+        try {
+          setSaving(true);
+
+          const response = await fetch('/api/wedding/love-story/batch', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ updated: updates.updated, deleted: updates.deleted }),
+          });
+
+          if (response.ok) {
+            await refetch.loveStory();
+            triggerRefresh();
+          } else {
+            // Show detailed error from API
+            const errorData = await response.json();
+            console.error('API error:', errorData);
+            showError(
+              `Failed to update love story: ${errorData.error ?? 'Unknown error'}${errorData.details ? ` - ${JSON.stringify(errorData.details)}` : ''}`
+            );
+          }
+        } catch (error) {
+          console.error('Failed to update love story:', error);
+          showError('Failed to update love story. Please try again.');
+        } finally {
+          setSaving(false);
+        }
+      },
+      refetch: refetch.loveStory,
+    }),
+    [loveStoryContent, refetch, setSaving, showError, triggerRefresh]
+  );
+
   // Feature toggle handlers
   const features = useMemo(
     () => ({
@@ -309,6 +356,7 @@ export function useContentHandlers({
     groomSection,
     brideSection,
     faqSection,
+    loveStorySection,
     features,
   };
 }

@@ -1,9 +1,7 @@
-import { secondaryColorHex } from '@/lib/constants';
-
 const MeetIcon = () => (
   <svg
-    fill={secondaryColorHex}
     version="1.1"
+    fill="currentColor"
     id="_x31_"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 128 128"

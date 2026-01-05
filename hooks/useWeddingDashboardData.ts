@@ -9,7 +9,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { StartingSectionContent } from '@/db/schema/starting-section';
 import type { GroomSectionContent } from '@/db/schema/groom-section';
 import type { BrideSectionContent } from '@/db/schema/bride-section';
-import type { FAQItem } from '@/db/schema/content';
+import type { FAQItem, LoveStorySegment } from '@/db/schema/content';
 import type { WeddingConfigWithFeatures, RefetchActions } from '@/lib/admin/types';
 
 // Return type for this hook
@@ -19,6 +19,7 @@ export interface UseWeddingDashboardDataReturn {
   groomSectionContent: GroomSectionContent | null;
   brideSectionContent: BrideSectionContent | null;
   faqSectionContent: FAQItem[] | null;
+  loveStoryContent: LoveStorySegment[] | null;
   loading: boolean;
   refreshTrigger: number;
   refetch: RefetchActions;
@@ -32,6 +33,7 @@ export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
   const [groomSectionContent, setGroomSectionContent] = useState<GroomSectionContent | null>(null);
   const [brideSectionContent, setBrideSectionContent] = useState<BrideSectionContent | null>(null);
   const [faqSectionContent, setFAQSectionContent] = useState<FAQItem[] | null>(null);
+  const [loveStoryContent, setLoveStoryContent] = useState<LoveStorySegment[] | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -112,6 +114,18 @@ export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
     }
   }, []);
 
+  const fetchLoveStory = useCallback(async () => {
+    try {
+      const res = await fetch('/api/wedding/love-story');
+      if (res.ok) {
+        const data = await res.json();
+        setLoveStoryContent(data.data);
+      }
+    } catch (err) {
+      console.error('Error fetching love story', err);
+    }
+  }, []);
+
   // Grouped refetch actions
   const refetch = useMemo(
     () => ({
@@ -122,6 +136,7 @@ export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
           fetchGroomSection(),
           fetchBrideSection(),
           fetchFaqs(),
+          fetchLoveStory(),
         ]);
       },
       config: fetchConfig,
@@ -129,8 +144,16 @@ export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
       groomSection: fetchGroomSection,
       brideSection: fetchBrideSection,
       faqs: fetchFaqs,
+      loveStory: fetchLoveStory,
     }),
-    [fetchConfig, fetchStartingSection, fetchGroomSection, fetchBrideSection, fetchFaqs]
+    [
+      fetchConfig,
+      fetchStartingSection,
+      fetchGroomSection,
+      fetchBrideSection,
+      fetchFaqs,
+      fetchLoveStory,
+    ]
   );
 
   const triggerRefresh = useCallback(() => {
@@ -154,6 +177,7 @@ export function useWeddingDashboardData(): UseWeddingDashboardDataReturn {
     groomSectionContent,
     brideSectionContent,
     faqSectionContent,
+    loveStoryContent,
     loading,
     refreshTrigger,
     refetch,
